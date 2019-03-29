@@ -1,0 +1,11 @@
+Clean and compile:
+mvn clean compile
+
+Launch server:
+mvn exec:java -Pserver
+
+Launch client:
+mvn exec:java -Pclient
+
+Launch MySQL:
+mysqld --console --explicit_defaults_for_timestamp --default-time-zone=+00:00
