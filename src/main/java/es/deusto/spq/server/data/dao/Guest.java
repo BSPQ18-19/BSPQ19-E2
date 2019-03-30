@@ -8,7 +8,7 @@ public class Guest extends User {
 	private int phone;
 	private String address;
 	
-	public Guest(int userID, String name, String email, String password, int phone, String address) {
+	public Guest(String userID, String name, String email, String password, int phone, String address) {
 		super(userID, name, email, password, phone, address);
 		this.phone = phone;
 		this.address = address;

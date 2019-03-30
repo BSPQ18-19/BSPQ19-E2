@@ -7,12 +7,12 @@ import javax.jdo.annotations.*;
 public abstract class User {
 
 	@PrimaryKey
-	private int userID;
+	private String userID;
 	private String name;
 	private String email;
 	private String password;
 	
-	public User(int userID, String name, String email, String password, int phone, String address) {
+	public User(String userID, String name, String email, String password, int phone, String address) {
 		super();
 		this.userID = userID;
 		this.name = name;
@@ -44,7 +44,7 @@ public abstract class User {
 		this.password = password;
 	}
 	
-	public int getUserID() {
+	public String getUserID() {
 		return userID;
 	}
 	
