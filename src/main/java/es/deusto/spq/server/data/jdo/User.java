@@ -1,10 +1,12 @@
 package es.deusto.spq.server.data.jdo;
 
 
+import java.io.Serializable;
+
 import javax.jdo.annotations.*;
 
 @PersistenceCapable
-public abstract class User {
+public abstract class User implements Serializable {
 
 	@PrimaryKey
 	private String userID;

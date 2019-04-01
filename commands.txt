@@ -9,3 +9,5 @@ mvn exec:java -Pclient
 
 Launch MySQL:
 mysqld --console --explicit_defaults_for_timestamp --default-time-zone=+00:00
+
+For creating the DB Schema:
