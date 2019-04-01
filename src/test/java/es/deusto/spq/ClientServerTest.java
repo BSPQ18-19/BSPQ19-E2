@@ -15,6 +15,10 @@ import org.junit.Test;
 
 import junit.framework.Assert;
 
+/**The RMI registry must be running
+ * @author Iker
+ *
+ */
 public class ClientServerTest {
 
 	private static String serverUrl;
@@ -29,10 +33,7 @@ public class ClientServerTest {
 			System.setSecurityManager(new SecurityManager());
 		}
 	}
-	
-	//TODO hacer esto en una nueva branch para el test del C-S,
-	//y hacer pull request. Esto no es del user system
-	
+		
 	@SuppressWarnings("deprecation")
 	@Test
 	public void clientServerRMITest() throws RemoteException, MalformedURLException, NotBoundException {
