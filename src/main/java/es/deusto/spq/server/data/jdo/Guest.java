@@ -1,4 +1,4 @@
-package es.deusto.spq.server.data.dao;
+package es.deusto.spq.server.data.jdo;
 
 import javax.jdo.annotations.PersistenceCapable;
 
