@@ -48,6 +48,6 @@ public class Server extends UnicastRemoteObject implements IServer {
 
 	@Override
 	public void sayHello() throws RemoteException {
-		LOGGER.info("Hello!");
+		System.out.println("Hello!");
 	}
 }
