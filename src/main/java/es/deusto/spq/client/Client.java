@@ -25,7 +25,7 @@ public class Client {
 			serverStub.sayHello();
 			serverStub.sayMessage("Bye!");
 		} catch (Exception e) {
-			log.severe("RMI error. Turning down the client...");
+			log.severe("RMI error. Turning down the client... - " + e.getMessage());
 //			e.printStackTrace();
 		}
 	}

@@ -14,7 +14,6 @@ public class Server extends UnicastRemoteObject implements IServer {
 	protected Server() throws RemoteException {
 		super();
 	}
-	
 
 	public static void main(String[] args) {
 		if (args.length != 3) {
@@ -39,8 +38,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 			@SuppressWarnings("unused")
 			String line  = stdin.readLine();
 		} catch (Exception e) {
-			log.severe("RMI error. Turning down...");
-//			e.printStackTrace();
+			log.severe("RMI error. Turning down... - " + e.getMessage());
 		}
 	}
 
@@ -51,6 +49,6 @@ public class Server extends UnicastRemoteObject implements IServer {
 
 	@Override
 	public void sayHello() throws RemoteException {
-		System.out.println("Hello!");		
+		System.out.println("Hello!");
 	}
 }
