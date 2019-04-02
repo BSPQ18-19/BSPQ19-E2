@@ -12,12 +12,12 @@ import javax.jdo.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import es.deusto.spq.server.data.jdo.*;
+
 import es.deusto.spq.server.data.MyPersistenceManager;
+import es.deusto.spq.server.data.jdo.*;
 
 public class TestDB {
-	private PersistenceManagerFactory pmf;
-	private PersistenceManager pm;
+	private PersistenceManager pm = null;
 	private Transaction tx = null;
 	
 	@Before
