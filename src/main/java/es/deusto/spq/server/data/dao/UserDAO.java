@@ -96,9 +96,6 @@ public class UserDAO implements IUserDAO {
 	private final void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
-
-		if (pm != null && !pm.isClosed())
-			pm.close();
 	}
 	
 }

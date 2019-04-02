@@ -14,26 +14,27 @@ public class TestDBDAO {
 			
 	@Test
 	public void test() {
-		try {
-			Guest u = new Guest("0", "Test", "email@email.email", "password", 1111, "Test street");//Test data
-			
-			//Create a user in the Database
-			System.out.println("The user we are creating: " + u);
-			dao.createUser(u);
-			
-			//Get all the users
-			List<User> ul = dao.getUsers();
-			for(User user : ul) {
-				System.out.println("> " + user);
-			}
-			
-			
-			//Get a user using an specific ID
-			assertTrue(u.equals(dao.getUserbyID("0")));
-		}catch (Exception e) {
-			System.out.println("Exception thrown during retrieval of Extent : " + e.getMessage());
-			assertFalse(false);
-		}		
+//		try {
+//			Guest u = new Guest("0", "Test", "email@email.email", "password", 1111, "Test street");//Test data
+//			
+//			//Create a user in the Database
+//			System.out.println("The user we are creating: " + u);
+//			dao.createUser(u);
+//			
+//			//Get all the users
+//			List<User> ul = dao.getUsers();
+//			for(User user : ul) {
+//				System.out.println("> " + user);
+//			}
+//			
+//			
+//			//Get a user using an specific ID
+//			assertTrue(u.equals(dao.getUserbyID("0")));
+//		}catch (Exception e) {
+//			System.out.println("Exception thrown during retrieval of Extent : " + e.getMessage());
+//			assertFalse(false);
+//		}		
+		fail("Not implemented yet");
 	}
 
 }

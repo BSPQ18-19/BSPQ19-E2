@@ -57,4 +57,12 @@ public abstract class User implements Serializable {
 	@Override
 	public abstract String toString();
 	
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof User) {
+			User object = (User) o;
+			return object.getUserID().equals(userID);
+		}
+		return false;
+	}
 }
