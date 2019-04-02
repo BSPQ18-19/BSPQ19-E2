@@ -1,15 +1,19 @@
+
 package es.deusto.spq.server.data.jdo;
 
 
 import javax.jdo.annotations.*;
 
-@PersistenceCapable
+@PersistenceCapable(detachable="true")
 public abstract class User {
 
 	@PrimaryKey
 	private String userID;
+	@Persistent(defaultFetchGroup="true")
 	private String name;
+	@Persistent(defaultFetchGroup="true")
 	private String email;
+	@Persistent(defaultFetchGroup="true")
 	private String password;
 	
 	public User(String userID, String name, String email, String password, int phone, String address) {

@@ -1,11 +1,14 @@
 package es.deusto.spq.server.data.jdo;
 
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 
-@PersistenceCapable
+@PersistenceCapable(detachable="true")
 public class Guest extends User {
 
+	@Persistent(defaultFetchGroup="true")
 	private int phone;
+	@Persistent(defaultFetchGroup="true")
 	private String address;
 	
 	public Guest(String userID, String name, String email, String password, int phone, String address) {
