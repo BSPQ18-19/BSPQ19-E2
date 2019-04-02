@@ -11,3 +11,7 @@ Launch MySQL:
 mysqld --console --explicit_defaults_for_timestamp --default-time-zone=+00:00
 
 For creating the DB Schema:
+mvn datanucleus:schema-create
+
+For deleting DB Schema:
+mvn datanucleus:schema-delete

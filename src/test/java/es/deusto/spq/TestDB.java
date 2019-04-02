@@ -9,14 +9,12 @@ import javax.jdo.Extent;
 import javax.jdo.Query;
 import javax.jdo.JDOHelper;
 import javax.jdo.Transaction;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import es.deusto.spq.server.data.jdo.*;
-public class DBTest {
 
+public class TestDB {
 	private PersistenceManagerFactory pmf = null;
 	private PersistenceManager pm = null;
 	private Transaction tx = null;
@@ -63,8 +61,8 @@ public class DBTest {
         try {
         	 tx.begin();
              System.out.println("Retrieving Extent for Users");
-             Extent<User> e = pm.getExtent(User.class, true);
-             Iterator<User> iter = e.iterator();
+             Extent<Guest> e = pm.getExtent(Guest.class, true);
+             Iterator<Guest> iter = e.iterator();
              while(iter.hasNext()) {
             	 Object obj = iter.next();
             	 System.out.println("> " +obj);
@@ -88,10 +86,10 @@ public class DBTest {
 		try {
 			tx.begin();
 			System.out.println("Executing Query for getting the user 'Egoitz'");
-			Extent<User> e = pm.getExtent(User.class,true);
-			Query<User> q = pm.newQuery(e,"NAME='Egoitz'");
-			for(User u : (List<User>) q.execute()) {
-				System.out.println(u);
+			Extent<Guest> e = pm.getExtent(Guest.class,true);
+			Query<Guest> q = pm.newQuery(e,"name=='Egoitz'");
+			for(Guest g : (List<Guest>) q.execute()) {
+				System.out.println(g);
 			}
 		}finally {
 			 if (tx.isActive())
@@ -110,8 +108,8 @@ public class DBTest {
         try
         {
             tx.begin();
-            System.out.println("Deleting all Users from persistence");
-            Query<User> q = pm.newQuery(User.class);
+            System.out.println("Deleting all Users");
+            Query<Guest> q = pm.newQuery(Guest.class);
             long numberInstancesDeleted = q.deletePersistentAll();
             System.out.println("Deleted " + numberInstancesDeleted + " users");
 

@@ -2,10 +2,11 @@ package es.deusto.spq.server.data.jdo;
 
 import java.io.Serializable;
 
+import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.PersistenceCapable;
 
 @PersistenceCapable
-public class Guest extends User implements Serializable {
+public class Guest extends User implements Serializable{
 
 	private int phone;
 	private String address;

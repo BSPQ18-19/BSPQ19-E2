@@ -6,7 +6,7 @@ import java.io.Serializable;
 import javax.jdo.annotations.*;
 
 @PersistenceCapable
-public abstract class User implements Serializable {
+public abstract class User implements Serializable{
 
 	@PrimaryKey
 	private String userID;
