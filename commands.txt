@@ -15,3 +15,6 @@ mvn datanucleus:schema-create
 
 For deleting DB Schema:
 mvn datanucleus:schema-delete
+
+For running Test:
+mvn test
