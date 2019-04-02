@@ -3,6 +3,7 @@ package es.deusto.spq.server;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Logger;
 
 public class Server extends UnicastRemoteObject implements IServer {
 
@@ -11,7 +12,8 @@ public class Server extends UnicastRemoteObject implements IServer {
 	protected Server() throws RemoteException {
 		super();
 	}
-	
+	private final static Logger LOGGER = Logger.getLogger(Server.class.getName());
+
 
 	public static void main(String[] args) {
 		if (args.length != 3) {
@@ -28,13 +30,13 @@ public class Server extends UnicastRemoteObject implements IServer {
 		try {
 			IServer objServer = new Server();
 			Naming.rebind(url, objServer);
-			System.out.println("Server '" + url + "' active and waiting...");
+			LOGGER.info("Server '" + url + "' active and waiting...");
 			java.io.InputStreamReader inputStreamReader = new java.io.InputStreamReader ( System.in );
 			java.io.BufferedReader stdin = new java.io.BufferedReader ( inputStreamReader );
 			@SuppressWarnings("unused")
 			String line  = stdin.readLine();
 		} catch (Exception e) {
-			System.err.println("Hello exception: " + e.getMessage());
+			LOGGER.warning("Hello exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -46,6 +48,6 @@ public class Server extends UnicastRemoteObject implements IServer {
 
 	@Override
 	public void sayHello() throws RemoteException {
-		System.out.println("Hello!");		
+		LOGGER.info("Hello!");
 	}
 }

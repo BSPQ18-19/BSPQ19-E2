@@ -2,7 +2,11 @@ package es.deusto.spq.client;
 
 import es.deusto.spq.server.IServer;
 
+import java.util.logging.Logger;
+
 public class Client {
+
+	private final static Logger LOGGER = Logger.getLogger(Client.class.getName());
 
 	public static void main(String[] args) {
 		if (args.length != 3) {
@@ -20,7 +24,7 @@ public class Client {
 			serverStub.sayHello();
 			serverStub.sayMessage("Bye!");
 		} catch (Exception e) {
-			System.err.println("RMI Example exception: " + e.getMessage());
+			LOGGER.warning("RMI example exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
