@@ -10,7 +10,7 @@ import javax.jdo.Transaction;
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.jdo.User;
 
-public class UserDAO {
+public class UserDAO implements IUserDAO {
 
 	private PersistenceManager pm;
 	private Transaction tx;
