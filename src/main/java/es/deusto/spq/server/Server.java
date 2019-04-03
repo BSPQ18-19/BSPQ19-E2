@@ -3,13 +3,36 @@ package es.deusto.spq.server;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import es.deusto.spq.server.data.Hotel;
+import es.deusto.spq.server.data.Room;
+import es.deusto.spq.server.data.RoomStatus;
+import es.deusto.spq.server.data.RoomType;
+import es.deusto.spq.server.data.dao.HotelDAO;
+import es.deusto.spq.server.data.dao.IHotelDAO;
+import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.gateway.INhHotelGateway;
+import es.deusto.spq.server.gateway.NhHotelGateway;
 
 public class Server extends UnicastRemoteObject implements IServer {
 
 	private static final long serialVersionUID = 1L;
-
+	
+//	private Map<String, Hotel> hotels = new TreeMap<String, Hotel>();
+//	private INhHotelGateway gateway;
+	private IHotelDAO dao;
+	
 	protected Server() throws RemoteException {
 		super();
+
+		
+		
 	}
 	
 
@@ -47,5 +70,12 @@ public class Server extends UnicastRemoteObject implements IServer {
 	@Override
 	public void sayHello() throws RemoteException {
 		System.out.println("Hello!");		
+	}
+
+
+	@Override
+	public ArrayList<HotelDTO> retrieveHotels() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
