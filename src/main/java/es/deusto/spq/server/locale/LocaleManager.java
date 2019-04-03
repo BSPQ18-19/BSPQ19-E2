@@ -97,6 +97,14 @@ public class LocaleManager {
     }
 
     /**
+     * Get the default LocaleMode
+     * @return the default LocaleMode
+     */
+    public static LocaleMode getDefaultLocaleMode() {
+        return LocaleMode.NORMAL;
+    }
+
+    /**
      * Get the current ResourceBundle for the selected Locale
      * @return the ResourceBundle associated to the current locale
      */
@@ -110,7 +118,7 @@ public class LocaleManager {
      * @return the ResourceBundle associated to the specified locale
      */
     private static ResourceBundle getResourceBundle(Locale locale) {
-        return ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
+        return ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale, new UTF8Control());
     }
 
     /**
