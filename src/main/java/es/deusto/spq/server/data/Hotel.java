@@ -1,5 +1,6 @@
 package es.deusto.spq.server.data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -15,15 +16,15 @@ public class Hotel {
 	private String hotelId;
 	private String name, location;
 	private String[] services;
-	private LocalDateTime seasonStart, seasonEnding;
+	private LocalDate seasonStart, seasonEnding;
 	private ArrayList<Room> rooms;
 	
 	@Persistent(mappedBy="hotel", dependentElement="true")
 	@Join
 	private ArrayList<Reservation> reservations;
 	
-	public Hotel(String hotelId, String name, String location, String[] services, LocalDateTime seasonStart,
-			LocalDateTime seasonEnding) {
+	public Hotel(String hotelId, String name, String location, String[] services, LocalDate seasonStart,
+			LocalDate seasonEnding) {
 		
 		this.hotelId = hotelId;
 		this.name = name;
@@ -67,11 +68,11 @@ public class Hotel {
 		this.services = services;
 	}
 
-	public LocalDateTime getSeasonStart() {
+	public LocalDate getSeasonStart() {
 		return seasonStart;
 	}
 
-	public void setSeasonStart(LocalDateTime seasonStart) {
+	public void setSeasonStart(LocalDate seasonStart) {
 		this.seasonStart = seasonStart;
 	}
 
@@ -83,11 +84,11 @@ public class Hotel {
 		this.rooms = rooms;
 	}
 	
-	public LocalDateTime getSeasonEnding() {
+	public LocalDate getSeasonEnding() {
 		return seasonEnding;
 	}
 
-	public void setSeasonEnding(LocalDateTime seasonEnding) {
+	public void setSeasonEnding(LocalDate seasonEnding) {
 		this.seasonEnding = seasonEnding;
 	}
 

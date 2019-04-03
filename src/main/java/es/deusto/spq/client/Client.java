@@ -37,7 +37,7 @@ public class Client {
 		return null;
     }
     
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RemoteException{
 		if (args.length != 3) {
 			System.out.println("Use: java [policy] [codebase] Client.Client [host] [port] [server]");
 			System.exit(0);
@@ -52,6 +52,7 @@ public class Client {
 			IServer serverStub = (IServer) java.rmi.Naming.lookup(name);
 			serverStub.sayHello();
 			serverStub.sayMessage("Bye!");
+			new Client(args);
 		} catch (Exception e) {
 			System.err.println("RMI Example exception: " + e.getMessage());
 			e.printStackTrace();

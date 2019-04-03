@@ -23,19 +23,13 @@ public class NhHotelServer extends UnicastRemoteObject implements INhHotelServer
 		// TODO Auto-generated constructor stub
 		
 		
-		hotels.put("H01", new NhHotel("H01", "Hotel1", "Bilbao", null, dateTime("2019-04-01"), dateTime("2019-06-30")));
-		hotels.put("H02", new NhHotel("H02", "Hotel2", "Barcelona", null, dateTime("2019-04-01"), dateTime("2019-08-31")));
-		hotels.put("H03", new NhHotel("H03", "Hotel3", "Madrid", null, dateTime("2019-01-01"), dateTime("2019-12-31")));
-		hotels.put("H04", new NhHotel("H04", "Hotel4", "Sevilla", null, dateTime("2019-06-01"), dateTime("2019-08-31")));
-		hotels.put("H05", new NhHotel("H05", "Hotel5", "Zaragoza", null, dateTime("2019-06-01"), dateTime("2019-08-31")));
-		hotels.put("H06", new NhHotel("H06", "Hotel6", "Gijon", null, dateTime("2019-01-01"), dateTime("2019-06-30")));
+//		hotels.put("H01", new NhHotel("H01", "Hotel1", "Bilbao", null, dateTime("2019-04-01"), dateTime("2019-06-30")));
+//		hotels.put("H02", new NhHotel("H02", "Hotel2", "Barcelona", null, dateTime("2019-04-01"), dateTime("2019-08-31")));
+//		hotels.put("H03", new NhHotel("H03", "Hotel3", "Madrid", null, dateTime("2019-01-01"), dateTime("2019-12-31")));
+//		hotels.put("H04", new NhHotel("H04", "Hotel4", "Sevilla", null, dateTime("2019-06-01"), dateTime("2019-08-31")));
+//		hotels.put("H05", new NhHotel("H05", "Hotel5", "Zaragoza", null, dateTime("2019-06-01"), dateTime("2019-08-31")));
+//		hotels.put("H06", new NhHotel("H06", "Hotel6", "Gijon", null, dateTime("2019-01-01"), dateTime("2019-06-30")));
 		
-	}
-	
-	public LocalDateTime dateTime(String date) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
-		return dateTime;
 	}
 
 	@Override

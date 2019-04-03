@@ -1,6 +1,7 @@
 package es.deusto.spq.hotelnh.data.dto;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class NhHotelDTO implements Serializable{
@@ -12,10 +13,10 @@ public class NhHotelDTO implements Serializable{
 	private String hotelId;
 	private String name, location;
 	private String[] services;
-	private LocalDateTime seasonStart, seasonEnding;
+	private LocalDate seasonStart, seasonEnding;
 	
-	public NhHotelDTO(String hotelId, String name, String location, String[] services, LocalDateTime seasonStart,
-			LocalDateTime seasonEnding) {
+	public NhHotelDTO(String hotelId, String name, String location, String[] services, LocalDate seasonStart,
+			LocalDate seasonEnding) {
 		this.hotelId = hotelId;
 		this.name = name;
 		this.location = location;
@@ -56,19 +57,19 @@ public class NhHotelDTO implements Serializable{
 		this.services = services;
 	}
 
-	public LocalDateTime getSeasonStart() {
+	public LocalDate getSeasonStart() {
 		return seasonStart;
 	}
 
-	public void setSeasonStart(LocalDateTime seasonStart) {
+	public void setSeasonStart(LocalDate seasonStart) {
 		this.seasonStart = seasonStart;
 	}
 
-	public LocalDateTime getSeasonEnding() {
+	public LocalDate getSeasonEnding() {
 		return seasonEnding;
 	}
 
-	public void setSeasonEnding(LocalDateTime seasonEnding) {
+	public void setSeasonEnding(LocalDate seasonEnding) {
 		this.seasonEnding = seasonEnding;
 	}	
 }
