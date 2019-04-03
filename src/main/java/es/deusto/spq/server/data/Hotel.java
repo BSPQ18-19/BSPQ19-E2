@@ -17,7 +17,7 @@ public class Hotel {
 	private String name, location;
 	private String[] services;
 	private LocalDate seasonStart, seasonEnding;
-	private ArrayList<Room> rooms;
+//	private ArrayList<Room> rooms;
 	
 	@Persistent(mappedBy="hotel", dependentElement="true")
 	@Join
@@ -32,7 +32,7 @@ public class Hotel {
 		this.services = services;
 		this.seasonStart = seasonStart;
 		this.seasonEnding = seasonEnding;
-		this.rooms = new ArrayList<>();
+//		this.rooms = new ArrayList<>();
 		this.reservations = new ArrayList<>();
 	}
 
@@ -76,13 +76,13 @@ public class Hotel {
 		this.seasonStart = seasonStart;
 	}
 
-	public ArrayList<Room> getRooms() {
-		return rooms;
-	}
-
-	public void setRooms(ArrayList<Room> rooms) {
-		this.rooms = rooms;
-	}
+//	public ArrayList<Room> getRooms() {
+//		return rooms;
+//	}
+//
+//	public void setRooms(ArrayList<Room> rooms) {
+//		this.rooms = rooms;
+//	}
 	
 	public LocalDate getSeasonEnding() {
 		return seasonEnding;

@@ -8,4 +8,5 @@ public interface IHotelDAO {
 	public void storeHotel(Hotel hotel);
 	public Hotel getHotel(String hotelID);
 	public List<Hotel> getHotels();
+	public void cleanDB();
 }

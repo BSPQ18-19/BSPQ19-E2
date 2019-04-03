@@ -7,6 +7,7 @@ import javax.jdo.Extent;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.Hotel;
@@ -110,4 +111,35 @@ private PersistenceManagerFactory pmf;
     
 	    return hotels;
 	}
+
+	public void cleanDB() {
+		System.out.println("- Cleaning the DB...");			
+		PersistenceManager pm = pmf.getPersistenceManager();
+		pm.getFetchPlan().setMaxFetchDepth(3);
+
+		Transaction tx = pm.currentTransaction();
+		//Start the transaction
+		try {
+			tx.begin();
+
+			//Delete users from DB
+			// As we are considering accounts as dependents on user - CASCADING BEHAVIOUR - ACCOUNTS DELETED
+			Query<Hotel> query1 = pm.newQuery(Hotel.class);
+			System.out.println(" * '" + query1.deletePersistentAll() + "' users and their accounts deleted from the DB.");
+
+			//End the transaction
+			tx.commit();
+		} catch (Exception ex) {
+			System.err.println(" $ Error cleaning the DB: " + ex.getMessage());
+			ex.printStackTrace();
+		} finally {
+			if (tx != null && tx.isActive()) {
+				tx.rollback();
+			}
+
+			if (pm != null && !pm.isClosed()) {
+				pm.close();
+			}
+		}
+	}	
 }

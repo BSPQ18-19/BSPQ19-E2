@@ -125,6 +125,7 @@ public class HotelAdminPanel extends JPanel{
 			break;
 		case VIEW:
 			centerPanel = new HotelView(this.screenWidth, this.screenHeight-upperButtons.getHeight(), client);
+			System.out.println(client.getCurrentHotels());
 			break;
 		default:
 			break;

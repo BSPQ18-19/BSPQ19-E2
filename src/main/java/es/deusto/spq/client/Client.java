@@ -37,27 +37,6 @@ public class Client {
 		return null;
     }
     
-	public static void main(String[] args) throws RemoteException{
-		if (args.length != 3) {
-			System.out.println("Use: java [policy] [codebase] Client.Client [host] [port] [server]");
-			System.exit(0);
-		}
-
-		if (System.getSecurityManager() == null) {
-			System.setSecurityManager(new SecurityManager());
-		}
-
-		try {
-			String name = "//" + args[0] + ":" + args[1] + "/" + args[2];
-			IServer serverStub = (IServer) java.rmi.Naming.lookup(name);
-			serverStub.sayHello();
-			serverStub.sayMessage("Bye!");
-			new Client(args);
-		} catch (Exception e) {
-			System.err.println("RMI Example exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
 	public ArrayList<HotelDTO> getCurrentHotels() {
 		return currentHotels;
 	}
@@ -66,6 +45,10 @@ public class Client {
 	}
 	public void setCurrentHotels() {
 		this.currentHotels.clear();
+	}
+	
+	public static void main(String[] args) throws RemoteException{
+		new Client(args);
 	}
 	
 }

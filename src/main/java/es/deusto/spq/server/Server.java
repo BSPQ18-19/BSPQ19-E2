@@ -34,9 +34,13 @@ public class Server extends UnicastRemoteObject implements IServer {
 		hotels.put("H04", new Hotel("H04", "Hotel4", "Sevilla", null, LocalDate.of(2019, 6, 01), LocalDate.of(2019, 8, 31)));
 		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", null, LocalDate.of(2019, 6, 01), LocalDate.of(2019, 8, 31)));
 		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", null, LocalDate.of(2019, 1, 01), LocalDate.of(2019, 6, 30)));
-	
 		
-		
+		this.dao = new HotelDAO();
+//		dao.cleanDB();
+//		for(Hotel hotel: hotels.values()) {
+//			dao.storeHotel(hotel);
+//		}
+
 	}
 	
 
@@ -83,7 +87,9 @@ public class Server extends UnicastRemoteObject implements IServer {
 		HotelAssembler hotelAssembler = new HotelAssembler();
 		
 		System.out.println("Retrieving hotels...");
-		for(Hotel hotel: hotels.values()) {
+		List<Hotel> listHotels = dao.getHotels();
+		for(Hotel hotel: listHotels) {
+			System.out.println(hotel.getLocation());
 			hotelsDTO.add(hotelAssembler.assemble(hotel));
 		}
 		
@@ -91,6 +97,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 			System.out.println("New exception - There are no hotels for the requested information.");
 			throw new RemoteException("HOTELS - There are no hotels for the requested information.");
 		}
+
 		return hotelsDTO;
 	}
 	
