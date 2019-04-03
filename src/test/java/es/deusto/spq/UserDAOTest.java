@@ -33,7 +33,9 @@ public class UserDAOTest {
 		User user1Test = userDao.getUserbyID("4");
 //		Logger.getLogger("log").info(user1Test.toString());
 		Assert.assertTrue(user1.equals(user1Test));
-		//TODO the user should be deleted
+		
+		//Delete user
+		Assert.assertTrue(userDao.deleteUser("4") == 1);
 	}
 
 }

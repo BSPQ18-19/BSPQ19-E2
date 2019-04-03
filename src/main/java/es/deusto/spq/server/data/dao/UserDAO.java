@@ -97,5 +97,26 @@ public class UserDAO implements IUserDAO {
 		if (tx != null && tx.isActive())
 			tx.rollback();
 	}
+
+	public long deleteUser(String ID) {
+		try {
+			pm = MyPersistenceManager.getPersistenceManager();
+			tx = pm.currentTransaction();
+			tx.begin();
+			
+			Query<User> query = pm.newQuery(User.class);
+			query.setFilter("userID == '" + ID + "'");
+			long deletedUsers = query.deletePersistentAll();
+			tx.commit();
+			return deletedUsers;
+		} catch (Exception e) {
+			System.err.println("Error in UserDAO:deleteUser()"); //TODO replace sysos with logger
+			e.printStackTrace();
+			
+		} finally {
+			close();
+		}
+		return 0;
+	}
 	
 }
