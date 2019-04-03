@@ -16,12 +16,14 @@ public class Server extends UnicastRemoteObject implements IServer {
 	}
 
 	public static void main(String[] args) {
+
+		Logger log = ServerLogger.getLogger();
+
 		if (args.length != 3) {
-			System.out.println("How to invoke: java [policy] [codebase] Server.Server [host] [port] [server]");
+			log.severe("How to invoke: java [policy] [codebase] Server.Server [host] [port] [server]");
 			System.exit(0);
 		}
 
-		Logger log = ServerLogger.getLogger();
 
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new SecurityManager());
