@@ -118,7 +118,7 @@ public class LocaleManager {
      * @return the ResourceBundle associated to the specified locale
      */
     private static ResourceBundle getResourceBundle(Locale locale) {
-        return ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale, new UTF8Control());
+        return ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
     }
 
     /**
