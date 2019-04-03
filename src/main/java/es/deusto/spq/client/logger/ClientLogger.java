@@ -4,15 +4,16 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-/**The logger manager for the client, so that there's only one log in the client.
+/**
+ * The logger manager for the client, so that there's only one log in the client.
  * It can be retrieved to log messages.
  * @author Iker
  *
  */
 public class ClientLogger {
 
-	/**The logger to be used in the client.
-	 * 
+	/**
+	 * The logger to be used in the client.
 	 */
 	private static Logger log;
 	private static FileHandler fh;
@@ -28,8 +29,9 @@ public class ClientLogger {
 		}
 //		log.info("test");
 	}
-	
-	/**Retrieves the logger to be used in the client.
+
+	/**
+	 * Retrieves the logger to be used in the client.
 	 * @return a Logger object.
 	 */
 	public static Logger getLogger() {
