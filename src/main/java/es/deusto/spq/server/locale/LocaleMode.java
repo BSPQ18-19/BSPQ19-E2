@@ -1,4 +1,4 @@
-package es.deusto.spq.client.locale;
+package es.deusto.spq.server.locale;
 
 /**
  * LocaleMode sets the expected behaviour of the LocaleManager class

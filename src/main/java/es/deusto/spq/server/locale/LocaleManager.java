@@ -1,4 +1,4 @@
-package es.deusto.spq.client.locale;
+package es.deusto.spq.server.locale;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -17,6 +17,11 @@ public class LocaleManager {
      * Will be the only active instance for it.
      */
     private static LocaleManager instance = null;
+
+    /**
+     * The name of the ResourceBundle files
+     */
+    private static final String RESOURCE_BUNDLE_FILE_NAME = "localization";
 
     /**
      * The default locale for the app.
@@ -96,7 +101,7 @@ public class LocaleManager {
      * @return the ResourceBundle associated to the current locale
      */
     private static ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle("localization", locale);
+        return ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
     }
 
 
@@ -105,7 +110,7 @@ public class LocaleManager {
      * @return the ResourceBundle associated to the specified locale
      */
     private static ResourceBundle getResourceBundle(Locale locale) {
-        return ResourceBundle.getBundle("localization", locale);
+        return ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
     }
 
     /**
