@@ -9,6 +9,7 @@ import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.jdo.User;
+import es.deusto.spq.server.logger.ServerLogger;
 
 public class UserDAO implements IUserDAO {
 
@@ -36,7 +37,7 @@ public class UserDAO implements IUserDAO {
 			return queryExecution;
 			
 		} catch (Exception e) {
-			System.err.println("Error in UserDAO:getUsers()"); //TODO replace sysos with logger
+			ServerLogger.getLogger().severe("Error in UserDAO:getUsers()");
 			e.printStackTrace();
 			
 		} finally {
@@ -62,7 +63,7 @@ public class UserDAO implements IUserDAO {
 					null :
 					(User) pm.detachCopy(result.get(0));
 		} catch (Exception e) {
-			System.err.println("Error in UserDAO:getUserbyID()"); //TODO replace sysos with logger
+			ServerLogger.getLogger().severe("Error in UserDAO:getUserbyID()");
 			e.printStackTrace();
 			
 		} finally {
@@ -85,7 +86,7 @@ public class UserDAO implements IUserDAO {
 			return pm.detachCopy(user);
 			
 		} catch (Exception e) {
-			System.err.println("Error in UserDAO:createUser()"); //TODO replace with logger
+			ServerLogger.getLogger().severe("Error in UserDAO:createUser()");
 			e.printStackTrace();
 			
 		} finally {
@@ -123,7 +124,8 @@ public class UserDAO implements IUserDAO {
 			return true;
 
 		} catch (Exception e) {
-			
+			ServerLogger.getLogger().severe("Error in UserDAO:deleteUserbyID()");
+			e.printStackTrace();
 		} finally {
 			close();
 		}
