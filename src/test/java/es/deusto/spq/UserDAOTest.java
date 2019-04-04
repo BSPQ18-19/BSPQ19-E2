@@ -2,6 +2,7 @@ package es.deusto.spq;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.junit.BeforeClass;
@@ -35,20 +36,25 @@ public class UserDAOTest {
 		Assert.assertTrue(detachedUser.equals(user));
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void secondGetUserByID() {
-		
+		User detachedUser = userDao.getUserbyID(userID);
+		Assert.assertTrue(detachedUser.equals(user));
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void thirdGetUsers() {
-		
+		List<User> users = userDao.getUsers();
+		Assert.assertEquals(users.size(), 1);
+		Assert.assertEquals(users.get(0), user);
 	}
 	
-	@Test
 	@SuppressWarnings("deprecation")
+	@Test
 	public void fourthDeleteUserByID() {
-		
+		Assert.assertTrue(userDao.deleteUserbyID(userID));
 	}
 
 }
