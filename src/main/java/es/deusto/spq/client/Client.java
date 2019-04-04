@@ -1,14 +1,21 @@
 package es.deusto.spq.client;
 
+import java.util.logging.Logger;
+
+import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.IServer;
 
 public class Client {
 
 	public static void main(String[] args) {
+
+		Logger log = ClientLogger.getLogger();
+
 		if (args.length != 3) {
-			System.out.println("Use: java [policy] [codebase] Client.Client [host] [port] [server]");
+			log.severe("Use: java [policy] [codebase] Client.Client [host] [port] [server]");
 			System.exit(0);
 		}
+
 
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new SecurityManager());
@@ -20,8 +27,8 @@ public class Client {
 			serverStub.sayHello();
 			serverStub.sayMessage("Bye!");
 		} catch (Exception e) {
-			System.err.println("RMI Example exception: " + e.getMessage());
-			e.printStackTrace();
+			log.severe("RMI error. Turning down the client... - " + e.getMessage());
+//			e.printStackTrace();
 		}
 	}
 }
