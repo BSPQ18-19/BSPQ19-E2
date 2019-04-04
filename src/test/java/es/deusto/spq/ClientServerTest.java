@@ -23,12 +23,18 @@ public class ClientServerTest {
 
 	private static String serverUrl;
 	private static String clientUrl;
+	private static String cwd = ClientServerTest.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+
 	
 	@BeforeClass
 	public static void setUpParameters() {
 		serverUrl = "//127.0.0.1:1099/HotelManagementServer";
 		clientUrl = "//127.0.0.1:1099/HotelManagementServer";
-		
+
+
+		System.setProperty("java.rmi.server.codebase", "file:" + cwd);
+		System.setProperty("java.security.policy", "target\\classes\\security\\java.policy");
+
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new SecurityManager());
 		}
@@ -43,8 +49,6 @@ public class ClientServerTest {
 		java.io.InputStreamReader iSR = new java.io.InputStreamReader (System.in);
 		java.io.BufferedReader stdin = new java.io.BufferedReader (iSR);
 
-		System.out.println("hola");
-		
 		//Client side
 		String testMessage = "this is a test";
 		IServerTest serverStub = (IServerTest) java.rmi.Naming.lookup(clientUrl);
