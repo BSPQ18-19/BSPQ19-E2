@@ -1,5 +1,6 @@
 package es.deusto.spq.server.locale;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -125,30 +126,33 @@ public class LocaleManager {
      * Gets a translated String, given a key
      * @param key the key of the message to be localized
      */
-    public static String getMessage(String key, String... parameters) {
+    public static String getMessage(String key, Object... parameters) {
+
+        Locale localeToUse = getLocale();
 
         // Check if the key is present for the current locale
         if (!getResourceBundle().containsKey(key)) {
 
             // DEBUG mode: we don't fall back to default locale
             // useful for detecting untranslated UI elements
-            if (mode == LocaleMode.DEBUG) {
+            if (mode == LocaleMode.DEBUG || !getResourceBundle(DEFAULT_LOCALE).containsKey(key)) {
                 return key; // return just the translation key
             }
 
-            // If we're in NORMAL mode, we fall back to the default locale
-            if(!getResourceBundle(DEFAULT_LOCALE).containsKey(key)) {
-                return key; // locale not present even in the default locale, return key
-            }
-
-            // Return the key from the default locale
-            return getResourceBundle(DEFAULT_LOCALE).getString(key);
+            // In this case we use the default locale
+            localeToUse = getDefaultLocale();
 
         }
 
-        // Return the translated String from the current Locale
-        return getResourceBundle().getString(key);
+        MessageFormat formatter = new MessageFormat("");
+        formatter.setLocale(localeToUse);
+        formatter.applyPattern(getResourceBundle(localeToUse).getString(key));
+        return formatter.format(parameters);
+
     }
 
-    // TODO: support parameters in translation messages
+    private boolean shouldReturnKey(Locale locale, String key) {
+        return false;
+    }
+
 }

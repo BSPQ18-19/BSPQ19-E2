@@ -64,11 +64,18 @@ public class LocaleTest {
         Assert.assertEquals("Hello world!", LocaleManager.getMessage("test.hello"));
         Assert.assertEquals("Bye bye!", LocaleManager.getMessage("test.bye"));
 
-        // TODO make it work with non-ASCII characters.
+        // Switching locale...
         LocaleManager.setLocale(new Locale("es", "ES"));
+
+        // Special chars test (note you might need to update to Java 9+ to make this test pass)
         Assert.assertEquals("¡Hola!", LocaleManager.getMessage("test.hello"));
-        Assert.assertEquals("o/", LocaleManager.getMessage("test.bye"));
+        Assert.assertEquals("Adiós.", LocaleManager.getMessage("test.bye"));
         Assert.assertEquals("áéíóúÁÉÍÓÚñÑç¡¿\"\"", LocaleManager.getMessage("test.specialchars"));
+
+        // Parametrized examples
+        Assert.assertEquals("If you add 1 and 2, you get 3", LocaleManager.getMessage("test.parameters.1", 1+2));
+        Assert.assertEquals("Hello, John. You have 2 pending payments.",
+                LocaleManager.getMessage("test.parameters.2", "John", 2));
 
     }
 
