@@ -151,8 +151,4 @@ public class LocaleManager {
 
     }
 
-    private boolean shouldReturnKey(Locale locale, String key) {
-        return false;
-    }
-
 }
