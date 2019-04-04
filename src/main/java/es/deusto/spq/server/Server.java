@@ -17,10 +17,8 @@ public class Server extends UnicastRemoteObject implements IServer {
 
 	public static void main(String[] args) {
 
-		Logger log = ServerLogger.getLogger();
-
 		if (args.length != 3) {
-			log.severe("How to invoke: java [policy] [codebase] Server.Server [host] [port] [server]");
+			ServerLogger.getLogger().severe("How to invoke: java [policy] [codebase] Server.Server [host] [port] [server]");
 			System.exit(0);
 		}
 
@@ -34,13 +32,14 @@ public class Server extends UnicastRemoteObject implements IServer {
 		try {
 			IServer objServer = new Server();
 			Naming.rebind(url, objServer);
-			log.info("Server '" + url + "' active and waiting...");
+			ServerLogger.getLogger().info("Server '" + url + "' active and waiting...");
 			java.io.InputStreamReader inputStreamReader = new java.io.InputStreamReader ( System.in );
 			java.io.BufferedReader stdin = new java.io.BufferedReader ( inputStreamReader );
 			@SuppressWarnings("unused")
 			String line  = stdin.readLine();
 		} catch (Exception e) {
-			log.severe("RMI error. Turning down... - " + e.getMessage());
+			ServerLogger.getLogger().severe("RMI error. Turning off... - " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
