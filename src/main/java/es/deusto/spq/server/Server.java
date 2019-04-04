@@ -1,11 +1,18 @@
 package es.deusto.spq.server;
 
+import es.deusto.spq.server.locale.LocaleManager;
+import es.deusto.spq.server.locale.LocaleMode;
+
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+
+import java.util.Locale;
+
 import java.util.logging.Logger;
 
 import es.deusto.spq.server.logger.ServerLogger;
+
 
 public class Server extends UnicastRemoteObject implements IServer {
 
@@ -50,6 +57,6 @@ public class Server extends UnicastRemoteObject implements IServer {
 
 	@Override
 	public void sayHello() throws RemoteException {
-		System.out.println("Hello!");
+		System.out.println(LocaleManager.getMessage("test.hello"));
 	}
 }
