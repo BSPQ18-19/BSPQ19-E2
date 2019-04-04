@@ -15,11 +15,13 @@ public class UserDAO implements IUserDAO {
 	private PersistenceManager pm;
 	private Transaction tx;
 	
-	public UserDAO() {}
+	public UserDAO() {
+		pm = MyPersistenceManager.getPersistenceManager();
+	}
 	
+	@Override
 	public List<User> getUsers(){
 		try {
-			pm = MyPersistenceManager.getPersistenceManager();
 			tx = pm.currentTransaction();
 			tx.begin();
 			
@@ -44,9 +46,9 @@ public class UserDAO implements IUserDAO {
 		return null;
 	}
 	
+	@Override
 	public User getUserbyID(String ID) {
 		try {
-			pm = MyPersistenceManager.getPersistenceManager();
 			tx = pm.currentTransaction();
 			tx.begin();
 			
@@ -70,9 +72,9 @@ public class UserDAO implements IUserDAO {
 		return null;
 	}
 	
+	@Override
 	public User createUser(User user) {
 		try {
-			pm = MyPersistenceManager.getPersistenceManager();
 			tx = pm.currentTransaction();
 			tx.begin();
 
@@ -98,25 +100,34 @@ public class UserDAO implements IUserDAO {
 			tx.rollback();
 	}
 
-	public long deleteUser(String ID) {
+	@Override
+	public boolean deleteUser(User user) {
+		return deleteUserbyID(user.getUserID());
+	}
+	
+	@Override
+	public boolean deleteUserbyID(String ID) { //TODO
 		try {
-			pm = MyPersistenceManager.getPersistenceManager();
 			tx = pm.currentTransaction();
 			tx.begin();
 			
 			Query<User> query = pm.newQuery(User.class);
-			query.setFilter("userID == '" + ID + "'");
-			long deletedUsers = query.deletePersistentAll();
+			@SuppressWarnings("unchecked")
+			List<User> queryExecution = (List<User>) query.execute();
+			if(queryExecution.isEmpty() || queryExecution.size() > 1)
+				return false;
+			pm.deletePersistent(queryExecution.get(0));
+			
 			tx.commit();
-			return deletedUsers;
+			
+			return true;
+
 		} catch (Exception e) {
-			System.err.println("Error in UserDAO:deleteUser()"); //TODO replace sysos with logger
-			e.printStackTrace();
 			
 		} finally {
 			close();
 		}
-		return 0;
+		return false;
 	}
 	
 }
