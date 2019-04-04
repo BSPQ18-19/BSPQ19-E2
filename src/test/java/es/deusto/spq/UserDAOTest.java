@@ -1,9 +1,7 @@
 package es.deusto.spq;
 
-import static org.junit.Assert.*;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -15,6 +13,17 @@ import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.User;
 import junit.framework.Assert;
 
+/**
+ * The test-class for {@link es.deusto.spq.server.data.dao.UserDAO}. 
+ * 
+ * <p>
+ * Methods have a character at the beginning in order to sort them using both {@link org.junit.FixMethodOrder} and
+ * {@link org.junit.runners.MethodSorters}.
+ * </p>
+ * 
+ * @author Iker
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserDAOTest {
 

@@ -59,6 +59,7 @@ public abstract class User implements Serializable {
 	
 	@Override
 	public boolean equals(Object o) {
+		//Two users are equal objects if and only if they have the same userID.
 		if(o instanceof User) {
 			User object = (User) o;
 			return object.getUserID().equals(userID);

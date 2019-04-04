@@ -96,6 +96,9 @@ public class UserDAO implements IUserDAO {
 		return null;
 	}
 	
+	/**
+	 * Closes the transaction if it hasn't been closed before, and makes rollback.
+	 */
 	private final void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
