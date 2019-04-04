@@ -113,6 +113,7 @@ public class UserDAO implements IUserDAO {
 			tx.begin();
 			
 			Query<User> query = pm.newQuery(User.class);
+			query.setFilter("userID == '" + ID + "'");
 			@SuppressWarnings("unchecked")
 			List<User> queryExecution = (List<User>) query.execute();
 			if(queryExecution.isEmpty() || queryExecution.size() > 1)

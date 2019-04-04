@@ -31,21 +31,21 @@ public class UserDAOTest {
 	
 	@SuppressWarnings("deprecation")
 	@Test
-	public void firstCreateUser() {
+	public void aCreateUser() {
 		User detachedUser = userDao.createUser(user);
 		Assert.assertTrue(detachedUser.equals(user));
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Test
-	public void secondGetUserByID() {
+	public void bGetUserByID() {
 		User detachedUser = userDao.getUserbyID(userID);
 		Assert.assertTrue(detachedUser.equals(user));
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Test
-	public void thirdGetUsers() {
+	public void cGetUsers() {
 		List<User> users = userDao.getUsers();
 		Assert.assertEquals(users.size(), 1);
 		Assert.assertEquals(users.get(0), user);
@@ -53,7 +53,7 @@ public class UserDAOTest {
 	
 	@SuppressWarnings("deprecation")
 	@Test
-	public void fourthDeleteUserByID() {
+	public void dDeleteUserByID() {
 		Assert.assertTrue(userDao.deleteUserbyID(userID));
 	}
 
