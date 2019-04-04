@@ -33,11 +33,7 @@ public class ClientServerTest {
 
 
 		System.setProperty("java.rmi.server.codebase", "file:" + cwd);
-		System.setProperty("java.security.policy", "target\\classes\\security\\java.policy");
-
-		if (System.getSecurityManager() == null) {
-			System.setSecurityManager(new SecurityManager());
-		}
+		System.setProperty("java.security.policy", "./java.policy");
 	}
 		
 	@SuppressWarnings("deprecation")

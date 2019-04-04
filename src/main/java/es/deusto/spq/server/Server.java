@@ -14,6 +14,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 	
 
 	public static void main(String[] args) {
+
 		if (args.length != 3) {
 			System.out.println("How to invoke: java [policy] [codebase] Server.Server [host] [port] [server]");
 			System.exit(0);
