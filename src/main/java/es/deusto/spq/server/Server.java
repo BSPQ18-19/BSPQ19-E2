@@ -3,6 +3,7 @@ package es.deusto.spq.server;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import javax.swing.text.DateFormatter;
 
 import es.deusto.spq.server.data.Hotel;
 import es.deusto.spq.server.data.dao.HotelDAO;
@@ -92,6 +95,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 			System.out.println(hotel.getLocation());
 			hotelsDTO.add(hotelAssembler.assemble(hotel));
 		}
+		System.out.println(hotelsDTO.size());
 		
 		if(hotelsDTO.isEmpty()) {
 			System.out.println("New exception - There are no hotels for the requested information.");
@@ -99,6 +103,22 @@ public class Server extends UnicastRemoteObject implements IServer {
 		}
 
 		return hotelsDTO;
+	}
+
+
+	@Override
+	public HotelDTO createHotel(String id, String name, String location, String[] services, String seasonStart,
+			String seasonEnd) throws RemoteException {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		if(hotels.containsKey(id.trim()))
+			throw new RemoteException("Server - Hotel ID aready exists");
+		Hotel hotel = new Hotel(id.trim(), name.trim(), location.trim(), services,
+				LocalDate.parse(seasonStart.trim(), formatter), LocalDate.parse(seasonEnd.trim(), formatter));
+		hotels.put(hotel.getHotelId(), hotel);
+		dao.storeHotel(hotel);
+		
+		HotelAssembler hotelAssembler = new HotelAssembler();
+		return hotelAssembler.assemble(hotel);
 	}
 	
 }

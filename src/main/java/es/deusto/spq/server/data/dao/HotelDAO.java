@@ -122,10 +122,9 @@ private PersistenceManagerFactory pmf;
 		try {
 			tx.begin();
 
-			//Delete users from DB
-			// As we are considering accounts as dependents on user - CASCADING BEHAVIOUR - ACCOUNTS DELETED
+			//Delete hotels from DB
 			Query<Hotel> query1 = pm.newQuery(Hotel.class);
-			System.out.println(" * '" + query1.deletePersistentAll() + "' users and their accounts deleted from the DB.");
+			System.out.println(" * '" + query1.deletePersistentAll() + "' hotels deleted from the DB.");
 
 			//End the transaction
 			tx.commit();

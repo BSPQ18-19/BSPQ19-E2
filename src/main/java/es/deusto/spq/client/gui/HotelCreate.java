@@ -2,6 +2,7 @@ package es.deusto.spq.client.gui;
 
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.TextField;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,13 +14,16 @@ public class HotelCreate extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel nameLabel, locationLabel, servicesLabel, seasonStartLabel, seasonEndingLabel, roomLabel;
-	private JTextArea nameTextArea, locationTextArea, servicesTextArea, roomTextArea;
-	private JTextArea seasonStartTextArea, seasonEndingTextArea;
+	private JLabel idLabel, nameLabel, locationLabel, servicesLabel, seasonStartLabel, seasonEndingLabel, roomLabel;
+	private TextField idTextField, nameTextField, locationTextField, servicesTextField, roomTextField;
+	private TextField seasonStartTextField, seasonEndingTextField;
 	
 	public HotelCreate() {
 		
 		this.setLayout(new GridLayout(12, 1));
+		
+		idLabel = new JLabel("ID");
+		idLabel.setFont(new Font(idLabel.getName(), Font.PLAIN, 25));
 		
 		nameLabel = new JLabel("Name");
 		nameLabel.setFont(new Font(nameLabel.getName(), Font.PLAIN, 25));
@@ -36,63 +40,73 @@ public class HotelCreate extends JPanel {
 		seasonEndingLabel = new JLabel("Season ending (YYYY-MM-DD)");
 		seasonEndingLabel.setFont(new Font(seasonEndingLabel.getName(), Font.PLAIN, 25));
 
-		roomLabel = new JLabel("Season ending (YYYY-MM-DD)");
-		roomLabel.setFont(new Font(roomLabel.getName(), Font.PLAIN, 25));
+//		roomLabel = new JLabel("Season ending (YYYY-MM-DD)");
+//		roomLabel.setFont(new Font(roomLabel.getName(), Font.PLAIN, 25));
 		
-		nameTextArea = new JTextArea(1, 20);
-		nameTextArea.setFont(new Font(nameTextArea.getName(), Font.PLAIN, 25));
+		idTextField = new TextField(20);
+		idTextField.setFont(new Font(idTextField.getName(), Font.PLAIN, 25));
 		
-		locationTextArea = new JTextArea(1, 20);
-		locationTextArea.setFont(new Font(locationTextArea.getName(), Font.PLAIN, 25));
+		nameTextField = new TextField(20);
+		nameTextField.setFont(new Font(nameTextField.getName(), Font.PLAIN, 25));
 		
-		servicesTextArea = new JTextArea(1, 20);
-		servicesTextArea.setFont(new Font(servicesTextArea.getName(), Font.PLAIN, 25));
+		locationTextField = new TextField(20);
+		locationTextField.setFont(new Font(locationTextField.getName(), Font.PLAIN, 25));
 		
-		seasonStartTextArea = new JTextArea(1, 20);
-		seasonStartTextArea.setFont(new Font(seasonStartTextArea.getName(), Font.PLAIN, 25));
+		servicesTextField = new TextField(20);
+		servicesTextField.setFont(new Font(servicesTextField.getName(), Font.PLAIN, 25));
 		
-		seasonEndingTextArea = new JTextArea(1, 20);
-		seasonEndingTextArea.setFont(new Font(seasonEndingTextArea.getName(), Font.PLAIN, 25));
+		seasonStartTextField = new TextField(20);
+		seasonStartTextField.setFont(new Font(seasonStartTextField.getName(), Font.PLAIN, 25));
 		
-		roomTextArea = new JTextArea(1, 20);
-		roomTextArea.setFont(new Font(roomTextArea.getName(), Font.PLAIN, 25));
+		seasonEndingTextField = new TextField(20);
+		seasonEndingTextField.setFont(new Font(seasonEndingTextField.getName(), Font.PLAIN, 25));
+//		
+//		roomTextArea = new TextField(20);
+//		roomTextArea.setFont(new Font(roomTextArea.getName(), Font.PLAIN, 25));
 		
+		this.add(idLabel);
+		this.add(idTextField);
 		this.add(nameLabel);
-		this.add(nameTextArea);
+		this.add(nameTextField);
 		this.add(locationLabel);
-		this.add(locationTextArea);
+		this.add(locationTextField);
 		this.add(servicesLabel);
-		this.add(servicesTextArea);
+		this.add(servicesTextField);
 		this.add(seasonStartLabel);
-		this.add(seasonStartTextArea);
+		this.add(seasonStartTextField);
 		this.add(seasonEndingLabel);			
-		this.add(seasonEndingTextArea);
-		this.add(roomLabel);			
-		this.add(roomTextArea);
+		this.add(seasonEndingTextField);
+//		this.add(roomLabel);			
+//		this.add(roomTextArea);
 	}
 
-	public String getNameTextArea() {
-		return nameTextArea.getText();
+	
+	public String getIdTextField() {
+		return idTextField.getText();
 	}
 
-	public String getLocationTextArea() {
-		return locationTextArea.getText();
+	public String getNameTextField() {
+		return nameTextField.getText();
 	}
 
-	public String getServicesTextArea() {
-		return servicesTextArea.getText();
+	public String getLocationTextField() {
+		return locationTextField.getText();
 	}
 
-	public String getRoomTextArea() {
-		return roomTextArea.getText();
+	public String getServicesTextField() {
+		return servicesTextField.getText();
 	}
 
-	public String getSeasonStartTextArea() {
-		return seasonStartTextArea.getText();
+//	public String getRoomTextField() {
+//		return roomTextArea.getText();
+//	}
+
+	public String getSeasonStartTextField() {
+		return seasonStartTextField.getText();
 	}
 
-	public String getSeasonEndingTextArea() {
-		return seasonEndingTextArea.getText();
+	public String getSeasonEndingTextField() {
+		return seasonEndingTextField.getText();
 	}
 	
 	

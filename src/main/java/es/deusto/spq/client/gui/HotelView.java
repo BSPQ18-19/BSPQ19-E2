@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import javax.sound.midi.ControllerEventListener;
 import javax.swing.JFrame;
@@ -33,28 +36,6 @@ public class HotelView extends JPanel{
 		
 		hotelsTable = new JTable();
 		tableModel = (DefaultTableModel) hotelsTable.getModel();
-		
-		client.setCurrentHotels();
-		HotelDTO[] retrievedHotels = client.retrieveHotels();
-		if(retrievedHotels == null || retrievedHotels.length == 0) {
-			JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);
-		}else {
-			client.setCurrentHotels();
-			if(tableModel.getRowCount() != 0) {
-				for(int i = tableModel.getRowCount()-1; i >= 0; i--) {
-					tableModel.removeRow(i);
-				}
-			}
-			DecimalFormat df = new DecimalFormat("##");
-			for (HotelDTO hotel: retrievedHotels) {
-				tableModel.addRow(new String[] {hotel.getName(), hotel.getLocation(),
-						hotel.getServices().toString(), String.valueOf(df.format(hotel.getSeasonStart().getYear())) 
-						+ "-" + String.valueOf(df.format(hotel.getSeasonStart().getMonth())) 
-						+ "-" + String.valueOf(df.format(hotel.getSeasonStart().getDayOfMonth()))});
-				client.setCurrentHotels(hotel);
-			}
-		}
-		
 		hotelsTable.setSize(700, 100);
 		hotelsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
@@ -63,11 +44,9 @@ public class HotelView extends JPanel{
 		tableModel.addColumn("Services");
 		tableModel.addColumn("Season start");
 		tableModel.addColumn("Season end");
-//		tableModel.addColumn("Rooms");
-		
 		
 		hotelsTable.addMouseListener(new MouseAdapter() {
-						
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {		
 				hotelsTable.setDefaultRenderer(Object.class, new MyTableCellRenderer() );
@@ -79,6 +58,41 @@ public class HotelView extends JPanel{
 		tableScrollPane.setLocation((int) (screenWidth / 2.05 - tableScrollPane.getWidth() / 2), (int) (screenHeight / 3 - tableScrollPane.getHeight() / 2));
 		
 		this.add(tableScrollPane);
+		
+		client.setCurrentHotels();
+		ArrayList<HotelDTO> retrievedHotels = client.retrieveHotels();
+		if(retrievedHotels == null || retrievedHotels.size() == 0) {
+			JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);
+		}else {
+			client.setCurrentHotels();
+			if(tableModel.getRowCount() != 0) {
+				for(int i = tableModel.getRowCount()-1; i >= 0; i--) {
+					tableModel.removeRow(i);
+				}
+			}
+			
+			for (HotelDTO hotel: retrievedHotels) {
+				System.out.println(hotel.getName());
+				
+				tableModel.addRow(new String[] {hotel.getName(), hotel.getLocation(),
+						"" , String.valueOf(hotel.getSeasonStart().getYear())
+						+ "-" + String.valueOf(hotel.getSeasonStart().getMonth()) 
+						+ "-" + String.valueOf(hotel.getSeasonStart().getDayOfMonth()),
+						String.valueOf(hotel.getSeasonEnding().getYear())
+						+ "-" + String.valueOf(hotel.getSeasonEnding().getMonth()) 
+						+ "-" + String.valueOf(hotel.getSeasonEnding().getDayOfMonth())});
+
+				client.setCurrentHotels(hotel);
+			}
+		}
+		
+		
+		
+
+//		tableModel.addColumn("Rooms");
+		
+		
+
 	}
 	static class MyTableCellRenderer extends DefaultTableCellRenderer {
 

@@ -21,13 +21,36 @@ public class Client {
 		ClientWindow.getClientWindow(this).setVisible(true);
 	}
     
-    public HotelDTO[] retrieveHotels() {
+    public boolean createHotel(String id, String name, String location, String[] services, String seasonStart, String seasonEnd) {
+    	
+    	try {
+    		System.out.println("Creating new hotel...");
+			HotelDTO hotelDTO = serviceLocator.getService().createHotel(id, name, location, services, seasonStart, seasonEnd);
+			if(hotelDTO!=null) {
+				System.out.println("Hotel created successfully!");
+				return true;
+			}else {
+				System.out.println("Hotel cannot be created.");
+			}
+		} catch (RemoteException e) {
+			System.out.println("Error creating a new hotel: " + e.getMessage());
+		}
+    	return false;
+    }
+    
+    public ArrayList<HotelDTO> retrieveHotels() {
     	System.out.println("Getting list of hotels.");
     	try {
 			ArrayList<HotelDTO> hotel = serviceLocator.getService().retrieveHotels();
-			HotelDTO[] hotels = hotel.toArray(new HotelDTO[hotel.size()]);
-			if(hotels != null && hotels.length != 0) {
+//			for(HotelDTO hotelDTO: hotel) {
+//				System.out.println(hotelDTO.getLocation());
+//			}
+//			HotelDTO[] hotels = hotel.toArray(new HotelDTO[hotel.size()]);
+			
+			
+			if(hotel != null && hotel.size() != 0) {
 				System.out.println("List of hotels retrieved succesfully.");
+				return hotel;
 			}else {
 				System.out.println("Could not retrieve list of hotels");
 			}

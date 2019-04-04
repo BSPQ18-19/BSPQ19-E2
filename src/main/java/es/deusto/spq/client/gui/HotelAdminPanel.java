@@ -77,19 +77,25 @@ public class HotelAdminPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(centerPanel instanceof HotelCreate) {
-					if(((HotelCreate) centerPanel).getNameTextArea().equals("")
-							|| ((HotelCreate) centerPanel).getLocationTextArea().equals("")
-							|| ((HotelCreate) centerPanel).getServicesTextArea().equals("")
-							|| ((HotelCreate) centerPanel).getRoomTextArea().equals("")
-							|| ((HotelCreate) centerPanel).getSeasonStartTextArea().equals("")
-							|| ((HotelCreate) centerPanel).getSeasonEndingTextArea().equals("")) {
+					if(((HotelCreate) centerPanel).getNameTextField().equals("")
+							|| ((HotelCreate) centerPanel).getLocationTextField().equals("")
+							|| ((HotelCreate) centerPanel).getServicesTextField().equals("")
+							|| ((HotelCreate) centerPanel).getSeasonStartTextField().equals("")
+							|| ((HotelCreate) centerPanel).getSeasonEndingTextField().equals("")
+							|| ((HotelCreate) centerPanel).getIdTextField().equals("")){
 						JOptionPane.showMessageDialog(null, "Please fill everything.", "Error", JOptionPane.ERROR_MESSAGE);
+					}else {
+						String[] services = ((HotelCreate) centerPanel).getServicesTextField().trim().split(", ");
+						client.createHotel(((HotelCreate) centerPanel).getIdTextField(), ((HotelCreate) centerPanel).getNameTextField(), ((HotelCreate) centerPanel).getLocationTextField(),
+								services, ((HotelCreate) centerPanel).getSeasonStartTextField(), 
+								((HotelCreate) centerPanel).getSeasonEndingTextField());
+						JOptionPane.showConfirmDialog(null, "Hotel created");
 					}
 				}
 				else if(centerPanel instanceof HotelView) {
 					System.out.println("2");
 				}
-				
+
 			}
 		});
 				
