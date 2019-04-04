@@ -106,7 +106,7 @@ public class UserDAO implements IUserDAO {
 	}
 	
 	@Override
-	public boolean deleteUserbyID(String ID) { //TODO
+	public boolean deleteUserbyID(String ID) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
