@@ -64,6 +64,7 @@ public class LocaleTest {
         Assert.assertEquals("áéíóúÁÉÍÓÚñÑç¡¿\"\"", LocaleManager.getMessage("test.specialchars"));
 
         // Parametrized examples
+        LocaleManager.setLocale(LocaleManager.getDefaultLocale());
         Assert.assertEquals("If you add 1 and 2, you get 3", LocaleManager.getMessage("test.parameters.1", 1+2));
         Assert.assertEquals("Hello, John. You have 2 pending payments.",
                 LocaleManager.getMessage("test.parameters.2", "John", 2));
