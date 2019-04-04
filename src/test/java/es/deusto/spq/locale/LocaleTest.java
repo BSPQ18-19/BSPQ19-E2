@@ -46,21 +46,12 @@ public class LocaleTest {
 
     }
 
-    /**
-     * Check that we get correct translations by default
-     */
-    @Test
-    public void getMessage_ExistingKeyDefaultLocale_CorrectMessage() {
-
-        // By default, english locale
-        Assert.assertEquals("Hello world!", LocaleManager.getMessage("test.hello"));
-        Assert.assertEquals("Bye bye!", LocaleManager.getMessage("test.bye"));
-    }
-
     @Test
     public void getMessage_LocaleChanges_CorrectMessage() {
 
         // First, with default locale
+        LocaleManager.setLocale(LocaleManager.getDefaultLocale());
+
         Assert.assertEquals("Hello world!", LocaleManager.getMessage("test.hello"));
         Assert.assertEquals("Bye bye!", LocaleManager.getMessage("test.bye"));
 
@@ -131,7 +122,7 @@ public class LocaleTest {
     }
 
     /**
-     *
+     * Test that when a key doesn't exist, the key itself gets printed
      */
     @Test
     public void getMessage_InvalidKeyNotPresent_PrintKey() {

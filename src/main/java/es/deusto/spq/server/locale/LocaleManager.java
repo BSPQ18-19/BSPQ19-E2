@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
  * The Client locale management master class.
  * <p>
  *     The main localization helper class.
+ *
  * </p>
  * @author Iñigo Apellániz
  */
@@ -122,12 +123,16 @@ public class LocaleManager {
         return ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
     }
 
+
     /**
-     * Gets a translated String, given a key
-     * @param key the key of the message to be localized
+     * Localize a message resource.
+     * @param key the key of the resource
+     * @param parameters vararg of the parameters for the resource
+     * @return an already-formatted String
      */
     public static String getMessage(String key, Object... parameters) {
 
+        // The locale to use for the formatting below
         Locale localeToUse = getLocale();
 
         // Check if the key is present for the current locale
@@ -139,11 +144,12 @@ public class LocaleManager {
                 return key; // return just the translation key
             }
 
-            // In this case we use the default locale
+            // In this case we use the default locale (key not found in Locale)
             localeToUse = getDefaultLocale();
 
         }
 
+        // Format with parameters
         MessageFormat formatter = new MessageFormat("");
         formatter.setLocale(localeToUse);
         formatter.applyPattern(getResourceBundle(localeToUse).getString(key));
