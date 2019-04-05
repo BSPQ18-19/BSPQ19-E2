@@ -3,24 +3,34 @@ package es.deusto.spq.server.data.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import es.deusto.spq.server.data.jdo.RoomType;
+
 public class RoomDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String roomID;
 	private float size;
 	private float price;
-	private RoomTypeDTO type;
-	private boolean status;
+	private RoomType type;
+	private boolean isOccupied;
 	private List<String> features;
 	
-	public RoomDTO(String roomID, float size, float price, RoomTypeDTO type, boolean status, List<String> features) {
+	public RoomDTO(String roomID, float size, float price, RoomType type, boolean isOccupied, List<String> features) {
 		super();
 		this.roomID = roomID;
 		this.size = size;
 		this.price = price;
 		this.type = type;
-		this.status = status;
+		this.isOccupied = isOccupied;
 		this.features = features;
+	}
+
+	public boolean isOccupied() {
+		return isOccupied;
+	}
+
+	public void setOccupied(boolean isOccupied) {
+		this.isOccupied = isOccupied;
 	}
 
 	public String getRoomID() {
@@ -47,20 +57,12 @@ public class RoomDTO implements Serializable {
 		this.price = price;
 	}
 
-	public RoomTypeDTO getType() {
+	public RoomType getType() {
 		return type;
 	}
 
-	public void setType(RoomTypeDTO type) {
+	public void setType(RoomType type) {
 		this.type = type;
-	}
-
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
 	}
 
 	public List<String> getFeatures() {

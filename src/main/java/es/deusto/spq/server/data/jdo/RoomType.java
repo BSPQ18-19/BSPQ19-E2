@@ -1,5 +1,7 @@
 package es.deusto.spq.server.data.jdo;
 
-public enum RoomType {
+import java.io.Serializable;
+
+public enum RoomType implements Serializable {
 	SINGLE, DOUBLE, TRIPLE, SUITE
 }

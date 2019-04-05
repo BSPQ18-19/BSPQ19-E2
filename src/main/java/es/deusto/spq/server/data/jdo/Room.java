@@ -7,25 +7,24 @@ public class Room {
 	private float size; 
 	private float price; 
 	private RoomType type;
-	private boolean status;
+	private boolean isOccupied;
 	private List<String> features;
 	
-	
 	/**
-	 * @param roomId 	Id of the room
-	 * @param size 		Size in square meters
-	 * @param price		Price per night
-	 * @param type		Single, double, triple or suite
-	 * @param status	Occupied or vacant
-	 * @param features	All the features that a room have
+	 * @param roomId Id of the room
+	 * @param size Size in square meters
+	 * @param price Price per night
+	 * @param type Single, double, triple or suite
+	 * @param isOccupied Occupied or vacant
+	 * @param features All the features that a room have
 	 */
-	public Room(String roomId, float size, float price, RoomType type, boolean status, List<String> features) {
+	public Room(String roomId, float size, float price, RoomType type, boolean isOccupied, List<String> features) {
 		super();
 		this.roomId = roomId;
 		this.size = size;
 		this.price = price;
 		this.type = type;
-		this.status = status;
+		this.isOccupied = isOccupied;
 		this.features = features;
 	}
 
@@ -61,12 +60,12 @@ public class Room {
 		this.type = type;
 	}
 
-	public boolean getStatus() {
-		return status;
+	public boolean isOccupied() {
+		return isOccupied;
 	}
 
-	public void setStatus(boolean status) {
-		this.status = status;
+	public void setOccupied(boolean isOccupied) {
+		this.isOccupied = isOccupied;
 	}
 
 	public List<String> getFeatures() {
