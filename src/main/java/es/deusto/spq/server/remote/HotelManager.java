@@ -28,7 +28,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 	
 	@Override
-	public boolean signInGuest(String name, String email, String password) {
+	public boolean signInGuest(String name, String email, String password, int phone, String address) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -49,13 +49,13 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
-	public boolean createHotel() {
+	public boolean createHotel(HotelDTO hotel) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean editHotel(String ID) {
+	public boolean editHotel(String ID, HotelDTO newVersion) {
 		// TODO Auto-generated method stub
 		return false;
 	}
