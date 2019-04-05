@@ -1,9 +1,0 @@
-Logger levels:
-
-FINEST < FINER < FINE < CONFIG < INFO < WARNING < SEVERE
-
-ALL - indicates all messages should be logged
-OFF - turns off logging
-
-More extended information about these levels:
-https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html

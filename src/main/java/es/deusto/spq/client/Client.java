@@ -4,6 +4,9 @@ import java.util.logging.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.IServer;
+import es.deusto.spq.server.locale.LocaleManager;
+
+import java.util.Locale;
 
 public class Client {
 
@@ -25,7 +28,8 @@ public class Client {
 			String name = "//" + args[0] + ":" + args[1] + "/" + args[2];
 			IServer serverStub = (IServer) java.rmi.Naming.lookup(name);
 			serverStub.sayHello();
-			serverStub.sayMessage("Bye!");
+			LocaleManager.setLocale(new Locale("es", "ES"));
+			serverStub.sayMessage(LocaleManager.getMessage("test.bye"));
 		} catch (Exception e) {
 			log.severe("RMI error. Turning down the client... - " + e.getMessage());
 //			e.printStackTrace();
