@@ -56,7 +56,7 @@ public class UserDAOTest {
 	@Test
 	public void cGetUsers() {
 		List<User> users = userDao.getUsers();
-		Assert.assertEquals(users.get(0), user);
+		Assert.assertTrue(users.contains(users));
 	}
 	
 	@SuppressWarnings("deprecation")
