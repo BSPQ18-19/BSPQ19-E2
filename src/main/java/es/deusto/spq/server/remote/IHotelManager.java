@@ -9,11 +9,11 @@ import es.deusto.spq.server.data.dto.UserDTO;
 
 public interface IHotelManager extends Remote {
 
-	public boolean signInGuest(String name, String email, String password);
+	public boolean signInGuest(String name, String email, String password, int phone, String address);
 	public UserDTO logIn(String email, String password);
 	public boolean logOut(UserDTO user);
-	public boolean createHotel();
-	public boolean editHotel(String ID);
+	public boolean createHotel(HotelDTO hotel);
+	public boolean editHotel(String ID, HotelDTO newVersion);
 	public boolean deleteHotel(String ID);
 	public List<HotelDTO> getHotels();
 	public HotelDTO getHotelbyID(String hotelID);
