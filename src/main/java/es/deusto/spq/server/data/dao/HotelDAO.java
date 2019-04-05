@@ -15,6 +15,8 @@ import es.deusto.spq.server.data.Hotel;
 public class HotelDAO implements IHotelDAO {
 	
 private PersistenceManagerFactory pmf;
+private PersistenceManager pm;
+private Transaction tx;
 	
 	public HotelDAO(){
 		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
@@ -25,8 +27,8 @@ private PersistenceManagerFactory pmf;
 	}
 	
 	private void storeObject(Object object) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-	    Transaction tx = pm.currentTransaction();
+		pm = pmf.getPersistenceManager();
+	    tx = pm.currentTransaction();
 	   
 	    try {
 	       tx.begin();
@@ -40,8 +42,9 @@ private PersistenceManagerFactory pmf;
 	    	if (tx != null && tx.isActive()) {
 	    		tx.rollback();
 	    	}
-				
-    		pm.close();
+			if(pm != null && !pm.isClosed()) {
+				pm.close();
+			}
 	    }
 	}
 	
@@ -81,15 +84,15 @@ private PersistenceManagerFactory pmf;
 	}
 
 
-	public List<Hotel> getHotels() {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		pm.getFetchPlan().setMaxFetchDepth(3);
+	public ArrayList<Hotel> getHotels() {
+		pm = pmf.getPersistenceManager();
+//		pm.getFetchPlan().setMaxFetchDepth(3);
 		
-	    Transaction tx = pm.currentTransaction();
-	    List<Hotel> hotels = new ArrayList<Hotel>();
+	    tx = pm.currentTransaction();
+	    ArrayList<Hotel> hotels = new ArrayList<>();
 	        
 	    try {
-	    	System.out.println("   * Executing a Query for Hotels ");
+	    	System.out.println("   * Retrieving all the hotels ");
 	    	
 	    	tx.begin();	    	
 			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
@@ -103,12 +106,18 @@ private PersistenceManagerFactory pmf;
 	    	System.out.println("   $ Error retreiving an extent: " + ex.getMessage());
 	    } finally {
 	    	if (tx != null && tx.isActive()) {
+	    		System.out.println("rollback");
 	    		tx.rollback();
 	    	}
-			
-    		pm.close();
+			if(pm != null && !pm.isClosed()) {
+				// TODO NULL POINTER EXCEPTION
+				System.out.println("  ---> ");
+				pm.close();
+				System.out.println("  #---> " + hotels.get(0).getLocation());
+			}
 	    }
     
+	    System.out.println(hotels.get(0).getLocation());
 	    return hotels;
 	}
 

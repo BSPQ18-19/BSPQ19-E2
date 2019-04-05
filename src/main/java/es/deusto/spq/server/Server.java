@@ -39,10 +39,10 @@ public class Server extends UnicastRemoteObject implements IServer {
 		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", null, LocalDate.of(2019, 1, 01), LocalDate.of(2019, 6, 30)));
 		
 		this.dao = new HotelDAO();
-//		dao.cleanDB();
-//		for(Hotel hotel: hotels.values()) {
-//			dao.storeHotel(hotel);
-//		}
+		dao.cleanDB();
+		for(Hotel hotel: hotels.values()) {
+			dao.storeHotel(hotel);
+		}
 
 	}
 	
@@ -90,9 +90,12 @@ public class Server extends UnicastRemoteObject implements IServer {
 		HotelAssembler hotelAssembler = new HotelAssembler();
 		
 		System.out.println("Retrieving hotels...");
-		List<Hotel> listHotels = dao.getHotels();
-		for(Hotel hotel: listHotels) {
-			System.out.println(hotel.getLocation());
+		ArrayList<Hotel> listHotels = dao.getHotels();
+		System.out.println(" --> SERVER:");
+		System.out.println("ID: " + listHotels.get(1).getHotelId());
+		System.out.println("NAME: " + listHotels.get(1).getName());
+		System.out.println("LOCATION: " + listHotels.get(1).getLocation());
+		for(Hotel hotel : listHotels) {
 			hotelsDTO.add(hotelAssembler.assemble(hotel));
 		}
 		System.out.println(hotelsDTO.size());
