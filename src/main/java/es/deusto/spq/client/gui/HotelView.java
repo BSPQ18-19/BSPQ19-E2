@@ -60,6 +60,7 @@ public class HotelView extends JPanel{
 		this.add(tableScrollPane);
 		
 		client.setCurrentHotels();
+		client.getCurrentHotels();
 		ArrayList<HotelDTO> retrievedHotels = client.retrieveHotels();
 		if(retrievedHotels == null || retrievedHotels.size() == 0) {
 			JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);

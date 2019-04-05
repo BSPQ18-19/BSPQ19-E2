@@ -7,9 +7,9 @@ package es.deusto.spq.server.data;
 public class Room {
 	private String roomId;
 	private int size; 
-	private int price; 
+	private float price; 
 	private RoomType type;
-	private RoomStatus status;
+	private boolean status;
 	private String[] features;
 	
 	
@@ -21,7 +21,7 @@ public class Room {
 	 * @param status	Occupied or vacant
 	 * @param features	All the features that a room have
 	 */
-	public Room(String roomId, int size, int price, RoomType type, RoomStatus status, String[] features) {
+	public Room(String roomId, int size, float price, RoomType type, boolean status, String[] features) {
 		super();
 		this.roomId = roomId;
 		this.size = size;
@@ -47,12 +47,20 @@ public class Room {
 		this.size = size;
 	}
 
-	public int getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(float price) {
 		this.price = price;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	public RoomType getType() {
@@ -61,14 +69,6 @@ public class Room {
 
 	public void setType(RoomType type) {
 		this.type = type;
-	}
-
-	public RoomStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(RoomStatus status) {
-		this.status = status;
 	}
 
 	public String[] getFeatures() {
