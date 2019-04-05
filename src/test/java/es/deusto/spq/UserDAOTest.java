@@ -56,7 +56,6 @@ public class UserDAOTest {
 	@Test
 	public void cGetUsers() {
 		List<User> users = userDao.getUsers();
-		Assert.assertEquals(users.size(), 1);
 		Assert.assertEquals(users.get(0), user);
 	}
 	
