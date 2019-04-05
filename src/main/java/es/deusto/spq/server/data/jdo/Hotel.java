@@ -1,6 +1,7 @@
 package es.deusto.spq.server.data.jdo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
@@ -11,10 +12,10 @@ public class Hotel {
 	@PrimaryKey
 	private String hotelId;
 	private String name, location;
-	private String[] services;
+	private List<String> services;
 	private LocalDate seasonStart, seasonEnding;
 	
-	public Hotel(String hotelId, String name, String location, String[] services, LocalDate seasonStart,
+	public Hotel(String hotelId, String name, String location, List<String> services, LocalDate seasonStart,
 			LocalDate seasonEnding) {
 		
 		this.hotelId = hotelId;
@@ -49,11 +50,11 @@ public class Hotel {
 		this.location = location;
 	}
 
-	public String[] getServices() {
+	public List<String> getServices() {
 		return services;
 	}
 
-	public void setServices(String[] services) {
+	public void setServices(List<String> services) {
 		this.services = services;
 	}
 

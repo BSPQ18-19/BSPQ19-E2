@@ -1,16 +1,14 @@
 package es.deusto.spq.server.data.jdo;
 
-/**
- * @author garri
- *
- */
+import java.util.List;
+
 public class Room {
 	private String roomId;
-	private int size; 
+	private float size; 
 	private float price; 
 	private RoomType type;
 	private boolean status;
-	private String[] features;
+	private List<String> features;
 	
 	
 	/**
@@ -21,7 +19,7 @@ public class Room {
 	 * @param status	Occupied or vacant
 	 * @param features	All the features that a room have
 	 */
-	public Room(String roomId, int size, float price, RoomType type, boolean status, String[] features) {
+	public Room(String roomId, float size, float price, RoomType type, boolean status, List<String> features) {
 		super();
 		this.roomId = roomId;
 		this.size = size;
@@ -39,11 +37,11 @@ public class Room {
 		this.roomId = roomId;
 	}
 
-	public int getSize() {
+	public float getSize() {
 		return size;
 	}
 
-	public void setSize(int size) {
+	public void setSize(float size) {
 		this.size = size;
 	}
 
@@ -71,11 +69,11 @@ public class Room {
 		this.status = status;
 	}
 
-	public String[] getFeatures() {
+	public List<String> getFeatures() {
 		return features;
 	}
 
-	public void setFeatures(String[] features) {
+	public void setFeatures(List<String> features) {
 		this.features = features;
 	}
 }
