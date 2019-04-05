@@ -6,6 +6,8 @@ import es.deusto.spq.server.data.jdo.User;
 
 public class Assembler {
 
+	public Assembler() {}
+	
 	public HotelDTO assembleHotel(Hotel hotel) {
 		return new HotelDTO(hotel.getHotelId(), hotel.getName(), hotel.getLocation(), hotel.getServices(),
 				hotel.getSeasonStart(), hotel.getSeasonEnding());
