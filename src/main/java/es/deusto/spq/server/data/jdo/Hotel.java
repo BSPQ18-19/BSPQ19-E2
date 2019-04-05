@@ -11,7 +11,8 @@ public class Hotel {
 	
 	@PrimaryKey
 	private String hotelId;
-	private String name, location;
+	private String name;
+	private String location;
 	private List<String> services;
 	private LocalDate seasonStart, seasonEnding;
 	

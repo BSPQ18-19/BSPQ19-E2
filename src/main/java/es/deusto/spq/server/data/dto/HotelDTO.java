@@ -8,7 +8,8 @@ public class HotelDTO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private String hotelId;
-	private String name, location;
+	private String name;
+	private String location;
 	private List<String> services;
 	private LocalDate seasonStart, seasonEnding;
 	
