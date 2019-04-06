@@ -24,7 +24,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	private Set<User> loggedUsers;
 	private Logger log;
 	
-	protected HotelManager() throws RemoteException {
+	public HotelManager() throws RemoteException {
 		super();
 		this.assembler = new Assembler();
 		this.userDAO = new UserDAO();

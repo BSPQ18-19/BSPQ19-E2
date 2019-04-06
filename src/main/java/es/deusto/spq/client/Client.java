@@ -3,7 +3,7 @@ package es.deusto.spq.client;
 import java.util.logging.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
-import es.deusto.spq.server.IServer;
+import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.locale.LocaleManager;
 
 import java.util.Locale;
@@ -25,14 +25,11 @@ public class Client {
 		}
 
 		try {
-			String name = "//" + args[0] + ":" + args[1] + "/" + args[2];
-			IServer serverStub = (IServer) java.rmi.Naming.lookup(name);
-			serverStub.sayHello();
+			RMIServiceLocator sl = RMIServiceLocator.getServiceLocator();
+			sl.setService(args[0], Integer.parseInt(args[1]), args[2]);		
 			LocaleManager.setLocale(new Locale("es", "ES"));
-			serverStub.sayMessage(LocaleManager.getMessage("test.bye"));
 		} catch (Exception e) {
 			log.severe("RMI error. Turning down the client... - " + e.getMessage());
-//			e.printStackTrace();
 		}
 	}
 }

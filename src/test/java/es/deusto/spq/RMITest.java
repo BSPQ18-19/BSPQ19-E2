@@ -19,11 +19,11 @@ import junit.framework.Assert;
  * @author Iker
  *
  */
-public class ClientServerTest {
+public class RMITest {
 
 	private static String serverUrl;
 	private static String clientUrl;
-	private static String cwd = ClientServerTest.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+	private static String cwd = RMITest.class.getProtectionDomain().getCodeSource().getLocation().getFile();
 
 	
 	@BeforeClass

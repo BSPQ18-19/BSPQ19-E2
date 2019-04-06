@@ -7,7 +7,7 @@ import es.deusto.spq.server.remote.IHotelManager;
 
 public class RMIServiceLocator {
 
-	private static RMIServiceLocator rsl;
+	private static RMIServiceLocator rsl = null;
 	private IHotelManager hotelManager;
 	private Logger log;
 	

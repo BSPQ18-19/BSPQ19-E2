@@ -12,9 +12,11 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import es.deusto.spq.server.logger.ServerLogger;
+import es.deusto.spq.server.remote.HotelManager;
+import es.deusto.spq.server.remote.IHotelManager;
 
 
-public class Server extends UnicastRemoteObject implements IServer {
+public class Server {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,29 +36,21 @@ public class Server extends UnicastRemoteObject implements IServer {
 			System.setSecurityManager(new SecurityManager());
 		}
 
+		Logger log = ServerLogger.getLogger();
+		
 		String url = "//" + args[0] + ":" + args[1] + "/" + args[2];
 
 		try {
-			IServer objServer = new Server();
-			Naming.rebind(url, objServer);
-			ServerLogger.getLogger().info("Server '" + url + "' active and waiting...");
-			java.io.InputStreamReader inputStreamReader = new java.io.InputStreamReader ( System.in );
-			java.io.BufferedReader stdin = new java.io.BufferedReader ( inputStreamReader );
+			IHotelManager hotelManager = new HotelManager();
+			Naming.rebind(url, hotelManager);
+			java.io.InputStreamReader inputStreamReader = new java.io.InputStreamReader(System.in);
+			java.io.BufferedReader stdin = new java.io.BufferedReader(inputStreamReader);
 			@SuppressWarnings("unused")
 			String line  = stdin.readLine();
+			log.info("Server active and waiting...");
 		} catch (Exception e) {
-			ServerLogger.getLogger().severe("RMI error. Turning off... - " + e.getMessage());
-			e.printStackTrace();
+			log.severe("RMI error. Turning off... - " + e.getMessage());
 		}
 	}
 
-	@Override
-	public void sayMessage(String message) throws RemoteException {
-		System.out.println(message);
-	}
-
-	@Override
-	public void sayHello() throws RemoteException {
-		System.out.println(LocaleManager.getMessage("test.hello"));
-	}
 }
