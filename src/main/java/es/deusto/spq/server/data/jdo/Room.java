@@ -3,6 +3,7 @@ package es.deusto.spq.server.data.jdo;
 import java.util.List;
 
 public class Room {
+	
 	private String roomId;
 	private float size; 
 	private float price; 
