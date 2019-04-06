@@ -3,12 +3,11 @@ package es.deusto.spq.client.controller;
 import java.util.List;
 import java.util.logging.Logger;
 
-import es.deusto.spq.client.GUI.Login;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
+import es.deusto.spq.server.data.SignupException;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
-import es.deusto.spq.server.data.dto.UserDTO;
 
 public class HotelManagementController {
 
@@ -118,6 +117,16 @@ public class HotelManagementController {
 		else
 			log.info("Did not retrieve room with ID: " + roomID);
 		return room;
+	}
+
+	public boolean signupGuest(String email, String name, String password, String phone, String address) {
+		boolean result = false;
+		try {
+			 rsl.getHotelManager().registerGuest(email, name, password, phone, address);
+		} catch (SignupException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 }

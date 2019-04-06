@@ -3,6 +3,7 @@ package es.deusto.spq.server.remote;
 import java.rmi.Remote;
 import java.util.List;
 
+import es.deusto.spq.server.data.SignupException;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
@@ -20,5 +21,7 @@ public interface IHotelManager extends Remote {
 	public HotelDTO getHotelbyID(String hotelID);
 	public List<RoomDTO> getRoomOfHotelID(String hoteID);
 	public RoomDTO getRoombyID(String roomID);
+	// Signup
+	public boolean registerGuest(String email, String name, String password, String phone, String address) throws SignupException;
 	
 }

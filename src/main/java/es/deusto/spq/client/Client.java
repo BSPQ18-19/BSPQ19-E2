@@ -2,7 +2,8 @@ package es.deusto.spq.client;
 
 import java.util.logging.Logger;
 
-import es.deusto.spq.client.GUI.Login;
+import es.deusto.spq.client.gui.Login;
+import es.deusto.spq.client.gui.RegisterWindow;
 import es.deusto.spq.client.controller.*;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.IServer;
@@ -11,6 +12,10 @@ import es.deusto.spq.server.locale.LocaleManager;
 import java.util.Locale;
 
 public class Client {
+
+	public static void showSignup() {
+		new RegisterWindow(HotelManagementController.getController());
+	}
 
 	public static void main(String[] args) {
 

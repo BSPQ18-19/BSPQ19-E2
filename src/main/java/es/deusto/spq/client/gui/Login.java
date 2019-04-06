@@ -1,11 +1,8 @@
-package es.deusto.spq.client.GUI;
-import java.awt.EventQueue;
+package es.deusto.spq.client.gui;
 
 import javax.swing.JFrame;
-import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.BoxLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
@@ -16,8 +13,6 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
-import java.awt.FlowLayout;
-import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,6 +25,7 @@ public class Login {
 	private JTextField tFEmail;
 	private JTextField tFPassword;
 	private final JPanel panel_3 = new JPanel();
+	private RegisterWindow registerWindowFrame;
 
 	HotelManagementController controller;
 
@@ -112,7 +108,7 @@ public class Login {
 				int result = controller.logIn(email, password);
 				switch (result) {
 				case 1:
-					//TODO Call the Admin GUI
+					//TODO Call the Admin gui
 					break;
 				case 2:
 					//TODO Call the Guest Gui
@@ -134,8 +130,12 @@ public class Login {
 		btnRegister.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				//TODO This takes you to the registration GUI and closes this window
-				frame.dispose();
+				//TODO This takes you to the registration gui and closes this window
+				if (registerWindowFrame == null) {
+					new RegisterWindow(controller);
+				} else {
+					registerWindowFrame.show();
+				}
 			}
 		});
 		panel_3.add(btnRegister);

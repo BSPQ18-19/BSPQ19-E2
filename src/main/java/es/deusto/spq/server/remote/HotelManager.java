@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import es.deusto.spq.server.data.SignupException;
 import es.deusto.spq.server.data.dao.UserDAO;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.HotelDTO;
@@ -100,6 +101,30 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	public RoomDTO getRoombyID(String roomID) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean registerGuest(String email, String name, String password, String phone, String address) throws SignupException {
+
+		if (email.trim().isEmpty()
+				|| password.trim().isEmpty()
+				|| phone.trim().isEmpty()
+				|| address.trim().isEmpty()) {
+
+			throw new SignupException(SignupException.VALIDATION);
+		}
+
+		// TODO save phone number (after it gets migrated to String)
+		User placeholder = new Guest(null, name, email, password, 1, address);
+
+		User result = userDAO.createUser(placeholder);
+
+		if (result == null) {
+			throw new SignupException();
+		}
+
+		ServerLogger.getLogger().info("Registered new Guest: " + result.toString());
+		return true;
 	}
 
 }
