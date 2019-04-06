@@ -89,7 +89,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public UserDTO createUser(UserDTO user) {
+	public UserDTO createUser(User user) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -98,7 +98,7 @@ public class UserDAO implements IDAO, IUserDAO {
 
 			tx.commit();
 
-			return pm.detachCopy(user);
+			return pm.detachCopy(assembler.assembleUser(user));
 
 		} catch (Exception e) {
 			ServerLogger.getLogger().severe("Error in UserDAO:createUser()");
@@ -138,6 +138,33 @@ public class UserDAO implements IDAO, IUserDAO {
 			close();
 		}
 		return false;
+	}
+	
+	@Override
+	public UserDTO logIn(String email, String password) {
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			Query<User> query = pm.newQuery(User.class);
+			query.setFilter("email == '" + email + "'");
+			@SuppressWarnings("unchecked")
+			List<User> result = (List<User>) query.execute();
+			tx.commit();
+
+			if(result == null || result.isEmpty() || result.size() > 1)
+				return null;
+			User user = result.get(0);
+			if(user.getPassword().equals(password))
+				return assembler.assembleUser(user);
+		} catch (Exception e) {
+			ServerLogger.getLogger().severe("Error in UserDAO:getUserbyID()");
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+		return null;
 	}
 	
 	/**

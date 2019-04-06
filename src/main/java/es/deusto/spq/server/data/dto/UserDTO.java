@@ -39,4 +39,13 @@ public class UserDTO implements Serializable {
 		this.name = name;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof UserDTO) {
+			UserDTO object = (UserDTO) o;
+			return object.getUserID().equals(userID);
+		}
+		return false;
+	}
+	
 }
