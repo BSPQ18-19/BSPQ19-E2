@@ -39,6 +39,7 @@ public class HotelView extends JPanel{
 		hotelsTable.setSize(700, 100);
 		hotelsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
+		tableModel.addColumn("Id");
 		tableModel.addColumn("Name");
 		tableModel.addColumn("Location");
 		tableModel.addColumn("Services");
@@ -75,13 +76,13 @@ public class HotelView extends JPanel{
 			for (HotelDTO hotel: retrievedHotels) {
 				System.out.println(hotel.getName());
 				
-				tableModel.addRow(new String[] {hotel.getName(), hotel.getLocation(),
+				tableModel.addRow(new String[] {hotel.getHotelId(), hotel.getName(), hotel.getLocation(),
 						"" , String.valueOf(hotel.getSeasonStart().getYear())
 						+ "-" + String.valueOf(hotel.getSeasonStart().getMonth()) 
-						+ "-" + String.valueOf(hotel.getSeasonStart().getDayOfMonth()),
+						+ "-" + String.valueOf(hotel.getSeasonStart().getDate()),
 						String.valueOf(hotel.getSeasonEnding().getYear())
 						+ "-" + String.valueOf(hotel.getSeasonEnding().getMonth()) 
-						+ "-" + String.valueOf(hotel.getSeasonEnding().getDayOfMonth())});
+						+ "-" + String.valueOf(hotel.getSeasonEnding().getDate())});
 
 				client.setCurrentHotels(hotel);
 			}
@@ -116,6 +117,12 @@ public class HotelView extends JPanel{
 			return this;
 		}
 	}
+	
+	
+	public JTable getHotelsTable() {
+		return hotelsTable;
+	}
+
 	public static void main(String[] args) {
 		JFrame testFrame = new JFrame();
 		testFrame.setSize(800, 600);

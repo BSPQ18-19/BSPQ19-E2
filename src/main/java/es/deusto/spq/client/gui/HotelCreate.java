@@ -43,22 +43,22 @@ public class HotelCreate extends JPanel {
 //		roomLabel = new JLabel("Season ending (YYYY-MM-DD)");
 //		roomLabel.setFont(new Font(roomLabel.getName(), Font.PLAIN, 25));
 		
-		idTextField = new TextField(20);
+		idTextField = new TextField("", 20);
 		idTextField.setFont(new Font(idTextField.getName(), Font.PLAIN, 25));
 		
-		nameTextField = new TextField(20);
+		nameTextField = new TextField("", 20);
 		nameTextField.setFont(new Font(nameTextField.getName(), Font.PLAIN, 25));
 		
-		locationTextField = new TextField(20);
+		locationTextField = new TextField("", 20);
 		locationTextField.setFont(new Font(locationTextField.getName(), Font.PLAIN, 25));
 		
-		servicesTextField = new TextField(20);
+		servicesTextField = new TextField("", 20);
 		servicesTextField.setFont(new Font(servicesTextField.getName(), Font.PLAIN, 25));
 		
-		seasonStartTextField = new TextField(20);
+		seasonStartTextField = new TextField("", 20);
 		seasonStartTextField.setFont(new Font(seasonStartTextField.getName(), Font.PLAIN, 25));
 		
-		seasonEndingTextField = new TextField(20);
+		seasonEndingTextField = new TextField("", 20);
 		seasonEndingTextField.setFont(new Font(seasonEndingTextField.getName(), Font.PLAIN, 25));
 //		
 //		roomTextArea = new TextField(20);
@@ -81,19 +81,19 @@ public class HotelCreate extends JPanel {
 	}
 
 	
-	public String getIdTextField() {
+	public String getIdTextFieldText() {
 		return idTextField.getText();
 	}
 
-	public String getNameTextField() {
+	public String getNameTextFieldText() {
 		return nameTextField.getText();
 	}
 
-	public String getLocationTextField() {
+	public String getLocationTextFieldText() {
 		return locationTextField.getText();
 	}
 
-	public String getServicesTextField() {
+	public String getServicesTextFieldText() {
 		return servicesTextField.getText();
 	}
 
@@ -101,13 +101,43 @@ public class HotelCreate extends JPanel {
 //		return roomTextArea.getText();
 //	}
 
-	public String getSeasonStartTextField() {
+	public String getSeasonStartTextFieldText() {
 		return seasonStartTextField.getText();
 	}
 
-	public String getSeasonEndingTextField() {
+	public String getSeasonEndingTextFieldText() {
 		return seasonEndingTextField.getText();
 	}
+
+
+	public TextField getIdTextField() {
+		return idTextField;
+	}
+
+
+	public TextField getNameTextField() {
+		return nameTextField;
+	}
+
+
+	public TextField getLocationTextField() {
+		return locationTextField;
+	}
+	
+	public TextField getServicesTextField() {
+		return servicesTextField;
+	}
+
+
+	public TextField getSeasonStartTextField() {
+		return seasonStartTextField;
+	}
+
+
+	public TextField getSeasonEndingTextField() {
+		return seasonEndingTextField;
+	}
+	
 	
 	
 }

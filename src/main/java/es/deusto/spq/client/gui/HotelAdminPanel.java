@@ -56,6 +56,9 @@ public class HotelAdminPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				changeHotelScreen(HotelPanelType.VIEW);
 				confirm.setEnabled(true);
+				if(centerPanel instanceof HotelView) {
+					deleteHotel.setEnabled(true);
+				}
 				
 			}
 		});
@@ -67,6 +70,17 @@ public class HotelAdminPanel extends JPanel{
 		deleteHotel = new JButton("Delete hotel");
 		deleteHotel.setSize(100, 30);
 		deleteHotel.setEnabled(false);
+		deleteHotel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String id = (String) ((HotelView) centerPanel).getHotelsTable().getValueAt(((HotelView) centerPanel).getHotelsTable().getSelectedRow(), 0);
+				if(client.deleteHotel(id)) {
+					JOptionPane.showMessageDialog(null, "Hotel deleted", "Done", JOptionPane.OK_OPTION);
+				}
+				
+			}
+		});
 		
 		confirm = new JButton("Confirm");
 		confirm.setSize(100, 30);
@@ -77,19 +91,20 @@ public class HotelAdminPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(centerPanel instanceof HotelCreate) {
-					if(((HotelCreate) centerPanel).getNameTextField().equals("")
-							|| ((HotelCreate) centerPanel).getLocationTextField().equals("")
-							|| ((HotelCreate) centerPanel).getServicesTextField().equals("")
-							|| ((HotelCreate) centerPanel).getSeasonStartTextField().equals("")
-							|| ((HotelCreate) centerPanel).getSeasonEndingTextField().equals("")
-							|| ((HotelCreate) centerPanel).getIdTextField().equals("")){
+					if(((HotelCreate) centerPanel).getNameTextFieldText().equals("")
+							|| ((HotelCreate) centerPanel).getLocationTextFieldText().equals("")
+							|| ((HotelCreate) centerPanel).getServicesTextFieldText().equals("")
+							|| ((HotelCreate) centerPanel).getSeasonStartTextFieldText().equals("")
+							|| ((HotelCreate) centerPanel).getSeasonEndingTextFieldText().equals("")
+							|| ((HotelCreate) centerPanel).getIdTextFieldText().equals("")){
 						JOptionPane.showMessageDialog(null, "Please fill everything.", "Error", JOptionPane.ERROR_MESSAGE);
 					}else {
-						String[] services = ((HotelCreate) centerPanel).getServicesTextField().trim().split(", ");
-						client.createHotel(((HotelCreate) centerPanel).getIdTextField(), ((HotelCreate) centerPanel).getNameTextField(), ((HotelCreate) centerPanel).getLocationTextField(),
-								services, ((HotelCreate) centerPanel).getSeasonStartTextField(), 
-								((HotelCreate) centerPanel).getSeasonEndingTextField());
-						JOptionPane.showConfirmDialog(null, "Hotel created");
+						String[] services = ((HotelCreate) centerPanel).getServicesTextFieldText().trim().split(", ");
+						client.createHotel(((HotelCreate) centerPanel).getIdTextFieldText(), ((HotelCreate) centerPanel).getNameTextFieldText(),
+								((HotelCreate) centerPanel).getLocationTextFieldText(),
+								services, ((HotelCreate) centerPanel).getSeasonStartTextFieldText(), 
+								((HotelCreate) centerPanel).getSeasonEndingTextFieldText());
+						JOptionPane.showMessageDialog(null, "Hotel created", "Done", JOptionPane.OK_OPTION);
 					}
 				}
 				else if(centerPanel instanceof HotelView) {
@@ -111,6 +126,8 @@ public class HotelAdminPanel extends JPanel{
 		upperButtons.add(deleteHotel);
 		upperButtons.add(confirm);
 		upperButtons.add(logout);
+		
+		centerPanel = new JPanel();
 		
 		this.add(upperButtons, BorderLayout.NORTH);
 		
@@ -137,6 +154,6 @@ public class HotelAdminPanel extends JPanel{
 			break;
 		}
 		this.add(centerPanel, BorderLayout.CENTER);
-		this.revalidate();
+		centerPanel.revalidate();
 	}
 }

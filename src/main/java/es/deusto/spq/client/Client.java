@@ -38,6 +38,21 @@ public class Client {
     	return false;
     }
     
+    public boolean deleteHotel(String id) {
+    	try {
+			System.out.println("Deleting hotel with ID: " + id);
+			if(serviceLocator.getService().deleteHotel(id)) {
+				System.out.println("Hotel deleted successfully!");
+				return true;
+			}else {
+				System.out.println("Hotel cannot be deleted");
+			}
+		} catch (RemoteException e) {
+			System.out.println("Error deleting an hotel...");
+		}
+    	return false;
+    }
+    
     public ArrayList<HotelDTO> retrieveHotels() {
     	System.out.println("Getting list of hotels.");
     	try {

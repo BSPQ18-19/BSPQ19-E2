@@ -15,8 +15,6 @@ import es.deusto.spq.server.data.Hotel;
 public class HotelDAO implements IHotelDAO {
 	
 private PersistenceManagerFactory pmf;
-private PersistenceManager pm;
-private Transaction tx;
 	
 	public HotelDAO(){
 		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
@@ -27,8 +25,8 @@ private Transaction tx;
 	}
 	
 	private void storeObject(Object object) {
-		pm = pmf.getPersistenceManager();
-	    tx = pm.currentTransaction();
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
 	   
 	    try {
 	       tx.begin();
@@ -85,10 +83,10 @@ private Transaction tx;
 
 
 	public ArrayList<Hotel> getHotels() {
-		pm = pmf.getPersistenceManager();
-//		pm.getFetchPlan().setMaxFetchDepth(3);
+		PersistenceManager pm = pmf.getPersistenceManager();
+		pm.getFetchPlan().setMaxFetchDepth(3);
 		
-	    tx = pm.currentTransaction();
+		Transaction tx = pm.currentTransaction();
 	    ArrayList<Hotel> hotels = new ArrayList<>();
 	        
 	    try {
@@ -98,6 +96,7 @@ private Transaction tx;
 			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
 
 			for (Hotel hotel : extent) {
+				
 				hotels.add(hotel);
 			}
 			
@@ -110,17 +109,46 @@ private Transaction tx;
 	    		tx.rollback();
 	    	}
 			if(pm != null && !pm.isClosed()) {
-				// TODO NULL POINTER EXCEPTION
-				System.out.println("  ---> ");
 				pm.close();
-				System.out.println("  #---> " + hotels.get(0).getLocation());
 			}
 	    }
-    
-	    System.out.println(hotels.get(0).getLocation());
 	    return hotels;
 	}
 
+	@Override
+	public boolean deleteHotel(String hotelID) {
+		PersistenceManager pm = pmf.getPersistenceManager();
+		
+		Transaction tx = pm.currentTransaction();
+		try {
+			tx.begin();
+			
+			Query<Hotel> query = pm.newQuery(Hotel.class);
+			query.setFilter("hotelId == '" + hotelID + "'");
+			@SuppressWarnings("unchecked")
+			List<Hotel> queryExecution = (List<Hotel>) query.execute();
+			if(queryExecution.isEmpty() || queryExecution.size() > 1)
+				return false;
+			pm.deletePersistent(queryExecution.get(0));
+			
+			tx.commit();
+			
+			return true;
+
+		} catch (Exception ex) {
+	    	System.out.println("   $ Error deleting an hotel: " + ex.getMessage());
+	    } finally {
+	    	if (tx != null && tx.isActive()) {
+	    		System.out.println("rollback");
+	    		tx.rollback();
+	    	}
+			if(pm != null && !pm.isClosed()) {
+				pm.close();
+			}
+	    }
+		return false;
+	}
+	
 	public void cleanDB() {
 		System.out.println("- Cleaning the DB...");			
 		PersistenceManager pm = pmf.getPersistenceManager();

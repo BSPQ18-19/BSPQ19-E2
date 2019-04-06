@@ -3,11 +3,13 @@ package es.deusto.spq.server;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -28,15 +30,17 @@ public class Server extends UnicastRemoteObject implements IServer {
 //	private INhHotelGateway gateway;
 	private IHotelDAO dao;
 	
+	@SuppressWarnings("deprecation")
 	protected Server() throws RemoteException {
 		super();
-
-		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", null, LocalDate.of(2019, 4, 01), LocalDate.of(2019, 6, 30)));
-		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", null, LocalDate.of(2019, 4, 01), LocalDate.of(2019, 8, 31)));
-		hotels.put("H03", new Hotel("H03", "Hotel3", "Madrid", null, LocalDate.of(2019, 1, 01), LocalDate.of(2019, 12, 31)));
-		hotels.put("H04", new Hotel("H04", "Hotel4", "Sevilla", null, LocalDate.of(2019, 6, 01), LocalDate.of(2019, 8, 31)));
-		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", null, LocalDate.of(2019, 6, 01), LocalDate.of(2019, 8, 31)));
-		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", null, LocalDate.of(2019, 1, 01), LocalDate.of(2019, 6, 30)));
+		LocalDate localDate = LocalDate.of(2019, 04, 01);
+	
+		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+		hotels.put("H03", new Hotel("H03", "Hotel3", "Madrid", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+		hotels.put("H04", new Hotel("H04", "Hotel4", "Sevilla", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
 		
 		this.dao = new HotelDAO();
 		dao.cleanDB();
@@ -112,16 +116,32 @@ public class Server extends UnicastRemoteObject implements IServer {
 	@Override
 	public HotelDTO createHotel(String id, String name, String location, String[] services, String seasonStart,
 			String seasonEnd) throws RemoteException {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		if(hotels.containsKey(id.trim()))
 			throw new RemoteException("Server - Hotel ID aready exists");
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
+		LocalDate localDateStart = LocalDate.parse(seasonStart.trim(), formatter);
+		LocalDate localDateEnding = LocalDate.parse(seasonEnd.trim(), formatter);
+		
 		Hotel hotel = new Hotel(id.trim(), name.trim(), location.trim(), services,
-				LocalDate.parse(seasonStart.trim(), formatter), LocalDate.parse(seasonEnd.trim(), formatter));
+				Timestamp.valueOf(localDateStart.atStartOfDay()), Timestamp.valueOf(localDateEnding.atStartOfDay()));
 		hotels.put(hotel.getHotelId(), hotel);
 		dao.storeHotel(hotel);
 		
 		HotelAssembler hotelAssembler = new HotelAssembler();
 		return hotelAssembler.assemble(hotel);
+	}
+
+
+	@Override
+	public boolean deleteHotel(String id) throws RemoteException {
+		hotels.remove(id);
+		dao.deleteHotel(id);
+		if(hotels.containsKey(id) == false) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 	
 }

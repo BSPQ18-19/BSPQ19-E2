@@ -9,5 +9,6 @@ public interface IHotelDAO {
 	public void storeHotel(Hotel hotel);
 	public Hotel getHotel(String hotelID);
 	public ArrayList<Hotel> getHotels();
+	public boolean deleteHotel(String hotelID);
 	public void cleanDB();
 }
