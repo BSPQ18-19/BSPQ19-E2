@@ -9,7 +9,6 @@ import javax.jdo.annotations.*;
 @PersistenceCapable(detachable="true")
 public abstract class User implements Serializable {
 
-	private static final long serialVersionUID = 1L;
 	@PrimaryKey
 	private String userID;
 	@Persistent(defaultFetchGroup="true")
