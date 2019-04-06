@@ -21,12 +21,9 @@ public class HotelManagementController {
 		controller = new HotelManagementController();
 	}
 	
-	private HotelManagementController() {
+	public HotelManagementController() {
 		rsl = RMIServiceLocator.getServiceLocator();
 		log = ClientLogger.getLogger();
-		
-		//Initialize the GUI
-		new Login(this);
 	}
 	
 	public static HotelManagementController getController() {

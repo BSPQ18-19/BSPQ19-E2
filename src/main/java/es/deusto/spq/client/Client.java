@@ -2,6 +2,8 @@ package es.deusto.spq.client;
 
 import java.util.logging.Logger;
 
+import es.deusto.spq.client.GUI.Login;
+import es.deusto.spq.client.controller.*;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.IServer;
 import es.deusto.spq.server.locale.LocaleManager;
@@ -12,6 +14,9 @@ public class Client {
 
 	public static void main(String[] args) {
 
+		HotelManagementController controller = new HotelManagementController();
+		new Login(controller);
+		
 		Logger log = ClientLogger.getLogger();
 
 		if (args.length != 3) {
