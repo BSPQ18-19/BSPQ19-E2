@@ -3,6 +3,7 @@ package es.deusto.spq.client.controller;
 import java.util.List;
 import java.util.logging.Logger;
 
+import es.deusto.spq.client.GUI.Login;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.data.dto.HotelDTO;
@@ -13,7 +14,7 @@ public class HotelManagementController {
 
 	private static HotelManagementController controller;
 	private RMIServiceLocator rsl;
-	private UserDTO loggedUser = null;
+	private String loggedUser = null;
 	private Logger log;
 	
 	static {
@@ -23,6 +24,9 @@ public class HotelManagementController {
 	private HotelManagementController() {
 		rsl = RMIServiceLocator.getServiceLocator();
 		log = ClientLogger.getLogger();
+		
+		//Initialize the GUI
+		new Login(this);
 	}
 	
 	public static HotelManagementController getController() {
@@ -38,17 +42,17 @@ public class HotelManagementController {
 		return result;
 	}
 	
-	public void logIn(String email, String password) {
-		if(loggedUser != null)
-			logOut();
-		loggedUser = rsl.getHotelManager().logIn(email, password);
-		if(loggedUser != null)
-			log.info("Did not logged in user with email: " + email);
-		else
-			log.info("Logged in user with email: " + email);
+	public int logIn(String email, String password) {
+		if(loggedUser != null);
+		//	logOut();
+		int result = rsl.getHotelManager().logIn(email, password);
+		if(result != 3) {
+			loggedUser = email;
+		}
+		return result;
 	}
 	
-	public boolean logOut() {
+/*	public boolean logOut() {
 		if(loggedUser == null) {
 			log.info("Did not logged out any user - no users were logged");
 			return false;
@@ -57,7 +61,7 @@ public class HotelManagementController {
 		log.info("Logged out user with ID: " + loggedUser.getUserID());
 		loggedUser = null;
 		return true;
-	}
+	}*/
 	
 	public boolean createHotel(HotelDTO hotel) {
 		boolean result = rsl.getHotelManager().createHotel(hotel);

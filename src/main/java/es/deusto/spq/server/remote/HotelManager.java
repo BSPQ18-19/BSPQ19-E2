@@ -12,6 +12,7 @@ import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -39,12 +40,18 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
-	public UserDTO logIn(String userID, String password) {
+	public int logIn(String userID, String password) {
 		User result = userDAO.getUserbyID(userID);
-		if(result == null || !result.getPassword().equals(password)) {
-			//TODO finish
+		if(result != null && result.getPassword().equals(password)) {
+			if(result instanceof Guest) {
+				loggedUsers.add(result);
+				return 2;
+			}/*else if(result instanceof Admin) {
+				loggedUsers.add(result);
+				return 1;
+			}*/
 		}
-		return null;
+		return 3;
 	}
 
 	@Override

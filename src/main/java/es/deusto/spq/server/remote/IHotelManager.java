@@ -11,7 +11,7 @@ public interface IHotelManager extends Remote {
 
 	public boolean signInGuest(String name, String email, String password, int phone, String address);
 	//TODO signInAdministrator
-	public UserDTO logIn(String email, String password);
+	public int logIn(String email, String password);
 	public boolean logOut(UserDTO user);
 	public boolean createHotel(HotelDTO hotel);
 	public boolean editHotel(String ID, HotelDTO newVersion);
