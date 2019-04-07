@@ -150,18 +150,32 @@ public class RegisterWindow {
 //                addressTextField.getText());
         UserDTO result = null;
 		try {
-			result = hotelManagementController.signInGuest("Pepe",
-					"pepe@gmail.com",
-			        "pepepassword",
-			        "1",
-			        "Avda. de la Sierra 23");
+			result = hotelManagementController.signInGuest(nameTextField.getText(),
+                    emailTextField.getText(),
+                    new String(passwordField.getPassword()),
+                    phoneTextField.getText(),
+                    addressTextField.getText());
 		} catch (RemoteException e) {
 			log.info("Remote exception trying to create a UserDTO");
 		}
 
         if (result == null) {
             ClientLogger.getLogger().severe("User not registered...");
+            JOptionPane.showMessageDialog(frame,
+                    LocaleManager.getMessage("register.validation.errors.unknown"),
+                    LocaleManager.getMessage("register.validation.errors.unknown.title"),
+                    JOptionPane.ERROR_MESSAGE);
+
+            frame.dispose();
+            return;
         }
+
+        JOptionPane.showMessageDialog(frame,
+                LocaleManager.getMessage("register.success.body"),
+                LocaleManager.getMessage("register.success.title"),
+                JOptionPane.INFORMATION_MESSAGE);
+        frame.dispose();
+
     }
 
     private void notifyValidationFail(ValidationFailReason reason) {
