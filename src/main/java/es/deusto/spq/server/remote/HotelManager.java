@@ -43,43 +43,43 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 	
 	@Override
-	public UserDTO signInGuest(String name, String email, String password, String phone, String address) {
+	public UserDTO signInGuest(String name, String email, String password, String phone, String address) throws RemoteException{
 		String randomID = generateRandomId();
+		log.info("Selected random ID for new user: " + randomID);
 		User user = new Guest(randomID, name, email, password, phone, address); //TODO generate correctly the IDs
 		return userDAO.createUser(user);
 	}
 
 	@Override
-	public UserDTO logIn(String email, String password) {
+	public UserDTO logIn(String email, String password) throws RemoteException{
 		UserDTO user = userDAO.logIn(email, password);
 		loggedUsers.add(user);
 		return user;
 	}
 
 	@Override
-	public boolean logOut(UserDTO user) {
+	public boolean logOut(UserDTO user) throws RemoteException{
 		return loggedUsers.remove(user);
 	}
 
 	@Override
-	public List<HotelDTO> getHotels(UserDTO authorization) {
+	public List<HotelDTO> getHotels(UserDTO authorization) throws RemoteException{
 		return hotelDAO.getHotels(authorization);
 	}
 
 	@Override
-	public HotelDTO getHotelbyID(UserDTO authorization, String hotelID) {
+	public HotelDTO getHotelbyID(UserDTO authorization, String hotelID) throws RemoteException{
 		return hotelDAO.getHotelbyID(authorization, hotelID);
 	}
 
 	@Override
-	public HotelDTO createHotel(UserDTO authorization, HotelDTO hotel) {
+	public HotelDTO createHotel(UserDTO authorization, HotelDTO hotel) throws RemoteException{
 		return hotelDAO.createHotel(authorization, hotel);
 	}
 
 	@Override
-	public boolean deleteHotel(UserDTO authorization, String ID) {
+	public boolean deleteHotel(UserDTO authorization, String ID) throws RemoteException{
 		return hotelDAO.deleteHotel(authorization, ID);
 	}
 	
-
 }

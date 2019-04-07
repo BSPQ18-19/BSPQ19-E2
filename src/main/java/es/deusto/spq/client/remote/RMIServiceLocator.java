@@ -7,16 +7,13 @@ import es.deusto.spq.server.remote.IHotelManager;
 
 public class RMIServiceLocator {
 
-	private static RMIServiceLocator rsl = null;
+	private static RMIServiceLocator rsl = new RMIServiceLocator();
 	private IHotelManager hotelManager;
 	private Logger log;
 	
-	static {
-		rsl = new RMIServiceLocator();
-	}
-	
 	private RMIServiceLocator() {
 		log = ClientLogger.getLogger();
+		log.info("RMIServiceLocator initialized");
 	}
 	
 	public static RMIServiceLocator getServiceLocator() {

@@ -1,6 +1,7 @@
 package es.deusto.spq.client.logger;
 
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -26,6 +27,8 @@ public class ClientLogger {
 			fh.setFormatter(new SimpleFormatter());
 		} catch (Exception e) {
 			log.severe("Cannot set the file handler for the logger. " + e.getMessage());
+		} finally {
+			log.setLevel(Level.ALL);
 		}
 	}
 
