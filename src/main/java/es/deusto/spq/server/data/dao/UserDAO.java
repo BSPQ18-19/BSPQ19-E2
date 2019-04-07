@@ -98,7 +98,8 @@ public class UserDAO implements IDAO, IUserDAO {
 
 			tx.commit();
 
-			return pm.detachCopy(assembler.assembleUser(user));
+			User detachedCopy = pm.detachCopy(user);
+			return assembler.assembleUser(detachedCopy);
 
 		} catch (Exception e) {
 			ServerLogger.getLogger().severe("Error in UserDAO:createUser()");

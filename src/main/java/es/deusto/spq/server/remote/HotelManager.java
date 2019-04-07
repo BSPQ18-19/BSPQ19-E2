@@ -45,6 +45,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	@Override
 	public UserDTO signInGuest(String name, String email, String password, String phone, String address) throws RemoteException{
 		String randomID = generateRandomId();
+		log.info("Selected random ID for new user: " + randomID);
 		User user = new Guest(randomID, name, email, password, phone, address); //TODO generate correctly the IDs
 		return userDAO.createUser(user);
 	}
