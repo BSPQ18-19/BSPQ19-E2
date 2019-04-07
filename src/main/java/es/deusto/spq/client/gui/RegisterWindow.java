@@ -11,6 +11,8 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+import java.util.logging.Logger;
 
 /**
  * The Register window.
@@ -27,10 +29,11 @@ public class RegisterWindow {
     private JTextField nameTextField, emailTextField, phoneTextField, addressTextField;
     private JPasswordField passwordField, passwordConfirmationField;
     private JButton submitButton;
-
+    private Logger log;
 
     public RegisterWindow(HotelManagementController controller) {
-        hotelManagementController = controller;
+        log = ClientLogger.getLogger();
+    	hotelManagementController = controller;
         initialize();
     }
 
@@ -145,11 +148,16 @@ public class RegisterWindow {
 //                new String(passwordField.getPassword()),
 //                phoneTextField.getText(),
 //                addressTextField.getText());
-        UserDTO result = hotelManagementController.signInGuest("Pepe",
-        		"pepe@gmail.com",
-                "pepepassword",
-                "1",
-                "Avda. de la Sierra 23");
+        UserDTO result = null;
+		try {
+			result = hotelManagementController.signInGuest("Pepe",
+					"pepe@gmail.com",
+			        "pepepassword",
+			        "1",
+			        "Avda. de la Sierra 23");
+		} catch (RemoteException e) {
+			log.info("Remote exception trying to create a UserDTO");
+		}
 
         if (result == null) {
             ClientLogger.getLogger().severe("User not registered...");

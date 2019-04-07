@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 
 import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
 
 import java.awt.Insets;
@@ -17,6 +18,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.rmi.RemoteException;
+import java.util.logging.Logger;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -27,13 +30,14 @@ public class Login {
 	private JTextField tFPassword;
 	private final JPanel panel_3 = new JPanel();
 	private RegisterWindow registerWindowFrame;
-
-	HotelManagementController controller;
+	private Logger log;
+	private HotelManagementController controller;
 
 	/**
 	 * Create the application.
 	 */
 	public Login(HotelManagementController controller) {
+		log = ClientLogger.getLogger();
 		initialize();
 		frame.setVisible(true);
 		this.controller = controller;
@@ -106,7 +110,12 @@ public class Login {
 				String email = tFEmail.getText();
 				String password = tFPassword.getText();
 				
-				controller.logIn(email, password);
+				try {
+					controller.logIn(email, password);
+				} catch (RemoteException e) {
+					log.info("Remote exception trying to create a UserDTO");
+
+				}
 				UserDTO loggedUser = controller.getLoggedUser();
 				if(loggedUser == null)
 					JOptionPane.showMessageDialog(frame, "Incorrect Password or UserID", "Login Error", JOptionPane.ERROR_MESSAGE);
