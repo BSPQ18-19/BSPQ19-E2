@@ -133,9 +133,8 @@ public class Login {
 		btnRegister.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				//TODO This takes you to the registration gui and closes this window
 				if (registerWindowFrame == null) {
-					new RegisterWindow(controller);
+					registerWindowFrame = new RegisterWindow(controller);
 				} else {
 					registerWindowFrame.show();
 				}

@@ -20,65 +20,82 @@ import java.util.logging.Logger;
  * Suggestions for improvement:
  * - Use an actual form system
  * - Make a validation system
- *
+ * @author Iñigo Apellániz, Iker Barriocanal
  */
 public class RegisterWindow {
 
     private JFrame frame;
     private HotelManagementController hotelManagementController;
+
+    // All the form fields and buttons
     private JTextField nameTextField, emailTextField, phoneTextField, addressTextField;
     private JPasswordField passwordField, passwordConfirmationField;
     private JButton submitButton;
+
+    // Logger
     private Logger log;
 
+    /**
+     * Instantiates a new registration window and shows it
+     * @param controller the HotelManagementController in use
+     */
     public RegisterWindow(HotelManagementController controller) {
         log = ClientLogger.getLogger();
     	hotelManagementController = controller;
         initialize();
     }
 
-    public void initialize() {
+    /**
+     * All the Swing code for showing the actual frame
+     */
+    private void initialize() {
         frame = new JFrame();
         frame.setTitle(LocaleManager.getMessage("register.title"));
         frame.setSize(400, 400);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        // The container is using BorderLayout so that
         JPanel container = new JPanel(new BorderLayout());
-
 
         JPanel form = new JPanel(new SpringLayout());
 
-
+        // I know this smells pretty badly. Sorry about that...
+        // Name field
         JLabel nameLabel = new JLabel(LocaleManager.getMessage("register.label.name"), JLabel.TRAILING);
         form.add(nameLabel);
         nameTextField = new JTextField(10);
         nameLabel.setLabelFor(nameTextField);
         form.add(nameTextField);
 
+        // Email field
         JLabel emailLabel = new JLabel(LocaleManager.getMessage("register.label.email"), JLabel.TRAILING);
         form.add(emailLabel);
         emailTextField = new JTextField(10);
         emailLabel.setLabelFor(emailTextField);
         form.add(emailTextField);
 
+        // Password field
         JLabel passwordLabel = new JLabel(LocaleManager.getMessage("register.label.password"), JLabel.TRAILING);
         form.add(passwordLabel);
         passwordField = new JPasswordField(10);
         passwordLabel.setLabelFor(passwordField);
         form.add(passwordField);
 
+        // Password confirmation field
         JLabel passwordConfirmationLabel = new JLabel(LocaleManager.getMessage("register.label.password-confirmation"), JLabel.TRAILING);
         form.add(passwordConfirmationLabel);
         passwordConfirmationField = new JPasswordField(10);
         passwordConfirmationLabel.setLabelFor(passwordConfirmationField);
         form.add(passwordConfirmationField);
 
+        // Phone field
         JLabel phoneLabel = new JLabel(LocaleManager.getMessage("register.label.phone"), JLabel.TRAILING);
         form.add(phoneLabel);
         phoneTextField = new JTextField(10);
         phoneLabel.setLabelFor(phoneTextField);
         form.add(phoneTextField);
 
+        // Address field
         JLabel addressLabel = new JLabel(LocaleManager.getMessage("register.label.address"), JLabel.TRAILING);
         form.add(addressLabel);
         addressTextField = new JTextField(10);
@@ -86,41 +103,60 @@ public class RegisterWindow {
         form.add(addressTextField);
 
 
-        //Lay out the panel.
+        // Lay out the form and make it a nice "responsive" grid
         SpringUtilities.makeCompactGrid(form,
                 6, 2, //rows, cols
                 6, 6,        //initX, initY
                 6, 6);       //xPad, yPad
 
+        // Add the form to the center slot
         container.add(form, BorderLayout.CENTER);
 
 
+        // Submit button
         submitButton = new JButton(LocaleManager.getMessage("register.submit"));
-        container.add(submitButton, BorderLayout.PAGE_END);
+        container.add(submitButton, BorderLayout.PAGE_END); // add it to the bottom
 
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleFormSubmission();
-            }
-        });
+        // Register the click function
+        submitButton.addActionListener((ActionEvent e) -> { handleFormSubmission(); });
 
         frame.add(container);
 
         frame.setVisible(true);
     }
 
-    public void show() {
+    /**
+     * Show and bring to focus the window
+     */
+    void show() {
         frame.setVisible(true);
         frame.requestFocus();
     }
 
+    /**
+     * Represents a reason of why the validation might fail
+     */
     private enum ValidationFailReason {
+        /**
+         * A required field was left empty
+         */
         REQUIRED_FIELD_EMPTY,
+
+        /**
+         * The password confirmation is not the same as the password
+         */
         PASSWORD_CONFIRMATION_DIFFERENT
     }
 
+    /**
+     * All the logic for registrations: validates, sends data to server, checks response
+     */
     private void handleFormSubmission() {
+
+        // Disable all fields
+        toggleFields(false);
+
+        // Required fields
         JTextComponent[] components = {
                 nameTextField,
                 emailTextField,
@@ -130,24 +166,25 @@ public class RegisterWindow {
                 passwordConfirmationField,
         };
 
-        for (int i = 0; i < components.length ; i++) {
-            if (components[i].getText().trim().isEmpty()) {
+        // Check that all required fields are filled, and if not, fail
+        for (JTextComponent component : components) {
+            if (component.getText().trim().isEmpty()) {
                 notifyValidationFail(ValidationFailReason.REQUIRED_FIELD_EMPTY);
+                // Re-enable fields
+                toggleFields(true);
                 return;
             }
         }
 
+        // Check if the password confirmation matches the password, and if not, fail
         if (!(new String(passwordField.getPassword())).equals(new String(passwordConfirmationField.getPassword()))) {
             notifyValidationFail(ValidationFailReason.PASSWORD_CONFIRMATION_DIFFERENT);
+            // Re-enable fields
+            toggleFields(true);
             return;
         }
 
-        // Signup logic
-//        boolean result = hotelManagementController.signupGuest(emailTextField.getText(),
-//                nameTextField.getText(),
-//                new String(passwordField.getPassword()),
-//                phoneTextField.getText(),
-//                addressTextField.getText());
+        // Create a new User and send it to the server
         UserDTO result = null;
 		try {
 			result = hotelManagementController.signInGuest(nameTextField.getText(),
@@ -159,6 +196,7 @@ public class RegisterWindow {
 			log.info("Remote exception trying to create a UserDTO");
 		}
 
+		// If it fails, tell the user and dispose the frame
         if (result == null) {
             ClientLogger.getLogger().severe("User not registered...");
             JOptionPane.showMessageDialog(frame,
@@ -170,6 +208,7 @@ public class RegisterWindow {
             return;
         }
 
+        // Success!
         JOptionPane.showMessageDialog(frame,
                 LocaleManager.getMessage("register.success.body"),
                 LocaleManager.getMessage("register.success.title"),
@@ -178,6 +217,10 @@ public class RegisterWindow {
 
     }
 
+    /**
+     * Show a dialog informing about a form validation failure
+     * @param reason the reason why the validation has failed
+     */
     private void notifyValidationFail(ValidationFailReason reason) {
 
         String messageKey;
@@ -204,6 +247,10 @@ public class RegisterWindow {
                 messageType);
     }
 
+    /**
+     * Enable or disable all the fields in the form
+     * @param enable whether or not to leave enabled the fields
+     */
     private void toggleFields(boolean enable) {
         nameTextField.setEnabled(enable);
         emailTextField.setEnabled(enable);
@@ -211,7 +258,7 @@ public class RegisterWindow {
         passwordField.setEnabled(enable);
         phoneTextField.setEnabled(enable);
         addressTextField.setEnabled(enable);
-        submitButton.setEnabled(false);
+        submitButton.setEnabled(enable);
     }
 
 }
