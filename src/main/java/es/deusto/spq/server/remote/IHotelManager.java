@@ -3,25 +3,21 @@ package es.deusto.spq.server.remote;
 import java.rmi.Remote;
 import java.util.List;
 
-import es.deusto.spq.server.data.SignupException;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 
 public interface IHotelManager extends Remote {
 
-	public boolean signInGuest(String name, String email, String password, int phone, String address);
+	public UserDTO signInGuest(String name, String email, String password, String phone, String address);
 	//TODO signInAdministrator
-	public int logIn(String email, String password);
+	public UserDTO logIn(String email, String password);
 	public boolean logOut(UserDTO user);
-	public boolean createHotel(HotelDTO hotel);
-	public boolean editHotel(String ID, HotelDTO newVersion);
-	public boolean deleteHotel(String ID);
-	public List<HotelDTO> getHotels();
-	public HotelDTO getHotelbyID(String hotelID);
-	public List<RoomDTO> getRoomOfHotelID(String hoteID);
-	public RoomDTO getRoombyID(String roomID);
-	// Signup
-	public boolean registerGuest(String email, String name, String password, String phone, String address) throws SignupException;
-	
+	public List<HotelDTO> getHotels(UserDTO authorization);
+	public HotelDTO getHotelbyID(UserDTO authorization, String hotelID);
+	public HotelDTO createHotel(UserDTO authorization, HotelDTO hotel);
+	public boolean deleteHotel(UserDTO authorization, String ID);
+	//TODO editHotel
+	//TODO getRoomsOfHotelbyID
+	//TODO getRoombyID
 }

@@ -1,6 +1,6 @@
 package es.deusto.spq.server.data.jdo;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -14,10 +14,11 @@ public class Hotel {
 	private String name;
 	private String location;
 	private List<String> services;
-	private LocalDate seasonStart, seasonEnding;
+	private Timestamp seasonStart;
+	private Timestamp seasonEnding;
 	
-	public Hotel(String hotelId, String name, String location, List<String> services, LocalDate seasonStart,
-			LocalDate seasonEnding) {
+	public Hotel(String hotelId, String name, String location, List<String> services, Timestamp seasonStart,
+			Timestamp seasonEnding) {
 		
 		this.hotelId = hotelId;
 		this.name = name;
@@ -59,19 +60,19 @@ public class Hotel {
 		this.services = services;
 	}
 
-	public LocalDate getSeasonStart() {
+	public Timestamp getSeasonStart() {
 		return seasonStart;
 	}
 
-	public void setSeasonStart(LocalDate seasonStart) {
+	public void setSeasonStart(Timestamp seasonStart) {
 		this.seasonStart = seasonStart;
 	}
 
-	public LocalDate getSeasonEnding() {
+	public Timestamp getSeasonEnding() {
 		return seasonEnding;
 	}
 
-	public void setSeasonEnding(LocalDate seasonEnding) {
+	public void setSeasonEnding(Timestamp seasonEnding) {
 		this.seasonEnding = seasonEnding;
 	}
 
