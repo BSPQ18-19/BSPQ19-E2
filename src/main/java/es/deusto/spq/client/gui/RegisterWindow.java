@@ -3,6 +3,7 @@ package es.deusto.spq.client.gui;
 import es.deusto.spq.client.gui.forms.SpringUtilities;
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.logger.ClientLogger;
+import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.locale.LocaleManager;
 
 import javax.swing.*;
@@ -144,13 +145,13 @@ public class RegisterWindow {
 //                new String(passwordField.getPassword()),
 //                phoneTextField.getText(),
 //                addressTextField.getText());
-        boolean result = hotelManagementController.signupGuest("pepe@gmail.com",
-                "Pepe",
-                "pepe",
+        UserDTO result = hotelManagementController.signInGuest("Pepe",
+        		"pepe@gmail.com",
+                "pepepassword",
                 "1",
                 "Avda. de la Sierra 23");
 
-        if (!result) {
+        if (result == null) {
             ClientLogger.getLogger().severe("User not registered...");
         }
     }

@@ -119,4 +119,8 @@ public class HotelManagementController {
 //		return room;
 //	}
 
+	public UserDTO getLoggedUser() {
+		return loggedUser;
+	}
+
 }

@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 
 import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.server.data.dto.UserDTO;
 
 import java.awt.Insets;
 import javax.swing.JPanel;
@@ -105,23 +106,16 @@ public class Login {
 				String email = tFEmail.getText();
 				String password = tFPassword.getText();
 				
-				int result = controller.logIn(email, password);
-				switch (result) {
-				case 1:
-					//TODO Call the Admin gui
-					break;
-				case 2:
-					//TODO Call the Guest Gui
-					break;
-					
-				case 3:
+				controller.logIn(email, password);
+				UserDTO loggedUser = controller.getLoggedUser();
+				if(loggedUser == null)
 					JOptionPane.showMessageDialog(frame, "Incorrect Password or UserID", "Login Error", JOptionPane.ERROR_MESSAGE);
-					break;
-
-				default:
-					break;
+				else {
+					if(loggedUser.isGuest())
+						;//TODO guest GUI
+					else
+						;//TODO admin GUI
 				}
-				
 			}
 		});
 		panel_3.add(btnLogin);
