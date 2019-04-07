@@ -3,13 +3,20 @@ package es.deusto.spq.client;
 import java.util.logging.Logger;
 
 import es.deusto.spq.client.controller.*;
+import es.deusto.spq.client.gui.Login;
+import es.deusto.spq.client.gui.RegisterWindow;
 import es.deusto.spq.client.logger.ClientLogger;
+import es.deusto.spq.client.controller.*;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.locale.LocaleManager;
 
 import java.util.Locale;
 
 public class Client {
+
+	public static void showSignup() {
+		new RegisterWindow(HotelManagementController.getController());
+	}
 
 	public static void main(String[] args) {
 
@@ -26,6 +33,8 @@ public class Client {
 
 		Client client = new Client();
 		client.initializeClient(args[0], Integer.parseInt(args[1]), args[2]);
+		log.info("Client initialization finished");
+		new Login(client.controller);
 	}
 	
 	private HotelManagementController controller = null;
@@ -45,6 +54,5 @@ public class Client {
 	public RMIServiceLocator getRMIServiceLocator() {
 		return rsl;
 	}
-	
 	
 }

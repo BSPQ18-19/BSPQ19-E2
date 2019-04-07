@@ -35,4 +35,5 @@ public class MyPersistenceManager {
 	public static PersistenceManager getPersistenceManager() {
 		return pm;
 	}
+
 }

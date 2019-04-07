@@ -12,4 +12,5 @@ public interface IHotelDAO {
 	public HotelDTO createHotel(UserDTO authorization, HotelDTO hotel);
 	public boolean deleteHotel(UserDTO authorization, String hotelID);
 	public HotelDTO editHotel(UserDTO authorization, String hotelID, HotelDTO updates);
+
 }
