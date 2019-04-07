@@ -9,6 +9,7 @@ import javax.jdo.annotations.*;
 @PersistenceCapable(detachable="true")
 public abstract class User implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	@PrimaryKey
 	private String userID;
 	@Persistent(defaultFetchGroup="true")
@@ -18,12 +19,18 @@ public abstract class User implements Serializable {
 	@Persistent(defaultFetchGroup="true")
 	private String password;
 	
-	public User(String userID, String name, String email, String password, int phone, String address) {
+	public User(String userID, String name, String email, String password, String address) {
 		super();
 		this.userID = userID;
 		this.name = name;
 		this.email = email;
 		this.password = password;
+	}
+	
+	public User(String userID, String name) {
+		super();
+		this.userID = userID;
+		this.name = name;
 	}
 	
 	public String getName() {

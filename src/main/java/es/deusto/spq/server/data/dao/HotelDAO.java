@@ -7,19 +7,23 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
+import javax.jdo.Extent;
+
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.dto.Assembler;
+import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
-public class UserDAO implements IDAO, IUserDAO {
+public class HotelDAO implements IDAO, IHotelDAO {
 
 	private PersistenceManager pm;
 	private Transaction tx;
 	private Assembler assembler;
 
-	public UserDAO() {
+	public HotelDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
 		assembler = new Assembler();
 	}
@@ -31,97 +35,99 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public List<UserDTO> getUsers(UserDTO authorization) {
+	public List<HotelDTO> getHotels(UserDTO authorization) {
 		if (!checkAuthorizationIsAdmin(authorization))
 			return null;
+
+		try {
+			pm.getFetchPlan().setMaxFetchDepth(3);
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
+			List<HotelDTO> result = new ArrayList<HotelDTO>();
+			for (Hotel hotel : extent)
+				result.add(assembler.assembleHotel(hotel));
+			tx.commit();
+
+			return result;
+
+		} catch (Exception e) {
+			ServerLogger.getLogger().severe("Error retrieving all the hotels");
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+
+		return null;
+	}
+
+	@Override
+	public HotelDTO getHotelbyID(UserDTO authorization, String hotelID) {
+		if (!checkAuthorizationIsAdmin(authorization))
+			return null;
+
+		try {
+			pm.getFetchPlan().setMaxFetchDepth(3); //Default level == 1
+			tx = pm.currentTransaction();
+			tx.begin();
+			
+			Query<Hotel> query = pm.newQuery(Hotel.class);
+			query.setFilter("hotelId == '" + hotelID + "'");
+			@SuppressWarnings("unchecked")
+			List<Hotel> result = (List<Hotel>) query.execute();
+			tx.commit();
+			return result == null || result.isEmpty() || result.size() > 1 ? 
+					null : 
+					assembler.assembleHotel(result.get(0));
+		} catch (Exception e) {
+			ServerLogger.getLogger().severe("Error retrieving the hotel with ID: " + hotelID);
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+		return null;
+	}
+
+	@Override
+	public HotelDTO createHotel(UserDTO authorization, HotelDTO hotel) {
+		if (!checkAuthorizationIsAdmin(authorization))
+			return null;
+
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			pm.makePersistent(hotel);
+
+			tx.commit();
+
+			return pm.detachCopy(hotel);
+
+		} catch (Exception e) {
+			ServerLogger.getLogger().severe("Error creating the hotel with ID: " + hotel.getHotelId());
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+
+		return null;
+	}
+
+	@Override
+	public boolean deleteHotel(UserDTO authorization, String hotelID) {
+		if (!checkAuthorizationIsAdmin(authorization))
+			return false;
 		
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
 
 			Query<User> query = pm.newQuery(User.class);
-			@SuppressWarnings("unchecked")
-			List<User> queryExecution = (List<User>) query.execute();
-			List<UserDTO> result = new ArrayList<UserDTO>();
-			for (User user : queryExecution)
-				result.add(assembler.assembleUser(user));
-			tx.commit();
-
-			return result;
-
-		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error in UserDAO:getUsers()");
-			e.printStackTrace();
-
-		} finally {
-			close();
-		}
-
-		return null;
-	}
-
-	@Override
-	public UserDTO getUserbyID(UserDTO authorization, String ID) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return null;
-		try {
-			tx = pm.currentTransaction();
-			tx.begin();
-
-			Query<User> query = pm.newQuery(User.class);
-			query.setFilter("userID == '" + ID + "'");
-			@SuppressWarnings("unchecked")
-			List<User> result = (List<User>) query.execute();
-			tx.commit();
-
-			return result == null || result.isEmpty() || result.size() > 1 ? 
-					null : 
-					assembler.assembleUser(result.get(0));
-		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error in UserDAO:getUserbyID()");
-			e.printStackTrace();
-
-		} finally {
-			close();
-		}
-
-		return null;
-	}
-
-	@Override
-	public UserDTO createUser(User user) {
-		try {
-			tx = pm.currentTransaction();
-			tx.begin();
-
-			pm.makePersistent(user);
-
-			tx.commit();
-
-			User detachedCopy = pm.detachCopy(user);
-			return assembler.assembleUser(detachedCopy);
-
-		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error in UserDAO:createUser()");
-			e.printStackTrace();
-
-		} finally {
-			close();
-		}
-
-		return null;
-	}
-
-	@Override
-	public boolean deleteUserbyID(UserDTO authorization, String ID) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return false;
-		try {
-			tx = pm.currentTransaction();
-			tx.begin();
-
-			Query<User> query = pm.newQuery(User.class);
-			query.setFilter("userID == '" + ID + "'");
+			query.setFilter("hotelID == '" + hotelID + "'");
 			@SuppressWarnings("unchecked")
 			List<User> queryExecution = (List<User>) query.execute();
 			if (queryExecution.isEmpty() || queryExecution.size() > 1)
@@ -133,39 +139,13 @@ public class UserDAO implements IDAO, IUserDAO {
 			return true;
 
 		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error in UserDAO:deleteUserbyID()");
+			ServerLogger.getLogger().severe("Error deleting the hotel with ID: " + hotelID);
 			e.printStackTrace();
 		} finally {
 			close();
 		}
 		return false;
-	}
-	
-	@Override
-	public UserDTO logIn(String email, String password) {
-		try {
-			tx = pm.currentTransaction();
-			tx.begin();
 
-			Query<User> query = pm.newQuery(User.class);
-			query.setFilter("email == '" + email + "'");
-			@SuppressWarnings("unchecked")
-			List<User> result = (List<User>) query.execute();
-			tx.commit();
-
-			if(result == null || result.isEmpty() || result.size() > 1)
-				return null;
-			User user = result.get(0);
-			if(user.getPassword().equals(password))
-				return assembler.assembleUser(user);
-		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error in UserDAO:getUserbyID()");
-			e.printStackTrace();
-
-		} finally {
-			close();
-		}
-		return null;
 	}
 	
 	/**
@@ -175,5 +155,4 @@ public class UserDAO implements IDAO, IUserDAO {
 		if (tx != null && tx.isActive())
 			tx.rollback();
 	}
-	
 }
