@@ -11,7 +11,9 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
+import es.deusto.spq.client.logger.ClientLogger;
 import javax.sound.midi.ControllerEventListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -39,8 +41,10 @@ public class HotelView extends JPanel{
 	private JButton	createHotel, viewHotel, editHotel, deleteHotel;
 	private JPanel upperButtons, centerPanel;
 	private int screenWidth, screenHeight;
-	
+	private Logger log;
+
 	public HotelView(int screenWidth, int screenHeight, HotelManagementController controller) {
+		log = ClientLogger.getLogger();
 		
 		this.setLayout(new BorderLayout());
 		this.screenWidth = screenWidth;
@@ -140,8 +144,7 @@ public class HotelView extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {		
 				hotelsTable.setDefaultRenderer(Object.class, new MyTableCellRenderer() );
-
-				System.out.println(hotelsTable.getValueAt(hotelsTable.getSelectedRow(),0));
+				log.info(hotelsTable.getValueAt(hotelsTable.getSelectedRow(),0) + "");
 			}
 		});
 		

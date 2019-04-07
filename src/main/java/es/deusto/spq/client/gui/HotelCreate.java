@@ -7,7 +7,9 @@ import java.awt.GridLayout;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
+import es.deusto.spq.client.logger.ClientLogger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -31,8 +33,10 @@ public class HotelCreate extends JPanel {
 	private JPanel upperButtons, centerPanel;
 	private int screenWidth, screenHeight;
 	private HotelManagementController controller;
+	private Logger log;
 	
 	public HotelCreate(int screenWidth, int screenHeight, HotelManagementController controller) {
+		log = ClientLogger.getLogger();
 		
 		this.setLayout(new BorderLayout());
 		

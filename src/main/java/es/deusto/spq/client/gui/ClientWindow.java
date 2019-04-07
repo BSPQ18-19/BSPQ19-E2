@@ -1,9 +1,12 @@
 package es.deusto.spq.client.gui;
 import java.awt.*;
 import javax.swing.*;
+import java.util.logging.Logger;
 
+import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.Client;
 import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.logger.ClientLogger;
 
 public class ClientWindow extends JFrame {
 	
@@ -13,10 +16,13 @@ public class ClientWindow extends JFrame {
 	private int screenWidth, screenHeight;
 	private HotelManagementController controller;
 	private JPanel mainPanel;
+	private Logger log;
 	
 
 	// private constructor using lazy singleton
 	private ClientWindow(HotelManagementController controller) {
+		log = ClientLogger.getLogger();
+		
 		this.controller = controller;
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

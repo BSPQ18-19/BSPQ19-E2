@@ -2,7 +2,9 @@ package es.deusto.spq.server.data.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
+import es.deusto.spq.client.logger.ClientLogger;
 import javax.jdo.Extent;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
@@ -11,12 +13,15 @@ import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.jdo.Hotel;
+import es.deusto.spq.server.logger.ServerLogger;
 
 public class HotelDAO implements IHotelDAO {
 	
-private PersistenceManagerFactory pmf;
-	
+	private PersistenceManagerFactory pmf;
+	private Logger log;
+
 	public HotelDAO(){
+		log = ClientLogger.getLogger();
 		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
 	}
 	
@@ -30,12 +35,12 @@ private PersistenceManagerFactory pmf;
 	   
 	    try {
 	       tx.begin();
-	       System.out.println("   * Storing an object: " + object);
+	       ServerLogger.getLogger().info("   * Storing an object: " + object);
 	       pm.makePersistent(object);
 	       tx.commit();
 
 	    } catch (Exception ex) {
-	    	System.out.println("   $ Error storing an object: " + ex.getMessage());
+	    	ServerLogger.getLogger().severe("   $ Error storing an object: " + ex.getMessage());
 	    } finally {
 	    	if (tx != null && tx.isActive()) {
 	    		tx.rollback();
@@ -56,7 +61,7 @@ private PersistenceManagerFactory pmf;
 		Transaction tx = pm.currentTransaction();
 		
 		try {
-			System.out.println("   * Retrieving an Extent for Hotels.");
+			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
 			
 			tx.begin();			
 			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
@@ -69,7 +74,7 @@ private PersistenceManagerFactory pmf;
 
 			tx.commit();			
 		} catch (Exception ex) {
-	    	System.out.println("   $ Error retrieving an extent: " + ex.getMessage());
+			ServerLogger.getLogger().severe("   $ Error retrieving an extent: " + ex.getMessage());
 	    } finally {
 	    	if (tx != null && tx.isActive()) {
 	    		tx.rollback();
@@ -90,7 +95,7 @@ private PersistenceManagerFactory pmf;
 	    ArrayList<Hotel> hotels = new ArrayList<>();
 	        
 	    try {
-	    	System.out.println("   * Retrieving all the hotels ");
+	    	ServerLogger.getLogger().info("   * Retrieving all the hotels ");
 	    	
 	    	tx.begin();	    	
 			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
@@ -101,10 +106,10 @@ private PersistenceManagerFactory pmf;
 			
 	        tx.commit();
 	    } catch (Exception ex) {
-	    	System.out.println("   $ Error retreiving an extent: " + ex.getMessage());
+	    	ServerLogger.getLogger().severe("   $ Error retreiving an extent: " + ex.getMessage());
 	    } finally {
 	    	if (tx != null && tx.isActive()) {
-	    		System.out.println("rollback");
+	    		ServerLogger.getLogger().info("rollback");
 	    		tx.rollback();
 	    	}
 			if(pm != null && !pm.isClosed()) {
@@ -135,7 +140,7 @@ private PersistenceManagerFactory pmf;
 			return true;
 
 		} catch (Exception ex) {
-	    	System.out.println("   $ Error deleting an hotel: " + ex.getMessage());
+			ServerLogger.getLogger().severe("   $ Error deleting an hotel: " + ex.getMessage());
 	    } finally {
 	    	if (tx != null && tx.isActive()) {
 	    		System.out.println("rollback");
@@ -149,7 +154,7 @@ private PersistenceManagerFactory pmf;
 	}
 	
 	public void cleanDB() {
-		System.out.println("- Cleaning the DB...");			
+		ServerLogger.getLogger().info("- Cleaning the DB...");			
 		PersistenceManager pm = pmf.getPersistenceManager();
 		pm.getFetchPlan().setMaxFetchDepth(3);
 
@@ -160,12 +165,12 @@ private PersistenceManagerFactory pmf;
 
 			//Delete hotels from DB
 			Query<Hotel> query1 = pm.newQuery(Hotel.class);
-			System.out.println(" * '" + query1.deletePersistentAll() + "' hotels deleted from the DB.");
+			ServerLogger.getLogger().info(" * '" + query1.deletePersistentAll() + "' hotels deleted from the DB.");
 
 			//End the transaction
 			tx.commit();
 		} catch (Exception ex) {
-			System.err.println(" $ Error cleaning the DB: " + ex.getMessage());
+			ServerLogger.getLogger().severe(" $ Error cleaning the DB: " + ex.getMessage());
 			ex.printStackTrace();
 		} finally {
 			if (tx != null && tx.isActive()) {
