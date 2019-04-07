@@ -29,9 +29,9 @@ public class HotelManagementController {
 		return controller;
 	}
 	
-	public boolean signInGuest(String name, String email, String password, int phone, String address) {
-		boolean result = rsl.getHotelManager().signInGuest(name, email, password, phone, address);
-		if(result)
+	public UserDTO signInGuest(String name, String email, String password, String phone, String address) {
+		UserDTO result = rsl.getHotelManager().signInGuest(name, email, password, phone, address);
+		if(result != null)
 			log.info("Signed in user with email: " + email);
 		else
 			log.info("Did not signed in user with email: " + email);
@@ -59,26 +59,26 @@ public class HotelManagementController {
 		return true;
 	}
 	
-	public boolean createHotel(HotelDTO hotel) {
-		boolean result = rsl.getHotelManager().createHotel(hotel);
-		if(result)
+	public HotelDTO createHotel(HotelDTO hotel) {
+		HotelDTO result = rsl.getHotelManager().createHotel(loggedUser, hotel);
+		if(result != null)
 			log.info("Created hotel with ID: " + hotel.getHotelId());
 		else
 			log.info("Did not created hotel with ID: " + hotel.getHotelId() + " - and name: " + hotel.getName());
 		return result;
 	}
 	
-	public boolean editHotel(String ID, HotelDTO newVersion) {
-		boolean result = rsl.getHotelManager().editHotel(ID, newVersion);
-		if(result)
-			log.info("Modified hotel with ID: " + ID);
-		else
-			log.info("Did not modified hotel with ID: " + ID);
-		return result;
-	}
+//	public boolean editHotel(String ID, HotelDTO newVersion) {
+//		boolean result = rsl.getHotelManager().editHotel(ID, newVersion);
+//		if(result)
+//			log.info("Modified hotel with ID: " + ID);
+//		else
+//			log.info("Did not modified hotel with ID: " + ID);
+//		return result;
+//	}
 	
 	public boolean deleteHotel(String ID) {
-		boolean result = rsl.getHotelManager().deleteHotel(ID);
+		boolean result = rsl.getHotelManager().deleteHotel(loggedUser, ID);
 		if(result)
 			log.info("Deleted hotel with ID: " + ID);
 		else
@@ -87,13 +87,13 @@ public class HotelManagementController {
 	}
 	
 	public List<HotelDTO> getHotels(){
-		List<HotelDTO> result = rsl.getHotelManager().getHotels();
+		List<HotelDTO> result = rsl.getHotelManager().getHotels(loggedUser);
 		log.info("List of hotels retrieved");
 		return result;
 	}
 	
 	public HotelDTO getHotelbyID(String hotelID) {
-		HotelDTO result = rsl.getHotelManager().getHotelbyID(hotelID);
+		HotelDTO result = rsl.getHotelManager().getHotelbyID(loggedUser, hotelID);
 		if(result != null)
 			log.info("Retrieved hotel with ID: " + hotelID);
 		else
@@ -101,22 +101,22 @@ public class HotelManagementController {
 		return result;
 	}
 	
-	public List<RoomDTO> getRoomOfHotelID(String hotelID){
-		List<RoomDTO> rooms = rsl.getHotelManager().getRoomOfHotelID(hotelID);
-		if(rooms != null)
-			log.info("Retrieved rooms from hotel with ID: " + hotelID);
-		else
-			log.info("Did not retrieve rooms from hotel with ID: " + hotelID);
-		return rooms;
-	}
-	
-	public RoomDTO getRoombyID(String roomID) {
-		RoomDTO room = rsl.getHotelManager().getRoombyID(roomID);
-		if(room != null)
-			log.info("Retrieved room with ID: " + roomID);
-		else
-			log.info("Did not retrieve room with ID: " + roomID);
-		return room;
-	}
+//	public List<RoomDTO> getRoomOfHotelID(String hotelID){
+//		List<RoomDTO> rooms = rsl.getHotelManager().getRoomOfHotelID(hotelID);
+//		if(rooms != null)
+//			log.info("Retrieved rooms from hotel with ID: " + hotelID);
+//		else
+//			log.info("Did not retrieve rooms from hotel with ID: " + hotelID);
+//		return rooms;
+//	}
+//	
+//	public RoomDTO getRoombyID(String roomID) {
+//		RoomDTO room = rsl.getHotelManager().getRoombyID(roomID);
+//		if(room != null)
+//			log.info("Retrieved room with ID: " + roomID);
+//		else
+//			log.info("Did not retrieve room with ID: " + roomID);
+//		return room;
+//	}
 
 }
