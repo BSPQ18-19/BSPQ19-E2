@@ -19,7 +19,7 @@ public class Client {
 
 	public static void main(String[] args) {
 
-		HotelManagementController controller = new HotelManagementController();
+		HotelManagementController controller = HotelManagementController.getController();
 		new Login(controller);
 		
 		Logger log = ClientLogger.getLogger();
