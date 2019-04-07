@@ -31,7 +31,7 @@ public class HotelDAO implements IDAO, IHotelDAO {
 	@Override
 	public boolean checkAuthorizationIsAdmin(UserDTO authorization) {
 		// TODO
-		return false;
+		return true;
 	}
 
 	@Override

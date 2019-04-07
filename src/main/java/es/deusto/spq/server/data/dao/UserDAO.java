@@ -27,7 +27,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	@Override
 	public boolean checkAuthorizationIsAdmin(UserDTO authorization) {
 		// TODO
-		return false;
+		return true;
 	}
 
 	@Override
