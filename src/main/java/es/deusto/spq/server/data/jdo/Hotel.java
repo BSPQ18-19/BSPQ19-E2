@@ -1,13 +1,8 @@
-package es.deusto.spq.server.data;
+package es.deusto.spq.server.data.jdo;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
-import javax.jdo.annotations.Join;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
@@ -18,11 +13,6 @@ public class Hotel {
 	private String name, location;
 	private String[] services;
 	private Timestamp seasonStart, seasonEnding;
-//	private ArrayList<Room> rooms;
-	
-	@Persistent(mappedBy="hotel", dependentElement="true")
-	@Join
-	private ArrayList<Reservation> reservations;
 	
 	public Hotel(String hotelId, String name, String location, String[] services, Timestamp seasonStart,
 			Timestamp seasonEnding) {
@@ -33,8 +23,6 @@ public class Hotel {
 		this.services = services;
 		this.seasonStart = seasonStart;
 		this.seasonEnding = seasonEnding;
-//		this.rooms = new ArrayList<>();
-		this.reservations = new ArrayList<>();
 	}
 
 	public String getHotelId() {
@@ -76,14 +64,6 @@ public class Hotel {
 	public void setSeasonStart(Timestamp seasonStart) {
 		this.seasonStart = seasonStart;
 	}
-
-//	public ArrayList<Room> getRooms() {
-//		return rooms;
-//	}
-//
-//	public void setRooms(ArrayList<Room> rooms) {
-//		this.rooms = rooms;
-//	}
 	
 	public Timestamp getSeasonEnding() {
 		return seasonEnding;
@@ -92,12 +72,4 @@ public class Hotel {
 	public void setSeasonEnding(Timestamp seasonEnding) {
 		this.seasonEnding = seasonEnding;
 	}
-
-	public ArrayList<Reservation> getReservations() {
-		return reservations;
-	}
-
-	public void setReservations(ArrayList<Reservation> reservations) {
-		this.reservations = reservations;
-	}	
 }

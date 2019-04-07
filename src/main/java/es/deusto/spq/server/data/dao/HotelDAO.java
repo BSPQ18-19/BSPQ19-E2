@@ -10,7 +10,7 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
-import es.deusto.spq.server.data.Hotel;
+import es.deusto.spq.server.data.jdo.Hotel;
 
 public class HotelDAO implements IHotelDAO {
 	

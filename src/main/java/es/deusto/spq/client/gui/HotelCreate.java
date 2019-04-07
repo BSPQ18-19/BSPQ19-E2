@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import es.deusto.spq.client.Client;
+import es.deusto.spq.client.controller.HotelManagementController;
 
 public class HotelCreate extends JPanel {
 
@@ -29,9 +30,9 @@ public class HotelCreate extends JPanel {
 	private JButton	createHotel, viewHotel, editHotel, deleteHotel;
 	private JPanel upperButtons, centerPanel;
 	private int screenWidth, screenHeight;
-	private Client client;
+	private HotelManagementController controller;
 	
-	public HotelCreate(int screenWidth, int screenHeight, Client client) {
+	public HotelCreate(int screenWidth, int screenHeight, HotelManagementController controller) {
 		
 		this.setLayout(new BorderLayout());
 		
@@ -78,7 +79,7 @@ public class HotelCreate extends JPanel {
 //		roomTextArea.setFont(new Font(roomTextArea.getName(), Font.PLAIN, 25));
 		
 		
-		this.client = client;
+		this.controller = controller;
 		
 		this.setLayout(new BorderLayout());
 		this.screenWidth = screenWidth;
@@ -90,7 +91,7 @@ public class HotelCreate extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindow.getClientWindow(client).changeScreen(ScreenType.CREATE_HOTEL_ADMIN);
+				ClientWindow.getClientWindow(controller).changeScreen(ScreenType.CREATE_HOTEL_ADMIN);
 				confirm.setEnabled(true);
 				
 			}
@@ -102,7 +103,7 @@ public class HotelCreate extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindow.getClientWindow(client).changeScreen(ScreenType.VIEW_HOTEL_ADMIN);		
+				ClientWindow.getClientWindow(controller).changeScreen(ScreenType.VIEW_HOTEL_ADMIN);		
 			}
 		});
 		
@@ -130,7 +131,7 @@ public class HotelCreate extends JPanel {
 					JOptionPane.showMessageDialog(null, "Please fill everything.", "Error", JOptionPane.ERROR_MESSAGE);
 				}else {
 					String[] services = servicesTextField.getText().trim().split(", ");
-					client.createHotel(idTextField.getText(), nameTextField.getText(), locationTextField.getText(),
+					controller.createHotel(idTextField.getText(), nameTextField.getText(), locationTextField.getText(),
 							services, seasonStartTextField.getText(), seasonEndingTextField.getText());
 					JOptionPane.showMessageDialog(null, "Hotel created", "Done", JOptionPane.OK_OPTION);
 				}

@@ -3,6 +3,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import es.deusto.spq.client.Client;
+import es.deusto.spq.client.controller.HotelManagementController;
 
 public class ClientWindow extends JFrame {
 	
@@ -10,13 +11,13 @@ public class ClientWindow extends JFrame {
 	private static ClientWindow clientWindow;
 	private ScreenType currentScreenType;
 	private int screenWidth, screenHeight;
-	private Client client;
+	private HotelManagementController controller;
 	private JPanel mainPanel;
 	
 
 	// private constructor using lazy singleton
-	private ClientWindow(Client client) {
-		this.client = client;
+	private ClientWindow(HotelManagementController controller) {
+		this.controller = controller;
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setTitle("Hotel client");
@@ -38,10 +39,10 @@ public class ClientWindow extends JFrame {
 		
 		switch(nextScreenType) {
 		case VIEW_HOTEL_ADMIN:
-			mainPanel = new HotelView(screenWidth, screenHeight, client);
+			mainPanel = new HotelView(screenWidth, screenHeight, controller);
 			break;
 		case CREATE_HOTEL_ADMIN:
-			mainPanel = new HotelCreate(screenWidth, screenHeight, client);
+			mainPanel = new HotelCreate(screenWidth, screenHeight, controller);
 			break;
 		default:
 			break;
@@ -51,13 +52,13 @@ public class ClientWindow extends JFrame {
 	}
 
 	// lazy singleton
-	public static ClientWindow getClientWindow(Client client) {
+	public static ClientWindow getClientWindow(HotelManagementController controller) {
 		if (clientWindow == null)
-			clientWindow = new ClientWindow(client);
+			clientWindow = new ClientWindow(controller);
 		return clientWindow;
 	}
 
-	public Client getClient() {
-		return client;
+	public HotelManagementController getController() {
+		return controller;
 	}
 }

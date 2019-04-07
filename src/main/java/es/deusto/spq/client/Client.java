@@ -1,102 +1,58 @@
 package es.deusto.spq.client;
 
-import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.logging.Logger;
 
-import es.deusto.spq.client.gui.ClientWindow;
-import es.deusto.spq.client.remote.HotelServiceLocator;
-import es.deusto.spq.server.IServer;
-import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.client.controller.*;
+import es.deusto.spq.client.gui.Login;
+import es.deusto.spq.client.gui.RegisterWindow;
+import es.deusto.spq.client.logger.ClientLogger;
+import es.deusto.spq.client.controller.*;
+import es.deusto.spq.client.remote.RMIServiceLocator;
+import es.deusto.spq.server.locale.LocaleManager;
+
+import java.util.Locale;
 
 public class Client {
 
-	private HotelServiceLocator serviceLocator;
-	private ArrayList<HotelDTO> currentHotels;
-	
-    public Client(String args[]) throws RemoteException {
-		super();
-		serviceLocator = new HotelServiceLocator();
-		serviceLocator.setService(args);
-		this.currentHotels = new ArrayList<>();
-		ClientWindow.getClientWindow(this).setVisible(true);
+	public static void showSignup() {
+		new RegisterWindow(HotelManagementController.getController());
 	}
-    
-    public boolean createHotel(String id, String name, String location, String[] services, String seasonStart, String seasonEnd) {
-    	
-    	try {
-    		System.out.println("Creating new hotel...");
-			HotelDTO hotelDTO = serviceLocator.getService().createHotel(id, name, location, services, seasonStart, seasonEnd);
-			if(hotelDTO!=null) {
-				System.out.println("Hotel created successfully!");
-				return true;
-			}else {
-				System.out.println("Hotel cannot be created.");
-			}
-		} catch (RemoteException e) {
-			System.out.println("Error creating a new hotel: " + e.getMessage());
+
+	public static void main(String[] args) {
+
+		Logger log = ClientLogger.getLogger();
+
+		if (args.length != 3) {
+			log.severe("Use: java [policy] [codebase] Client.Client [host] [port] [server]");
+			System.exit(0);
 		}
-    	return false;
-    }
-    
-    public boolean deleteHotel(String id) {
-    	try {
-			System.out.println("Deleting hotel with ID: " + id);
-			if(serviceLocator.getService().deleteHotel(id)) {
-				System.out.println("Hotel deleted successfully!");
-				return true;
-			}else {
-				System.out.println("Hotel cannot be deleted");
-			}
-		} catch (RemoteException e) {
-			System.out.println("Error deleting an hotel...");
+
+		if (System.getSecurityManager() == null) {
+			System.setSecurityManager(new SecurityManager());
 		}
-    	return false;
-    }
-    
-    public ArrayList<HotelDTO> retrieveHotels() {
-    	System.out.println("Getting list of hotels.");
-    	try {
-			ArrayList<HotelDTO> hotel = serviceLocator.getService().retrieveHotels();
-//			for(HotelDTO hotelDTO: hotel) {
-//				System.out.println(hotelDTO.getLocation());
-//			}
-//			HotelDTO[] hotels = hotel.toArray(new HotelDTO[hotel.size()]);
-			
-			
-			if(hotel != null && hotel.size() != 0) {
-				System.out.println("List of hotels retrieved succesfully.");
-				return hotel;
-			}else {
-				System.out.println("Could not retrieve list of hotels");
-			}
-    	} catch (RemoteException e) {
-			System.out.println("Error getting list of hotels: " + e.getMessage());
-		}
-		return null;
-    }
-    
-    public boolean cleanDB() {
-    	try {
-    		serviceLocator.getService().cleanDB();
-			return true;
-		} catch (RemoteException e) {
-			System.out.println("Error cleaning db: " + e.getMessage());
-		}
-    	return false;
-    }
-    
-	public ArrayList<HotelDTO> getCurrentHotels() {
-		return currentHotels;
-	}
-	public void setCurrentHotels(HotelDTO hotelDTO) {
-		this.currentHotels.add(hotelDTO);
-	}
-	public void setCurrentHotels() {
-		this.currentHotels.clear();
+
+		Client client = new Client();
+		client.initializeClient(args[0], Integer.parseInt(args[1]), args[2]);
+		log.info("Client initialization finished");
+		new Login(client.controller);
 	}
 	
-	public static void main(String[] args) throws RemoteException{
-		new Client(args);
+	private HotelManagementController controller = null;
+	private RMIServiceLocator rsl = null;
+	
+	public void initializeClient(String ip, int port, String serviceName) {
+		controller = HotelManagementController.getController();
+		rsl = RMIServiceLocator.getServiceLocator();
+		rsl.setService(ip, port, serviceName);
+		LocaleManager.setLocale(new Locale("es", "ES"));
+	}
+
+	public HotelManagementController getController() {
+		return controller;
+	}
+
+	public RMIServiceLocator getRMIServiceLocator() {
+		return rsl;
 	}
 	
 }
