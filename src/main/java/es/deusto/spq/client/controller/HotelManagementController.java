@@ -66,15 +66,6 @@ public class HotelManagementController {
 		return result;
 	}
 	
-//	public boolean editHotel(String ID, HotelDTO newVersion) {
-//		boolean result = rsl.getHotelManager().editHotel(ID, newVersion);
-//		if(result)
-//			log.info("Modified hotel with ID: " + ID);
-//		else
-//			log.info("Did not modified hotel with ID: " + ID);
-//		return result;
-//	}
-	
 	public boolean deleteHotel(String ID) throws RemoteException {
 		boolean result = rsl.getHotelManager().deleteHotel(loggedUser, ID);
 		if(result)
@@ -99,24 +90,6 @@ public class HotelManagementController {
 		return result;
 	}
 	
-//	public List<RoomDTO> getRoomOfHotelID(String hotelID){
-//		List<RoomDTO> rooms = rsl.getHotelManager().getRoomOfHotelID(hotelID);
-//		if(rooms != null)
-//			log.info("Retrieved rooms from hotel with ID: " + hotelID);
-//		else
-//			log.info("Did not retrieve rooms from hotel with ID: " + hotelID);
-//		return rooms;
-//	}
-//	
-//	public RoomDTO getRoombyID(String roomID) {
-//		RoomDTO room = rsl.getHotelManager().getRoombyID(roomID);
-//		if(room != null)
-//			log.info("Retrieved room with ID: " + roomID);
-//		else
-//			log.info("Did not retrieve room with ID: " + roomID);
-//		return room;
-//	}
-
 	public UserDTO getLoggedUser() {
 		return loggedUser;
 	}

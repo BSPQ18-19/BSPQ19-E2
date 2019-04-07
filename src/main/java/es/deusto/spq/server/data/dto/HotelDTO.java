@@ -72,4 +72,13 @@ public class HotelDTO implements Serializable {
 	public void setSeasonEnding(Timestamp seasonEnding) {
 		this.seasonEnding = seasonEnding;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof HotelDTO) {
+			HotelDTO object = (HotelDTO) o;
+			return hotelId.equals(object.getHotelId());
+		}
+		return false;
+	}
 }

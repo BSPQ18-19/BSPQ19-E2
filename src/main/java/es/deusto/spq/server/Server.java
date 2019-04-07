@@ -22,7 +22,12 @@ public class Server {
 		}
 
 		String url = "//" + args[0] + ":" + args[1] + "/" + args[2];
-
+		
+		Server server = new Server();
+		server.initializeServer(url);
+	}
+	
+	public void initializeServer(String url) {
 		try {
 			IHotelManager objServer = new HotelManager();
 			Naming.rebind(url, objServer);

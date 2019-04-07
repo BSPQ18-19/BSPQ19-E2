@@ -24,11 +24,27 @@ public class Client {
 			System.setSecurityManager(new SecurityManager());
 		}
 
-		HotelManagementController controller = HotelManagementController.getController();
-		log.info("Controller initialization finished in Client:main()");
-		RMIServiceLocator rsl = RMIServiceLocator.getServiceLocator();
-		rsl.setService(args[0], Integer.parseInt(args[1]), args[2]);
-		LocaleManager.setLocale(new Locale("es", "ES"));
-
+		Client client = new Client();
+		client.initializeClient(args[0], Integer.parseInt(args[1]), args[2]);
 	}
+	
+	private HotelManagementController controller = null;
+	private RMIServiceLocator rsl = null;
+	
+	public void initializeClient(String ip, int port, String serviceName) {
+		controller = HotelManagementController.getController();
+		rsl = RMIServiceLocator.getServiceLocator();
+		rsl.setService(ip, port, serviceName);
+		LocaleManager.setLocale(new Locale("es", "ES"));
+	}
+
+	public HotelManagementController getController() {
+		return controller;
+	}
+
+	public RMIServiceLocator getRMIServiceLocator() {
+		return rsl;
+	}
+	
+	
 }
