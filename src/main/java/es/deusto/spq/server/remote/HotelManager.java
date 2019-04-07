@@ -30,9 +30,7 @@ import es.deusto.spq.server.logger.ServerLogger;
 public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 
 	private static final long serialVersionUID = 1L;
-	private Assembler assembler;
 	private UserDAO userDAO;
-	private HotelDAO hotelDAO;
 	private Set<UserDTO> loggedUsers;
 	private Logger log;
 	private Map<String, Hotel> hotels = new TreeMap<String, Hotel>();
@@ -40,9 +38,9 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	
 	public HotelManager() throws RemoteException {
 		super();
-		this.assembler = new Assembler();
+		new Assembler();
 		this.userDAO = new UserDAO();
-		this.hotelDAO = new HotelDAO();
+		new HotelDAO();
 		loggedUsers = new HashSet<UserDTO>();
 		log = ServerLogger.getLogger();
 		r = new Random();
@@ -97,7 +95,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		ArrayList<Hotel> listHotels = dao.getHotels();
 		System.out.println(" --> SERVER:");
 		System.out.println("ID: " + listHotels.get(1).getHotelId());
-		System.out.println("NAME: " + listHotels.get(1).getName());
+		System.out.println("NAME: " + listHotels);
 		System.out.println("LOCATION: " + listHotels.get(1).getLocation());
 		for(Hotel hotel : listHotels) {
 			hotelsDTO.add(hotelAssembler.assemble(hotel));

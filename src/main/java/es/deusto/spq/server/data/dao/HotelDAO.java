@@ -96,7 +96,6 @@ private PersistenceManagerFactory pmf;
 			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
 
 			for (Hotel hotel : extent) {
-				
 				hotels.add(hotel);
 			}
 			

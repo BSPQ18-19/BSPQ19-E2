@@ -34,7 +34,7 @@ public class ClientWindow extends JFrame {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
-	public void changeScreen(ScreenType nextScreenType, String... strings) {
+	public void changeScreen(ScreenType nextScreenType) {
 		this.currentScreenType = nextScreenType;
 		
 		switch(nextScreenType) {
