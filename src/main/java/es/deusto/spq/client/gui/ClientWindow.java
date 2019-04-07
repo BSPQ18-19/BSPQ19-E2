@@ -28,7 +28,7 @@ public class ClientWindow extends JFrame {
 		this.screenWidth = (int) windowSize.getWidth();
 		this.screenHeight = (int) windowSize.getHeight();
 		
-		changeScreen(ScreenType.HOTEL_ADMIN);
+		changeScreen(ScreenType.VIEW_HOTEL_ADMIN);
 		
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
@@ -37,11 +37,11 @@ public class ClientWindow extends JFrame {
 		this.currentScreenType = nextScreenType;
 		
 		switch(nextScreenType) {
-		case INITIAL:
-			mainPanel = new InitialJPanel(screenWidth, screenHeight);
+		case VIEW_HOTEL_ADMIN:
+			mainPanel = new HotelView(screenWidth, screenHeight, client);
 			break;
-		case HOTEL_ADMIN:
-			mainPanel = new HotelAdminPanel(screenWidth, screenHeight, client);
+		case CREATE_HOTEL_ADMIN:
+			mainPanel = new HotelCreate(screenWidth, screenHeight, client);
 			break;
 		default:
 			break;

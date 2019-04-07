@@ -15,4 +15,5 @@ public interface IServer extends Remote {
 	public ArrayList<HotelDTO> retrieveHotels() throws RemoteException;
 	public HotelDTO createHotel(String id, String name, String location, String[] services, String seasonStart, String seasonEnd) throws RemoteException;
 	public boolean deleteHotel(String id) throws RemoteException;
+	public boolean cleanDB() throws RemoteException;
 }

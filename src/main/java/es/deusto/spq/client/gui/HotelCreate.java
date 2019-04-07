@@ -1,12 +1,20 @@
 package es.deusto.spq.client.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import es.deusto.spq.client.Client;
 
 public class HotelCreate extends JPanel {
 
@@ -17,10 +25,15 @@ public class HotelCreate extends JPanel {
 	private JLabel idLabel, nameLabel, locationLabel, servicesLabel, seasonStartLabel, seasonEndingLabel, roomLabel;
 	private TextField idTextField, nameTextField, locationTextField, servicesTextField, roomTextField;
 	private TextField seasonStartTextField, seasonEndingTextField;
+	private JButton	logout, confirm;
+	private JButton	createHotel, viewHotel, editHotel, deleteHotel;
+	private JPanel upperButtons, centerPanel;
+	private int screenWidth, screenHeight;
+	private Client client;
 	
-	public HotelCreate() {
+	public HotelCreate(int screenWidth, int screenHeight, Client client) {
 		
-		this.setLayout(new GridLayout(12, 1));
+		this.setLayout(new BorderLayout());
 		
 		idLabel = new JLabel("ID");
 		idLabel.setFont(new Font(idLabel.getName(), Font.PLAIN, 25));
@@ -64,80 +77,98 @@ public class HotelCreate extends JPanel {
 //		roomTextArea = new TextField(20);
 //		roomTextArea.setFont(new Font(roomTextArea.getName(), Font.PLAIN, 25));
 		
-		this.add(idLabel);
-		this.add(idTextField);
-		this.add(nameLabel);
-		this.add(nameTextField);
-		this.add(locationLabel);
-		this.add(locationTextField);
-		this.add(servicesLabel);
-		this.add(servicesTextField);
-		this.add(seasonStartLabel);
-		this.add(seasonStartTextField);
-		this.add(seasonEndingLabel);			
-		this.add(seasonEndingTextField);
+		
+		this.client = client;
+		
+		this.setLayout(new BorderLayout());
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
+		
+		createHotel = new JButton("New hotel");
+		createHotel.setSize(100, 30);
+		createHotel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClientWindow.getClientWindow(client).changeScreen(ScreenType.CREATE_HOTEL_ADMIN);
+				confirm.setEnabled(true);
+				
+			}
+		});
+		
+		viewHotel = new JButton("View hotels");
+		viewHotel.setSize(100, 30);
+		viewHotel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClientWindow.getClientWindow(client).changeScreen(ScreenType.VIEW_HOTEL_ADMIN);		
+			}
+		});
+		
+		editHotel = new JButton("Edit hotel");
+		editHotel.setSize(100, 30);
+		editHotel.setEnabled(false);
+		
+		deleteHotel = new JButton("Delete hotel");
+		deleteHotel.setSize(100, 30);
+		deleteHotel.setEnabled(false);
+		
+		confirm = new JButton("Confirm");
+		confirm.setSize(100, 30);
+		confirm.setBackground(Color.GREEN);
+		confirm.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(idTextField.getText().equals("")
+						|| nameTextField.getText().equals("")
+						|| locationTextField.getText().equals("")
+						|| servicesTextField.getText().equals("")
+						|| seasonStartTextField.getText().equals("")
+						|| seasonEndingTextField.getText().equals("")){
+					JOptionPane.showMessageDialog(null, "Please fill everything.", "Error", JOptionPane.ERROR_MESSAGE);
+				}else {
+					String[] services = servicesTextField.getText().trim().split(", ");
+					client.createHotel(idTextField.getText(), nameTextField.getText(), locationTextField.getText(),
+							services, seasonStartTextField.getText(), seasonEndingTextField.getText());
+					JOptionPane.showMessageDialog(null, "Hotel created", "Done", JOptionPane.OK_OPTION);
+				}
+			}
+		});
+				
+		logout = new JButton("Log out");
+		logout.setSize(100, 30);
+		logout.setBackground(Color.white);
+		
+		upperButtons = new JPanel();
+		upperButtons.setBackground(Color.LIGHT_GRAY);
+		upperButtons.add(createHotel);
+		upperButtons.add(viewHotel);
+		upperButtons.add(editHotel);
+		upperButtons.add(deleteHotel);
+		upperButtons.add(confirm);
+		upperButtons.add(logout);
+		
+		centerPanel = new JPanel();
+		centerPanel.setLayout(new GridLayout(12, 1));
+				
+		centerPanel.add(idLabel);
+		centerPanel.add(idTextField);
+		centerPanel.add(nameLabel);
+		centerPanel.add(nameTextField);
+		centerPanel.add(locationLabel);
+		centerPanel.add(locationTextField);
+		centerPanel.add(servicesLabel);
+		centerPanel.add(servicesTextField);
+		centerPanel.add(seasonStartLabel);
+		centerPanel.add(seasonStartTextField);
+		centerPanel.add(seasonEndingLabel);			
+		centerPanel.add(seasonEndingTextField);
 //		this.add(roomLabel);			
 //		this.add(roomTextArea);
-	}
-
-	
-	public String getIdTextFieldText() {
-		return idTextField.getText();
-	}
-
-	public String getNameTextFieldText() {
-		return nameTextField.getText();
-	}
-
-	public String getLocationTextFieldText() {
-		return locationTextField.getText();
-	}
-
-	public String getServicesTextFieldText() {
-		return servicesTextField.getText();
-	}
-
-//	public String getRoomTextField() {
-//		return roomTextArea.getText();
-//	}
-
-	public String getSeasonStartTextFieldText() {
-		return seasonStartTextField.getText();
-	}
-
-	public String getSeasonEndingTextFieldText() {
-		return seasonEndingTextField.getText();
-	}
-
-
-	public TextField getIdTextField() {
-		return idTextField;
-	}
-
-
-	public TextField getNameTextField() {
-		return nameTextField;
-	}
-
-
-	public TextField getLocationTextField() {
-		return locationTextField;
-	}
-	
-	public TextField getServicesTextField() {
-		return servicesTextField;
-	}
-
-
-	public TextField getSeasonStartTextField() {
-		return seasonStartTextField;
-	}
-
-
-	public TextField getSeasonEndingTextField() {
-		return seasonEndingTextField;
-	}
-	
-	
-	
+		
+		this.add(upperButtons, BorderLayout.NORTH);
+		this.add(centerPanel, BorderLayout.CENTER);
+	}	
 }

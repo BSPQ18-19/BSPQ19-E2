@@ -143,5 +143,13 @@ public class Server extends UnicastRemoteObject implements IServer {
 			return false;
 		}
 	}
+
+
+	@Override
+	public boolean cleanDB() throws RemoteException {
+		hotels.clear();
+		dao.cleanDB();
+		return false;
+	}
 	
 }

@@ -1,7 +1,10 @@
 package es.deusto.spq.client.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DateFormat;
@@ -10,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.sound.midi.ControllerEventListener;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -30,9 +34,93 @@ public class HotelView extends JPanel{
 	private DefaultTableModel tableModel;
 	private JTable hotelsTable;
 	private JScrollPane tableScrollPane;
+	private JButton	logout, confirm;
+	private JButton	createHotel, viewHotel, editHotel, deleteHotel;
+	private JPanel upperButtons, centerPanel;
+	private int screenWidth, screenHeight;
 	
 	public HotelView(int screenWidth, int screenHeight, Client client) {
-		this.setLayout(null);
+		
+		this.setLayout(new BorderLayout());
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
+		
+		createHotel = new JButton("New hotel");
+		createHotel.setSize(100, 30);
+		createHotel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClientWindow.getClientWindow(client).changeScreen(ScreenType.CREATE_HOTEL_ADMIN);
+				confirm.setEnabled(true);
+				
+			}
+		});
+		
+		viewHotel = new JButton("View hotels");
+		viewHotel.setSize(100, 30);
+		viewHotel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ClientWindow.getClientWindow(client).changeScreen(ScreenType.VIEW_HOTEL_ADMIN);			
+			}
+		});
+		
+		editHotel = new JButton("Edit hotel");
+		editHotel.setSize(100, 30);
+		editHotel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				client.cleanDB();
+				for(int i = 0; i < hotelsTable.getRowCount(); i++) {
+					String[] services = ((String) hotelsTable.getValueAt(i, 3)).split(", ");
+					client.createHotel((String) hotelsTable.getValueAt(i, 0),
+							(String) hotelsTable.getValueAt(i, 1), 
+							(String) hotelsTable.getValueAt(i, 2), 
+							services, 
+							(String) hotelsTable.getValueAt(i, 4), 
+							(String) hotelsTable.getValueAt(i, 5));
+				}
+			}
+		});
+		
+		deleteHotel = new JButton("Delete hotel");
+		deleteHotel.setSize(100, 30);
+		deleteHotel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(hotelsTable.getSelectedRow() != -1) {
+					String id = (String) (hotelsTable.getValueAt(hotelsTable.getSelectedRow(), 0));
+					if(client.deleteHotel(id)) {
+						JOptionPane.showMessageDialog(null, "Hotel deleted", "Done", JOptionPane.OK_OPTION);
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, "Select an hotel", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+
+				
+			}
+		});
+		
+		confirm = new JButton("Confirm");
+		confirm.setSize(100, 30);
+		confirm.setBackground(Color.GREEN);
+				
+		logout = new JButton("Log out");
+		logout.setSize(100, 30);
+		logout.setBackground(Color.white);
+		
+		upperButtons = new JPanel();
+		upperButtons.setBackground(Color.LIGHT_GRAY);
+		upperButtons.add(createHotel);
+		upperButtons.add(viewHotel);
+		upperButtons.add(editHotel);
+		upperButtons.add(deleteHotel);
+		upperButtons.add(confirm);
+		upperButtons.add(logout);		
 		
 		hotelsTable = new JTable();
 		tableModel = (DefaultTableModel) hotelsTable.getModel();
@@ -60,7 +148,8 @@ public class HotelView extends JPanel{
 		tableScrollPane.setSize(hotelsTable.getWidth() , 100);
 		tableScrollPane.setLocation((int) (screenWidth / 2.05 - tableScrollPane.getWidth() / 2), (int) (screenHeight / 3 - tableScrollPane.getHeight() / 2));
 		
-		this.add(tableScrollPane);
+		this.add(upperButtons, BorderLayout.NORTH);
+		this.add(tableScrollPane, BorderLayout.CENTER);
 		
 		client.setCurrentHotels();
 		client.getCurrentHotels();
@@ -76,15 +165,38 @@ public class HotelView extends JPanel{
 			}
 			
 			for (HotelDTO hotel: retrievedHotels) {
-				System.out.println(hotel.getName());
+				String seasonStartMonth = "";
+				String seasonStartDate = "";
+				String seasonEndingMonth = "";
+				String seasonEndingDate = "";
+				if((hotel.getSeasonStart().getMonth()+1) < 10) {
+					seasonStartMonth = "0" + (hotel.getSeasonStart().getMonth()+1);
+				}else {
+					seasonStartMonth = "" + (hotel.getSeasonStart().getMonth()+1);
+				}
 				
+				if((hotel.getSeasonStart().getDate()+1) < 10) {
+					seasonStartDate = "0" + (hotel.getSeasonStart().getDate()+1);
+				}else {
+					seasonStartDate = "" + (hotel.getSeasonStart().getDate()+1);
+				}
+				if((hotel.getSeasonEnding().getMonth()+1) < 10) {
+					seasonEndingMonth = "0" + (hotel.getSeasonEnding().getMonth()+1); 
+				}else {
+					seasonEndingMonth = "" + (hotel.getSeasonEnding().getMonth()+1); 
+				}
+				if((hotel.getSeasonEnding().getDate()+1) < 10) {
+					seasonEndingDate = "0" + (hotel.getSeasonEnding().getDate()+1);
+				}else {
+					seasonEndingDate = "" + (hotel.getSeasonEnding().getDate()+1);
+				}
 				tableModel.addRow(new String[] {hotel.getHotelId(), hotel.getName(), hotel.getLocation(),
-						"" , String.valueOf(hotel.getSeasonStart().getYear())
-						+ "-" + String.valueOf(hotel.getSeasonStart().getMonth()) 
-						+ "-" + String.valueOf(hotel.getSeasonStart().getDate()),
-						String.valueOf(hotel.getSeasonEnding().getYear())
-						+ "-" + String.valueOf(hotel.getSeasonEnding().getMonth()) 
-						+ "-" + String.valueOf(hotel.getSeasonEnding().getDate())});
+						"" , String.valueOf(hotel.getSeasonStart().getYear() + 1900)
+						+ "-" + seasonStartMonth 
+						+ "-" + seasonStartDate,
+						String.valueOf(hotel.getSeasonEnding().getYear() + 1900)
+						+ "-" + seasonEndingMonth
+						+ "-" + seasonEndingDate});
 
 				client.setCurrentHotels(hotel);
 			}
@@ -118,11 +230,6 @@ public class HotelView extends JPanel{
 
 			return this;
 		}
-	}
-	
-	
-	public JTable getHotelsTable() {
-		return hotelsTable;
 	}
 
 	public static void main(String[] args) {

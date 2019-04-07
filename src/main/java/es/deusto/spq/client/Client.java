@@ -75,6 +75,16 @@ public class Client {
 		return null;
     }
     
+    public boolean cleanDB() {
+    	try {
+    		serviceLocator.getService().cleanDB();
+			return true;
+		} catch (RemoteException e) {
+			System.out.println("Error cleaning db: " + e.getMessage());
+		}
+    	return false;
+    }
+    
 	public ArrayList<HotelDTO> getCurrentHotels() {
 		return currentHotels;
 	}
