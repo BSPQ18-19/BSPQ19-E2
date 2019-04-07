@@ -12,6 +12,8 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import es.deusto.spq.server.logger.ServerLogger;
+import es.deusto.spq.server.remote.HotelManager;
+import es.deusto.spq.server.remote.IHotelManager;
 
 
 public class Server extends UnicastRemoteObject implements IServer {
@@ -37,7 +39,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 		String url = "//" + args[0] + ":" + args[1] + "/" + args[2];
 
 		try {
-			IServer objServer = new Server();
+			IHotelManager objServer = new HotelManager();
 			Naming.rebind(url, objServer);
 			ServerLogger.getLogger().info("Server '" + url + "' active and waiting...");
 			java.io.InputStreamReader inputStreamReader = new java.io.InputStreamReader ( System.in );

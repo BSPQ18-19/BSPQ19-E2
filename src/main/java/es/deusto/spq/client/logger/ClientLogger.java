@@ -27,7 +27,6 @@ public class ClientLogger {
 		} catch (Exception e) {
 			log.severe("Cannot set the file handler for the logger. " + e.getMessage());
 		}
-//		log.info("test");
 	}
 
 	/**
