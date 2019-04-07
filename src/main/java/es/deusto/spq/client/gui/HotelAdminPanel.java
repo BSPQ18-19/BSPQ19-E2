@@ -66,6 +66,14 @@ public class HotelAdminPanel extends JPanel{
 		editHotel = new JButton("Edit hotel");
 		editHotel.setSize(100, 30);
 		editHotel.setEnabled(false);
+		editHotel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				changeHotelScreen(HotelPanelType.EDIT);
+				confirm.setEnabled(true);
+				}
+		});
 		
 		deleteHotel = new JButton("Delete hotel");
 		deleteHotel.setSize(100, 30);
@@ -149,6 +157,19 @@ public class HotelAdminPanel extends JPanel{
 		case VIEW:
 			centerPanel = new HotelView(this.screenWidth, this.screenHeight-upperButtons.getHeight(), client);
 			System.out.println(client.getCurrentHotels());
+			editHotel.setEnabled(true);
+			break;
+		case EDIT:
+
+			JTable table = (JTable) ((HotelView) centerPanel).getHotelsTable();
+			if(table.getSelectedRow() != -1)
+			{
+				centerPanel = new HotelCreate();
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Please select hotel", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+
 			break;
 		default:
 			break;

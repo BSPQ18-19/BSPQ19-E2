@@ -51,6 +51,8 @@ public class HotelView extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {		
 				hotelsTable.setDefaultRenderer(Object.class, new MyTableCellRenderer() );
+
+				System.out.println(hotelsTable.getValueAt(hotelsTable.getSelectedRow(),0));
 			}
 		});
 		
