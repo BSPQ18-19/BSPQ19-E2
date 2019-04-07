@@ -41,9 +41,9 @@ public class HotelManagementController {
 			logOut();
 		loggedUser = rsl.getHotelManager().logIn(email, password);
 		if(loggedUser != null)
-			log.info("Did not logged in user with email: " + email);
-		else
 			log.info("Logged in user with email: " + email);
+		else
+			log.info("Did not logged in user with email: " + email);
 	}
 	
 	public boolean logOut() throws RemoteException {
