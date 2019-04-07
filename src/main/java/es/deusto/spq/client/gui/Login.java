@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.locale.LocaleManager;
 
 import java.awt.Insets;
 import javax.swing.JPanel;
@@ -65,7 +66,7 @@ public class Login {
 		gbc_panel_2.gridy = 1;
 		frame.getContentPane().add(panel_2, gbc_panel_2);
 		
-		JLabel lblLogin = new JLabel("Login");
+		JLabel lblLogin = new JLabel(LocaleManager.getMessage("login.title"));
 		panel_2.add(lblLogin);
 		
 		JPanel panel_1 = new JPanel();
@@ -76,7 +77,7 @@ public class Login {
 		gbc_panel_1.gridy = 2;
 		frame.getContentPane().add(panel_1, gbc_panel_1);
 		
-		JLabel lblEmail = new JLabel("Email");
+		JLabel lblEmail = new JLabel(LocaleManager.getMessage("login.label.email"));
 		panel_1.add(lblEmail);
 		
 		tFEmail = new JTextField();
@@ -91,7 +92,7 @@ public class Login {
 		gbc_panel.gridy = 3;
 		frame.getContentPane().add(panel, gbc_panel);
 		
-		JLabel lblPassword = new JLabel("Password");
+		JLabel lblPassword = new JLabel(LocaleManager.getMessage("login.label.password"));
 		panel.add(lblPassword);
 		
 		tFPassword = new JPasswordField();
@@ -103,7 +104,7 @@ public class Login {
 		frame.getContentPane().add(panel_3, gbc_panel_3);
 		
 		
-		JButton btnLogin = new JButton("Login");
+		JButton btnLogin = new JButton(LocaleManager.getMessage("login.submit"));
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//This trigers when login in
@@ -118,7 +119,7 @@ public class Login {
 				}
 				UserDTO loggedUser = controller.getLoggedUser();
 				if(loggedUser == null)
-					JOptionPane.showMessageDialog(frame, "Incorrect Password or UserID", "Login Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(frame, LocaleManager.getMessage("login.failed.body"), LocaleManager.getMessage("login.failed.title"), JOptionPane.ERROR_MESSAGE);
 				else {
 					if(loggedUser.isGuest())
 						;//TODO guest GUI
@@ -129,7 +130,7 @@ public class Login {
 		});
 		panel_3.add(btnLogin);
 		
-		JButton btnRegister = new JButton("Register");
+		JButton btnRegister = new JButton(LocaleManager.getMessage("login.register"));
 		btnRegister.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
