@@ -4,6 +4,7 @@ import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.User;
+import es.deusto.spq.server.logger.ServerLogger;
 
 public class Assembler {
 
@@ -15,7 +16,7 @@ public class Assembler {
 			return null;
 		HotelDTO hotelDTO = new HotelDTO(hotel.getHotelId(), hotel.getName(), hotel.getLocation(),
 				hotel.getServices(), hotel.getSeasonStart(), hotel.getSeasonEnding());
-		System.out.println("Assembling hotel...");
+		ServerLogger.getLogger().info("Assembling hotel...");
 		return hotelDTO;
 	}
 

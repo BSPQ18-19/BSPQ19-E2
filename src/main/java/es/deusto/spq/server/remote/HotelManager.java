@@ -91,19 +91,19 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		ArrayList<HotelDTO> hotelsDTO = new ArrayList<>();
 		Assembler hotelAssembler = new Assembler();
 		
-		System.out.println("Retrieving hotels...");
+		log.info("Retrieving hotels...");
 		ArrayList<Hotel> listHotels = dao.getHotels();
-		System.out.println(" --> SERVER:");
-		System.out.println("ID: " + listHotels.get(1).getHotelId());
-		System.out.println("NAME: " + listHotels);
-		System.out.println("LOCATION: " + listHotels.get(1).getLocation());
+		log.info(" --> SERVER:");
+		log.info("ID: " + listHotels.get(1).getHotelId());
+		log.info("NAME: " + listHotels);
+		log.info("LOCATION: " + listHotels.get(1).getLocation());
 		for(Hotel hotel : listHotels) {
 			hotelsDTO.add(hotelAssembler.assemble(hotel));
 		}
-		System.out.println(hotelsDTO.size());
+		log.info("Arraylist size: "+hotelsDTO.size());
 		
 		if(hotelsDTO.isEmpty()) {
-			System.out.println("New exception - There are no hotels for the requested information.");
+			log.severe("New exception - There are no hotels for the requested information.");
 			throw new RemoteException("HOTELS - There are no hotels for the requested information.");
 		}
 

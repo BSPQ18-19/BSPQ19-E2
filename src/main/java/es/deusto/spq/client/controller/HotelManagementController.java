@@ -64,37 +64,37 @@ public class HotelManagementController {
 public boolean createHotel(String id, String name, String location, String[] services, String seasonStart, String seasonEnd) {
     	
     	try {
-    		System.out.println("Creating new hotel...");
+    		log.info("Creating new hotel...");
 			HotelDTO hotelDTO = rsl.getHotelManager().createHotel(id, name, location, services, seasonStart, seasonEnd);
 			if(hotelDTO!=null) {
-				System.out.println("Hotel created successfully!");
+				log.info("Hotel created successfully!");
 				return true;
 			}else {
-				System.out.println("Hotel cannot be created.");
+				log.info("Hotel cannot be created.");
 			}
 		} catch (RemoteException e) {
-			System.out.println("Error creating a new hotel: " + e.getMessage());
+			log.severe("Error creating a new hotel: " + e.getMessage());
 		}
     	return false;
     }
     
     public boolean deleteHotel(String id) {
     	try {
-			System.out.println("Deleting hotel with ID: " + id);
+    		log.info("Deleting hotel with ID: " + id);
 			if(rsl.getHotelManager().deleteHotel(id)) {
-				System.out.println("Hotel deleted successfully!");
+				log.info("Hotel deleted successfully!");
 				return true;
 			}else {
-				System.out.println("Hotel cannot be deleted");
+				log.info("Hotel cannot be deleted");
 			}
 		} catch (RemoteException e) {
-			System.out.println("Error deleting an hotel...");
+			log.severe("Error deleting an hotel...");
 		}
     	return false;
     }
     
     public ArrayList<HotelDTO> retrieveHotels() {
-    	System.out.println("Getting list of hotels.");
+    	log.info("Getting list of hotels.");
     	try {
 			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();
 //			for(HotelDTO hotelDTO: hotel) {
@@ -104,13 +104,13 @@ public boolean createHotel(String id, String name, String location, String[] ser
 			
 			
 			if(hotel != null && hotel.size() != 0) {
-				System.out.println("List of hotels retrieved succesfully.");
+				log.info("List of hotels retrieved succesfully.");
 				return hotel;
 			}else {
-				System.out.println("Could not retrieve list of hotels");
+				log.info("Could not retrieve list of hotels");
 			}
     	} catch (RemoteException e) {
-			System.out.println("Error getting list of hotels: " + e.getMessage());
+    		log.severe("Error getting list of hotels: " + e.getMessage());
 		}
 		return null;
     }
@@ -120,7 +120,7 @@ public boolean createHotel(String id, String name, String location, String[] ser
     		rsl.getHotelManager().cleanDB();
 			return true;
 		} catch (RemoteException e) {
-			System.out.println("Error cleaning db: " + e.getMessage());
+			log.severe("Error cleaning db: " + e.getMessage());
 		}
     	return false;
     }
