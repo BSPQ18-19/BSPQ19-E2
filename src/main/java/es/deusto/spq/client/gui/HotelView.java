@@ -100,7 +100,7 @@ public class HotelView extends JPanel{
 				if(hotelsTable.getSelectedRow() != -1) {
 					String id = (String) (hotelsTable.getValueAt(hotelsTable.getSelectedRow(), 0));
 					if(controller.deleteHotel(id)) {
-						JOptionPane.showMessageDialog(null, "Hotel deleted", "Done", JOptionPane.OK_OPTION);
+						JOptionPane.showMessageDialog(null, "Hotel deleted", "Done", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}else {
 					JOptionPane.showMessageDialog(null, "Select an hotel", "Error", JOptionPane.ERROR_MESSAGE);

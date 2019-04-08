@@ -137,7 +137,7 @@ public class HotelCreate extends JPanel {
 					String[] services = servicesTextField.getText().trim().split(", ");
 					controller.createHotel(idTextField.getText(), nameTextField.getText(), locationTextField.getText(),
 							services, seasonStartTextField.getText(), seasonEndingTextField.getText());
-					JOptionPane.showMessageDialog(null, "Hotel created", "Done", JOptionPane.OK_OPTION);
+					JOptionPane.showMessageDialog(null, "Hotel created", "Done", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
