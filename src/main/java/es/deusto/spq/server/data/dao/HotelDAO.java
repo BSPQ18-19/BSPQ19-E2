@@ -2,203 +2,184 @@ package es.deusto.spq.server.data.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
+import es.deusto.spq.client.logger.ClientLogger;
+import javax.jdo.Extent;
+import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
-import javax.jdo.Extent;
-
-import es.deusto.spq.server.data.MyPersistenceManager;
-import es.deusto.spq.server.data.dto.Assembler;
-import es.deusto.spq.server.data.dto.HotelDTO;
-import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Hotel;
-import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
-public class HotelDAO implements IDAO, IHotelDAO {
+public class HotelDAO implements IHotelDAO {
+	
+	private PersistenceManagerFactory pmf;
+	private Logger log;
 
-	private PersistenceManager pm;
-	private Transaction tx;
-	private Assembler assembler;
-
-	public HotelDAO() {
-		pm = MyPersistenceManager.getPersistenceManager();
-		assembler = new Assembler();
+	public HotelDAO(){
+		log = ClientLogger.getLogger();
+		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
 	}
-
-	@Override
-	public boolean checkAuthorizationIsAdmin(UserDTO authorization) {
-		// TODO
-		return true;
+	
+	public void storeHotel(Hotel hotel) {
+		this.storeObject(hotel);
 	}
+	
+	private void storeObject(Object object) {
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+	   
+	    try {
+	       tx.begin();
+	       ServerLogger.getLogger().info("   * Storing an object: " + object);
+	       pm.makePersistent(object);
+	       tx.commit();
 
-	@Override
-	public List<HotelDTO> getHotels(UserDTO authorization) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return null;
-
-		try {
-			pm.getFetchPlan().setMaxFetchDepth(2);
-			tx = pm.currentTransaction();
-			tx.begin();
-
-			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
-			List<HotelDTO> result = new ArrayList<HotelDTO>();
-			for (Hotel hotel : extent)
-				result.add(assembler.assembleHotel(hotel));
-			tx.commit();
-
-			return result;
-
-		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error retrieving all the hotels");
-			e.printStackTrace();
-
-		} finally {
-			close();
-		}
-
-		return null;
+	    } catch (Exception ex) {
+	    	ServerLogger.getLogger().severe("   $ Error storing an object: " + ex.getMessage());
+	    } finally {
+	    	if (tx != null && tx.isActive()) {
+	    		tx.rollback();
+	    	}
+			if(pm != null && !pm.isClosed()) {
+				pm.close();
+			}
+	    }
 	}
-
-	@Override
-	public HotelDTO getHotelbyID(UserDTO authorization, String hotelID) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return null;
-
-		try {
-			pm.getFetchPlan().setMaxFetchDepth(2); //Default level == 1
-			tx = pm.currentTransaction();
-			tx.begin();
-			
-			Query<Hotel> query = pm.newQuery(Hotel.class);
-			query.setFilter("hotelId == '" + hotelID + "'");
-			@SuppressWarnings("unchecked")
-			List<Hotel> result = (List<Hotel>) query.execute();
-			tx.commit();
-			return result == null || result.isEmpty() || result.size() > 1 ? 
-					null : 
-					assembler.assembleHotel(result.get(0));
-		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error retrieving the hotel with ID: " + hotelID);
-			e.printStackTrace();
-
-		} finally {
-			close();
-		}
-		return null;
-	}
-
-	@Override
-	public HotelDTO createHotel(UserDTO authorization, HotelDTO hotel) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return null;
-
-		try {
-			tx = pm.currentTransaction();
-			tx.begin();
-
-			pm.makePersistent(hotel);
-
-			tx.commit();
-
-			return pm.detachCopy(hotel);
-
-		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error creating the hotel with ID: " + hotel.getHotelId());
-			e.printStackTrace();
-
-		} finally {
-			close();
-		}
-
-		return null;
-	}
-
-	@Override
-	public boolean deleteHotel(UserDTO authorization, String hotelID) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return false;
+	
+	public Hotel getHotel(String hotelID) {
+		PersistenceManager pm = pmf.getPersistenceManager();
+		/* By default only 1 level is retrieved from the db
+		 * so if we wish to fetch more than one level, we must indicate it
+		 */
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		Transaction tx = pm.currentTransaction();
 		
 		try {
-			tx = pm.currentTransaction();
-			tx.begin();
+			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
+			
+			tx.begin();			
+			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
+			
+			for (Hotel hotel : extent) {
+				if (hotel.getName().equals(hotelID)) {
+				    return hotel;
+                }
+			}
 
-			Query<User> query = pm.newQuery(User.class);
-			query.setFilter("hotelID == '" + hotelID + "'");
-			@SuppressWarnings("unchecked")
-			List<User> queryExecution = (List<User>) query.execute();
-			if (queryExecution.isEmpty() || queryExecution.size() > 1)
-				return false;
-			pm.deletePersistent(queryExecution.get(0));
+			tx.commit();			
+		} catch (Exception ex) {
+			ServerLogger.getLogger().severe("   $ Error retrieving an extent: " + ex.getMessage());
+	    } finally {
+	    	if (tx != null && tx.isActive()) {
+	    		tx.rollback();
+	    	}
 
-			tx.commit();
-
-			return true;
-
-		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error deleting the hotel with ID: " + hotelID);
-			e.printStackTrace();
-		} finally {
-			close();
-		}
-		return false;
-
+    		pm.close();    		
+	    }
+	    				
+		return null;
 	}
-	
-	@Override
-	public HotelDTO editHotel(UserDTO authorization, String hotelID, HotelDTO updates) {
-		if(!checkAuthorizationIsAdmin(authorization))
-			return null;
 
+
+	public ArrayList<Hotel> getHotels() {
+		PersistenceManager pm = pmf.getPersistenceManager();
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		Transaction tx = pm.currentTransaction();
+	    ArrayList<Hotel> hotels = new ArrayList<>();
+	        
+	    try {
+	    	ServerLogger.getLogger().info("   * Retrieving all the hotels ");
+	    	
+	    	tx.begin();	    	
+			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
+
+			for (Hotel hotel : extent) {
+				hotels.add(hotel);
+			}
+			
+	        tx.commit();
+	    } catch (Exception ex) {
+	    	ServerLogger.getLogger().severe("   $ Error retreiving an extent: " + ex.getMessage());
+	    } finally {
+	    	if (tx != null && tx.isActive()) {
+	    		ServerLogger.getLogger().info("rollback");
+	    		tx.rollback();
+	    	}
+			if(pm != null && !pm.isClosed()) {
+				pm.close();
+			}
+	    }
+	    return hotels;
+	}
+
+	@Override
+	public boolean deleteHotel(String hotelID) {
+		PersistenceManager pm = pmf.getPersistenceManager();
+		
+		Transaction tx = pm.currentTransaction();
 		try {
-			pm.getFetchPlan().setMaxFetchDepth(2); //Default level == 1
-			tx = pm.currentTransaction();
 			tx.begin();
 			
 			Query<Hotel> query = pm.newQuery(Hotel.class);
 			query.setFilter("hotelId == '" + hotelID + "'");
 			@SuppressWarnings("unchecked")
-			List<Hotel> result = (List<Hotel>) query.execute();
+			List<Hotel> queryExecution = (List<Hotel>) query.execute();
+			if(queryExecution.isEmpty() || queryExecution.size() > 1)
+				return false;
+			pm.deletePersistent(queryExecution.get(0));
+			
 			tx.commit();
-			if(result == null || result.isEmpty() || result.size() > 1)
-				return null;
-			Hotel old = result.get(0);
-			updateHotelFields(old, updates);
 			
-			pm.detachCopy(old);
-			return assembler.assembleHotel(old);
-			
-		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error retrieving the hotel with ID: " + hotelID);
-			e.printStackTrace();
+			return true;
 
+		} catch (Exception ex) {
+			ServerLogger.getLogger().severe("   $ Error deleting an hotel: " + ex.getMessage());
+	    } finally {
+	    	if (tx != null && tx.isActive()) {
+	    		ServerLogger.getLogger().finer("rollback");
+	    		tx.rollback();
+	    	}
+			if(pm != null && !pm.isClosed()) {
+				pm.close();
+			}
+	    }
+		return false;
+	}
+	
+	public void cleanDB() {
+		ServerLogger.getLogger().info("- Cleaning the DB...");			
+		PersistenceManager pm = pmf.getPersistenceManager();
+		pm.getFetchPlan().setMaxFetchDepth(3);
+
+		Transaction tx = pm.currentTransaction();
+		//Start the transaction
+		try {
+			tx.begin();
+
+			//Delete hotels from DB
+			Query<Hotel> query1 = pm.newQuery(Hotel.class);
+			ServerLogger.getLogger().info(" * '" + query1.deletePersistentAll() + "' hotels deleted from the DB.");
+
+			//End the transaction
+			tx.commit();
+		} catch (Exception ex) {
+			ServerLogger.getLogger().severe(" $ Error cleaning the DB: " + ex.getMessage());
+			ex.printStackTrace();
 		} finally {
-			close();
+			if (tx != null && tx.isActive()) {
+				tx.rollback();
+			}
+
+			if (pm != null && !pm.isClosed()) {
+				pm.close();
+			}
 		}
-		return null;
-	}
-	
-	private void updateHotelFields(Hotel old, HotelDTO current) {
-		if(!old.getName().equals(current.getName()))
-			old.setName(current.getName());
-		if(!old.getLocation().equals(current.getLocation()))
-			old.setLocation(current.getLocation());
-		if(old.getServices().size() != current.getServices().size())
-			old.setServices(current.getServices());
-		if(!old.getSeasonStart().equals(current.getSeasonStart()))
-			old.setSeasonStart(current.getSeasonStart());
-		if(!old.getSeasonEnding().equals(current.getSeasonEnding()))
-			old.setSeasonEnding(current.getSeasonEnding());
-	}
-	
-	/**
-	 * Closes the transaction if it hasn't been closed before, and makes rollback.
-	 */
-	private final void close() {
-		if (tx != null && tx.isActive())
-			tx.rollback();
-	}
+	}	
 }

@@ -1,6 +1,7 @@
 package es.deusto.spq.client.controller;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -15,11 +16,13 @@ public class HotelManagementController {
 	private RMIServiceLocator rsl;
 	private UserDTO loggedUser = null;
 	private Logger log;
+	private ArrayList<HotelDTO> currentHotels;
 	
 	private HotelManagementController() {
 		rsl = RMIServiceLocator.getServiceLocator();
 		log = ClientLogger.getLogger();
 		log.info("HotelManagementController initialized");
+		this.currentHotels = new ArrayList<>();
 	}
 	
 	public static HotelManagementController getController() {
@@ -58,37 +61,78 @@ public class HotelManagementController {
 		return true;
 	}
 	
-	public HotelDTO createHotel(HotelDTO hotel) throws RemoteException {
-		HotelDTO result = rsl.getHotelManager().createHotel(loggedUser, hotel);
-		if(result != null)
-			log.info("Created hotel with ID: " + hotel.getHotelId());
-		else
-			log.info("Did not created hotel with ID: " + hotel.getHotelId() + " - and name: " + hotel.getName());
-		return result;
+public boolean createHotel(String id, String name, String location, String[] services, String seasonStart, String seasonEnd) {
+    	
+    	try {
+    		log.info("Creating new hotel...");
+			HotelDTO hotelDTO = rsl.getHotelManager().createHotel(id, name, location, services, seasonStart, seasonEnd);
+			if(hotelDTO!=null) {
+				log.info("Hotel created successfully!");
+				return true;
+			}else {
+				log.info("Hotel cannot be created.");
+			}
+		} catch (RemoteException e) {
+			log.severe("Error creating a new hotel: " + e.getMessage());
+		}
+    	return false;
+    }
+    
+    public boolean deleteHotel(String id) {
+    	try {
+    		log.info("Deleting hotel with ID: " + id);
+			if(rsl.getHotelManager().deleteHotel(id)) {
+				log.info("Hotel deleted successfully!");
+				return true;
+			}else {
+				log.info("Hotel cannot be deleted");
+			}
+		} catch (RemoteException e) {
+			log.severe("Error deleting an hotel...");
+		}
+    	return false;
+    }
+    
+    public ArrayList<HotelDTO> retrieveHotels() {
+    	log.info("Getting list of hotels.");
+    	try {
+			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();
+//			for(HotelDTO hotelDTO: hotel) {
+//				System.out.println(hotelDTO.getLocation());
+//			}
+//			HotelDTO[] hotels = hotel.toArray(new HotelDTO[hotel.size()]);
+			
+			
+			if(hotel != null && hotel.size() != 0) {
+				log.info("List of hotels retrieved succesfully.");
+				return hotel;
+			}else {
+				log.info("Could not retrieve list of hotels");
+			}
+    	} catch (RemoteException e) {
+    		log.severe("Error getting list of hotels: " + e.getMessage());
+		}
+		return null;
+    }
+    
+    public boolean cleanDB() {
+    	try {
+    		rsl.getHotelManager().cleanDB();
+			return true;
+		} catch (RemoteException e) {
+			log.severe("Error cleaning db: " + e.getMessage());
+		}
+    	return false;
+    }
+    
+	public ArrayList<HotelDTO> getCurrentHotels() {
+		return currentHotels;
 	}
-	
-	public boolean deleteHotel(String ID) throws RemoteException {
-		boolean result = rsl.getHotelManager().deleteHotel(loggedUser, ID);
-		if(result)
-			log.info("Deleted hotel with ID: " + ID);
-		else
-			log.info("Did not delete hotel with ID: " + ID);
-		return result;
+	public void setCurrentHotels(HotelDTO hotelDTO) {
+		this.currentHotels.add(hotelDTO);
 	}
-	
-	public List<HotelDTO> getHotels() throws RemoteException {
-		List<HotelDTO> result = rsl.getHotelManager().getHotels(loggedUser);
-		log.info("List of hotels retrieved");
-		return result;
-	}
-	
-	public HotelDTO getHotelbyID(String hotelID) throws RemoteException {
-		HotelDTO result = rsl.getHotelManager().getHotelbyID(loggedUser, hotelID);
-		if(result != null)
-			log.info("Retrieved hotel with ID: " + hotelID);
-		else
-			log.info("Did not retrieve hotel with ID: " + hotelID);
-		return result;
+	public void setCurrentHotels() {
+		this.currentHotels.clear();
 	}
 	
 	public UserDTO getLoggedUser() {

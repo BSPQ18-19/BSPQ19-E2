@@ -4,20 +4,20 @@ import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.User;
+import es.deusto.spq.server.logger.ServerLogger;
 
 public class Assembler {
 
 	public Assembler() {}
 	
 	// Hotel
-	public HotelDTO assembleHotel(Hotel hotel) {
-		return new HotelDTO(hotel.getHotelId(), hotel.getName(), hotel.getLocation(), hotel.getServices(),
-				hotel.getSeasonStart(), hotel.getSeasonEnding());
-	}
-
-	public Hotel disassembleHotel(HotelDTO hotel) {
-		return new Hotel(hotel.getHotelId(), hotel.getName(), hotel.getLocation(), hotel.getServices(),
-				hotel.getSeasonStart(), hotel.getSeasonEnding());
+	public HotelDTO assemble(Hotel hotel) {
+		if (hotel == null)
+			return null;
+		HotelDTO hotelDTO = new HotelDTO(hotel.getHotelId(), hotel.getName(), hotel.getLocation(),
+				hotel.getServices(), hotel.getSeasonStart(), hotel.getSeasonEnding());
+		ServerLogger.getLogger().info("Assembling hotel...");
+		return hotelDTO;
 	}
 
 	// Room

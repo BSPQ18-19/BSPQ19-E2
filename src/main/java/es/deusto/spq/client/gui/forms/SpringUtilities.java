@@ -34,7 +34,9 @@ package es.deusto.spq.client.gui.forms;
 import javax.swing.*;
 import javax.swing.SpringLayout;
 import java.awt.*;
+import java.util.logging.Logger;
 
+import es.deusto.spq.client.logger.ClientLogger;
 /**
  * A 1.4 file that provides utility methods for
  * creating forms- or grid-style layouts with SpringLayout.
@@ -46,10 +48,14 @@ public class SpringUtilities {
      * A debugging utility that prints to stdout the component's
      * minimum, preferred, and maximum sizes.
      */
+	
+	private static Logger log = ClientLogger.getLogger();
+	
+	
     public static void printSizes(Component c) {
-        System.out.println("minimumSize = " + c.getMinimumSize());
-        System.out.println("preferredSize = " + c.getPreferredSize());
-        System.out.println("maximumSize = " + c.getMaximumSize());
+    	log.info("minimumSize = " + c.getMinimumSize());
+    	log.info("preferredSize = " + c.getPreferredSize());
+    	log.info("maximumSize = " + c.getMaximumSize());
     }
 
     /**
