@@ -1,6 +1,7 @@
 package es.deusto.spq.server.data.jdo;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
@@ -10,11 +11,13 @@ public class Hotel {
 	
 	@PrimaryKey
 	private String hotelId;
-	private String name, location;
-	private String[] services;
-	private Timestamp seasonStart, seasonEnding;
+	private String name;
+	private String location;
+	private List<String> services;
+	private Timestamp seasonStart;
+	private Timestamp seasonEnding;
 	
-	public Hotel(String hotelId, String name, String location, String[] services, Timestamp seasonStart,
+	public Hotel(String hotelId, String name, String location, List<String> services, Timestamp seasonStart,
 			Timestamp seasonEnding) {
 		
 		this.hotelId = hotelId;
@@ -49,11 +52,11 @@ public class Hotel {
 		this.location = location;
 	}
 
-	public String[] getServices() {
+	public List<String> getServices() {
 		return services;
 	}
 
-	public void setServices(String[] services) {
+	public void setServices(List<String> services) {
 		this.services = services;
 	}
 
@@ -64,7 +67,7 @@ public class Hotel {
 	public void setSeasonStart(Timestamp seasonStart) {
 		this.seasonStart = seasonStart;
 	}
-	
+
 	public Timestamp getSeasonEnding() {
 		return seasonEnding;
 	}
@@ -72,4 +75,5 @@ public class Hotel {
 	public void setSeasonEnding(Timestamp seasonEnding) {
 		this.seasonEnding = seasonEnding;
 	}
+
 }

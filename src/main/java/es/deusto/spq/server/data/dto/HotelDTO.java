@@ -2,21 +2,19 @@ package es.deusto.spq.server.data.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
 public class HotelDTO implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String hotelId;
-	private String name, location;
-	private String[] services;
-	private Timestamp seasonStart, seasonEnding;
+	private String name;
+	private String location;
+	private List<String> services;
+	private Timestamp seasonStart;
+	private Timestamp seasonEnding;
 	
-	public HotelDTO(String hotelId, String name, String location, String[] services, Timestamp seasonStart,
+	public HotelDTO(String hotelId, String name, String location, List<String> services, Timestamp seasonStart,
 			Timestamp seasonEnding) {
 		
 		this.hotelId = hotelId;
@@ -51,11 +49,11 @@ public class HotelDTO implements Serializable {
 		this.location = location;
 	}
 
-	public String[] getServices() {
+	public List<String> getServices() {
 		return services;
 	}
 
-	public void setServices(String[] services) {
+	public void setServices(List<String> services) {
 		this.services = services;
 	}
 
@@ -73,5 +71,14 @@ public class HotelDTO implements Serializable {
 
 	public void setSeasonEnding(Timestamp seasonEnding) {
 		this.seasonEnding = seasonEnding;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof HotelDTO) {
+			HotelDTO object = (HotelDTO) o;
+			return hotelId.equals(object.getHotelId());
+		}
+		return false;
 	}
 }
