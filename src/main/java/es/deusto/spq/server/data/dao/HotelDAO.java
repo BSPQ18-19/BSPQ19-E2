@@ -143,7 +143,7 @@ public class HotelDAO implements IHotelDAO {
 			ServerLogger.getLogger().severe("   $ Error deleting an hotel: " + ex.getMessage());
 	    } finally {
 	    	if (tx != null && tx.isActive()) {
-	    		System.out.println("rollback");
+	    		ServerLogger.getLogger().finer("rollback");
 	    		tx.rollback();
 	    	}
 			if(pm != null && !pm.isClosed()) {
