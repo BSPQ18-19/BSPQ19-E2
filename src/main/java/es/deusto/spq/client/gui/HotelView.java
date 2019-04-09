@@ -80,13 +80,11 @@ public class HotelView extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				controller.cleanDB();
 				for(int i = 0; i < hotelsTable.getRowCount(); i++) {
-					String[] services = ((String) hotelsTable.getValueAt(i, 3)).split(", ");
 					controller.createHotel((String) hotelsTable.getValueAt(i, 0),
 							(String) hotelsTable.getValueAt(i, 1), 
-							(String) hotelsTable.getValueAt(i, 2), 
-							services, 
-							(String) hotelsTable.getValueAt(i, 4), 
-							(String) hotelsTable.getValueAt(i, 5));
+							(String) hotelsTable.getValueAt(i, 2),
+							(String) hotelsTable.getValueAt(i, 3), 
+							(String) hotelsTable.getValueAt(i, 4));
 				}
 			}
 		});
@@ -135,7 +133,6 @@ public class HotelView extends JPanel{
 		tableModel.addColumn("Id");
 		tableModel.addColumn("Name");
 		tableModel.addColumn("Location");
-		tableModel.addColumn("Services");
 		tableModel.addColumn("Season start");
 		tableModel.addColumn("Season end");
 		
@@ -195,7 +192,7 @@ public class HotelView extends JPanel{
 					seasonEndingDate = "" + (hotel.getSeasonEnding().getDate()+1);
 				}
 				tableModel.addRow(new String[] {hotel.getHotelId(), hotel.getName(), hotel.getLocation(),
-						"" , String.valueOf(hotel.getSeasonStart().getYear() + 1900)
+						String.valueOf(hotel.getSeasonStart().getYear() + 1900)
 						+ "-" + seasonStartMonth 
 						+ "-" + seasonStartDate,
 						String.valueOf(hotel.getSeasonEnding().getYear() + 1900)

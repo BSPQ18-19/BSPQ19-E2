@@ -47,12 +47,12 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		
 		LocalDate localDate = LocalDate.of(2019, 04, 01);
 		
-		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H03", new Hotel("H03", "Hotel3", "Madrid", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H04", new Hotel("H04", "Hotel4", "Sevilla", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", null, Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+		hotels.put("H03", new Hotel("H03", "Hotel3", "Madrid", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+		hotels.put("H04", new Hotel("H04", "Hotel4", "Sevilla", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
 		
 		this.dao = new HotelDAO();
 		dao.cleanDB();
@@ -112,7 +112,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 
 
 	@Override
-	public HotelDTO createHotel(String id, String name, String location, String[] services, String seasonStart,
+	public HotelDTO createHotel(String id, String name, String location, String seasonStart,
 			String seasonEnd) throws RemoteException {
 		if(hotels.containsKey(id.trim()))
 			throw new RemoteException("Server - Hotel ID aready exists");
@@ -121,7 +121,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		LocalDate localDateStart = LocalDate.parse(seasonStart.trim(), formatter);
 		LocalDate localDateEnding = LocalDate.parse(seasonEnd.trim(), formatter);
 		
-		Hotel hotel = new Hotel(id.trim(), name.trim(), location.trim(), services,
+		Hotel hotel = new Hotel(id.trim(), name.trim(), location.trim(),
 				Timestamp.valueOf(localDateStart.atStartOfDay()), Timestamp.valueOf(localDateEnding.atStartOfDay()));
 		hotels.put(hotel.getHotelId(), hotel);
 		dao.storeHotel(hotel);
