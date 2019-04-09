@@ -11,25 +11,20 @@ import junit.framework.Assert;
 
 public class FullClientServerTest {
 
-	private Client client;
-	private Server server;
-	private String ip;
-	private int port;
-	private String serviceName;
-	private String url;
+	private static Client client;
+	private static Server server;
+	private static String ip;
+	private static int port;
+	private static String serviceName;
+	private static String url;
 	
 	@BeforeClass
-	public void initialize() {
+	public static void initialize() {
 		client = new Client();
 		server = new Server();
 
-		System.setProperty("java.rmi.server.hostname","127.0.0.1");
+		System.setProperty("java.rmi.server.hostname", "127.0.0.1");
 
-
-		if (System.getSecurityManager() == null) {
-			System.setSecurityManager(new SecurityManager());
-		}
-		
 		ip = "127.0.0.1";
 		port = 1099;
 		serviceName = "HotelManagementServer";
@@ -37,12 +32,6 @@ public class FullClientServerTest {
 		
 		server.initializeServer(url);
 		client.initializeClient(ip, port, serviceName);
-		
-		initializeData();
-	}
-	
-	private void initializeData() {
-		
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -54,37 +43,37 @@ public class FullClientServerTest {
 	
 	@Test
 	public void signInGuestTest() {
-		
+		// TODO test
 	}
 	
 	@Test
 	public void logInTest() {
-		
+		// TODO test
 	}
 	
 	@Test
 	public void logOutTest() {
-		
+		// TODO test
 	}
 	
 	@Test
 	public void createHotelTest() {
-		
+		// TODO test
 	}
 	
 	@Test
 	public void deleteHotelTest() {
-		
+		// TODO test
 	}
 	
 	@Test
 	public void getHotelsTest() {
-		
+		// TODO test
 	}
 
 	@Test
 	public void getHotelbyIDTest() {
-		
+		// TODO test
 	}
 	
 }
