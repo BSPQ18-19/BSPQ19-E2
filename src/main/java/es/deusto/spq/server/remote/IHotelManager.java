@@ -15,7 +15,7 @@ public interface IHotelManager extends Remote {
 	public UserDTO logIn(String email, String password) throws RemoteException;
 	public boolean logOut(UserDTO user) throws RemoteException;
 	public ArrayList<HotelDTO> retrieveHotels() throws RemoteException;
-	public HotelDTO createHotel(String id, String name, String location, String[] services, String seasonStart, String seasonEnd) throws RemoteException;
+	public HotelDTO createHotel(String id, String name, String location, String seasonStart, String seasonEnd) throws RemoteException;
 	public boolean deleteHotel(String id) throws RemoteException;
 	public boolean cleanDB() throws RemoteException;
 	//TODO getRoomsOfHotelbyID
