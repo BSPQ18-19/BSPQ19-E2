@@ -10,3 +10,4 @@ before_install:
   - mysql -u root -e "create database hotelManagementDB";
   - mysql -u root -e "CREATE USER 'hm'@'%' IDENTIFIED BY 'hm'";
   - mysql -u root -e "GRANT ALL ON hotelManagementDB.* TO 'hm'@'%'";
+  - rmiregistry -J-Djava.rmi.server.useCodebaseOnly=false %
