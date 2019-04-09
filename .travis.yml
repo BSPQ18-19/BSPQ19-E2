@@ -7,4 +7,5 @@ cache:
    directories:
      - $HOME/.m2
 before_install:
+  - mysql -u root -e "create database hotelManagementDB";
   - mysql -u root hotelManagementDB < hotel-management.sql
