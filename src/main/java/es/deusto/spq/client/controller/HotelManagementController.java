@@ -61,11 +61,11 @@ public class HotelManagementController {
 		return true;
 	}
 	
-public boolean createHotel(String id, String name, String location, String[] services, String seasonStart, String seasonEnd) {
+public boolean createHotel(String id, String name, String location, String seasonStart, String seasonEnd) {
     	
     	try {
     		log.info("Creating new hotel...");
-			HotelDTO hotelDTO = rsl.getHotelManager().createHotel(id, name, location, services, seasonStart, seasonEnd);
+			HotelDTO hotelDTO = rsl.getHotelManager().createHotel(id, name, location, seasonStart, seasonEnd);
 			if(hotelDTO!=null) {
 				log.info("Hotel created successfully!");
 				return true;

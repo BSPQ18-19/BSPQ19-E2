@@ -25,8 +25,8 @@ public class HotelCreate extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel idLabel, nameLabel, locationLabel, servicesLabel, seasonStartLabel, seasonEndingLabel, roomLabel;
-	private TextField idTextField, nameTextField, locationTextField, servicesTextField, roomTextField;
+	private JLabel idLabel, nameLabel, locationLabel, seasonStartLabel, seasonEndingLabel;
+	private TextField idTextField, nameTextField, locationTextField;
 	private TextField seasonStartTextField, seasonEndingTextField;
 	private JButton	logout, confirm;
 	private JButton	createHotel, viewHotel, editHotel, deleteHotel;
@@ -49,17 +49,11 @@ public class HotelCreate extends JPanel {
 		locationLabel = new JLabel("Location");
 		locationLabel.setFont(new Font(locationLabel.getName(), Font.PLAIN, 25));
 		
-		servicesLabel = new JLabel("Services");
-		servicesLabel.setFont(new Font(servicesLabel.getName(), Font.PLAIN, 25));
-		
 		seasonStartLabel = new JLabel("Season start (YYYY-MM-DD)");
 		seasonStartLabel.setFont(new Font(seasonStartLabel.getName(), Font.PLAIN, 25));
 		
 		seasonEndingLabel = new JLabel("Season ending (YYYY-MM-DD)");
 		seasonEndingLabel.setFont(new Font(seasonEndingLabel.getName(), Font.PLAIN, 25));
-
-//		roomLabel = new JLabel("Season ending (YYYY-MM-DD)");
-//		roomLabel.setFont(new Font(roomLabel.getName(), Font.PLAIN, 25));
 		
 		idTextField = new TextField("", 20);
 		idTextField.setFont(new Font(idTextField.getName(), Font.PLAIN, 25));
@@ -70,17 +64,11 @@ public class HotelCreate extends JPanel {
 		locationTextField = new TextField("", 20);
 		locationTextField.setFont(new Font(locationTextField.getName(), Font.PLAIN, 25));
 		
-		servicesTextField = new TextField("", 20);
-		servicesTextField.setFont(new Font(servicesTextField.getName(), Font.PLAIN, 25));
-		
 		seasonStartTextField = new TextField("", 20);
 		seasonStartTextField.setFont(new Font(seasonStartTextField.getName(), Font.PLAIN, 25));
 		
 		seasonEndingTextField = new TextField("", 20);
 		seasonEndingTextField.setFont(new Font(seasonEndingTextField.getName(), Font.PLAIN, 25));
-//		
-//		roomTextArea = new TextField(20);
-//		roomTextArea.setFont(new Font(roomTextArea.getName(), Font.PLAIN, 25));
 		
 		
 		this.controller = controller;
@@ -129,14 +117,12 @@ public class HotelCreate extends JPanel {
 				if(idTextField.getText().equals("")
 						|| nameTextField.getText().equals("")
 						|| locationTextField.getText().equals("")
-						|| servicesTextField.getText().equals("")
 						|| seasonStartTextField.getText().equals("")
 						|| seasonEndingTextField.getText().equals("")){
 					JOptionPane.showMessageDialog(null, "Please fill everything.", "Error", JOptionPane.ERROR_MESSAGE);
 				}else {
-					String[] services = servicesTextField.getText().trim().split(", ");
 					controller.createHotel(idTextField.getText(), nameTextField.getText(), locationTextField.getText(),
-							services, seasonStartTextField.getText(), seasonEndingTextField.getText());
+							seasonStartTextField.getText(), seasonEndingTextField.getText());
 					JOptionPane.showMessageDialog(null, "Hotel created", "Done", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
@@ -164,14 +150,10 @@ public class HotelCreate extends JPanel {
 		centerPanel.add(nameTextField);
 		centerPanel.add(locationLabel);
 		centerPanel.add(locationTextField);
-		centerPanel.add(servicesLabel);
-		centerPanel.add(servicesTextField);
 		centerPanel.add(seasonStartLabel);
 		centerPanel.add(seasonStartTextField);
 		centerPanel.add(seasonEndingLabel);			
 		centerPanel.add(seasonEndingTextField);
-//		this.add(roomLabel);			
-//		this.add(roomTextArea);
 		
 		this.add(upperButtons, BorderLayout.NORTH);
 		this.add(centerPanel, BorderLayout.CENTER);

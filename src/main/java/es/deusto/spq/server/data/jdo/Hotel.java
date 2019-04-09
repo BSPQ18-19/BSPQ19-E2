@@ -13,17 +13,15 @@ public class Hotel {
 	private String hotelId;
 	private String name;
 	private String location;
-	private List<String> services;
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
 	
-	public Hotel(String hotelId, String name, String location, List<String> services, Timestamp seasonStart,
+	public Hotel(String hotelId, String name, String location, Timestamp seasonStart,
 			Timestamp seasonEnding) {
 		
 		this.hotelId = hotelId;
 		this.name = name;
 		this.location = location;
-		this.services = services;
 		this.seasonStart = seasonStart;
 		this.seasonEnding = seasonEnding;
 	}
@@ -50,14 +48,6 @@ public class Hotel {
 
 	public void setLocation(String location) {
 		this.location = location;
-	}
-
-	public List<String> getServices() {
-		return services;
-	}
-
-	public void setServices(List<String> services) {
-		this.services = services;
 	}
 
 	public Timestamp getSeasonStart() {
