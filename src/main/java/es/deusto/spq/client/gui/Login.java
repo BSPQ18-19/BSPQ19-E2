@@ -126,6 +126,7 @@ public class Login {
 						;//TODO guest GUI
 					else
 						;//TODO admin GUI
+					ClientWindow.getClientWindow(controller).setVisible(true);
 					JOptionPane.showMessageDialog(frame, "Succesfull login", "Succesfull login", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
