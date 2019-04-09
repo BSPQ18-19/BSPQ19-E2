@@ -23,6 +23,9 @@ public class FullClientServerTest {
 		client = new Client();
 		server = new Server();
 
+		System.setProperty("java.rmi.server.hostname","127.0.0.1");
+
+
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new SecurityManager());
 		}
