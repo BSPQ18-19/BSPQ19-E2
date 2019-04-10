@@ -1,4 +1,4 @@
-package es.deusto.spq;
+/*package es.deusto.spq;
 
 import static org.junit.Assert.*;
 
@@ -77,3 +77,4 @@ public class FullClientServerTest {
 	}
 	
 }
+*/

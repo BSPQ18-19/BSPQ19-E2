@@ -1,12 +1,18 @@
 package es.deusto.spq.server.data.jdo;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.Join;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
+@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public class Hotel {
 	
 	@PrimaryKey
@@ -15,6 +21,10 @@ public class Hotel {
 	private String location;
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
+	
+	@Persistent(defaultFetchGroup="true", mappedBy="hotel", dependentElement = "true")
+    @Join
+	private List<Review> reviews = new ArrayList<Review>();
 	
 	public Hotel(String hotelId, String name, String location, Timestamp seasonStart,
 			Timestamp seasonEnding) {
@@ -65,5 +75,4 @@ public class Hotel {
 	public void setSeasonEnding(Timestamp seasonEnding) {
 		this.seasonEnding = seasonEnding;
 	}
-
 }

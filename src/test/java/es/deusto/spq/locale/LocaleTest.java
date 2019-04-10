@@ -1,4 +1,4 @@
-package es.deusto.spq.locale;
+/*package es.deusto.spq.locale;
 
 import es.deusto.spq.server.locale.LocaleManager;
 import es.deusto.spq.server.locale.LocaleMode;
@@ -11,12 +11,12 @@ import java.util.Locale;
  * Unit test suite for the LocaleManager class.
  * @author Iñigo Apellániz
  */
-public class LocaleTest {
+/*public class LocaleTest {
 
     /**
      * The default locale should always be English (en_EN)
      */
-    @Test
+ /*   @Test
     public void getMessage_DefaultLocale_IsEnglish() {
 
         Locale englishLocale = new Locale("en", "EN");
@@ -31,7 +31,7 @@ public class LocaleTest {
     /**
      * Test that the getter and setter for the Locale are behaving as expected
      */
-    @Test
+  /*  @Test
     public void setLocale_GetterSetter_ExpectedBehaviour() {
 
         // Test to change the locale
@@ -74,7 +74,7 @@ public class LocaleTest {
     /**
      * Get the default LocaleMode (NORMAL)
      */
-    @Test
+ /*   @Test
     public void getDefaultLocalMode_DefaultLocale_IsNormal() {
 
         Assert.assertEquals(LocaleMode.NORMAL, LocaleManager.getDefaultLocaleMode());
@@ -83,7 +83,7 @@ public class LocaleTest {
     /**
      * Test that the getters and setters are behaving as expected
      */
-    @Test
+ /*   @Test
     public void getLocaleMode_GetterSetter_ExpectedBehaviour() {
 
         LocaleManager.setMode(LocaleMode.DEBUG);
@@ -98,7 +98,7 @@ public class LocaleTest {
      * Test that if we try to get a non-translated key for a non-default locale, and if we are in normal mode,
      * the translated key from the default locale should be returned. (fallback)
      */
-    @Test
+/*    @Test
     public void getMessage_InvalidKeyNormalModePresentInDefault_DefaultFallback() {
 
         LocaleManager.setMode(LocaleMode.NORMAL);
@@ -112,7 +112,7 @@ public class LocaleTest {
      * Test that if we're in DEBUG LocaleMode there's no fallback to the default locale and instead we get the key
      * of the translation itself.
      */
-    @Test
+/*    @Test
     public void getMessage_InvalidKeyDebugModePresentInDefault_NoFallback() {
 
         LocaleManager.setMode(LocaleMode.DEBUG);
@@ -125,11 +125,11 @@ public class LocaleTest {
     /**
      * Test that when a key doesn't exist, the key itself gets printed
      */
-    @Test
+/*    @Test
     public void getMessage_InvalidKeyNotPresent_PrintKey() {
 
         Assert.assertEquals("test.invalid", LocaleManager.getMessage("test.invalid"));
 
     }
 
-}
+}*/

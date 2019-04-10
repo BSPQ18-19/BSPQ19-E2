@@ -3,6 +3,7 @@ package es.deusto.spq.server.data.dao;
 import java.util.List;
 
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.Review;
 import es.deusto.spq.server.data.jdo.User;
 
 public interface IUserDAO {
@@ -33,4 +34,12 @@ public interface IUserDAO {
 	 */
 	public boolean deleteUserbyID(UserDTO authorization, String ID);
 	public UserDTO logIn(String email, String password);
+	
+	/**
+	 * Stores a review in the database
+	 * @param The review to be stored in the DB
+	 * @return Return the detached copy of the stored Review
+	 * 
+	 */
+	public Review createReview(Review r);
 }
