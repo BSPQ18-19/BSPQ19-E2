@@ -16,17 +16,14 @@ public class LocaleTest {
     /**
      * The default locale should always be English (en_EN)
      */
-    @Test
-    public void getMessage_DefaultLocale_IsEnglish() {
+	@Test
+	public void getMessage_DefaultLocale_IsEnglish() {
 
-        Locale englishLocale = new Locale("en", "EN");
+		Locale englishLocale = new Locale("en", "EN");
 
-        // Check expected default value
-        Assert.assertEquals(englishLocale, LocaleManager.getDefaultLocale());
-
-        // Also check the first locale we get without changin anything
-        Assert.assertEquals(englishLocale, LocaleManager.getLocale());
-    }
+		// Check expected default value
+		Assert.assertEquals(englishLocale, LocaleManager.getDefaultLocale());
+	}
 
     /**
      * Test that the getter and setter for the Locale are behaving as expected
