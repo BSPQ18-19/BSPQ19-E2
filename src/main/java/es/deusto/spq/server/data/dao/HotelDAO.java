@@ -153,6 +153,18 @@ public class HotelDAO implements IHotelDAO {
 		return false;
 	}
 	
+	public void updateHotel(Hotel hotel) {
+		PersistenceManager pm = pmf.getPersistenceManager();	
+		Transaction tx = pm.currentTransaction();
+		try {
+			tx.begin();
+			pm.makePersistent(hotel);
+			tx.commit();
+		}catch (Exception e) {
+			ServerLogger.getLogger().severe("");
+		}
+	}
+	
 	public void cleanDB() {
 		ServerLogger.getLogger().info("- Cleaning the DB...");			
 		PersistenceManager pm = pmf.getPersistenceManager();

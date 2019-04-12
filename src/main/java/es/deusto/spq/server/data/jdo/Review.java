@@ -8,7 +8,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable(detachable = "true")
-@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public class Review {
 	
 	@PrimaryKey

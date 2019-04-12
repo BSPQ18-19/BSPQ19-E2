@@ -191,7 +191,6 @@ public class UserDAO implements IDAO, IUserDAO {
 		}
 
 		return null;
-		
 	}
 	
 	/**

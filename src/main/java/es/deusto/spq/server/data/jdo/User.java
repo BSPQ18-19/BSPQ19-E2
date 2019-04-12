@@ -2,14 +2,12 @@
 package es.deusto.spq.server.data.jdo;
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.annotations.*;
 
 @PersistenceCapable(detachable="true")
-@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public abstract class User {
 
 	@PrimaryKey
@@ -22,8 +20,7 @@ public abstract class User {
 	private String password;
 	
 	@Persistent(defaultFetchGroup="true", mappedBy="user", dependentElement = "true")
-    @Join
-	private List<Review> reviews = new ArrayList<Review>();
+	private List<Review> reviews;
 	
 	public User(String userID, String name, String email, String password, String address) {
 		super();
@@ -31,6 +28,7 @@ public abstract class User {
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		reviews = new ArrayList<Review>();
 	}
 	
 	public User(String userID, String name) {

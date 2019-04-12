@@ -12,7 +12,6 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
-@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public class Hotel {
 	
 	@PrimaryKey
@@ -23,8 +22,7 @@ public class Hotel {
 	private Timestamp seasonEnding;
 	
 	@Persistent(defaultFetchGroup="true", mappedBy="hotel", dependentElement = "true")
-    @Join
-	private List<Review> reviews = new ArrayList<Review>();
+	private List<Review> reviews;
 	
 	public Hotel(String hotelId, String name, String location, Timestamp seasonStart,
 			Timestamp seasonEnding) {
@@ -34,8 +32,13 @@ public class Hotel {
 		this.location = location;
 		this.seasonStart = seasonStart;
 		this.seasonEnding = seasonEnding;
+		reviews = new ArrayList<Review>();
 	}
 
+	public void addReview(Review r) {
+		reviews.add(r);
+	}
+	
 	public String getHotelId() {
 		return hotelId;
 	}
