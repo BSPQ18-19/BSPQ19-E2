@@ -23,9 +23,6 @@ public class LocaleTest {
 
         // Check expected default value
         Assert.assertEquals(englishLocale, LocaleManager.getDefaultLocale());
-
-        // Also check the first locale we get without changin anything
-        Assert.assertEquals(englishLocale, LocaleManager.getLocale());
     }
 
     /**
