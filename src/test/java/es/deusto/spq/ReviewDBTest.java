@@ -3,8 +3,10 @@ package es.deusto.spq;
 import static org.junit.Assert.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 import org.junit.After;
@@ -25,25 +27,28 @@ import es.deusto.spq.server.logger.ServerLogger;
 public class ReviewDBTest {
 
 	private static Review r;
-	private static UserDAO userDAO;
 	private static HotelDAO hotelDAO;
 	
 	private PersistenceManager pm =  MyPersistenceManager.getPersistenceManager();;
 	private Transaction tx;
 	private Assembler assembler;
 	
+	private static Hotel h;
+	
 	@BeforeClass
 	public static void setUp() throws Exception {
-		User u = new Guest("69", "name", "email", "password", "1", "address");
-		userDAO.createUser(u);
-		Hotel h =new Hotel("H69", "Hotel1", "Bilbao", Timestamp.valueOf("2019-03-02 00:00:00"), Timestamp.valueOf("2019-03-02 00:00:00"));
-		hotelDAO.storeHotel(h);
+		h =new Hotel("H69", "Hotel1", "Bilbao", Timestamp.valueOf("2019-03-02 00:00:00"), Timestamp.valueOf("2019-03-02 00:00:00"));
 		r = new Review("1", "Perfect", 9, Timestamp.valueOf("2019-03-02 00:00:00"));
-		h.addReview(r);
+		hotelDAO.storeHotel(h);
 	}
 
 	@Test
 	public void test() {
-		
+		hotelDAO.storeReview(r, h.getHotelId());
+	}
+	
+	@After
+	public void delete() {
+		hotelDAO.deleteHotel(h.getHotelId());
 	}
 }

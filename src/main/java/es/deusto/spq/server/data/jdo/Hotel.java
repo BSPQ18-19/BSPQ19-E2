@@ -11,7 +11,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-@PersistenceCapable
+@PersistenceCapable(detachable = "true")
 public class Hotel {
 	
 	@PrimaryKey
@@ -21,7 +21,7 @@ public class Hotel {
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
 	
-	@Persistent(defaultFetchGroup="true", mappedBy="hotel", dependentElement = "true")
+	@Persistent(mappedBy="hotel")
 	private List<Review> reviews;
 	
 	public Hotel(String hotelId, String name, String location, Timestamp seasonStart,

@@ -13,6 +13,7 @@ import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.jdo.Hotel;
+import es.deusto.spq.server.data.jdo.Review;
 import es.deusto.spq.server.logger.ServerLogger;
 
 public class HotelDAO implements IHotelDAO {
@@ -153,12 +154,20 @@ public class HotelDAO implements IHotelDAO {
 		return false;
 	}
 	
-	public void updateHotel(Hotel hotel) {
+	public void storeReview(Review r, String hotelID) {
 		PersistenceManager pm = pmf.getPersistenceManager();	
 		Transaction tx = pm.currentTransaction();
 		try {
 			tx.begin();
-			pm.makePersistent(hotel);
+			
+			Query<Hotel> query = pm.newQuery(Hotel.class);
+			query.setFilter("hotelId == '" + hotelID + "'");
+			
+			@SuppressWarnings("unchecked")
+			List<Hotel> result = (List<Hotel>) query.execute();
+			Hotel hotel = result.get(0);
+			hotel.addReview(r);
+			
 			tx.commit();
 		}catch (Exception e) {
 			ServerLogger.getLogger().severe("");

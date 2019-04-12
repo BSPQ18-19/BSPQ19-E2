@@ -15,7 +15,7 @@ public class Review {
 	private String opinion;
 	private int score;
 	private Timestamp publishDate;
-	private User user;
+	//private User user;
 	private Hotel hotel;
 	
 	public Review(String reviewID, String opinion, int score, Timestamp publishDate) {
@@ -50,12 +50,6 @@ public class Review {
 	public void setPublishDate(Timestamp publishDate) {
 		this.publishDate = publishDate;
 	}
-	public User getWriter() {
-		return user;
-	}
-	public void setWriter(User writer) {
-		this.user = writer;
-	}
 	public Hotel getHotel() {
 		return hotel;
 	}
@@ -66,6 +60,6 @@ public class Review {
 	@Override
 	public String toString() {
 		return "Review [reviewID=" + reviewID + ", opinion=" + opinion + ", score=" + score + ", publishDate="
-				+ publishDate + ", writer=" + user.getName() + ", hotel=" + hotel.getName() + "]";
+				+ publishDate + ", writer= + user.getName() + , hotel=" + hotel.getName() + "]";
 	}	
 }

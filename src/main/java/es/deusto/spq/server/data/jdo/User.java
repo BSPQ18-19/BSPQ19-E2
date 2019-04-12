@@ -19,8 +19,8 @@ public abstract class User {
 	@Persistent(defaultFetchGroup="true")
 	private String password;
 	
-	@Persistent(defaultFetchGroup="true", mappedBy="user", dependentElement = "true")
-	private List<Review> reviews;
+	/*@Persistent(defaultFetchGroup="true", mappedBy="user", dependentElement = "true")
+	private List<Review> reviews;*/
 	
 	public User(String userID, String name, String email, String password, String address) {
 		super();
@@ -28,7 +28,7 @@ public abstract class User {
 		this.name = name;
 		this.email = email;
 		this.password = password;
-		reviews = new ArrayList<Review>();
+		//reviews = new ArrayList<Review>();
 	}
 	
 	public User(String userID, String name) {
