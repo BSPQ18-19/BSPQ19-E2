@@ -10,11 +10,11 @@ mvn exec:java -Pclient
 Launch MySQL:
 mysqld --console --explicit_defaults_for_timestamp --default-time-zone=+00:00
 
-For creating the DB Schema:
-mvn datanucleus:schema-create
-
-For deleting DB Schema:
-mvn datanucleus:schema-delete
-
 For running Test:
 mvn test
+
+Report generation:
+mvn test
+mvn checkstyle:checkstyle
+mvn jdepend:generate
+mvn site
