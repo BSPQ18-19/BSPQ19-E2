@@ -1,5 +1,7 @@
 package es.deusto.spq.client.gui.base;
 
+import java.util.logging.Logger;
+
 /**
  * Underlying class for app Views
  * @author Iñigo Apellániz
@@ -7,9 +9,13 @@ package es.deusto.spq.client.gui.base;
 public abstract class View {
 
     /**
-     * The ViewManager responsible for
+     * The ViewManager responsible for the View.
      */
     private ViewManager viewManager;
+
+    public View(ViewManager viewManager) {
+        this.viewManager = viewManager;
+    }
 
     /**
      * Getter for the ViewType of the View
@@ -20,33 +26,53 @@ public abstract class View {
     }
 
     /**
+     * The ViewPermission of a View represents when it can remain opened whenever the permission level changes in the
+     * application. @see es.deusto.spq.client.gui.base.ViewPermission
+     * @return the view permission
+     */
+    public ViewPermission getViewPermission() {
+        return ViewPermission.NONE;
+    }
+
+    /**
      * Whether or not only one instance of the View should ever be opened.
      * @return whether or not the View is unique
      */
-    boolean isUnique() {
+    public boolean isUnique() {
         return false;
     }
 
     /**
      * Initializes the View and shows it
-     * @param viewManager a reference to the ViewManager that created the view
      */
-    void initialize(ViewManager viewManager) {
-
+    public void initialize() {
+        Logger.getLogger(this.getClass().getName())
+                .warning("initialize method not implemented or calling super!");
     }
 
     /**
      * Brings the view to the top.
      */
-    void bringToTop() {
-
+    public void bringToFront() {
+        Logger.getLogger(this.getClass().getName())
+                .warning("bringToFront method not implemented or calling super!");
     }
 
     /**
      * Minimizes the view to the background.
      */
-    void minimize() {
+    public void minimize() {
+        Logger.getLogger(this.getClass().getName())
+                .warning("minimize method not implemented or calling super!");
+    }
 
+    /**
+     * Tells the window to force-check for new data and update it.
+     * Should also re-paint it in case the locale has changed.
+     */
+    public void refresh() {
+        Logger.getLogger(this.getClass().getName())
+                .warning("refresh method not implemented or calling super!");
     }
 
     /**
@@ -54,7 +80,9 @@ public abstract class View {
      * After this call, the View instance will never be called again.
      */
     public void dispose() {
-
+        Logger.getLogger(this.getClass().getName())
+                .warning("dispose method not implemented or calling super!");
     }
+
 
 }

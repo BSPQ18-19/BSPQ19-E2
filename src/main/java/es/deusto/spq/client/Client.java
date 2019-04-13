@@ -6,6 +6,8 @@ import es.deusto.spq.client.controller.*;
 import es.deusto.spq.client.gui.ClientWindow;
 import es.deusto.spq.client.gui.Login;
 import es.deusto.spq.client.gui.RegisterWindow;
+import es.deusto.spq.client.gui.base.ViewManager;
+import es.deusto.spq.client.gui.views.LoginView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.controller.*;
 import es.deusto.spq.client.remote.RMIServiceLocator;
@@ -14,6 +16,8 @@ import es.deusto.spq.server.locale.LocaleManager;
 import java.util.Locale;
 
 public class Client {
+
+	private ViewManager viewManager;
 
 	public static void showSignup() {
 		new RegisterWindow(HotelManagementController.getController());
@@ -47,6 +51,9 @@ public class Client {
 		rsl = RMIServiceLocator.getServiceLocator();
 		rsl.setService(ip, port, serviceName);
 		LocaleManager.setLocale(new Locale("es", "ES"));
+		viewManager = new ViewManager(this);
+		viewManager.initialize();
+		viewManager.openView(new LoginView(viewManager));
 	}
 
 	public HotelManagementController getController() {
