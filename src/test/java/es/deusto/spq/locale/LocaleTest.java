@@ -16,8 +16,8 @@ public class LocaleTest {
     /**
      * The default locale should always be English (en_EN)
      */
-    @Test
-    public void getMessage_DefaultLocale_IsEnglish() {
+	@Test
+	public void getMessage_DefaultLocale_IsEnglish() {
 
         Locale englishLocale = new Locale("en", "EN");
 
