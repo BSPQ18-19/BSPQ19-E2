@@ -3,13 +3,11 @@ package es.deusto.spq.client;
 import java.util.logging.Logger;
 
 import es.deusto.spq.client.controller.*;
-import es.deusto.spq.client.gui.ClientWindow;
 import es.deusto.spq.client.gui.Login;
 import es.deusto.spq.client.gui.RegisterWindow;
 import es.deusto.spq.client.gui.base.ViewManager;
-import es.deusto.spq.client.gui.views.LoginView;
+import es.deusto.spq.client.gui.views.auth.LoginView;
 import es.deusto.spq.client.logger.ClientLogger;
-import es.deusto.spq.client.controller.*;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.locale.LocaleManager;
 

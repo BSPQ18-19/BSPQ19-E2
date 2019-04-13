@@ -1,6 +1,6 @@
 package es.deusto.spq.client.gui;
 
-import es.deusto.spq.client.gui.forms.SpringUtilities;
+import es.deusto.spq.client.gui.util.SpringUtilities;
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
@@ -10,7 +10,6 @@ import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.logging.Logger;
 

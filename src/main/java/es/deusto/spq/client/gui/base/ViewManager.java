@@ -210,6 +210,7 @@ public class ViewManager {
         // Add the view to the list and open it
         views.add(view);
         view.initialize();
+        desktopPane.add(view.getInternalFrame());
 
     }
 }

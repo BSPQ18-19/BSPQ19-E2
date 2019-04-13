@@ -1,5 +1,8 @@
 package es.deusto.spq.client.gui.base;
 
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
 import java.util.logging.Logger;
 
 /**
@@ -32,6 +35,16 @@ public abstract class View {
      */
     public ViewPermission getViewPermission() {
         return ViewPermission.NONE;
+    }
+
+    /**
+     * @return the internal frame of the View
+     */
+    @Nullable
+    public JInternalFrame getInternalFrame() {
+        Logger.getLogger(this.getClass().getName())
+                .warning("getInternalFrame method not implemented or calling super!");
+        return null;
     }
 
     /**
