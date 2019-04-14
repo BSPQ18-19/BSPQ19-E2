@@ -33,8 +33,10 @@ package es.deusto.spq.client.gui.util;
 
 import javax.swing.*;
 import javax.swing.SpringLayout;
+
+import org.apache.log4j.Logger;
+
 import java.awt.*;
-import java.util.logging.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 /**

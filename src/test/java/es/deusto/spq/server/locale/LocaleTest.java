@@ -1,4 +1,4 @@
-package es.deusto.spq.locale;
+package es.deusto.spq.server.locale;
 
 import es.deusto.spq.server.locale.LocaleManager;
 import es.deusto.spq.server.locale.LocaleMode;

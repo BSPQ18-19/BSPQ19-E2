@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.logging.Logger;
 
+import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.dao.HotelDAO;
 import es.deusto.spq.server.data.dao.IHotelDAO;
@@ -103,7 +103,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		log.info("Arraylist size: "+hotelsDTO.size());
 		
 		if(hotelsDTO.isEmpty()) {
-			log.severe("New exception - There are no hotels for the requested information.");
+			log.fatal("New exception - There are no hotels for the requested information.");
 			throw new RemoteException("HOTELS - There are no hotels for the requested information.");
 		}
 

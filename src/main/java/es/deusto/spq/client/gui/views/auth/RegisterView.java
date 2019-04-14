@@ -13,10 +13,12 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
+
+import org.apache.log4j.Logger;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.rmi.RemoteException;
-import java.util.logging.Logger;
 
 public class RegisterView extends View {
 
@@ -212,7 +214,7 @@ public class RegisterView extends View {
 
         // If it fails, tell the user and dispose the frame
         if (result == null) {
-            ClientLogger.getLogger().severe("User not registered...");
+            ClientLogger.getLogger().fatal("User not registered...");
             JOptionPane.showMessageDialog(frame,
                     LocaleManager.getMessage("register.validation.errors.unknown"),
                     LocaleManager.getMessage("register.validation.errors.unknown.title"),

@@ -1,10 +1,10 @@
 package es.deusto.spq.client.gui.views.admin;
 import java.awt.*;
 import javax.swing.*;
-import java.util.logging.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.controller.HotelManagementController;
+import org.apache.log4j.Logger;
 
 public class ClientWindow extends JInternalFrame {
 	
