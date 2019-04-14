@@ -1,11 +1,8 @@
 package es.deusto.spq.client.gui.views.auth;
 
 import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.gui.base.*;
 import es.deusto.spq.client.gui.views.admin.ClientWindow;
-import es.deusto.spq.client.gui.base.View;
-import es.deusto.spq.client.gui.base.ViewManager;
-import es.deusto.spq.client.gui.base.ViewPermission;
-import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.views.admin.HotelAdminView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
@@ -144,7 +141,7 @@ public class LoginView extends View {
                         ;//TODO guest GUI
                     else
                         ;//TODO admin GUI
-                    getViewManager().openView(new HotelAdminView(getViewManager()));
+                    getViewManager().openView(ViewFactory.buildView(ViewType.ADMIN_HOTELS, getViewManager()));
                     dispose();
                     JOptionPane.showMessageDialog(frame, "Succesfull login", "Succesfull login", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -156,7 +153,7 @@ public class LoginView extends View {
         btnRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
-                getViewManager().openView(new RegisterView(getViewManager()));
+                getViewManager().openView(ViewFactory.buildView(ViewType.REGISTRATION, getViewManager()));
             }
         });
         panel_3.add(btnRegister);

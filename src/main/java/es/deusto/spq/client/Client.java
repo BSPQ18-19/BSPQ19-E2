@@ -3,7 +3,9 @@ package es.deusto.spq.client;
 import java.util.logging.Logger;
 
 import es.deusto.spq.client.controller.*;
+import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewManager;
+import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.views.auth.LoginView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
@@ -48,7 +50,7 @@ public class Client {
 
 		viewManager = new ViewManager(this);
 		viewManager.initialize();
-		viewManager.openView(new LoginView(viewManager));
+		viewManager.openView(ViewFactory.buildView(ViewType.LOGIN, viewManager));
 	}
 
 	public HotelManagementController getController() {
