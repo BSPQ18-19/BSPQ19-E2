@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  * Underlying class for app Views
@@ -53,7 +53,7 @@ public abstract class View {
     @Nullable
     public JInternalFrame getInternalFrame() {
         Logger.getLogger(this.getClass().getName())
-                .warning("getInternalFrame method not implemented or calling super!");
+                .warn("getInternalFrame method not implemented or calling super!");
         return null;
     }
 
@@ -70,7 +70,7 @@ public abstract class View {
      */
     public void initialize() {
         Logger.getLogger(this.getClass().getName())
-                .warning("initialize method not implemented or calling super!");
+                .warn("initialize method not implemented or calling super!");
     }
 
     /**
@@ -78,7 +78,7 @@ public abstract class View {
      */
     public void bringToFront() {
         Logger.getLogger(this.getClass().getName())
-                .warning("bringToFront method not implemented or calling super!");
+                .warn("bringToFront method not implemented or calling super!");
     }
 
     /**
@@ -86,7 +86,7 @@ public abstract class View {
      */
     public void minimize() {
         Logger.getLogger(this.getClass().getName())
-                .warning("minimize method not implemented or calling super!");
+                .warn("minimize method not implemented or calling super!");
     }
 
     /**
@@ -95,7 +95,7 @@ public abstract class View {
      */
     public void refresh() {
         Logger.getLogger(this.getClass().getName())
-                .warning("refresh method not implemented or calling super!");
+                .warn("refresh method not implemented or calling super!");
     }
 
     /**
@@ -123,7 +123,7 @@ public abstract class View {
                 }
             });
         } catch (NullPointerException e) {
-            Logger.getLogger(this.getClass().getName()).warning("Trying to setup InternalFrame listeners before" +
+            Logger.getLogger(this.getClass().getName()).warn("Trying to setup InternalFrame listeners before" +
                     "creating the InternalFrame");
         }
     }

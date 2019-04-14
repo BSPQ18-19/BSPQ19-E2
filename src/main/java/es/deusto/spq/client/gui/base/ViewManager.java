@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  * Manages the whole UI View system.
@@ -100,7 +100,7 @@ public class ViewManager {
             frame.setVisible(true);
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         } else {
-            Logger.getLogger(this.getClass().getName()).warning("Tried to initialize when already initialized");
+            Logger.getLogger(this.getClass().getName()).warn("Tried to initialize when already initialized");
         }
 
         repaintUI();
