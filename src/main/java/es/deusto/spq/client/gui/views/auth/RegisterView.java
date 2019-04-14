@@ -1,7 +1,6 @@
 package es.deusto.spq.client.gui.views.auth;
 
 import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.gui.RegisterWindow;
 import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewPermission;

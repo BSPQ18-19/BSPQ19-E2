@@ -2,7 +2,6 @@ package es.deusto.spq.client.gui.views.auth;
 
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.gui.ClientWindow;
-import es.deusto.spq.client.gui.RegisterWindow;
 import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewPermission;
@@ -27,7 +26,6 @@ public class LoginView extends View {
     private JTextField tFEmail;
     private JTextField tFPassword;
     private final JPanel panel_3 = new JPanel();
-    private RegisterWindow registerWindowFrame;
     private Logger log;
     private HotelManagementController controller;
 
