@@ -1,4 +1,4 @@
-package es.deusto.spq.data.jdo;
+package es.deusto.spq.server.data.jdo;
 
 import static org.junit.Assert.*;
 
