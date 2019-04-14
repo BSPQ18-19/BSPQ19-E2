@@ -1,6 +1,7 @@
 package es.deusto.spq.client.gui.base;
 
 import es.deusto.spq.client.Client;
+import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.locale.LocaleManager;
 import org.jetbrains.annotations.Nullable;
 
@@ -89,7 +90,7 @@ public class ViewManager {
      */
     public void initialize() {
 
-        // Only initialize if
+        // Only initialize if we're not already initialized
         if (frame == null) {
             frame = new JFrame(LocaleManager.getMessage("app.name"));
             desktopPane = new JDesktopPane();
@@ -100,7 +101,7 @@ public class ViewManager {
             frame.setVisible(true);
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         } else {
-            Logger.getLogger(this.getClass().getName()).warn("Tried to initialize when already initialized");
+            ClientLogger.getLogger().warn("Tried to initialize when already initialized");
         }
 
         repaintUI();

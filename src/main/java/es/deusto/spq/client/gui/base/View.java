@@ -1,5 +1,6 @@
 package es.deusto.spq.client.gui.base;
 
+import es.deusto.spq.client.logger.ClientLogger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +41,7 @@ public abstract class View {
 
     /**
      * The ViewPermission of a View represents when it can remain opened whenever the permission level changes in the
-     * application. @see es.deusto.spq.client.gui.base.ViewPermission
+     * application. See {@link ViewPermission}
      * @return the view permission
      */
     public ViewPermission getViewPermission() {
@@ -52,7 +53,7 @@ public abstract class View {
      */
     @Nullable
     public JInternalFrame getInternalFrame() {
-        Logger.getLogger(this.getClass().getName())
+        ClientLogger.getLogger()
                 .warn("getInternalFrame method not implemented or calling super!");
         return null;
     }
@@ -69,7 +70,7 @@ public abstract class View {
      * Initializes the View and shows it
      */
     public void initialize() {
-        Logger.getLogger(this.getClass().getName())
+        ClientLogger.getLogger()
                 .warn("initialize method not implemented or calling super!");
     }
 
@@ -77,7 +78,7 @@ public abstract class View {
      * Brings the view to the top.
      */
     public void bringToFront() {
-        Logger.getLogger(this.getClass().getName())
+        ClientLogger.getLogger()
                 .warn("bringToFront method not implemented or calling super!");
     }
 
@@ -85,7 +86,7 @@ public abstract class View {
      * Minimizes the view to the background.
      */
     public void minimize() {
-        Logger.getLogger(this.getClass().getName())
+        ClientLogger.getLogger()
                 .warn("minimize method not implemented or calling super!");
     }
 
@@ -94,7 +95,7 @@ public abstract class View {
      * Should also re-paint it in case the locale has changed.
      */
     public void refresh() {
-        Logger.getLogger(this.getClass().getName())
+        ClientLogger.getLogger()
                 .warn("refresh method not implemented or calling super!");
     }
 
@@ -123,7 +124,7 @@ public abstract class View {
                 }
             });
         } catch (NullPointerException e) {
-            Logger.getLogger(this.getClass().getName()).warn("Trying to setup InternalFrame listeners before" +
+            ClientLogger.getLogger().warn("Trying to setup InternalFrame listeners before" +
                     "creating the InternalFrame");
         }
     }
