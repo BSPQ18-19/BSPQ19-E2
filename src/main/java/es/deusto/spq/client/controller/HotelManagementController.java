@@ -3,7 +3,8 @@ package es.deusto.spq.client.controller;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
@@ -73,7 +74,7 @@ public boolean createHotel(String id, String name, String location, String seaso
 				log.info("Hotel cannot be created.");
 			}
 		} catch (RemoteException e) {
-			log.severe("Error creating a new hotel: " + e.getMessage());
+			log.fatal("Error creating a new hotel: " + e.getMessage());
 		}
     	return false;
     }
@@ -88,7 +89,7 @@ public boolean createHotel(String id, String name, String location, String seaso
 				log.info("Hotel cannot be deleted");
 			}
 		} catch (RemoteException e) {
-			log.severe("Error deleting an hotel...");
+			log.fatal("Error deleting an hotel...");
 		}
     	return false;
     }
@@ -110,7 +111,7 @@ public boolean createHotel(String id, String name, String location, String seaso
 				log.info("Could not retrieve list of hotels");
 			}
     	} catch (RemoteException e) {
-    		log.severe("Error getting list of hotels: " + e.getMessage());
+    		log.fatal("Error getting list of hotels: " + e.getMessage());
 		}
 		return null;
     }
@@ -120,7 +121,7 @@ public boolean createHotel(String id, String name, String location, String seaso
     		rsl.getHotelManager().cleanDB();
 			return true;
 		} catch (RemoteException e) {
-			log.severe("Error cleaning db: " + e.getMessage());
+			log.fatal("Error cleaning db: " + e.getMessage());
 		}
     	return false;
     }

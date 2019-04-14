@@ -11,7 +11,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import javax.sound.midi.ControllerEventListener;
@@ -23,6 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.Client;
 import es.deusto.spq.client.controller.HotelManagementController;

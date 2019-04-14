@@ -7,6 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 
+import org.apache.log4j.Logger;
+
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
@@ -20,7 +22,6 @@ import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
-import java.util.logging.Logger;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
