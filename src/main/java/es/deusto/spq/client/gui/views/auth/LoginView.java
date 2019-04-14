@@ -37,7 +37,7 @@ public class LoginView extends View {
     public LoginView(ViewManager viewManager) {
         super(viewManager);
 
-        log = ClientLogger.getLogger();
+        log = Logger.getLogger(this.getClass().getName());
         this.controller = viewManager.getClient().getController();
 
     }
