@@ -1,8 +1,11 @@
 package es.deusto.spq.client.gui.base;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import java.util.logging.Logger;
 
 /**
@@ -18,6 +21,13 @@ public abstract class View {
 
     public View(ViewManager viewManager) {
         this.viewManager = viewManager;
+    }
+
+    /**
+     * @return the ViewManager responsible for the View
+     */
+    public ViewManager getViewManager() {
+        return viewManager;
     }
 
     /**
@@ -95,6 +105,28 @@ public abstract class View {
     public void dispose() {
         Logger.getLogger(this.getClass().getName())
                 .warning("dispose method not implemented or calling super!");
+    }
+
+    /**
+     *
+     */
+    public void addDisposeEventHandler() {
+        try {
+            getInternalFrame().addInternalFrameListener(new InternalFrameAdapter() {
+                @Override
+                public void internalFrameClosed(InternalFrameEvent e) {
+                    getViewManager().notifyDisposal(getView());
+                }
+            });
+        } catch (NullPointerException e) {
+            Logger.getLogger(this.getClass().getName()).warning("Trying to setup InternalFrame listeners before" +
+                    "creating the InternalFrame");
+        }
+    }
+
+    @Contract(value = " -> this", pure = true)
+    private View getView() {
+        return this;
     }
 
 

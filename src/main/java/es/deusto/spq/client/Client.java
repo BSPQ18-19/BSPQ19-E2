@@ -49,6 +49,7 @@ public class Client {
 		rsl = RMIServiceLocator.getServiceLocator();
 		rsl.setService(ip, port, serviceName);
 		LocaleManager.setLocale(new Locale("es", "ES"));
+
 		viewManager = new ViewManager(this);
 		viewManager.initialize();
 		viewManager.openView(new LoginView(viewManager));

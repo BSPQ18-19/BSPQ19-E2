@@ -47,9 +47,15 @@ public class LoginView extends View {
     public ViewPermission getViewPermission() {
         return ViewPermission.NOT_LOGGED_IN;
     }
+
     @Override
     public ViewType getViewType() {
         return ViewType.LOGIN;
+    }
+
+    @Override
+    public boolean isUnique() {
+        return true;
     }
 
     @Override
@@ -145,16 +151,13 @@ public class LoginView extends View {
         btnRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
-                if (registerWindowFrame == null) {
-                    //registerWindowFrame = new RegisterWindow(controller);
-                } else {
-                    //registerWindowFrame.show();
-                }
+                getViewManager().openView(new RegisterView(getViewManager()));
             }
         });
         panel_3.add(btnRegister);
 
         frame.setVisible(true);
+        addDisposeEventHandler();
     }
 
     @Override

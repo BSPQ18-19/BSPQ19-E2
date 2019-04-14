@@ -155,6 +155,9 @@ public class ViewManager {
         frame.repaint();
     }
 
+    public void notifyDisposal(View view) {
+        views.remove(view);
+    }
 
 
     /**
