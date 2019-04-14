@@ -33,15 +33,15 @@ public class RMITest {
 	public static void setUpParameters() {
 
 		try {
-			locateRegistry = LocateRegistry.createRegistry(1099);
+			locateRegistry = LocateRegistry.createRegistry(1098);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
 
-		serverUrl = "//127.0.0.1:1099/HotelManagementServer";
-		clientUrl = "//127.0.0.1:1099/HotelManagementServer";
+		serverUrl = "//127.0.0.1:1098/HotelManagementServer";
+		clientUrl = "//127.0.0.1:1098/HotelManagementServer";
 
-		System.setProperty("java.rmi.server.codebase", "file:" + cwd);
+		//System.setProperty("java.rmi.server.codebase", "file:" + cwd);
 	}
 		
 	@SuppressWarnings("deprecation")
