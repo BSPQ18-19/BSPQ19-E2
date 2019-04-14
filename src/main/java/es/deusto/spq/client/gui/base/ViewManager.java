@@ -149,12 +149,19 @@ public class ViewManager {
     }
 
 
+    /**
+     * Repaint the whole base UI
+     */
     private void repaintUI() {
         reloadMenu();
         frame.validate();
         frame.repaint();
     }
 
+    /**
+     * Called from a View whenever it's self-disposed
+     * @param view
+     */
     public void notifyDisposal(View view) {
         views.remove(view);
     }
@@ -196,6 +203,10 @@ public class ViewManager {
         return null;
     }
 
+    /**
+     * Add a View and open it
+     * @param view the view to open
+     */
     public void openView(View view)  {
 
         // If we try to open an unique window, bring it to the front instead of creating a new one
