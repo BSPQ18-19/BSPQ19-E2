@@ -30,9 +30,7 @@ public class RMITest {
 	public static void setUpParameters() {
 		serverUrl = "//127.0.0.1:1099/HotelManagementServer";
 		clientUrl = "//127.0.0.1:1099/HotelManagementServer";
-
-
-		System.setProperty("java.rmi.server.codebase", "file:" + cwd);
+		
 		System.setProperty("java.security.policy", "./java.policy");
 	}
 		
