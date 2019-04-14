@@ -22,4 +22,9 @@ public enum ViewType
      * Will almost likely be disposed for many operations.
      */
     OTHER,
+
+    /**
+     * Admin window to manage existing hotels, delete them and create new.
+     */
+    ADMIN_HOTELS,
 }

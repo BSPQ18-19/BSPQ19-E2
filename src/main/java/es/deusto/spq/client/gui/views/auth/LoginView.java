@@ -1,11 +1,12 @@
 package es.deusto.spq.client.gui.views.auth;
 
 import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.gui.ClientWindow;
+import es.deusto.spq.client.gui.views.admin.ClientWindow;
 import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewPermission;
 import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.client.gui.views.admin.HotelAdminView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.locale.LocaleManager;
@@ -54,6 +55,11 @@ public class LoginView extends View {
     @Override
     public boolean isUnique() {
         return true;
+    }
+
+    @Override
+    public @Nullable JInternalFrame getInternalFrame() {
+        return frame;
     }
 
     @Override
@@ -138,7 +144,8 @@ public class LoginView extends View {
                         ;//TODO guest GUI
                     else
                         ;//TODO admin GUI
-                    ClientWindow.getClientWindow(controller).setVisible(true);
+                    getViewManager().openView(new HotelAdminView(getViewManager()));
+                    dispose();
                     JOptionPane.showMessageDialog(frame, "Succesfull login", "Succesfull login", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
@@ -158,8 +165,4 @@ public class LoginView extends View {
         addDisposeEventHandler();
     }
 
-    @Override
-    public @Nullable JInternalFrame getInternalFrame() {
-        return frame;
-    }
 }

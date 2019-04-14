@@ -103,12 +103,16 @@ public abstract class View {
      * After this call, the View instance will never be called again.
      */
     public void dispose() {
-        Logger.getLogger(this.getClass().getName())
-                .warning("dispose method not implemented or calling super!");
+        try {
+            getInternalFrame().dispose();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     *
+     * Adds a dispose event listener for the InternalFrame.
+     * REQUIRED call after finishing the internal frame creation.
      */
     public void addDisposeEventHandler() {
         try {
@@ -124,10 +128,13 @@ public abstract class View {
         }
     }
 
+    /**
+     * I know it's a silly call, but required due to scope issues.
+     * @return the View itself.
+     */
     @Contract(value = " -> this", pure = true)
     private View getView() {
         return this;
     }
-
 
 }

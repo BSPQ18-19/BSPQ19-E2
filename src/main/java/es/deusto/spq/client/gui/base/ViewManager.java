@@ -214,6 +214,7 @@ public class ViewManager {
         views.add(view);
         view.initialize();
         desktopPane.add(view.getInternalFrame());
+        view.bringToFront();
 
     }
 }
