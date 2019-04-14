@@ -12,7 +12,7 @@ public class Server {
 	public static void main(String[] args) {
 
 		if (args.length != 3) {
-			ServerLogger.getLogger().severe("How to invoke: java [policy] [codebase] Server.Server [host] [port] [server]");
+			ServerLogger.getLogger().fatal("How to invoke: java [policy] [codebase] Server.Server [host] [port] [server]");
 			System.exit(0);
 		}
 
@@ -37,7 +37,7 @@ public class Server {
 			@SuppressWarnings("unused")
 			String line  = stdin.readLine();
 		} catch (Exception e) {
-			ServerLogger.getLogger().severe("RMI error. Turning off... - " + e.getMessage());
+			ServerLogger.getLogger().fatal("RMI error. Turning off... - " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

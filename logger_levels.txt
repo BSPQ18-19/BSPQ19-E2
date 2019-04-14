@@ -1,9 +1,9 @@
-Logger levels:
+Some Logger levels (see documentation for full list):
 
-FINEST < FINER < FINE < CONFIG < INFO < WARNING < SEVERE
+ALL < DEBUG < INFO < WARN < ERROR < FATAL
 
-ALL - indicates all messages should be logged
-OFF - turns off logging
+ALL	-	All levels including custom levels.
+OFF	-	The highest possible rank and is intended to turn off logging.
 
-More extended information about these levels:
-https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html
+Apache documentation:
+https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/Level.html

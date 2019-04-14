@@ -1,7 +1,9 @@
 package es.deusto.spq.client.gui;
+
 import java.awt.*;
 import javax.swing.*;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.Client;

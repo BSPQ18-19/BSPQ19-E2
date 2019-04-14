@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import javax.swing.JButton;
@@ -15,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.Client;
 import es.deusto.spq.client.controller.HotelManagementController;
