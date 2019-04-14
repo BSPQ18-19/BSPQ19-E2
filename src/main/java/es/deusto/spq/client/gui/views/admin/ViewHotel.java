@@ -230,12 +230,4 @@ public class ViewHotel extends JPanel{
 			return this;
 		}
 	}
-
-	public static void main(String[] args) {
-		JFrame testFrame = new JFrame();
-		testFrame.setSize(800, 600);
-		testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		testFrame.add(new ViewHotel(800, 600, null));
-		testFrame.setVisible(true);
-	}
 }
