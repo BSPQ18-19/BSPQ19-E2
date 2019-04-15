@@ -1,16 +1,12 @@
-package es.deusto.spq.client.gui;
-
+package es.deusto.spq.client.gui.views.admin;
 import java.awt.*;
 import javax.swing.*;
 
+import es.deusto.spq.client.logger.ClientLogger;
+import es.deusto.spq.client.controller.HotelManagementController;
 import org.apache.log4j.Logger;
 
-import es.deusto.spq.client.logger.ClientLogger;
-import es.deusto.spq.client.Client;
-import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.logger.ClientLogger;
-
-public class ClientWindow extends JFrame {
+public class ClientWindow extends JInternalFrame {
 	
 	private static final long serialVersionUID = 1L;
 	private static ClientWindow clientWindow;
@@ -31,7 +27,6 @@ public class ClientWindow extends JFrame {
 		this.setTitle("Hotel client");
 		Dimension windowSize = new Dimension((int) (screenSize.getWidth() / 1.3), (int) (screenSize.getHeight() / 1.3));
 		this.setSize(windowSize);
-		this.setLocationRelativeTo(null);
 		mainPanel = (JPanel) this.getContentPane();
 
 		this.screenWidth = (int) windowSize.getWidth();
@@ -47,10 +42,10 @@ public class ClientWindow extends JFrame {
 		
 		switch(nextScreenType) {
 		case VIEW_HOTEL_ADMIN:
-			mainPanel = new HotelView(screenWidth, screenHeight, controller);
+			mainPanel = new ViewHotel(screenWidth, screenHeight, controller);
 			break;
 		case CREATE_HOTEL_ADMIN:
-			mainPanel = new HotelCreate(screenWidth, screenHeight, controller);
+			mainPanel = new CreateHotel(screenWidth, screenHeight, controller);
 			break;
 		default:
 			break;

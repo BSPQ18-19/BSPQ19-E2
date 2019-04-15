@@ -1,10 +1,15 @@
-package es.deusto.spq.client.gui;
+package es.deusto.spq.client.gui.views.auth;
 
-import es.deusto.spq.client.gui.forms.SpringUtilities;
 import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.gui.base.View;
+import es.deusto.spq.client.gui.base.ViewManager;
+import es.deusto.spq.client.gui.base.ViewPermission;
+import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.client.gui.util.SpringUtilities;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.locale.LocaleManager;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -13,20 +18,16 @@ import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
-/**
- * The Register window.
- * I know it's ugly, but I was in a hurry. Sorry about that :'(
- * Suggestions for improvement:
- * - Use an actual form system
- * - Make a validation system
- * @author Iñigo Apellániz, Iker Barriocanal
- */
-public class RegisterWindow {
+public class RegisterView extends View {
 
-    private JFrame frame;
+    public RegisterView(ViewManager viewManager) {
+        super(viewManager);
+        hotelManagementController = viewManager.getClient().getController();
+    }
+
+    private JInternalFrame frame;
     private HotelManagementController hotelManagementController;
 
     // All the form fields and buttons
@@ -37,22 +38,33 @@ public class RegisterWindow {
     // Logger
     private Logger log;
 
-    /**
-     * Instantiates a new registration window and shows it
-     * @param controller the HotelManagementController in use
-     */
-    public RegisterWindow(HotelManagementController controller) {
-        log = ClientLogger.getLogger();
-    	hotelManagementController = controller;
-        initialize();
+    @Override
+    public ViewType getViewType() {
+        return ViewType.REGISTRATION;
+    }
+
+    @Override
+    public ViewPermission getViewPermission() {
+        return ViewPermission.NOT_LOGGED_IN;
+    }
+
+    @Override
+    public boolean isUnique() {
+        return true;
+    }
+
+    @Override
+    public @Nullable JInternalFrame getInternalFrame() {
+        return frame;
     }
 
     /**
      * All the Swing code for showing the actual frame
      */
-    private void initialize() {
-        frame = new JFrame();
-        frame.setTitle(LocaleManager.getMessage("register.title"));
+    public void initialize() {
+        frame = new JInternalFrame();
+        frame.setClosable(true);
+        //frame.setTitle(LocaleManager.getMessage("register.title"));
         frame.setSize(400, 400);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -125,6 +137,8 @@ public class RegisterWindow {
         frame.add(container);
 
         frame.setVisible(true);
+        frame.toFront();
+        addDisposeEventHandler();
     }
 
     /**
@@ -188,17 +202,17 @@ public class RegisterWindow {
 
         // Create a new User and send it to the server
         UserDTO result = null;
-		try {
-			result = hotelManagementController.signInGuest(nameTextField.getText(),
+        try {
+            result = hotelManagementController.signInGuest(nameTextField.getText(),
                     emailTextField.getText(),
                     new String(passwordField.getPassword()),
                     phoneTextField.getText(),
                     addressTextField.getText());
-		} catch (RemoteException e) {
-			log.info("Remote exception trying to create a UserDTO");
-		}
+        } catch (RemoteException e) {
+            log.info("Remote exception trying to create a UserDTO");
+        }
 
-		// If it fails, tell the user and dispose the frame
+        // If it fails, tell the user and dispose the frame
         if (result == null) {
             ClientLogger.getLogger().fatal("User not registered...");
             JOptionPane.showMessageDialog(frame,
@@ -232,15 +246,15 @@ public class RegisterWindow {
             case REQUIRED_FIELD_EMPTY:
                 messageKey = "register.validation.errors.required";
                 messageType = JOptionPane.WARNING_MESSAGE;
-            break;
+                break;
             case PASSWORD_CONFIRMATION_DIFFERENT:
                 messageKey = "register.validation.errors.password-confirmation";
                 messageType = JOptionPane.WARNING_MESSAGE;
-            break;
+                break;
             default:
                 messageKey = "register.validation.errors.unknown";
                 messageType = JOptionPane.ERROR_MESSAGE;
-            break;
+                break;
         }
 
         JOptionPane.showMessageDialog(frame,
@@ -263,5 +277,8 @@ public class RegisterWindow {
         submitButton.setEnabled(enable);
     }
 
+    @Override
+    public void bringToFront() {
+        getInternalFrame().toFront();
+    }
 }
-

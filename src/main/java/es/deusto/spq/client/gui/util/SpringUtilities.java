@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
+ * Redistribution and use in source and binary util, with or without
  * modification, are permitted provided that the following conditions
  * are met:
  *
  *   - Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
  *
- *   - Redistributions in binary forms must reproduce the above copyright
+ *   - Redistributions in binary util must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package es.deusto.spq.client.gui.forms;
+package es.deusto.spq.client.gui.util;
 
 import javax.swing.*;
 import javax.swing.SpringLayout;
@@ -41,7 +41,7 @@ import java.awt.*;
 import es.deusto.spq.client.logger.ClientLogger;
 /**
  * A 1.4 file that provides utility methods for
- * creating forms- or grid-style layouts with SpringLayout.
+ * creating util- or grid-style layouts with SpringLayout.
  * These utilities are used by several programs, such as
  * SpringBox and SpringCompactGrid.
  */

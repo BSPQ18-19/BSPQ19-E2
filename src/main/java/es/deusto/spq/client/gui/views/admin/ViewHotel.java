@@ -1,4 +1,4 @@
-package es.deusto.spq.client.gui;
+package es.deusto.spq.client.gui.views.admin;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,13 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import es.deusto.spq.client.logger.ClientLogger;
-import javax.sound.midi.ControllerEventListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -29,7 +26,7 @@ import es.deusto.spq.client.Client;
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.server.data.dto.HotelDTO;
 
-public class HotelView extends JPanel{
+public class ViewHotel extends JPanel{
 	
 	/**
 	 * 
@@ -44,7 +41,7 @@ public class HotelView extends JPanel{
 	private int screenWidth, screenHeight;
 	private Logger log;
 
-	public HotelView(int screenWidth, int screenHeight, HotelManagementController controller) {
+	public ViewHotel(int screenWidth, int screenHeight, HotelManagementController controller) {
 		log = ClientLogger.getLogger();
 		
 		this.setLayout(new BorderLayout());
@@ -232,13 +229,5 @@ public class HotelView extends JPanel{
 
 			return this;
 		}
-	}
-
-	public static void main(String[] args) {
-		JFrame testFrame = new JFrame();
-		testFrame.setSize(800, 600);
-		testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		testFrame.add(new HotelView(800, 600, null));
-		testFrame.setVisible(true);
 	}
 }
