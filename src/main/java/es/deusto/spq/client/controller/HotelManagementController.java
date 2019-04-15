@@ -62,7 +62,7 @@ public class HotelManagementController {
 		return true;
 	}
 	
-public boolean createHotel(String id, String name, String location, String seasonStart, String seasonEnd) {
+	public boolean createHotel(String id, String name, String location, String seasonStart, String seasonEnd) {
     	
     	try {
     		log.info("Creating new hotel...");
@@ -97,12 +97,24 @@ public boolean createHotel(String id, String name, String location, String seaso
     public ArrayList<HotelDTO> retrieveHotels() {
     	log.info("Getting list of hotels.");
     	try {
-			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();
-//			for(HotelDTO hotelDTO: hotel) {
-//				System.out.println(hotelDTO.getLocation());
-//			}
-//			HotelDTO[] hotels = hotel.toArray(new HotelDTO[hotel.size()]);
+			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();			
 			
+			if(hotel != null && hotel.size() != 0) {
+				log.info("List of hotels retrieved succesfully.");
+				return hotel;
+			}else {
+				log.info("Could not retrieve list of hotels");
+			}
+    	} catch (RemoteException e) {
+    		log.fatal("Error getting list of hotels: " + e.getMessage());
+		}
+		return null;
+    }
+    
+    public ArrayList<HotelDTO> retrieveHotels(String arrivalDate) {
+    	log.info("Getting list of hotels.");
+    	try {
+			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels(arrivalDate);			
 			
 			if(hotel != null && hotel.size() != 0) {
 				log.info("List of hotels retrieved succesfully.");
