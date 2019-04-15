@@ -1,4 +1,4 @@
-/*package es.deusto.spq;
+package es.deusto.spq;
 
 
 import static org.junit.Assert.fail;
@@ -25,7 +25,7 @@ import junit.framework.Assert;
  * @author Iker
  *
  */
-/*@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserDAOTest {
 
 	private static UserDAO userDao;
@@ -36,7 +36,7 @@ public class UserDAOTest {
 	public static void initialize() {
 		userDao = new UserDAO();
 		userID = "1";
-//		user = new Guest(userID, "name", "email", "password", "1", "address");
+		user = new Guest(userID, "name", "email", "password", "1", "address");
 		//TODO initialize user correctly
 	}
 	
@@ -72,4 +72,3 @@ public class UserDAOTest {
 	}
 
 }
-*/

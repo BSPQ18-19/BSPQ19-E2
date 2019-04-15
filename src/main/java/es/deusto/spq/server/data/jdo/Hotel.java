@@ -39,6 +39,10 @@ public class Hotel {
 		reviews.add(r);
 	}
 	
+	public List<Review> getReviews() {
+		return reviews;
+	}
+	
 	public String getHotelId() {
 		return hotelId;
 	}

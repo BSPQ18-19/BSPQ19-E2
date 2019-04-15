@@ -168,31 +168,6 @@ public class UserDAO implements IDAO, IUserDAO {
 		}
 		return null;
 	}
-	
-	@Override
-	public Review createReview(Review r) {
-		try {
-			tx = pm.currentTransaction();
-			tx.begin();
-
-			pm.makePersistent(r);
-			
-			tx.commit();
-
-			Review detachedCopy = pm.detachCopy(r);
-			return detachedCopy;
-
-		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error in UserDAO:createUser()");
-			e.printStackTrace();
-
-		} finally {
-			close();
-		}
-
-		return null;
-	}
-	
 	/**
 	 * Closes the transaction if it hasn't been closed before, and makes rollback.
 	 */

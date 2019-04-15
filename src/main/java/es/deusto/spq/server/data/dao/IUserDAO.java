@@ -34,12 +34,4 @@ public interface IUserDAO {
 	 */
 	public boolean deleteUserbyID(UserDTO authorization, String ID);
 	public UserDTO logIn(String email, String password);
-	
-	/**
-	 * Stores a review in the database
-	 * @param The review to be stored in the DB
-	 * @return Return the detached copy of the stored Review
-	 * 
-	 */
-	public Review createReview(Review r);
 }
