@@ -35,8 +35,11 @@ public class ReviewDBTest {
 		h.addReview(r);
 	}
 
+	/*
+	 * Stores a review and retrive it to see if the Review DAO and JDO work fine
+	 */
 	@Test
-	public void test() {
+	public void reviewDAOTest() {
 		hotelDAO.storeReview(r, h.getHotelId());
 		Hotel detachedHotel = hotelDAO.getHotel(hotelID);
 		List<Review> reviews = h.getReviews();

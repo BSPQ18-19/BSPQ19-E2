@@ -1,4 +1,4 @@
-/*package es.deusto.spq;
+package es.deusto.spq;
 
 import static org.junit.Assert.*;
 
@@ -19,7 +19,7 @@ import junit.framework.Assert;
  * @author Iker
  *
  */
-/*public class RMITest {
+public class RMITest {
 
 	private static String serverUrl;
 	private static String clientUrl;
@@ -74,4 +74,3 @@ import junit.framework.Assert;
 	}
 
 }
-*/

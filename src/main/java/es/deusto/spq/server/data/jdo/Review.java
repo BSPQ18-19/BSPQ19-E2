@@ -6,6 +6,7 @@ import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
+import javax.jws.Oneway;
 
 @PersistenceCapable(detachable = "true")
 public class Review {
@@ -14,8 +15,7 @@ public class Review {
 	private String reviewID;
 	private String opinion;
 	private int score;
-	private Timestamp publishDate;
-	//private User user;
+	private Timestamp publishDate;	
 	private Hotel hotel;
 	
 	public Review(String reviewID, String opinion, int score, Timestamp publishDate) {

@@ -170,7 +170,7 @@ public class HotelDAO implements IHotelDAO {
 			
 			tx.commit();
 		}catch (Exception e) {
-			ServerLogger.getLogger().severe("");
+			ServerLogger.getLogger().severe("   $ Error Storing a review: " + e.getMessage());
 		}
 	}
 	
