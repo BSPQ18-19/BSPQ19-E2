@@ -65,16 +65,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.lgoodatepicker</groupId>
-			<artifactId>lgoodatepicker</artifactId>
-			<version>10.4.1</version>
+			<groupId>com.github.LGoodDatePicker</groupId>
+			<artifactId>LGoodDatePicker</artifactId>
+			<version>v10.4.1-Standard</version>
 		</dependency>
-		<dependency>
-			<groupId>com.github.lgoodatepicker</groupId>
-			<artifactId>lgoodatepicker-javadoc</artifactId>
-			<version>10.4.1</version>
-		</dependency>
-		
 	</dependencies>
 
 	<build>
@@ -301,6 +295,10 @@
 			<id>DN_M2_Repo</id>
 			<name>DataNucleus Repository</name>
 			<url>http://www.datanucleus.org/downloads/maven2</url>
+		</repository>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
