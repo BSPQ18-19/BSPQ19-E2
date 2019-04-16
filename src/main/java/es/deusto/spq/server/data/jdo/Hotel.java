@@ -21,7 +21,7 @@ public class Hotel {
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
 	
-	@Persistent(mappedBy="hotel")
+	@Persistent(defaultFetchGroup="true", mappedBy="hotel", dependentElement = "true")
 	private List<Review> reviews;
 	
 	public Hotel(String hotelId, String name, String location, Timestamp seasonStart,
@@ -37,6 +37,10 @@ public class Hotel {
 
 	public void addReview(Review r) {
 		reviews.add(r);
+	}
+	
+	public void deleteReview(Review r) {
+		reviews.remove(r);
 	}
 	
 	public List<Review> getReviews() {

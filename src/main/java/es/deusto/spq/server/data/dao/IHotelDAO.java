@@ -19,6 +19,6 @@ public interface IHotelDAO {
 	 * 		  hotelID the hotel the Review is about
 	 * 
 	 */
-	public void storeReview(Review r, String hotelID);
+	public Review storeReview(Review r, String hotelID);
 
 }

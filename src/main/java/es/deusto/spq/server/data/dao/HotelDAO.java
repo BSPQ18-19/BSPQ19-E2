@@ -14,6 +14,7 @@ import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Review;
+import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
 public class HotelDAO implements IHotelDAO {
@@ -66,14 +67,13 @@ public class HotelDAO implements IHotelDAO {
 			
 			tx.begin();			
 			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
-			
+			tx.commit();
 			for (Hotel hotel : extent) {
-				if (hotel.getName().equals(hotelID)) {
+				if (hotel.getHotelId().equals(hotelID)) {
 				    return hotel;
                 }
 			}
-
-			tx.commit();			
+			
 		} catch (Exception ex) {
 			ServerLogger.getLogger().severe("   $ Error retrieving an extent: " + ex.getMessage());
 	    } finally {
@@ -154,7 +154,7 @@ public class HotelDAO implements IHotelDAO {
 		return false;
 	}
 	
-	public void storeReview(Review r, String hotelID) {
+	public Review storeReview(Review r, String hotelID) {
 		PersistenceManager pm = pmf.getPersistenceManager();	
 		Transaction tx = pm.currentTransaction();
 		try {
@@ -168,10 +168,49 @@ public class HotelDAO implements IHotelDAO {
 			Hotel hotel = result.get(0);
 			hotel.addReview(r);
 			
+			Review re = pm.detachCopy(r);
+			
 			tx.commit();
+			
+			return re;
 		}catch (Exception e) {
 			ServerLogger.getLogger().severe("   $ Error Storing a review: " + e.getMessage());
-		}
+		}finally {
+	    	if (tx != null && tx.isActive()) {
+	    		ServerLogger.getLogger().finer("rollback");
+	    		tx.rollback();
+	    	}
+			if(pm != null && !pm.isClosed()) {
+				pm.close();
+			}
+	    }
+		return null;
+	}
+	
+	public void deleteReview(String reviewID) {
+		PersistenceManager pm = pmf.getPersistenceManager();	
+		Transaction tx = pm.currentTransaction();
+		try {
+			tx.begin();
+			
+			Query<Review> query = pm.newQuery(Review.class);
+			query.setFilter("reviewID == '" + reviewID + "'");
+			@SuppressWarnings("unchecked")
+			List<Review> queryExecution = (List<Review>) query.execute();
+			pm.deletePersistent(queryExecution.get(0));
+			
+			tx.commit();
+		}catch (Exception e) {
+			ServerLogger.getLogger().severe("   $ Error Deleting a review: " + e.getMessage());
+		}finally {
+		    	if (tx != null && tx.isActive()) {
+		    		ServerLogger.getLogger().finer("rollback");
+		    		tx.rollback();
+		    	}
+				if(pm != null && !pm.isClosed()) {
+					pm.close();
+				}
+		    }
 	}
 	
 	public void cleanDB() {
