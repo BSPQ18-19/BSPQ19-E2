@@ -21,10 +21,8 @@ import es.deusto.spq.server.logger.ServerLogger;
 public class HotelDAO implements IHotelDAO {
 	
 	private PersistenceManagerFactory pmf;
-	private Logger log;
 
 	public HotelDAO(){
-		log = ClientLogger.getLogger();
 		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
 	}
 	
@@ -175,10 +173,10 @@ public class HotelDAO implements IHotelDAO {
 			
 			return re;
 		}catch (Exception e) {
-			ServerLogger.getLogger().severe("   $ Error Storing a review: " + e.getMessage());
+			ServerLogger.getLogger().fatal("   $ Error Storing a review: " + e.getMessage());
 		}finally {
 	    	if (tx != null && tx.isActive()) {
-	    		ServerLogger.getLogger().finer("rollback");
+	    		ServerLogger.getLogger().debug("rollback");
 	    		tx.rollback();
 	    	}
 			if(pm != null && !pm.isClosed()) {
@@ -202,10 +200,10 @@ public class HotelDAO implements IHotelDAO {
 			
 			tx.commit();
 		}catch (Exception e) {
-			ServerLogger.getLogger().severe("   $ Error Deleting a review: " + e.getMessage());
+			ServerLogger.getLogger().fatal("   $ Error Deleting a review: " + e.getMessage());
 		}finally {
 		    	if (tx != null && tx.isActive()) {
-		    		ServerLogger.getLogger().finer("rollback");
+		    		ServerLogger.getLogger().debug("rollback");
 		    		tx.rollback();
 		    	}
 				if(pm != null && !pm.isClosed()) {
