@@ -7,13 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.time.format.DateTimeFormatter;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import es.deusto.spq.client.logger.ClientLogger;
-import javax.sound.midi.ControllerEventListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -25,7 +22,6 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
-import es.deusto.spq.client.Client;
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.server.data.dto.HotelDTO;
 
@@ -116,6 +112,19 @@ public class HotelView extends JPanel{
 		logout = new JButton("Log out");
 		logout.setSize(100, 30);
 		logout.setBackground(Color.white);
+		logout.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					controller.logOut();
+					JOptionPane.showMessageDialog(null,  "Successfully logged out", "Logged out",JOptionPane.INFORMATION_MESSAGE);
+					ClientWindow.getClientWindow(controller).dispose();
+				} catch (RemoteException e1) {
+					log.info("Error while trying to log out: " + e1.getMessage());
+				}
+			}
+		});
 		
 		upperButtons = new JPanel();
 		upperButtons.setBackground(Color.LIGHT_GRAY);
