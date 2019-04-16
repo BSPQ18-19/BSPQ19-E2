@@ -290,6 +290,9 @@
 				</plugins>
 			</build>
 		</profile>
+		
+		<!-- run as 'mvn exec:java -Ppaypal' -->
+		<!-- TODO: the profile of PayPal external service -->
 	</profiles>
 	<repositories>
 		<repository>
