@@ -1,4 +1,4 @@
-package es.deusto.spq.locale;
+package es.deusto.spq.server.locale;
 
 import es.deusto.spq.server.locale.LocaleManager;
 import es.deusto.spq.server.locale.LocaleMode;
@@ -16,16 +16,13 @@ public class LocaleTest {
     /**
      * The default locale should always be English (en_EN)
      */
-    @Test
-    public void getMessage_DefaultLocale_IsEnglish() {
+	@Test
+	public void getMessage_DefaultLocale_IsEnglish() {
 
         Locale englishLocale = new Locale("en", "EN");
 
         // Check expected default value
         Assert.assertEquals(englishLocale, LocaleManager.getDefaultLocale());
-
-        // Also check the first locale we get without changin anything
-        Assert.assertEquals(englishLocale, LocaleManager.getLocale());
     }
 
     /**

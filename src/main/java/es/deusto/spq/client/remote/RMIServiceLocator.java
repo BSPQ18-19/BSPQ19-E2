@@ -1,6 +1,6 @@
 package es.deusto.spq.client.remote;
 
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.remote.IHotelManager;
@@ -26,7 +26,7 @@ public class RMIServiceLocator {
 			hotelManager = (IHotelManager) java.rmi.Naming.lookup(url);
 			log.info("Connected to: " + url);
 		} catch (Exception e) {
-			log.severe("Exception stablishing connection to: " + url);
+			log.fatal("Exception stablishing connection to: " + url);
 		}
 	}
 	

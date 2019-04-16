@@ -51,7 +51,7 @@ public class UserDAO implements IDAO, IUserDAO {
 			return result;
 
 		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error in UserDAO:getUsers()");
+			ServerLogger.getLogger().fatal("Error in UserDAO:getUsers()");
 			e.printStackTrace();
 
 		} finally {
@@ -79,7 +79,7 @@ public class UserDAO implements IDAO, IUserDAO {
 					null : 
 					assembler.assembleUser(result.get(0));
 		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error in UserDAO:getUserbyID()");
+			ServerLogger.getLogger().fatal("Error in UserDAO:getUserbyID()");
 			e.printStackTrace();
 
 		} finally {
@@ -103,7 +103,7 @@ public class UserDAO implements IDAO, IUserDAO {
 			return assembler.assembleUser(detachedCopy);
 
 		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error in UserDAO:createUser()");
+			ServerLogger.getLogger().fatal("Error in UserDAO:createUser()");
 			e.printStackTrace();
 
 		} finally {
@@ -134,7 +134,7 @@ public class UserDAO implements IDAO, IUserDAO {
 			return true;
 
 		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error in UserDAO:deleteUserbyID()");
+			ServerLogger.getLogger().fatal("Error in UserDAO:deleteUserbyID()");
 			e.printStackTrace();
 		} finally {
 			close();
@@ -160,7 +160,7 @@ public class UserDAO implements IDAO, IUserDAO {
 			if(user.getPassword().equals(password))
 				return assembler.assembleUser(user);
 		} catch (Exception e) {
-			ServerLogger.getLogger().severe("Error in UserDAO:getUserbyID()");
+			ServerLogger.getLogger().fatal("Error in UserDAO:getUserbyID()");
 			e.printStackTrace();
 
 		} finally {

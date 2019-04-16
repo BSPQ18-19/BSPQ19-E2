@@ -2,7 +2,6 @@ package es.deusto.spq.server.data.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import javax.jdo.Extent;
@@ -11,6 +10,8 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
+
+import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Review;
@@ -42,7 +43,7 @@ public class HotelDAO implements IHotelDAO {
 	       tx.commit();
 
 	    } catch (Exception ex) {
-	    	ServerLogger.getLogger().severe("   $ Error storing an object: " + ex.getMessage());
+	    	ServerLogger.getLogger().fatal("   $ Error storing an object: " + ex.getMessage());
 	    } finally {
 	    	if (tx != null && tx.isActive()) {
 	    		tx.rollback();
@@ -75,7 +76,7 @@ public class HotelDAO implements IHotelDAO {
 			}
 			
 		} catch (Exception ex) {
-			ServerLogger.getLogger().severe("   $ Error retrieving an extent: " + ex.getMessage());
+			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
 	    } finally {
 	    	if (tx != null && tx.isActive()) {
 	    		tx.rollback();
@@ -107,7 +108,7 @@ public class HotelDAO implements IHotelDAO {
 			
 	        tx.commit();
 	    } catch (Exception ex) {
-	    	ServerLogger.getLogger().severe("   $ Error retreiving an extent: " + ex.getMessage());
+	    	ServerLogger.getLogger().fatal("   $ Error retreiving an extent: " + ex.getMessage());
 	    } finally {
 	    	if (tx != null && tx.isActive()) {
 	    		ServerLogger.getLogger().info("rollback");
@@ -141,10 +142,10 @@ public class HotelDAO implements IHotelDAO {
 			return true;
 
 		} catch (Exception ex) {
-			ServerLogger.getLogger().severe("   $ Error deleting an hotel: " + ex.getMessage());
+			ServerLogger.getLogger().fatal("   $ Error deleting an hotel: " + ex.getMessage());
 	    } finally {
 	    	if (tx != null && tx.isActive()) {
-	    		ServerLogger.getLogger().finer("rollback");
+	    		ServerLogger.getLogger().debug("rollback");
 	    		tx.rollback();
 	    	}
 			if(pm != null && !pm.isClosed()) {
@@ -230,7 +231,7 @@ public class HotelDAO implements IHotelDAO {
 			//End the transaction
 			tx.commit();
 		} catch (Exception ex) {
-			ServerLogger.getLogger().severe(" $ Error cleaning the DB: " + ex.getMessage());
+			ServerLogger.getLogger().fatal(" $ Error cleaning the DB: " + ex.getMessage());
 			ex.printStackTrace();
 		} finally {
 			if (tx != null && tx.isActive()) {

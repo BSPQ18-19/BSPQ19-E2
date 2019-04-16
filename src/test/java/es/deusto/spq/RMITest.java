@@ -8,6 +8,8 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import org.junit.BeforeClass;
@@ -21,6 +23,7 @@ import junit.framework.Assert;
  */
 public class RMITest {
 
+	private static Registry locateRegistry;
 	private static String serverUrl;
 	private static String clientUrl;
 	private static String cwd = RMITest.class.getProtectionDomain().getCodeSource().getLocation().getFile();
@@ -28,12 +31,17 @@ public class RMITest {
 	
 	@BeforeClass
 	public static void setUpParameters() {
-		serverUrl = "//127.0.0.1:1099/HotelManagementServer";
-		clientUrl = "//127.0.0.1:1099/HotelManagementServer";
 
+		try {
+			locateRegistry = LocateRegistry.createRegistry(1098);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 
-		System.setProperty("java.rmi.server.codebase", "file:" + cwd);
-		System.setProperty("java.security.policy", "./java.policy");
+		serverUrl = "//127.0.0.1:1098/HotelManagementServer";
+		clientUrl = "//127.0.0.1:1098/HotelManagementServer";
+
+		//System.setProperty("java.rmi.server.codebase", "file:" + cwd);
 	}
 		
 	@SuppressWarnings("deprecation")

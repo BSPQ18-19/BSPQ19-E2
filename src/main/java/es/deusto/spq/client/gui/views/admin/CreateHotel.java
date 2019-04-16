@@ -1,4 +1,4 @@
-package es.deusto.spq.client.gui;
+package es.deusto.spq.client.gui.views.admin;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,19 +7,19 @@ import java.awt.GridLayout;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+
+import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.Client;
 import es.deusto.spq.client.controller.HotelManagementController;
 
-public class HotelCreate extends JPanel {
+public class CreateHotel extends JPanel {
 
 	/**
 	 * 
@@ -35,7 +35,7 @@ public class HotelCreate extends JPanel {
 	private HotelManagementController controller;
 	private Logger log;
 	
-	public HotelCreate(int screenWidth, int screenHeight, HotelManagementController controller) {
+	public CreateHotel(int screenWidth, int screenHeight, HotelManagementController controller) {
 		log = ClientLogger.getLogger();
 		
 		this.setLayout(new BorderLayout());
