@@ -4,6 +4,4 @@ import es.deusto.spq.server.data.dto.UserDTO;
 
 public interface IDAO {
 
-	public boolean checkAuthorizationIsAdmin(UserDTO authorization);
-	
 }

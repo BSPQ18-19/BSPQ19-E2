@@ -23,7 +23,7 @@ public class HotelAdminView extends View {
 
     @Override
     public ViewPermission getViewPermission() {
-        return ViewPermission.NOT_LOGGED_IN; // TODO change
+        return ViewPermission.LOGGED_IN; // TODO change
     }
 
     @Override
@@ -35,6 +35,16 @@ public class HotelAdminView extends View {
     public void initialize() {
         clientWindow = ClientWindow.getClientWindow(getViewManager().getClient().getController());
         clientWindow.setVisible(true);
+    }
+
+    @Override
+    public void dispose() {
+        getInternalFrame().dispose();
+    }
+
+    @Override
+    public void bringToFront() {
+        getInternalFrame().toFront();
     }
 
     @Override

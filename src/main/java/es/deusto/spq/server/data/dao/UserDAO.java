@@ -25,15 +25,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public boolean checkAuthorizationIsAdmin(UserDTO authorization) {
-		// TODO
-		return true;
-	}
-
-	@Override
 	public List<UserDTO> getUsers(UserDTO authorization) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return null;
 		
 		try {
 			tx = pm.currentTransaction();
@@ -62,8 +54,7 @@ public class UserDAO implements IDAO, IUserDAO {
 
 	@Override
 	public UserDTO getUserbyID(UserDTO authorization, String ID) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return null;
+
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -114,8 +105,7 @@ public class UserDAO implements IDAO, IUserDAO {
 
 	@Override
 	public boolean deleteUserbyID(UserDTO authorization, String ID) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return false;
+
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();

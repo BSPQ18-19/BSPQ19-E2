@@ -60,6 +60,11 @@ public class LoginView extends View {
     }
 
     @Override
+    public void bringToFront() {
+        getInternalFrame().toFront();
+    }
+
+    @Override
     public void initialize() {
 
         // TODO Remove code smells!!!
@@ -141,9 +146,9 @@ public class LoginView extends View {
                         ;//TODO guest GUI
                     else
                         ;//TODO admin GUI
+                    getViewManager().setPermission(ViewPermission.LOGGED_IN);
                     getViewManager().openView(ViewFactory.buildView(ViewType.ADMIN_HOTELS, getViewManager()));
                     dispose();
-                    JOptionPane.showMessageDialog(frame, "Succesfull login", "Succesfull login", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });

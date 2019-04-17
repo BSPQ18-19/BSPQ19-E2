@@ -10,8 +10,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 /**
  * Manages the whole UI View system.
@@ -83,6 +83,24 @@ public class ViewManager {
      */
     public void setPermission(ViewPermission permission) {
         this.permission = permission;
+
+        List<View> viewsToDispose = new ArrayList<>();
+
+        // Close all Views that don't meet the new permission level
+        for (Iterator<View> iterator = views.iterator(); iterator.hasNext();) {
+            View view = iterator.next();
+
+            if (!ViewPermission.hasPermission(permission, view.getViewPermission())) {
+                viewsToDispose.add(view);
+            }
+        }
+
+        for (View view : views) {
+            view.dispose();
+        }
+
+
+        repaintUI();
     }
 
     /**
@@ -145,8 +163,52 @@ public class ViewManager {
         });
         menuMainItem.add(salirMenuItem);
 
+        // Menú SESIÓN (dcha) ----------------------------
+        String lblSesion;
+        if(getPermission() == ViewPermission.LOGGED_IN) {
+            if(getPermission() == ViewPermission.LOGGED_IN_ADMIN) {
+                lblSesion = "User (ADMIN)";
+            } else {
+                lblSesion = "User";
+            }
+        } else {
+            lblSesion = LocaleManager.getMessage("menu.session.none");
+        }
+        JMenu sesionMenu = new JMenu(lblSesion);
+        if(getPermission() == ViewPermission.LOGGED_IN) {
+
+            JMenuItem logInMenuItem = new JMenuItem(LocaleManager.getMessage("menu.session.logout"));
+            logInMenuItem.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    setPermission(ViewPermission.NOT_LOGGED_IN);
+                    //openView(ViewFactory.buildView(ViewType.LOGIN, getViewManager()));
+
+                }
+            });
+            sesionMenu.add(logInMenuItem);
+        } else {
+
+            JMenuItem iniciarSesionMenuItem = new JMenuItem(LocaleManager.getMessage("menu.session.login"));
+            iniciarSesionMenuItem.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    openView(ViewFactory.buildView(ViewType.LOGIN, getViewManager()));
+                }
+            });
+            sesionMenu.add(iniciarSesionMenuItem);
+        }
+
         menuBar.add(menuMainItem);
+        menuBar.add(sesionMenu);
+
         frame.setJMenuBar(menuBar);
+    }
+
+    public ViewManager getViewManager() {
+        return this;
     }
 
 
@@ -191,7 +253,7 @@ public class ViewManager {
      * @return the first found view with the type, or null
      */
     @Nullable
-    private View getViewByViewType(ViewType viewType) {
+    public View getFirstViewByViewType(ViewType viewType) {
 
         // Iterate active views
         for (View view : views) {
@@ -204,6 +266,18 @@ public class ViewManager {
         return null;
     }
 
+    private List<View> getViewsByViewPermission(ViewPermission viewPermission) {
+        ArrayList<View> result = new ArrayList<>();
+
+        for (View view : views) {
+            if (view.getViewPermission() == viewPermission) {
+                result.add(view);
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Add a View and open it
      * @param view the view to open
@@ -212,7 +286,7 @@ public class ViewManager {
 
         // If we try to open an unique window, bring it to the front instead of creating a new one
         if (view.isUnique() && isViewTypeActive(view.getViewType())) {
-            getViewByViewType(view.getViewType()).bringToFront();
+            getFirstViewByViewType(view.getViewType()).bringToFront();
             return;
         }
 
