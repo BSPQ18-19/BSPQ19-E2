@@ -31,17 +31,19 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 
 	private static final long serialVersionUID = 1L;
 	private UserDAO userDAO;
-	private Set<UserDTO> loggedUsers;
+	private Set<User> loggedUsers;
 	private Logger log;
 	private Map<String, Hotel> hotels = new TreeMap<String, Hotel>();
 	private IHotelDAO dao;
+	private Assembler assembler;
+	
 	
 	public HotelManager() throws RemoteException {
 		super();
-		new Assembler();
+		assembler = new Assembler();
 		this.userDAO = new UserDAO();
 		new HotelDAO();
-		loggedUsers = new HashSet<UserDTO>();
+		loggedUsers = new HashSet<User>();
 		log = ServerLogger.getLogger();
 		r = new Random();
 		
@@ -55,7 +57,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
 		
 		this.dao = new HotelDAO();
-		dao.cleanDB();
+//		dao.cleanDB();
 		for(Hotel hotel: hotels.values()) {
 			dao.storeHotel(hotel);
 		}
@@ -71,14 +73,14 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		String randomID = generateRandomId();
 		log.info("Selected random ID for new user: " + randomID);
 		User user = new Guest(randomID, name, email, password, phone, address); //TODO generate correctly the IDs
-		return userDAO.createUser(user);
+		return assembler.assembleUser( userDAO.createUser(user) );
 	}
 
 	@Override
 	public UserDTO logIn(String email, String password) throws RemoteException{
-		UserDTO user = userDAO.logIn(email, password);
+		User user = userDAO.logIn(email, password);
 		loggedUsers.add(user);
-		return user;
+		return assembler.assembleUser(user);
 	}
 
 	@Override
@@ -92,7 +94,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		Assembler hotelAssembler = new Assembler();
 		
 		log.info("Retrieving hotels...");
-		ArrayList<Hotel> listHotels = dao.getHotels();
+		List<Hotel> listHotels = dao.getHotels();
 		log.info(" --> SERVER:");
 		log.info("ID: " + listHotels.get(1).getHotelId());
 		log.info("NAME: " + listHotels);
@@ -146,7 +148,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	@Override
 	public boolean cleanDB() throws RemoteException {
 		hotels.clear();
-		dao.cleanDB();
+//		dao.cleanDB();
 		return false;
 	}
 	

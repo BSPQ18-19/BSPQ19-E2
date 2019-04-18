@@ -1,31 +1,30 @@
 package es.deusto.spq.server.data.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
+import org.apache.log4j.Logger;
+
 import es.deusto.spq.server.data.MyPersistenceManager;
-import es.deusto.spq.server.data.dto.Assembler;
-import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
-public class UserDAO implements IDAO, IUserDAO {
+public class UserDAO implements IUserDAO {
 
 	private PersistenceManager pm;
 	private Transaction tx;
-	private Assembler assembler;
+	private Logger log;
 
 	public UserDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
-		assembler = new Assembler();
+		log = ServerLogger.getLogger();
 	}
 
 	@Override
-	public List<UserDTO> getUsers(UserDTO authorization) {
+	public List<User> getUsers() {
 		
 		try {
 			tx = pm.currentTransaction();
@@ -34,26 +33,23 @@ public class UserDAO implements IDAO, IUserDAO {
 			Query<User> query = pm.newQuery(User.class);
 			@SuppressWarnings("unchecked")
 			List<User> queryExecution = (List<User>) query.execute();
-			List<UserDTO> result = new ArrayList<UserDTO>();
-			for (User user : queryExecution)
-				result.add(assembler.assembleUser(user));
 			tx.commit();
 
-			return result;
+			log.info("User full list returned");
+			return queryExecution;
 
 		} catch (Exception e) {
-			ServerLogger.getLogger().fatal("Error in UserDAO:getUsers()");
-			e.printStackTrace();
+			log.fatal(e.getMessage());
 
 		} finally {
 			close();
 		}
-
+		
 		return null;
 	}
 
 	@Override
-	public UserDTO getUserbyID(UserDTO authorization, String ID) {
+	public User getUserbyID(String ID) {
 
 		try {
 			tx = pm.currentTransaction();
@@ -67,10 +63,9 @@ public class UserDAO implements IDAO, IUserDAO {
 
 			return result == null || result.isEmpty() || result.size() > 1 ? 
 					null : 
-					assembler.assembleUser(result.get(0));
+					result.get(0);
 		} catch (Exception e) {
-			ServerLogger.getLogger().fatal("Error in UserDAO:getUserbyID()");
-			e.printStackTrace();
+			log.fatal(e.getMessage());
 
 		} finally {
 			close();
@@ -80,21 +75,19 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public UserDTO createUser(User user) {
+	public User createUser(User user) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
-
 			pm.makePersistent(user);
-
 			tx.commit();
 
 			User detachedCopy = pm.detachCopy(user);
-			return assembler.assembleUser(detachedCopy);
+			log.info("Created user with ID: " + user.getUserID());
+			return detachedCopy;
 
 		} catch (Exception e) {
-			ServerLogger.getLogger().fatal("Error in UserDAO:createUser()");
-			e.printStackTrace();
+			log.fatal(e.getMessage());
 
 		} finally {
 			close();
@@ -104,7 +97,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public boolean deleteUserbyID(UserDTO authorization, String ID) {
+	public boolean deleteUserbyID(String ID) {
 
 		try {
 			tx = pm.currentTransaction();
@@ -114,8 +107,10 @@ public class UserDAO implements IDAO, IUserDAO {
 			query.setFilter("userID == '" + ID + "'");
 			@SuppressWarnings("unchecked")
 			List<User> queryExecution = (List<User>) query.execute();
-			if (queryExecution.isEmpty() || queryExecution.size() > 1)
+			if (queryExecution.isEmpty() || queryExecution.size() > 1) {
+				log.warn("Couldn't delete user with ID: " + ID + ". Either no existing users or more than one match.");
 				return false;
+			}
 			pm.deletePersistent(queryExecution.get(0));
 
 			tx.commit();
@@ -123,8 +118,7 @@ public class UserDAO implements IDAO, IUserDAO {
 			return true;
 
 		} catch (Exception e) {
-			ServerLogger.getLogger().fatal("Error in UserDAO:deleteUserbyID()");
-			e.printStackTrace();
+			log.fatal(e.getMessage());
 		} finally {
 			close();
 		}
@@ -132,7 +126,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 	
 	@Override
-	public UserDTO logIn(String email, String password) {
+	public User logIn(String email, String password) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -143,14 +137,15 @@ public class UserDAO implements IDAO, IUserDAO {
 			List<User> result = (List<User>) query.execute();
 			tx.commit();
 
-			if(result == null || result.isEmpty() || result.size() > 1)
+			if(result == null || result.isEmpty() || result.size() > 1) {
+				log.warn("Couldn't log in user with email: " + email);
 				return null;
+			}
 			User user = result.get(0);
 			if(user.getPassword().equals(password))
-				return assembler.assembleUser(user);
+				return user;
 		} catch (Exception e) {
-			ServerLogger.getLogger().fatal("Error in UserDAO:getUserbyID()");
-			e.printStackTrace();
+			log.fatal(e.getMessage());
 
 		} finally {
 			close();
