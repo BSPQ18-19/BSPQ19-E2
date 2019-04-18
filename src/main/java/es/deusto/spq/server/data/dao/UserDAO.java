@@ -12,20 +12,14 @@ import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
-public class UserDAO implements IUserDAO {
-
-	private PersistenceManager pm;
-	private Transaction tx;
-	private Logger log;
+public class UserDAO extends DAO implements IUserDAO {
 
 	public UserDAO() {
-		pm = MyPersistenceManager.getPersistenceManager();
-		log = ServerLogger.getLogger();
+		super(ServerLogger.getLogger());
 	}
 
 	@Override
 	public List<User> getUsers() {
-		
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -50,7 +44,6 @@ public class UserDAO implements IUserDAO {
 
 	@Override
 	public User getUserbyID(String ID) {
-
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -83,7 +76,7 @@ public class UserDAO implements IUserDAO {
 			tx.commit();
 
 			User detachedCopy = pm.detachCopy(user);
-			log.info("Created user with ID: " + user.getUserID());
+			log.info("Created User with ID: " + user.getUserID());
 			return detachedCopy;
 
 		} catch (Exception e) {
@@ -98,7 +91,6 @@ public class UserDAO implements IUserDAO {
 
 	@Override
 	public boolean deleteUserbyID(String ID) {
-
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -108,7 +100,7 @@ public class UserDAO implements IUserDAO {
 			@SuppressWarnings("unchecked")
 			List<User> queryExecution = (List<User>) query.execute();
 			if (queryExecution.isEmpty() || queryExecution.size() > 1) {
-				log.warn("Couldn't delete user with ID: " + ID + ". Either no existing users or more than one match.");
+				log.warn("Couldn't delete User with ID: " + ID + ". Either no existing users or more than one match.");
 				return false;
 			}
 			pm.deletePersistent(queryExecution.get(0));
@@ -138,7 +130,7 @@ public class UserDAO implements IUserDAO {
 			tx.commit();
 
 			if(result == null || result.isEmpty() || result.size() > 1) {
-				log.warn("Couldn't log in user with email: " + email);
+				log.warn("Couldn't log in User with email: " + email);
 				return null;
 			}
 			User user = result.get(0);
@@ -151,14 +143,6 @@ public class UserDAO implements IUserDAO {
 			close();
 		}
 		return null;
-	}
-	
-	/**
-	 * Closes the transaction if it hasn't been closed before, and makes rollback.
-	 */
-	private final void close() {
-		if (tx != null && tx.isActive())
-			tx.rollback();
 	}
 	
 }

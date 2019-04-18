@@ -1,186 +1,113 @@
 package es.deusto.spq.server.data.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import es.deusto.spq.client.logger.ClientLogger;
-import javax.jdo.Extent;
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
-import javax.jdo.Transaction;
-
-import org.apache.log4j.Logger;
-
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.logger.ServerLogger;
 
-public class HotelDAO implements IHotelDAO {
+public class HotelDAO extends DAO implements IHotelDAO {
 	
-	private PersistenceManagerFactory pmf;
-	private Logger log;
-
-	public HotelDAO(){
-		log = ClientLogger.getLogger();
-		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
-	}
-	
-	public void storeHotel(Hotel hotel) {
-		this.storeObject(hotel);
-	}
-	
-	private void storeObject(Object object) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		Transaction tx = pm.currentTransaction();
-	   
-	    try {
-	       tx.begin();
-	       ServerLogger.getLogger().info("   * Storing an object: " + object);
-	       pm.makePersistent(object);
-	       tx.commit();
-
-	    } catch (Exception ex) {
-	    	ServerLogger.getLogger().fatal("   $ Error storing an object: " + ex.getMessage());
-	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		tx.rollback();
-	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
-	    }
-	}
-	
-	public Hotel getHotel(String hotelID) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		/* By default only 1 level is retrieved from the db
-		 * so if we wish to fetch more than one level, we must indicate it
-		 */
-		pm.getFetchPlan().setMaxFetchDepth(3);
-		
-		Transaction tx = pm.currentTransaction();
-		
-		try {
-			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
-			
-			tx.begin();			
-			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
-			
-			for (Hotel hotel : extent) {
-				if (hotel.getName().equals(hotelID)) {
-				    return hotel;
-                }
-			}
-
-			tx.commit();			
-		} catch (Exception ex) {
-			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
-	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		tx.rollback();
-	    	}
-
-    		pm.close();    		
-	    }
-	    				
-		return null;
-	}
-
-
-	public ArrayList<Hotel> getHotels() {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		pm.getFetchPlan().setMaxFetchDepth(3);
-		
-		Transaction tx = pm.currentTransaction();
-	    ArrayList<Hotel> hotels = new ArrayList<>();
-	        
-	    try {
-	    	ServerLogger.getLogger().info("   * Retrieving all the hotels ");
-	    	
-	    	tx.begin();	    	
-			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
-
-			for (Hotel hotel : extent) {
-				hotels.add(hotel);
-			}
-			
-	        tx.commit();
-	    } catch (Exception ex) {
-	    	ServerLogger.getLogger().fatal("   $ Error retreiving an extent: " + ex.getMessage());
-	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		ServerLogger.getLogger().info("rollback");
-	    		tx.rollback();
-	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
-	    }
-	    return hotels;
+	public HotelDAO() {
+		super(ServerLogger.getLogger());
 	}
 
 	@Override
-	public boolean deleteHotel(String hotelID) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		
-		Transaction tx = pm.currentTransaction();
+	public List<Hotel> getHotels() {
+	    try {
+			pm.getFetchPlan().setMaxFetchDepth(2);
+	    	tx = pm.currentTransaction();
+	    	tx.begin();
+	    	
+	    	Query<Hotel> query = pm.newQuery(Hotel.class);
+			@SuppressWarnings("unchecked")
+	    	List<Hotel> queryExecution = (List<Hotel>) query.execute();
+	        tx.commit();
+	        
+	        log.info("Hotel full list returned");
+	        return queryExecution;
+	        
+	    } catch (Exception e) {
+	    	log.fatal(e.getMessage());
+	    } finally {
+	    	close();
+	    }
+	    return null;
+	}
+
+	@Override
+	public Hotel getHotelbyID(String hotelID) {
 		try {
+			tx = pm.currentTransaction();
 			tx.begin();
-			
+
 			Query<Hotel> query = pm.newQuery(Hotel.class);
-			query.setFilter("hotelId == '" + hotelID + "'");
+			query.setFilter("userID == '" + hotelID + "'");
+			@SuppressWarnings("unchecked")
+			List<Hotel> result = (List<Hotel>) query.execute();
+			tx.commit();
+
+			return result == null || result.isEmpty() || result.size() > 1 ? 
+					null : 
+					result.get(0);
+		} catch (Exception e) {
+			log.fatal(e.getMessage());
+
+		} finally {
+			close();
+		}
+
+		return null;
+	}
+
+	@Override
+	public Hotel createHotel(Hotel hotel) {
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+			pm.makePersistent(hotel);
+			tx.commit();
+
+			Hotel detachedCopy = pm.detachCopy(hotel);
+			log.info("Created Hotel with ID: " + hotel.getHotelId());
+			return detachedCopy;
+
+		} catch (Exception e) {
+			log.fatal(e.getMessage());
+
+		} finally {
+			close();
+		}
+
+		return null;
+	}
+
+	@Override
+	public boolean deleteHotelbyID(String hotelID) {
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			Query<Hotel> query = pm.newQuery(Hotel.class);
+			query.setFilter("userID == '" + hotelID + "'");
 			@SuppressWarnings("unchecked")
 			List<Hotel> queryExecution = (List<Hotel>) query.execute();
-			if(queryExecution.isEmpty() || queryExecution.size() > 1)
+			if (queryExecution.isEmpty() || queryExecution.size() > 1) {
+				log.warn("Couldn't delete Hotel with ID: " + hotelID + ". Either no existing hotels or more than one match.");
 				return false;
+			}
 			pm.deletePersistent(queryExecution.get(0));
-			
+
 			tx.commit();
-			
+
 			return true;
 
-		} catch (Exception ex) {
-			ServerLogger.getLogger().fatal("   $ Error deleting an hotel: " + ex.getMessage());
-	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		ServerLogger.getLogger().debug("rollback");
-	    		tx.rollback();
-	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
-	    }
+		} catch (Exception e) {
+			log.fatal(e.getMessage());
+		} finally {
+			close();
+		}
 		return false;
 	}
 	
-	public void cleanDB() {
-		ServerLogger.getLogger().info("- Cleaning the DB...");			
-		PersistenceManager pm = pmf.getPersistenceManager();
-		pm.getFetchPlan().setMaxFetchDepth(3);
-
-		Transaction tx = pm.currentTransaction();
-		//Start the transaction
-		try {
-			tx.begin();
-
-			//Delete hotels from DB
-			Query<Hotel> query1 = pm.newQuery(Hotel.class);
-			ServerLogger.getLogger().info(" * '" + query1.deletePersistentAll() + "' hotels deleted from the DB.");
-
-			//End the transaction
-			tx.commit();
-		} catch (Exception ex) {
-			ServerLogger.getLogger().fatal(" $ Error cleaning the DB: " + ex.getMessage());
-			ex.printStackTrace();
-		} finally {
-			if (tx != null && tx.isActive()) {
-				tx.rollback();
-			}
-
-			if (pm != null && !pm.isClosed()) {
-				pm.close();
-			}
-		}
-	}	
 }
