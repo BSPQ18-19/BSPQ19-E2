@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import javax.swing.JButton;
@@ -122,7 +123,8 @@ public class CreateHotel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Please fill everything.", "Error", JOptionPane.ERROR_MESSAGE);
 				}else {
 					controller.createHotel(idTextField.getText(), nameTextField.getText(), locationTextField.getText(),
-							seasonStartTextField.getText(), seasonEndingTextField.getText());
+							Timestamp.valueOf(seasonStartTextField.getText()),
+							Timestamp.valueOf(seasonEndingTextField.getText()));
 					JOptionPane.showMessageDialog(null, "Hotel created", "Done", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}

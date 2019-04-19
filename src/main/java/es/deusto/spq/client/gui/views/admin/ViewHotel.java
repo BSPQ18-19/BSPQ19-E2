@@ -7,7 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 import es.deusto.spq.client.logger.ClientLogger;
 
@@ -76,13 +78,12 @@ public class ViewHotel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.cleanDB();
 				for(int i = 0; i < hotelsTable.getRowCount(); i++) {
 					controller.createHotel((String) hotelsTable.getValueAt(i, 0),
 							(String) hotelsTable.getValueAt(i, 1), 
 							(String) hotelsTable.getValueAt(i, 2),
-							(String) hotelsTable.getValueAt(i, 3), 
-							(String) hotelsTable.getValueAt(i, 4));
+							Timestamp.valueOf((String) hotelsTable.getValueAt(i, 3)),
+							Timestamp.valueOf((String) hotelsTable.getValueAt(i, 4)));
 				}
 			}
 		});
@@ -152,7 +153,7 @@ public class ViewHotel extends JPanel{
 		
 		controller.setCurrentHotels();
 		controller.getCurrentHotels();
-		ArrayList<HotelDTO> retrievedHotels = controller.retrieveHotels();
+		List<HotelDTO> retrievedHotels = controller.retrieveHotels();
 		if(retrievedHotels == null || retrievedHotels.size() == 0) {
 			JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);
 		}else {
@@ -200,16 +201,10 @@ public class ViewHotel extends JPanel{
 				controller.setCurrentHotels(hotel);
 			}
 		}
-		
-		
-		
-
-//		tableModel.addColumn("Rooms");
-		
-		
 
 	}
-	static class MyTableCellRenderer extends DefaultTableCellRenderer {
+	
+	private static class MyTableCellRenderer extends DefaultTableCellRenderer {
 
 		/**
 		 * 
