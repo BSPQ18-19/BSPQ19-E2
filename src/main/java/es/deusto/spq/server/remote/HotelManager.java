@@ -15,8 +15,10 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
+import es.deusto.spq.server.data.dao.DAO;
 import es.deusto.spq.server.data.dao.HotelDAO;
 import es.deusto.spq.server.data.dao.IHotelDAO;
+import es.deusto.spq.server.data.dao.IUserDAO;
 import es.deusto.spq.server.data.dao.UserDAO;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.HotelDTO;
@@ -30,126 +32,115 @@ import es.deusto.spq.server.logger.ServerLogger;
 public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 
 	private static final long serialVersionUID = 1L;
-	private UserDAO userDAO;
-	private Set<User> loggedUsers;
-	private Logger log;
-	private Map<String, Hotel> hotels = new TreeMap<String, Hotel>();
-	private IHotelDAO dao;
-	private Assembler assembler;
+	/** The DAO to be used to manage users */
+	private IUserDAO userDAO = new UserDAO();
+	/** The DAO to be used to manage hotels */
+	private IHotelDAO hotelDAO = new HotelDAO();
+	/** A set to store the IDs of the current logged users */
+	private Set<String> loggedUsers = new HashSet<String>(); //IDs
+	/** A set to store the IDs of the created hotels */
+	private Set<String> createdHotels = new HashSet<String>();//IDs
+	/** The logger to log to */
+	private Logger log = ServerLogger.getLogger();
+	/** The assembler to assemble and disassembler the data model */
+	private Assembler assembler = new Assembler();
 	
-	
+	/**
+	 * Creates a new instance of the HotelManager.
+	 * @throws RemoteException Launched by the RMI registry.
+	 */
 	public HotelManager() throws RemoteException {
 		super();
-		assembler = new Assembler();
-		this.userDAO = new UserDAO();
-		new HotelDAO();
-		loggedUsers = new HashSet<User>();
-		log = ServerLogger.getLogger();
 		r = new Random();
 		
-		LocalDate localDate = LocalDate.of(2019, 04, 01);
-		
-		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H03", new Hotel("H03", "Hotel3", "Madrid", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H04", new Hotel("H04", "Hotel4", "Sevilla", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		
-		this.dao = new HotelDAO();
-//		dao.cleanDB();
-		for(Hotel hotel: hotels.values()) {
-			dao.storeHotel(hotel);
-		}
+		//Clear and reload the database
+		setUpDataBase();
+	}
+	
+	/**
+	 * Sets up the database: clean and load hotels and users.
+	 */
+	private void setUpDataBase() {
+		DataLoader.cleanDataBase((DAO) userDAO);
+		createdHotels = DataLoader.loadHotels(hotelDAO);
+		DataLoader.loadUsers();
 	}
 
 	private Random r;
-	private String generateRandomId() {
+	private String generateRandomId() {//TODO make a proper ID generator
 		return Integer.toString(r.nextInt(Integer.MAX_VALUE));
 	}
 	
+	private boolean checkAuthorization(UserDTO userDTO) { //TODO
+		return true;
+	}
+	
 	@Override
-	public UserDTO signInGuest(String name, String email, String password, String phone, String address) throws RemoteException{
+	public UserDTO signInGuest(String name, String email, String password, String phone, 
+			String address) throws RemoteException, IllegalArgumentException {
+		if(email == null || email.isEmpty() || password == null || password.isEmpty()) {
+			log.warn("Could not signed in guest, email or password are null or empty.");
+			throw new IllegalArgumentException("Email or password are null or empty.");
+		}
 		String randomID = generateRandomId();
-		log.info("Selected random ID for new user: " + randomID);
-		User user = new Guest(randomID, name, email, password, phone, address); //TODO generate correctly the IDs
-		return assembler.assembleUser( userDAO.createUser(user) );
+		User result = userDAO.createUser(new Guest(randomID, name, email, password, phone, address));
+		log.info("Created new Guest with ID: " + randomID);
+		return assembler.assembleUser(result);
 	}
 
 	@Override
-	public UserDTO logIn(String email, String password) throws RemoteException{
-		User user = userDAO.logIn(email, password);
-		loggedUsers.add(user);
-		return assembler.assembleUser(user);
+	public UserDTO logIn(String email, String password) throws RemoteException {
+		User result = userDAO.logIn(email, password);
+		loggedUsers.add(result.getUserID());
+		log.info("Logged in user with email: " + email);
+		return assembler.assembleUser(result);
 	}
 
 	@Override
 	public boolean logOut(UserDTO user) throws RemoteException{
-		return loggedUsers.remove(user);
+		boolean result = loggedUsers.remove(user.getUserID());
+		if(result)
+			log.info("Logged out user with ID: " + user.getUserID());
+		return result;
 	}
 
 	@Override
-	public ArrayList<HotelDTO> retrieveHotels() throws RemoteException {
-		ArrayList<HotelDTO> hotelsDTO = new ArrayList<>();
-		Assembler hotelAssembler = new Assembler();
-		
-		log.info("Retrieving hotels...");
-		List<Hotel> listHotels = dao.getHotels();
-		log.info(" --> SERVER:");
-		log.info("ID: " + listHotels.get(1).getHotelId());
-		log.info("NAME: " + listHotels);
-		log.info("LOCATION: " + listHotels.get(1).getLocation());
-		for(Hotel hotel : listHotels) {
-			hotelsDTO.add(hotelAssembler.assemble(hotel));
-		}
-		log.info("Arraylist size: "+hotelsDTO.size());
-		
-		if(hotelsDTO.isEmpty()) {
-			log.fatal("New exception - There are no hotels for the requested information.");
-			throw new RemoteException("HOTELS - There are no hotels for the requested information.");
-		}
-
-		return hotelsDTO;
+	public List<HotelDTO> retrieveHotels() throws RemoteException {
+		List<Hotel> hotels = hotelDAO.getHotels();
+		List<HotelDTO> result = assembler.assemble(hotels);
+		log.info("Retrieving all the hotels");
+		return result;
 	}
 
 
 	@Override
-	public HotelDTO createHotel(String id, String name, String location, String seasonStart,
-			String seasonEnd) throws RemoteException {
-		if(hotels.containsKey(id.trim()))
-			throw new RemoteException("Server - Hotel ID aready exists");
+	public HotelDTO createHotel(String id, String name, String location, Timestamp seasonStart,
+			Timestamp seasonEnd) throws RemoteException, IllegalArgumentException {
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
-		LocalDate localDateStart = LocalDate.parse(seasonStart.trim(), formatter);
-		LocalDate localDateEnding = LocalDate.parse(seasonEnd.trim(), formatter);
+		if(id == null || id.isEmpty()) {
+			log.warn("Could not create hotel, ID is null or empty");
+			throw new IllegalArgumentException("The ID is null or empty.");
+		}
 		
-		Hotel hotel = new Hotel(id.trim(), name.trim(), location.trim(),
-				Timestamp.valueOf(localDateStart.atStartOfDay()), Timestamp.valueOf(localDateEnding.atStartOfDay()));
-		hotels.put(hotel.getHotelId(), hotel);
-		dao.storeHotel(hotel);
+		if(createdHotels.contains(id)) {//TODO do this properly: to the database
+			log.warn("Could not create hotel, ID is duplicated");
+			throw new IllegalArgumentException("The ID is duplicated");
+		}
 		
-		Assembler hotelAssembler = new Assembler();
-		return hotelAssembler.assemble(hotel);
+		Hotel result = hotelDAO.createHotel(new Hotel(id, name, location, seasonStart, seasonEnd));
+		log.info("Hotel created with ID: " + id);
+		return assembler.assemble(result);
 	}
 
 
 	@Override
 	public boolean deleteHotel(String id) throws RemoteException {
-		hotels.remove(id);
-		dao.deleteHotel(id);
-		if(hotels.containsKey(id) == false) {
+		if(createdHotels.contains(id)) {
+			hotelDAO.deleteHotelbyID(id);
+			createdHotels.remove(id);
 			return true;
-		}else {
-			return false;
 		}
-	}
-
-
-	@Override
-	public boolean cleanDB() throws RemoteException {
-		hotels.clear();
-//		dao.cleanDB();
 		return false;
 	}
-	
+
 }

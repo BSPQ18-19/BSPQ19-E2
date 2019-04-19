@@ -1,5 +1,8 @@
 package es.deusto.spq.server.data.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Room;
@@ -18,6 +21,15 @@ public class Assembler {
 				hotel.getSeasonStart(), hotel.getSeasonEnding());
 		ServerLogger.getLogger().info("Assembling hotel...");
 		return hotelDTO;
+	}
+	
+	public List<HotelDTO> assemble(List<Hotel> hotels) {
+		if(hotels == null)
+			return null;
+		List<HotelDTO> result = new ArrayList<HotelDTO>(hotels.size());
+		for(Hotel h : hotels)
+			result.add(assemble(h));
+		return result;
 	}
 
 	// Room

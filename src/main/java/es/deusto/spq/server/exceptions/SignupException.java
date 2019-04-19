@@ -1,4 +1,4 @@
-package es.deusto.spq.server.data;
+package es.deusto.spq.server.exceptions;
 
 public class SignupException extends Exception {
 
