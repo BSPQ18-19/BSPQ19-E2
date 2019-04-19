@@ -89,7 +89,7 @@ public class HotelDAO extends DAO implements IHotelDAO {
 			tx.begin();
 
 			Query<Hotel> query = pm.newQuery(Hotel.class);
-			query.setFilter("userID == '" + hotelID + "'");
+			query.setFilter("hotelID == '" + hotelID + "'");
 			@SuppressWarnings("unchecked")
 			List<Hotel> queryExecution = (List<Hotel>) query.execute();
 			if (queryExecution.isEmpty() || queryExecution.size() > 1) {

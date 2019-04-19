@@ -34,21 +34,29 @@ public class Assembler {
 
 	// Room
 	public RoomDTO assembleRoom(Room room) {
+		if(room == null)
+			return null;
 		return new RoomDTO(room.getRoomId(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied(),
 				room.getFeatures());
 	}
 	
 	public Room disassembleRoom(RoomDTO room) {
+		if(room == null)
+			return null;
 		return new Room(room.getRoomID(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied(),
 				room.getFeatures());
 	}
 	
 	// User
 	public UserDTO assembleUser(User user) {
+		if(user == null)
+			return null;
 		return new UserDTO(user.getUserID(), user.getName(), user instanceof Guest);
 	}
 	
 	public User disassembleUser(UserDTO user) {
+		if(user == null)
+			return null;
 		if(user.isGuest())
 			return new Guest(user.getUserID(), user.getName());
 		else
