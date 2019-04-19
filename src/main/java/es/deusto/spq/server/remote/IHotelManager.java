@@ -3,7 +3,6 @@ package es.deusto.spq.server.remote;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 import es.deusto.spq.server.data.dto.HotelDTO;
@@ -21,10 +20,9 @@ public interface IHotelManager extends Remote {
 	 * @return A {@link es.deusto.spq.server.data.dto.UserDTO} of the signed up Guest.
 	 * 			If any of the email or password given is null, returns null.
 	 * @throws RemoteException Launched by the RMI registry.
-	 * @throws IllegalArgumentException When the email or password are null or empty.
 	 */
 	public UserDTO signInGuest(String name, String email, String password, String phone, 
-			String address) throws RemoteException, IllegalArgumentException;
+			String address) throws RemoteException;
 	//TODO signInAdministrator
 	/**
 	 * Logs in the user.
@@ -56,10 +54,9 @@ public interface IHotelManager extends Remote {
 	 * @param seasonEnd The ending date of the season-
 	 * @return A {@link es.deusto.spq.server.data.dto.HotelDTO} of the created Hotel.
 	 * @throws RemoteException Launched by the RMI registry.
-	 * @throws IllegalArgumentException when the ID is duplicated.
 	 */
 	public HotelDTO createHotel(String id, String name, String location, Timestamp seasonStart, 
-			Timestamp seasonEnd) throws RemoteException, IllegalArgumentException;
+			Timestamp seasonEnd) throws RemoteException;
 	/**
 	 * Deletes a Hotel in the database if the given ID matches any.
 	 * @param id The ID of the hotel to be deleted.

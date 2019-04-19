@@ -3,15 +3,10 @@ package es.deusto.spq.server.remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -22,7 +17,6 @@ import es.deusto.spq.server.data.dao.IUserDAO;
 import es.deusto.spq.server.data.dao.UserDAO;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.HotelDTO;
-import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
@@ -64,6 +58,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		DataLoader.cleanDataBase((DAO) userDAO);
 		createdHotels = DataLoader.loadHotels(hotelDAO);
 		DataLoader.loadUsers();
+		log.debug("Database set up completed");
 	}
 
 	private Random r;
@@ -77,10 +72,10 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	
 	@Override
 	public UserDTO signInGuest(String name, String email, String password, String phone, 
-			String address) throws RemoteException, IllegalArgumentException {
+			String address) throws RemoteException {
 		if(email == null || email.isEmpty() || password == null || password.isEmpty()) {
 			log.warn("Could not signed in guest, email or password are null or empty.");
-			throw new IllegalArgumentException("Email or password are null or empty.");
+			throw new RemoteException("Email or password are null or empty.");
 		}
 		String randomID = generateRandomId();
 		User result = userDAO.createUser(new Guest(randomID, name, email, password, phone, address));
@@ -115,16 +110,16 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 
 	@Override
 	public HotelDTO createHotel(String id, String name, String location, Timestamp seasonStart,
-			Timestamp seasonEnd) throws RemoteException, IllegalArgumentException {
+			Timestamp seasonEnd) throws RemoteException {
 		
 		if(id == null || id.isEmpty()) {
 			log.warn("Could not create hotel, ID is null or empty");
-			throw new IllegalArgumentException("The ID is null or empty.");
+			throw new RemoteException("The ID is null or empty.");
 		}
 		
 		if(createdHotels.contains(id)) {//TODO do this properly: to the database
 			log.warn("Could not create hotel, ID is duplicated");
-			throw new IllegalArgumentException("The ID is duplicated");
+			throw new RemoteException("The ID is duplicated");
 		}
 		
 		Hotel result = hotelDAO.createHotel(new Hotel(id, name, location, seasonStart, seasonEnd));
