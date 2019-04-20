@@ -30,6 +30,7 @@ public class Server {
 	public void initializeServer(String url) {
 		try {
 			IHotelManager objServer = new HotelManager();
+			ServerLogger.getLogger().debug("IHotelManager initialized. Rebinding...");
 			Naming.rebind(url, objServer);
 			ServerLogger.getLogger().info("Server '" + url + "' active and waiting...");
 			java.io.InputStreamReader inputStreamReader = new java.io.InputStreamReader(System.in);

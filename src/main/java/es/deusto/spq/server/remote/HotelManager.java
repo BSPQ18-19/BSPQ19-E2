@@ -48,14 +48,14 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		r = new Random();
 		
 		//Clear and reload the database
-		setUpDataBase();
+//		setUpDataBase();
 	}
 	
 	/**
 	 * Sets up the database: clean and load hotels and users.
 	 */
 	private void setUpDataBase() {
-		DataLoader.cleanDataBase((DAO) userDAO);
+//		DataLoader.cleanDataBase((DAO) userDAO);
 		createdHotels = DataLoader.loadHotels(hotelDAO);
 		DataLoader.loadUsers();
 		log.debug("Database set up completed");
