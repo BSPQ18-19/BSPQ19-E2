@@ -27,6 +27,7 @@ public class MyPersistenceManager {
 	static {
 		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
 		pm = pmf.getPersistenceManager();
+		pm.setDetachAllOnCommit(true);
 	}
 	
 	/**
