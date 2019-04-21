@@ -9,6 +9,8 @@ import java.net.SocketException;
 
 import org.apache.log4j.Logger;
 
+import es.deusto.spq.payment.PayPal.PayPal;
+
 public class ServerListener extends Thread {
 
 	private Logger log;
@@ -38,10 +40,14 @@ public class ServerListener extends Thread {
 				
 				switch(message) {
 				case "REGISTER":
-					
+					Registrator registrator = new Registrator(client, objectOutputStream, objectInputStream);
+					PayPal.addRegistrator(registrator);
+					registrator.start();
 					break;
 				case "PAY":
-					
+					Payer payer = new Payer(client, objectOutputStream, objectInputStream);
+					PayPal.addPayer(payer);
+					payer.start();
 					break;
 				default:
 					objectOutputStream.writeObject("ERROR");
@@ -53,7 +59,7 @@ public class ServerListener extends Thread {
 				try {
 					if(!client.isClosed())
 						client.close();
-					log.info("Client closed.");
+					log.info("Client listened.");
 				} catch (IOException e) {
 					log.warn("Error closing connection with client.");
 				}
@@ -65,6 +71,7 @@ public class ServerListener extends Thread {
 	
 	public void closeListener() {
 		serverActive = false;
+		PayPal.removeListener(this);
 	}
 
 }
