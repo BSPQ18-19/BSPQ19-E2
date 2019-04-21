@@ -42,7 +42,7 @@ public class ReviewDBTest {
 		hotelDAO.storeHotel(h);
 	}
 
-	/*
+	/**
 	 * Stores a review and retrive it to see if the Review DAO and JDO work fine
 	 */
 	@SuppressWarnings("deprecation")
@@ -55,7 +55,7 @@ public class ReviewDBTest {
 		Assert.assertEquals(re.getPublishDate(), r.getPublishDate());
 	}
 	
-	/*
+	/**
 	 * Retrives a Hotel from DB and from that hotel it gets the review
 	 */
 	@SuppressWarnings("deprecation")
@@ -73,7 +73,7 @@ public class ReviewDBTest {
 		Assert.assertEquals(re.getPublishDate(), r.getPublishDate());
 	}
 	
-	/*
+	/**
 	 * Deletes the review and the hotel from the DB
 	 */
 	@SuppressWarnings("deprecation")

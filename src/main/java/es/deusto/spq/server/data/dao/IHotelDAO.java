@@ -16,7 +16,7 @@ public interface IHotelDAO {
 	/**
 	 * Stores a review in the database
 	 * @param r the review we want to store
-	 * 		  hotelID the hotel the Review is about
+	 * @param hotelID the hotel the Review is about
 	 * 
 	 */
 	public Review storeReview(Review r, String hotelID);
