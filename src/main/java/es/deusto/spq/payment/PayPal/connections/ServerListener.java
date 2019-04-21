@@ -10,6 +10,7 @@ import java.net.SocketException;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.payment.PayPal.PayPal;
+import es.deusto.spq.payment.PayPal.logger.PayPalLogger;
 
 public class ServerListener extends Thread {
 
@@ -18,6 +19,7 @@ public class ServerListener extends Thread {
 	private Socket client;
 	
 	public ServerListener(int port) throws IOException {
+		log = PayPalLogger.getLogger();
 		server = new ServerSocket(port);
 		server.setReuseAddress(true);
 	}
@@ -28,6 +30,7 @@ public class ServerListener extends Thread {
 	
 	@Override
 	public void run() {
+		log.info("New ServerListener active and waiting on port " + server.getLocalPort() + "...");
 		while(serverActive) {
 			try {
 				client = server.accept();
