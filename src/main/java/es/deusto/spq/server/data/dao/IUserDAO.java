@@ -33,4 +33,15 @@ public interface IUserDAO {
 	 */
 	public boolean deleteUserbyID(UserDTO authorization, String ID);
 	public UserDTO logIn(String email, String password);
+	/**
+	 * 
+	 * @param userID of the user we want to edit
+	 * @param name the new name in case we have changed
+	 * @param email the new email in case we have changed
+	 * @param password the new password in case we have changed
+	 * @param phone the new phone number in case we have changed
+	 * @param address the new address in case we have changed
+	 * @return It return the updated DTO of the user
+	 */
+	public UserDTO editUser(String userID, String name, String email, String password, String phone, String address);
 }

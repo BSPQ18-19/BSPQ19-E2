@@ -1,6 +1,7 @@
 package es.deusto.spq.client.gui.base;
 
 import es.deusto.spq.client.gui.views.admin.HotelAdminView;
+import es.deusto.spq.client.gui.views.auth.EditUserView;
 import es.deusto.spq.client.gui.views.auth.LoginView;
 import es.deusto.spq.client.gui.views.auth.RegisterView;
 
@@ -32,6 +33,10 @@ public class ViewFactory {
             case ADMIN_HOTELS:
                 view = new HotelAdminView(viewManager);
                 break;
+            
+            case EDIT_USER:
+            	view = new EditUserView(viewManager);
+            	break;
         }
 
         return view;

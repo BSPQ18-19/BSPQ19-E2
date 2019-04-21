@@ -3,6 +3,7 @@ package es.deusto.spq.server.data.jdo;
 
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.jdo.annotations.*;
 

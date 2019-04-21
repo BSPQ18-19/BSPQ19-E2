@@ -175,5 +175,37 @@ public class UserDAO implements IDAO, IUserDAO {
 		if (tx != null && tx.isActive())
 			tx.rollback();
 	}
+
+	public UserDTO editUser(String userID, String name, String email, String password, String phone, String address) {
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			Query<User> query = pm.newQuery(User.class);
+			query.setFilter("userID == '" + userID + "'");
+			@SuppressWarnings("unchecked")
+			List<User> result = (List<User>) query.execute();
+			User user = result.get(0);
+			user.setName(name);
+			user.setEmail(email);
+			user.setPassword(password);
+			//user.setPhone(phone);
+			//user.setAddress(address);
+			
+			tx.commit();
+
+			return assembler.assembleUser(user);
+			
+		} catch (Exception e) {
+			ServerLogger.getLogger().fatal("Error in UserDAO:editUser()");
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+
+		return null;
+		
+	}
 	
 }

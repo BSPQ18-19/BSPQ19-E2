@@ -149,5 +149,19 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		dao.cleanDB();
 		return false;
 	}
+
+	@Override
+	public UserDTO editUser(UserDTO user, String name, String email, String password, String phone, String address) {
+		try {
+			UserDTO editedUser = userDAO.editUser(user.getUserID(), name, email, password, phone, address);
+			if(editedUser == null) return null;
+			loggedUsers.remove(user);
+			loggedUsers.add(editedUser);
+			return editedUser;
+		} catch (Exception e) {
+			log.fatal("Error editing User: "+e.getMessage());
+		}
+		return null;
+	}
 	
 }

@@ -140,4 +140,14 @@ public boolean createHotel(String id, String name, String location, String seaso
 		return loggedUser;
 	}
 
+	public UserDTO editUser(String name, String email, String password, String phone, String address) {
+		try {
+			loggedUser = rsl.getHotelManager().editUser(loggedUser, name, email, password, phone, address);
+			return loggedUser;
+		}catch (Exception e) {
+			log.fatal("Error editing User: " + e.getMessage());
+		}
+		return null;
+	}
+
 }
