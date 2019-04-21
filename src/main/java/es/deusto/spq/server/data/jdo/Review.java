@@ -2,11 +2,8 @@ package es.deusto.spq.server.data.jdo;
 
 import java.sql.Timestamp;
 
-import javax.jdo.annotations.Inheritance;
-import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
-import javax.jws.Oneway;
 
 @PersistenceCapable(detachable = "true")
 public class Review {
