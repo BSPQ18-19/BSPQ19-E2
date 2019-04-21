@@ -1,15 +1,22 @@
 package es.deusto.spq.payment.PayPal.data;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Payment {
 
 	private Timestamp timestamp;
-	private float amount;
+	private float amount = 0;
 	
 	public Payment(Timestamp timestamp, float amount) {
 		super();
 		this.timestamp = timestamp;
+		this.amount = amount;
+	}
+	
+	public Payment(float amount) {
+		super();
+		this.timestamp = Timestamp.valueOf(LocalDateTime.now());
 		this.amount = amount;
 	}
 	
