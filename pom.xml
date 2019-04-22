@@ -16,6 +16,7 @@
 		<server.IP>127.0.0.1</server.IP>
 		<server.port>1099</server.port>
 		<server.Name>HotelManagementServer</server.Name>
+		<paypal.port>45000</paypal.port>
 		<policy.file>${basedir}/src/main/resources/security/java.policy</policy.file>
 		<config.files.dir>${basedir}/src/main/resources</config.files.dir>
 	</properties>
@@ -313,13 +314,9 @@
 									<value>${policy.file}</value>
 								</systemProperty>
 							</systemProperties>
-							<!--
 							<arguments>
-								<argument>${server.IP}</argument>
-								<argument>${server.port}</argument>
-								<argument>${server.Name}</argument>
+								<argument>${paypal.port}</argument>
 							</arguments>
-							-->
 						</configuration>
 					</plugin>
 				</plugins>
