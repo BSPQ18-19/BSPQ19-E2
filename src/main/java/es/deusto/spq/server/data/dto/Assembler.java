@@ -33,7 +33,7 @@ public class Assembler {
 	
 	// User
 	public UserDTO assembleUser(User user) {
-		return new UserDTO(user.getUserID(), user.getName(), user instanceof Guest);
+		return new UserDTO(user.getUserID(), user.getName(), user.getEmail(), user.getPassword(), "","",user instanceof Guest);
 	}
 	
 	public User disassembleUser(UserDTO user) {

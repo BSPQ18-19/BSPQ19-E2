@@ -24,12 +24,13 @@ import java.rmi.RemoteException;
 
 public class EditUserView extends View {
 
-	//Provisional only for testing
-	private User loggedUser = new Guest("12", "Test", "Test", "Password", "1234", "1234");
+	//The user that is actually logged in and we want to edit
+	private UserDTO loggedUser;
 	
     public EditUserView(ViewManager viewManager) {
         super(viewManager);
         hotelManagementController = viewManager.getClient().getController();
+        loggedUser = hotelManagementController.getLoggedUser();
     }
 
     private JInternalFrame frame;
@@ -79,57 +80,51 @@ public class EditUserView extends View {
         JPanel form = new JPanel(new SpringLayout());
 
         // Name field
-        JLabel nameLabel = new JLabel(LocaleManager.getMessage("register.label.name"), JLabel.TRAILING);
+        JLabel nameLabel = new JLabel(LocaleManager.getMessage("editUser.label.name"), JLabel.TRAILING);
         form.add(nameLabel);
         nameTextField = new JTextField(10);
         nameLabel.setLabelFor(nameTextField);
         form.add(nameTextField);
-        //TODO Change the following line
         nameTextField.setText(loggedUser.getName());
 
         // Email field
-        JLabel emailLabel = new JLabel(LocaleManager.getMessage("register.label.email"), JLabel.TRAILING);
+        JLabel emailLabel = new JLabel(LocaleManager.getMessage("editUser.label.email"), JLabel.TRAILING);
         form.add(emailLabel);
         emailTextField = new JTextField(10);
         emailLabel.setLabelFor(emailTextField);
         form.add(emailTextField);
-        //TODO Change the following line
         emailTextField.setText(loggedUser.getEmail());
 
         // Password field
-        JLabel passwordLabel = new JLabel(LocaleManager.getMessage("register.label.password"), JLabel.TRAILING);
+        JLabel passwordLabel = new JLabel(LocaleManager.getMessage("editUser.label.password"), JLabel.TRAILING);
         form.add(passwordLabel);
         passwordField = new JPasswordField(10);
         passwordLabel.setLabelFor(passwordField);
         form.add(passwordField);
-      //TODO Change the following line
         passwordField.setText(loggedUser.getPassword());
 
         // Password confirmation field
-        JLabel passwordConfirmationLabel = new JLabel(LocaleManager.getMessage("register.label.password-confirmation"), JLabel.TRAILING);
+        JLabel passwordConfirmationLabel = new JLabel(LocaleManager.getMessage("editUser.label.password-confirmation"), JLabel.TRAILING);
         form.add(passwordConfirmationLabel);
         passwordConfirmationField = new JPasswordField(10);
         passwordConfirmationLabel.setLabelFor(passwordConfirmationField);
         form.add(passwordConfirmationField);
-      //TODO Change the following line
         passwordConfirmationField.setText(loggedUser.getPassword());
 
         // Phone field
-        JLabel phoneLabel = new JLabel(LocaleManager.getMessage("register.label.phone"), JLabel.TRAILING);
+        JLabel phoneLabel = new JLabel(LocaleManager.getMessage("editUser.label.phone"), JLabel.TRAILING);
         form.add(phoneLabel);
         phoneTextField = new JTextField(10);
         phoneLabel.setLabelFor(phoneTextField);
         form.add(phoneTextField);
-      //TODO Change the following line
         phoneTextField.setText("phone");
 
         // Address field
-        JLabel addressLabel = new JLabel(LocaleManager.getMessage("register.label.address"), JLabel.TRAILING);
+        JLabel addressLabel = new JLabel(LocaleManager.getMessage("editUser.label.address"), JLabel.TRAILING);
         form.add(addressLabel);
         addressTextField = new JTextField(10);
         addressLabel.setLabelFor(addressTextField);
         form.add(addressTextField);
-      //TODO Change the following line
         addressTextField.setText("address");
 
 
@@ -144,7 +139,7 @@ public class EditUserView extends View {
 
 
         // Submit button
-        submitButton = new JButton(LocaleManager.getMessage("register.submit"));
+        submitButton = new JButton(LocaleManager.getMessage("editUser.saveChanges"));
         container.add(submitButton, BorderLayout.PAGE_END); // add it to the bottom
 
         // Register the click function
@@ -228,8 +223,8 @@ public class EditUserView extends View {
         if (result == null) {
             ClientLogger.getLogger().fatal("User not registered...");
             JOptionPane.showMessageDialog(frame,
-                    LocaleManager.getMessage("register.validation.errors.unknown"),
-                    LocaleManager.getMessage("register.validation.errors.unknown.title"),
+                    LocaleManager.getMessage("editUser.validation.errors.unknown"),
+                    LocaleManager.getMessage("editUser.validation.errors.unknown.title"),
                     JOptionPane.ERROR_MESSAGE);
 
             frame.dispose();
@@ -238,8 +233,8 @@ public class EditUserView extends View {
 
         // Success!
         JOptionPane.showMessageDialog(frame,
-                LocaleManager.getMessage("register.success.body"),
-                LocaleManager.getMessage("register.success.title"),
+                LocaleManager.getMessage("editUser.success.body"),
+                LocaleManager.getMessage("editUser.success.title"),
                 JOptionPane.INFORMATION_MESSAGE);
         frame.dispose();
 
@@ -256,22 +251,22 @@ public class EditUserView extends View {
 
         switch (reason) {
             case REQUIRED_FIELD_EMPTY:
-                messageKey = "register.validation.errors.required";
+                messageKey = "editUser.validation.errors.required";
                 messageType = JOptionPane.WARNING_MESSAGE;
                 break;
             case PASSWORD_CONFIRMATION_DIFFERENT:
-                messageKey = "register.validation.errors.password-confirmation";
+                messageKey = "editUser.validation.errors.password-confirmation";
                 messageType = JOptionPane.WARNING_MESSAGE;
                 break;
             default:
-                messageKey = "register.validation.errors.unknown";
+                messageKey = "editUser.validation.errors.unknown";
                 messageType = JOptionPane.ERROR_MESSAGE;
                 break;
         }
 
         JOptionPane.showMessageDialog(frame,
                 LocaleManager.getMessage(messageKey),
-                LocaleManager.getMessage("register.validation.title"),
+                LocaleManager.getMessage("editUser.validation.title"),
                 messageType);
     }
 
