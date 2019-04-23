@@ -1,6 +1,7 @@
 package es.deusto.spq.server.data.jdo;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -15,6 +16,7 @@ public class Hotel {
 	private String location;
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
+	private ArrayList<Room> room;
 	
 	public Hotel(String hotelId, String name, String location, Timestamp seasonStart,
 			Timestamp seasonEnding) {

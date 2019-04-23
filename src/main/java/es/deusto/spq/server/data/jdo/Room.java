@@ -2,14 +2,19 @@ package es.deusto.spq.server.data.jdo;
 
 import java.util.List;
 
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.PrimaryKey;
+
+@PersistenceCapable
 public class Room {
 	
+	@PrimaryKey
 	private String roomId;
 	private float size; 
 	private float price; 
 	private RoomType type;
 	private boolean isOccupied;
-	private List<String> features;
+//	private List<String> features;
 	
 	/**
 	 * @param roomId Id of the room
@@ -17,16 +22,14 @@ public class Room {
 	 * @param price Price per night
 	 * @param type Single, double, triple or suite
 	 * @param isOccupied Occupied or vacant
-	 * @param features All the features that a room have
 	 */
-	public Room(String roomId, float size, float price, RoomType type, boolean isOccupied, List<String> features) {
+	public Room(String roomId, float size, float price, RoomType type, boolean isOccupied) {
 		super();
 		this.roomId = roomId;
 		this.size = size;
 		this.price = price;
 		this.type = type;
 		this.isOccupied = isOccupied;
-		this.features = features;
 	}
 
 	public String getRoomId() {
@@ -67,13 +70,5 @@ public class Room {
 
 	public void setOccupied(boolean isOccupied) {
 		this.isOccupied = isOccupied;
-	}
-
-	public List<String> getFeatures() {
-		return features;
-	}
-
-	public void setFeatures(List<String> features) {
-		this.features = features;
 	}
 }

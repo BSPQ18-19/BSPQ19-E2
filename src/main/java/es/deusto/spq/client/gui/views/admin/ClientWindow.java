@@ -4,6 +4,8 @@ import javax.swing.*;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.gui.HotelGuestSearchingPanel;
+
 import org.apache.log4j.Logger;
 
 public class ClientWindow extends JInternalFrame {
@@ -32,7 +34,7 @@ public class ClientWindow extends JInternalFrame {
 		this.screenWidth = (int) windowSize.getWidth();
 		this.screenHeight = (int) windowSize.getHeight();
 		
-		changeScreen(ScreenType.VIEW_HOTEL_ADMIN);
+		changeScreen(ScreenType.GUEST_SEARCH);
 		
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
@@ -46,6 +48,9 @@ public class ClientWindow extends JInternalFrame {
 			break;
 		case CREATE_HOTEL_ADMIN:
 			mainPanel = new CreateHotel(screenWidth, screenHeight, controller);
+			break;
+		case GUEST_SEARCH:
+			mainPanel = new HotelGuestSearchingPanel(screenWidth, screenHeight, controller);
 			break;
 		default:
 			break;

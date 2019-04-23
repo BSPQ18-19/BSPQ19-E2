@@ -13,16 +13,14 @@ public class RoomDTO implements Serializable {
 	private float price;
 	private RoomType type;
 	private boolean isOccupied;
-	private List<String> features;
 	
-	public RoomDTO(String roomID, float size, float price, RoomType type, boolean isOccupied, List<String> features) {
+	public RoomDTO(String roomID, float size, float price, RoomType type, boolean isOccupied) {
 		super();
 		this.roomID = roomID;
 		this.size = size;
 		this.price = price;
 		this.type = type;
 		this.isOccupied = isOccupied;
-		this.features = features;
 	}
 
 	public boolean isOccupied() {
@@ -63,14 +61,6 @@ public class RoomDTO implements Serializable {
 
 	public void setType(RoomType type) {
 		this.type = type;
-	}
-
-	public List<String> getFeatures() {
-		return features;
-	}
-
-	public void setFeatures(List<String> features) {
-		this.features = features;
 	}
 	
 }

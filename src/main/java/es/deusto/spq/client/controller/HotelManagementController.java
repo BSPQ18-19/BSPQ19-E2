@@ -116,6 +116,22 @@ public boolean createHotel(String id, String name, String location, String seaso
 		return null;
     }
     
+    public ArrayList<HotelDTO> retrieveHotels(String arrivalDate) {
+    	log.info("Getting list of hotels.");
+    	try {
+			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels(arrivalDate);			
+			
+			if(hotel != null && hotel.size() != 0) {
+				log.info("List of hotels retrieved succesfully.");
+				return hotel;
+			}else {
+				log.info("Could not retrieve list of hotels");
+			}
+    	} catch (RemoteException e) {
+    		log.fatal("Error getting list of hotels: " + e.getMessage());
+		}
+		return null;
+    }    
     public boolean cleanDB() {
     	try {
     		rsl.getHotelManager().cleanDB();
