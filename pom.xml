@@ -69,11 +69,6 @@
 			<artifactId>LGoodDatePicker</artifactId>
 			<version>v10.4.1-Standard</version>
 		</dependency>
-		<dependency>
-			<groupId>com.github.LGoodDatePicker</groupId>
-			<artifactId>LGoodDatePicker-javadoc</artifactId>
-			<version>v10.4.1-Standard</version>
-		</dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
