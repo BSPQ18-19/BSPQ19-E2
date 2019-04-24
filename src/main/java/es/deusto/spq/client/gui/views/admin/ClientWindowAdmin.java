@@ -39,6 +39,9 @@ public class ClientWindowAdmin extends JInternalFrame {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
+	/** Change the UI of the Admin panel
+	 * @param nextScreenType Type of the next screen that is wanted to be displayed
+	 */
 	public void changeScreen(ScreenTypeAdmin nextScreenType) {
 		this.currentScreenType = nextScreenType;
 		

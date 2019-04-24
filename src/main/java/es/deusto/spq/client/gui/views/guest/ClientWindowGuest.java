@@ -47,6 +47,9 @@ public class ClientWindowGuest extends JInternalFrame{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
+	/** Change the UI of the Guest panel
+	 * @param nextScreenType Type of the next screen that is wanted to be displayed
+	 */
 	public void changeScreen(ScreenTypeGuest nextScreenType) {
 		this.currentScreenType = nextScreenType;
 		

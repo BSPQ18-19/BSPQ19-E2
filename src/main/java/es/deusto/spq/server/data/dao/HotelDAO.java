@@ -14,26 +14,30 @@ import javax.jdo.Transaction;
 
 import org.apache.log4j.Logger;
 
+import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.logger.ServerLogger;
 
 public class HotelDAO implements IHotelDAO {
 	
-	private PersistenceManagerFactory pmf;
+	private PersistenceManager pm;
+	private Transaction tx;
 	private Logger log;
 
 	public HotelDAO(){
 		log = ClientLogger.getLogger();
-		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
+		pm = MyPersistenceManager.getPersistenceManager();
 	}
 	
 	public void storeHotel(Hotel hotel) {
 		this.storeObject(hotel);
 	}
 	
+	/** Store an object into the DB
+	 * @param object The object to be stored in the DB
+	 */
 	private void storeObject(Object object) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		Transaction tx = pm.currentTransaction();
+		tx = pm.currentTransaction();
 	   
 	    try {
 	       tx.begin();
@@ -47,20 +51,19 @@ public class HotelDAO implements IHotelDAO {
 	    	if (tx != null && tx.isActive()) {
 	    		tx.rollback();
 	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+//			if(pm != null && !pm.isClosed()) {
+//				pm.close();
+//			}
 	    }
 	}
 	
 	public Hotel getHotel(String hotelID) {
-		PersistenceManager pm = pmf.getPersistenceManager();
 		/* By default only 1 level is retrieved from the db
 		 * so if we wish to fetch more than one level, we must indicate it
 		 */
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
-		Transaction tx = pm.currentTransaction();
+		tx = pm.currentTransaction();
 		
 		try {
 			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
@@ -82,7 +85,7 @@ public class HotelDAO implements IHotelDAO {
 	    		tx.rollback();
 	    	}
 
-    		pm.close();    		
+//    		pm.close();    		
 	    }
 	    				
 		return null;
@@ -90,10 +93,9 @@ public class HotelDAO implements IHotelDAO {
 
 
 	public ArrayList<Hotel> getHotels() {
-		PersistenceManager pm = pmf.getPersistenceManager();
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
-		Transaction tx = pm.currentTransaction();
+		tx = pm.currentTransaction();
 	    ArrayList<Hotel> hotels = new ArrayList<>();
 	        
 	    try {
@@ -114,18 +116,17 @@ public class HotelDAO implements IHotelDAO {
 	    		ServerLogger.getLogger().info("rollback");
 	    		tx.rollback();
 	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+//			if(pm != null && !pm.isClosed()) {
+//				pm.close();
+//			}
 	    }
 	    return hotels;
 	}
 
 	public ArrayList<Hotel> getHotels(Timestamp arrivalDate) {
-		PersistenceManager pm = pmf.getPersistenceManager();
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
-		Transaction tx = pm.currentTransaction();
+		tx = pm.currentTransaction();
 	    ArrayList<Hotel> hotels = new ArrayList<>();
 	        
 	    try {
@@ -147,18 +148,16 @@ public class HotelDAO implements IHotelDAO {
 	    		ServerLogger.getLogger().info("rollback");
 	    		tx.rollback();
 	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+//			if(pm != null && !pm.isClosed()) {
+//				pm.close();
+//			}
 	    }
 	    return hotels;
 	}
 	
 	@Override
 	public boolean deleteHotel(String hotelID) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		
-		Transaction tx = pm.currentTransaction();
+		tx = pm.currentTransaction();
 		try {
 			tx.begin();
 			
@@ -181,19 +180,18 @@ public class HotelDAO implements IHotelDAO {
 	    		ServerLogger.getLogger().debug("rollback");
 	    		tx.rollback();
 	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+//			if(pm != null && !pm.isClosed()) {
+//				pm.close();
+//			}
 	    }
 		return false;
 	}
 	
 	public void cleanDB() {
-		ServerLogger.getLogger().info("- Cleaning the DB...");			
-		PersistenceManager pm = pmf.getPersistenceManager();
+		ServerLogger.getLogger().info("- Cleaning the DB...");
 		pm.getFetchPlan().setMaxFetchDepth(3);
 
-		Transaction tx = pm.currentTransaction();
+		tx = pm.currentTransaction();
 		//Start the transaction
 		try {
 			tx.begin();
@@ -212,9 +210,9 @@ public class HotelDAO implements IHotelDAO {
 				tx.rollback();
 			}
 
-			if (pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+//			if (pm != null && !pm.isClosed()) {
+//				pm.close();
+//			}
 		}
 	}	
 }
