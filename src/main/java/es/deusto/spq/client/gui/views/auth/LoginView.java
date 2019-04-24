@@ -2,11 +2,9 @@ package es.deusto.spq.client.gui.views.auth;
 
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.gui.base.*;
-import es.deusto.spq.client.gui.views.admin.ClientWindow;
-import es.deusto.spq.client.gui.views.admin.HotelAdminView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
-import es.deusto.spq.server.locale.LocaleManager;
+import es.deusto.spq.client.gui.locale.LocaleManager;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

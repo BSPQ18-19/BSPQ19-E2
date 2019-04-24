@@ -2,7 +2,7 @@ package es.deusto.spq.client.gui.base;
 
 import es.deusto.spq.client.Client;
 import es.deusto.spq.client.logger.ClientLogger;
-import es.deusto.spq.server.locale.LocaleManager;
+import es.deusto.spq.client.gui.locale.LocaleManager;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 /**
  * Manages the whole UI View system.

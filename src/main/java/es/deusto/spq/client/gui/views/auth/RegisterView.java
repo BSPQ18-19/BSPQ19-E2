@@ -8,7 +8,7 @@ import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.util.SpringUtilities;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
-import es.deusto.spq.server.locale.LocaleManager;
+import es.deusto.spq.client.gui.locale.LocaleManager;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

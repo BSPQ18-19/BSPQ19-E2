@@ -1,4 +1,4 @@
-package es.deusto.spq.server.locale;
+package es.deusto.spq.client.gui.locale;
 
 import java.text.MessageFormat;
 import java.util.Locale;

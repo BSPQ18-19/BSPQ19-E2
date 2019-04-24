@@ -4,10 +4,9 @@ import es.deusto.spq.client.controller.*;
 import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewType;
-import es.deusto.spq.client.gui.views.auth.LoginView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
-import es.deusto.spq.server.locale.LocaleManager;
+import es.deusto.spq.client.gui.locale.LocaleManager;
 
 import java.util.Locale;
 

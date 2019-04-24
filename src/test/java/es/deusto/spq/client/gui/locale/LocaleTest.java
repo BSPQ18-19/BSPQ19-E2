@@ -1,7 +1,5 @@
-package es.deusto.spq.server.locale;
+package es.deusto.spq.client.gui.locale;
 
-import es.deusto.spq.server.locale.LocaleManager;
-import es.deusto.spq.server.locale.LocaleMode;
 import org.junit.Assert;
 import org.junit.Test;
 
