@@ -21,6 +21,7 @@ public class Hotel {
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
 	
+	//The list of the review of the hotel
 	@Persistent(defaultFetchGroup="true", mappedBy="hotel", dependentElement = "true")
 	private List<Review> reviews;
 	

@@ -43,30 +43,43 @@ public class ReviewDBTest {
 	}
 
 	/**
-	 * Stores a review and retrive it to see if the Review DAO and JDO work fine
+	 * Stores a review and the DAO return the stored review to see if the review was correctly stored
 	 */
 	@SuppressWarnings("deprecation")
 	@Test
 	public void aStoreReview() {
-		Review re = hotelDAO.storeReview(r, hotelID);
-		Assert.assertEquals(re.getReviewID(), r.getReviewID());
-		Assert.assertEquals(re.getOpinion(), r.getOpinion());
-		Assert.assertEquals(re.getScore(), r.getScore());
-		Assert.assertEquals(re.getPublishDate(), r.getPublishDate());
+		//Stores the review and return the stored review
+		Review detachedCopy = hotelDAO.storeReview(r, hotelID);
+		/*
+		 * Compares the parameters to see if is the same review. 
+		 * If the id is correct should be the same.
+		 * If we wished to compare the objects itself insted of the parameters we would have to add the review to the hotel outside the DB.
+		 */
+		Assert.assertEquals(detachedCopy.getReviewID(), r.getReviewID());
+		Assert.assertEquals(detachedCopy.getOpinion(), r.getOpinion());
+		Assert.assertEquals(detachedCopy.getScore(), r.getScore());
+		Assert.assertEquals(detachedCopy.getPublishDate(), r.getPublishDate());
 	}
 	
 	/**
-	 * Retrives a Hotel from DB and from that hotel it gets the review
+	 * Retrives a Hotel from DB and from that hotel it gets the review we have previously stored.
 	 */
 	@SuppressWarnings("deprecation")
 	@Test
 	public void bRetriveReviewFromHotel() {
+		//Gets the hotel from the DB
 		Hotel hotel = hotelDAO.getHotel(hotelID);
 		
+		//Gets the reviews from the hotel we retrived. here should be the one we previously stored.
 		reviews = hotel.getReviews();
 		Assert.assertEquals(1, reviews.size());
 		
 		Review re = reviews.get(0);
+		/*
+		 * Compares the parameters to see if is the same review. 
+		 * If the id is correct should be the same.
+		 * If we wished to compare the objects itself insted of the parameters we would have to add the review to the hotel outside the DB.
+		 */
 		Assert.assertEquals(re.getReviewID(), r.getReviewID());
 		Assert.assertEquals(re.getOpinion(), r.getOpinion());
 		Assert.assertEquals(re.getScore(), r.getScore());
@@ -79,11 +92,13 @@ public class ReviewDBTest {
 	@SuppressWarnings("deprecation")
 	@Test
 	public void cDeleteReview() {
+		//Deletes the review from DB and that also deletes the relation between this review and the hotel
 		hotelDAO.deleteReview(r.getReviewID());
 		Hotel hotel =  hotelDAO.getHotel(hotelID);
 		reviews = hotel.getReviews();
 		Assert.assertEquals(0, reviews.size());
 		
+		//Deletes the hotel in case the review was not previously deleted it would be deleted when deleting the hotel
 		hotelDAO.deleteHotel(h.getHotelId());
 	}
 }

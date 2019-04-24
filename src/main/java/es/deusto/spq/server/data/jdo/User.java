@@ -1,10 +1,6 @@
 
 package es.deusto.spq.server.data.jdo;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.jdo.annotations.*;
 
 @PersistenceCapable(detachable="true")
@@ -19,16 +15,12 @@ public abstract class User {
 	@Persistent(defaultFetchGroup="true")
 	private String password;
 	
-	/*@Persistent(defaultFetchGroup="true", mappedBy="user", dependentElement = "true")
-	private List<Review> reviews;*/
-	
 	public User(String userID, String name, String email, String password, String address) {
 		super();
 		this.userID = userID;
 		this.name = name;
 		this.email = email;
 		this.password = password;
-		//reviews = new ArrayList<Review>();
 	}
 	
 	public User(String userID, String name) {

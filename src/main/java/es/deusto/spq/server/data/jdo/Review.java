@@ -12,7 +12,8 @@ public class Review {
 	private String reviewID;
 	private String opinion;
 	private int score;
-	private Timestamp publishDate;	
+	private Timestamp publishDate;
+	//The hotel class for the DB to create the reference to the hotel that stores the review
 	private Hotel hotel;
 	
 	public Review(String reviewID, String opinion, int score, Timestamp publishDate) {

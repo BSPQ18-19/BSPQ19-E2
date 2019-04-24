@@ -157,14 +157,17 @@ public class HotelDAO implements IHotelDAO {
 		PersistenceManager pm = pmf.getPersistenceManager();	
 		Transaction tx = pm.currentTransaction();
 		try {
+			//Begin transaction
 			tx.begin();
 			
+			//Searches the hotel where the review is from
 			Query<Hotel> query = pm.newQuery(Hotel.class);
 			query.setFilter("hotelId == '" + hotelID + "'");
 			
 			@SuppressWarnings("unchecked")
 			List<Hotel> result = (List<Hotel>) query.execute();
 			Hotel hotel = result.get(0);
+			//Uses a method to store the review on the hotel and like that, it stores the review in the DB using a foreing key.
 			hotel.addReview(r);
 			
 			Review re = pm.detachCopy(r);
@@ -190,14 +193,18 @@ public class HotelDAO implements IHotelDAO {
 		PersistenceManager pm = pmf.getPersistenceManager();	
 		Transaction tx = pm.currentTransaction();
 		try {
+			//Transaction begin
 			tx.begin();
 			
+			//Searches the review we want to delete from DB
 			Query<Review> query = pm.newQuery(Review.class);
 			query.setFilter("reviewID == '" + reviewID + "'");
 			@SuppressWarnings("unchecked")
 			List<Review> queryExecution = (List<Review>) query.execute();
+			//Deletes the review
 			pm.deletePersistent(queryExecution.get(0));
 			
+			//Transaction ends
 			tx.commit();
 		}catch (Exception e) {
 			ServerLogger.getLogger().fatal("   $ Error Deleting a review: " + e.getMessage());
