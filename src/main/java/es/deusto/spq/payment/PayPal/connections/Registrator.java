@@ -69,6 +69,8 @@ public class Registrator extends Thread {
 	
 	@Override
 	public void run() {
+		if(client == null)
+			return;
 		try {
 			objectOutputStream.writeObject("USERNAME");
 			String username = (String) objectInputStream.readObject();
@@ -104,6 +106,8 @@ public class Registrator extends Thread {
 	 * {@link es.deusto.spq.payment.PayPal.PayPal} class.
 	 */
 	public void closeRegistrator() {
+		if(client == null)
+			return;
 		try {
 			client.close();
 		} catch (IOException e) {

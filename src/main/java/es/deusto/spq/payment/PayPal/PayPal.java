@@ -33,7 +33,6 @@ public class PayPal {
 	public static void main(String [] args) {
 		int port = Integer.parseInt(args[0]);
 		PayPal server = new PayPal();
-		log = PayPalLogger.getLogger();
 		try {
 			// Initializes the execution of the server.
 			server.start(port);
@@ -48,6 +47,7 @@ public class PayPal {
 	 * lists.
 	 */
 	public PayPal() {
+		log = PayPalLogger.getLogger();
 		activeListeners = new ArrayList<ServerListener>();
 		activePayers = new ArrayList<Payer>();
 		activeRegistrators = new ArrayList<Registrator>();
@@ -82,6 +82,8 @@ public class PayPal {
 	 * @param listener - the listener to be added.
 	 */
 	public static void addListener(ServerListener listener) {
+		if(listener == null)
+			return;
 		listenerLock.lock();
 		activeListeners.add(listener);
 		listenerLock.unlock();
@@ -94,6 +96,8 @@ public class PayPal {
 	 * @param listener - the listener to be removed.
 	 */
 	public static void removeListener(ServerListener listener) {
+		if(listener == null)
+			return;
 		listenerLock.lock();
 		activeListeners.remove(listener);
 		listenerLock.unlock();
@@ -106,6 +110,8 @@ public class PayPal {
 	 * @param payer - the payer to be added.
 	 */
 	public static void addPayer(Payer payer) {
+		if(payer == null)
+			return;
 		payerLock.lock();
 		activePayers.add(payer);
 		payerLock.unlock();
@@ -118,6 +124,8 @@ public class PayPal {
 	 * @param payer - the payer to be removed.
 	 */
 	public static void removePayer(Payer payer) {
+		if(payer == null)
+			return;
 		payerLock.lock();
 		activePayers.add(payer);
 		payerLock.unlock();
@@ -130,6 +138,8 @@ public class PayPal {
 	 * @param registrator - the registrator to be added.
 	 */
 	public static void addRegistrator(Registrator registrator) {
+		if(registrator == null)
+			return;
 		registratorLock.lock();
 		activeRegistrators.add(registrator);
 		registratorLock.unlock();
@@ -142,6 +152,8 @@ public class PayPal {
 	 * @param registrator - the registrator to be removed.
 	 */
 	public static void removeRegistrator(Registrator registrator) {
+		if(registrator == null)
+			return;
 		registratorLock.lock();
 		activeRegistrators.add(registrator);
 		registratorLock.unlock();
