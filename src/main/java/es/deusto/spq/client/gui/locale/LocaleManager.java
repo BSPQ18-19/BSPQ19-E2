@@ -30,12 +30,12 @@ public class LocaleManager {
      * Will always be en_EN fue to teacher's requirements.
      * (the course is in English)
      */
-    private static final Locale DEFAULT_LOCALE = new Locale("en", "EN");
+    private static final Locale DEFAULT_LOCALE = AllowedLocale.ENGLISH.getLocale();
 
     /**
      * The current locale of the system.
      */
-    private static Locale locale = new Locale("en", "EN");
+    private static Locale locale = DEFAULT_LOCALE;
 
     /**
      * The mode for displaying non-localized keys
