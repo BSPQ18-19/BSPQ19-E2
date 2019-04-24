@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.annotations.Element;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
 
@@ -16,7 +17,9 @@ public class Hotel {
 	private String location;
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
-	private ArrayList<Room> room;
+
+    @Element(column="hotelId")
+	private List<Room> rooms = new ArrayList<Room>();
 	
 	public Hotel(String hotelId, String name, String location, Timestamp seasonStart,
 			Timestamp seasonEnding) {
@@ -67,5 +70,17 @@ public class Hotel {
 	public void setSeasonEnding(Timestamp seasonEnding) {
 		this.seasonEnding = seasonEnding;
 	}
+
+	public List<Room> getRooms() {
+		return rooms;
+	}
+
+	public void setRooms(List<Room> rooms) {
+		this.rooms = rooms;
+	}
+	
+	
+
+	
 
 }

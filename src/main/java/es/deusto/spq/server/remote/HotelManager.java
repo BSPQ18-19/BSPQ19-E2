@@ -24,6 +24,8 @@ import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
+import es.deusto.spq.server.data.jdo.Room;
+import es.deusto.spq.server.data.jdo.RoomType;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -34,6 +36,8 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	private Set<UserDTO> loggedUsers;
 	private Logger log;
 	private Map<String, Hotel> hotels = new TreeMap<String, Hotel>();
+	private List<Room> rooms1 = new ArrayList<Room>();
+	private List<Room> rooms2 = new ArrayList<Room>();
 	private IHotelDAO dao;
 	
 	public HotelManager() throws RemoteException {
@@ -45,6 +49,14 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		log = ServerLogger.getLogger();
 		r = new Random();
 		
+		rooms1.add(new Room("R01", 250, 150, RoomType.DOUBLE, false));
+		rooms1.add(new Room("R02", 450, 400, RoomType.SUITE, false));
+		rooms1.add(new Room("R03", 350, 400, RoomType.TRIPLE, false));
+		rooms2.add(new Room("R05", 250, 150, RoomType.DOUBLE, false));
+		rooms2.add(new Room("R06", 250, 150, RoomType.DOUBLE, false));
+		rooms2.add(new Room("R07", 250, 150, RoomType.DOUBLE, false));
+		rooms2.add(new Room("R08", 200, 100, RoomType.SINGLE, false));
+		
 		
 		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", Timestamp.valueOf(LocalDate.of(2019, 04, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 12, 31).atStartOfDay())));
 		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", Timestamp.valueOf(LocalDate.of(2019, 06, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 9, 30).atStartOfDay())));
@@ -53,8 +65,11 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", Timestamp.valueOf(LocalDate.of(2019, 05, 14).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 11, 30).atStartOfDay())));
 		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", Timestamp.valueOf(LocalDate.of(2019, 04, 20).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 11, 30).atStartOfDay())));
 	
+		
 		this.dao = new HotelDAO();
 		dao.cleanDB();
+		hotels.get("H01").setRooms(rooms1);
+		hotels.get("H02").setRooms(rooms2);
 		for(Hotel hotel: hotels.values()) {
 			dao.storeHotel(hotel);
 		}

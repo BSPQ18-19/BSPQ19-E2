@@ -2,7 +2,6 @@ package es.deusto.spq.server.data.dao;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
 
 import es.deusto.spq.server.data.jdo.Hotel;
 

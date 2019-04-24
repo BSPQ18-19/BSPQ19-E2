@@ -1,7 +1,5 @@
 package es.deusto.spq.server.data.jdo;
 
-import java.util.List;
-
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
 
@@ -14,7 +12,8 @@ public class Room {
 	private float price; 
 	private RoomType type;
 	private boolean isOccupied;
-//	private List<String> features;
+	
+
 	
 	/**
 	 * @param roomId Id of the room
