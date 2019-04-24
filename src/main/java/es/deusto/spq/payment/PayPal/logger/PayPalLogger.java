@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 /**
  * The logger manager for the PayPal sever, so that there's only one log in this external
  * service. It can be retrieved to log messages.
+ * 
  * @author Iker
  *
  */

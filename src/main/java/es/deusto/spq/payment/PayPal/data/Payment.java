@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 /**
  * The Payment data model the PayPal server uses.
+ * 
  * @author Iker
  *
  */

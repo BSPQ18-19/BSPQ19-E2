@@ -16,18 +16,19 @@ import es.deusto.spq.payment.PayPal.data.User;
 import es.deusto.spq.payment.PayPal.logger.PayPalLogger;
 
 /**
- * This is one type of thread that will run on the PayPal server. The only aim of this thread is
+ * <p>This is one type of thread that will run on the PayPal server. The only aim of this thread is
  * to process the payment of a client. There's only one chance to process it, if an error occurs
  * (such as a wrong input on the password), this thread is closed and a new thread must be
  * generated. The server requests to the client any information it needs; and at the end, it
  * informs whether the payment has been successfully processed (with an  "OK" response), or not
  * (with an "ERROR" response). However, the connection with the client can also be closed
- * through the <code>closePayer</code> method.
+ * through the <code>closePayer</code> method.</p>
  * 
- * In order to initialize a Payer thread, call Thread's <code>start</code> method. The thread
+ * <p>In order to initialize a Payer thread, call Thread's <code>start</code> method. The thread
  * is automatically closed when it finishes the payment process, including the removal of
- * itself from {@link es.deusto.spq.payment.PayPal.PayPal}'s payer's thread list. Please note
- * that the thread doesn't add itself to that pool. 
+ * itself from {@link es.deusto.spq.payment.PayPal.PayPal}'s payers thread list. Please note
+ * that the thread doesn't add itself to that pool.</p>
+ * 
  * @author Iker
  *
  */
@@ -92,13 +93,16 @@ public class Payer extends Thread {
 	
 	/**
 	 * Closes the connection with the client. If an IOException arises, it is logged to
-	 * the logger.
+	 * the logger. At the end, this thread is removed from the pool of Payers in
+	 * {@link es.deusto.spq.payment.PayPal.PayPal} class.
 	 */
 	public void closePayer() {
 		try {
 			client.close();
 		} catch (IOException e) {
 			log.warn(e.getMessage());
+		} finally {
+			PayPal.removePayer(this);
 		}
 	}
 	

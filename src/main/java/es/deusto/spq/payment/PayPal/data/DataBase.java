@@ -17,7 +17,8 @@ import es.deusto.spq.payment.PayPal.logger.PayPalLogger;
  * the server will ever have will be small, so there won't be any problem storing the
  * data this class will store in memory. However, if this code is going to be used in a
  * scalable project, the approach mentioned at the beginning of the paragraph is recommended
- * to be followed. 
+ * to be followed.
+ * 
  * @author Iker
  *
  */

@@ -2,6 +2,7 @@ package es.deusto.spq.payment.PayPal.data;
 
 /**
  * The User data model the PayPal server uses.
+ * 
  * @author Iker
  *
  */

@@ -13,14 +13,15 @@ import es.deusto.spq.payment.PayPal.connections.ServerListener;
 import es.deusto.spq.payment.PayPal.logger.PayPalLogger;
 
 /**
- * The main class of the PayPal server. The whole server is initialized, including the
+ * <p>The main class of the PayPal server. The whole server is initialized, including the
  * pools of the new threads that have not been closed. Nevertheless, the initialization
  * can also be done from another class through the <code>start</code> method. In order
  * to shut down the server, call the <code>closeServer</code> method. Thread pools that
- * keep track of the active or waiting threads are thread-safe.
+ * keep track of the active or waiting threads are thread-safe.</p>
  * 
- * The server will run in the port on the first argument, no other arguments are needed
- * (not checked, ignored).
+ * <p>The server will run in the port on the first argument, no other arguments are needed
+ * (not checked, ignored).</p>
+ * 
  * @author Iker
  *
  */
