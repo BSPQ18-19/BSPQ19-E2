@@ -3,6 +3,7 @@ package es.deusto.spq.client.gui.base;
 import es.deusto.spq.client.Client;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.gui.locale.LocaleManager;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -131,6 +132,17 @@ public class ViewManager {
 
         menuMainItem.addSeparator();
 
+        JMenuItem localeMenuItem = new JMenuItem("Locale settings");
+        localeMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openView(ViewFactory.buildView(ViewType.LOCALE_SETTINGS, getViewManager()));
+            }
+        });
+        menuMainItem.add(localeMenuItem);
+
+        menuMainItem.addSeparator();
+
         JMenuItem salirMenuItem = new JMenuItem(LocaleManager.getMessage("menu.quit"));
         salirMenuItem.setAccelerator(KeyStroke.getKeyStroke('Q', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
         salirMenuItem.addActionListener(new ActionListener() {
@@ -227,5 +239,10 @@ public class ViewManager {
         desktopPane.add(view.getInternalFrame());
         view.bringToFront();
 
+    }
+
+    @Contract(value = " -> this", pure = true)
+    private ViewManager getViewManager() {
+        return this;
     }
 }
