@@ -2,7 +2,7 @@ package es.deusto.spq.client.gui.views.auth;
 
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.gui.base.*;
-import es.deusto.spq.client.gui.views.admin.ClientWindow;
+import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 import es.deusto.spq.client.gui.views.admin.HotelAdminView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
@@ -142,6 +142,7 @@ public class LoginView extends View {
                     else
                         ;//TODO admin GUI
                     getViewManager().openView(ViewFactory.buildView(ViewType.ADMIN_HOTELS, getViewManager()));
+                    getViewManager().openView(ViewFactory.buildView(ViewType.GUEST_HOTELS, getViewManager()));
                     dispose();
                     JOptionPane.showMessageDialog(frame, "Succesfull login", "Succesfull login", JOptionPane.INFORMATION_MESSAGE);
                 }

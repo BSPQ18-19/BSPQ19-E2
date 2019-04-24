@@ -1,4 +1,4 @@
-package es.deusto.spq.client.gui;
+package es.deusto.spq.client.gui.views.guest;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 import com.github.lgooddatepicker.components.CalendarPanel;
 
 import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.gui.views.admin.ClientWindow;
+import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.HotelDTO;
 
@@ -128,7 +128,7 @@ public class HotelGuestSearchingPanel extends JPanel {
 				try {
 					controller.logOut();
 					JOptionPane.showMessageDialog(null,  "Successfully logged out", "Logged out",JOptionPane.INFORMATION_MESSAGE);
-					ClientWindow.getClientWindow(controller).dispose();
+					ClientWindowAdmin.getClientWindow(controller).dispose();
 				} catch (RemoteException e1) {
 					log.info("Error while trying to log out: " + e1.getMessage());
 				}

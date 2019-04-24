@@ -1,24 +1,25 @@
-package es.deusto.spq.client.gui.views.admin;
+package es.deusto.spq.client.gui.views.guest;
+
+import javax.swing.*;
+
+import org.jetbrains.annotations.Nullable;
 
 import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewPermission;
 import es.deusto.spq.client.gui.base.ViewType;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+public class HotelGuestView extends View{
 
-public class HotelAdminView extends View {
+    ClientWindowGuest clientWindow;
 
-    ClientWindowAdmin clientWindow;
-
-    public HotelAdminView(ViewManager viewManager) {
+    public HotelGuestView(ViewManager viewManager) {
         super(viewManager);
     }
 
     @Override
     public ViewType getViewType() {
-        return ViewType.ADMIN_HOTELS;
+        return ViewType.GUEST_HOTELS;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class HotelAdminView extends View {
 
     @Override
     public void initialize() {
-        clientWindow = ClientWindowAdmin.getClientWindow(getViewManager().getClient().getController());
+        clientWindow = ClientWindowGuest.getClientWindow(getViewManager().getClient().getController());
         clientWindow.setVisible(true);
     }
 

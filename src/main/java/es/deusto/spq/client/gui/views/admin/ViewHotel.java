@@ -54,7 +54,7 @@ public class ViewHotel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindow.getClientWindow(controller).changeScreen(ScreenType.CREATE_HOTEL_ADMIN);
+				ClientWindowAdmin.getClientWindow(controller).changeScreen(ScreenTypeAdmin.CREATE_HOTEL_ADMIN);
 				confirm.setEnabled(true);
 				
 			}
@@ -66,7 +66,7 @@ public class ViewHotel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindow.getClientWindow(controller).changeScreen(ScreenType.VIEW_HOTEL_ADMIN);			
+				ClientWindowAdmin.getClientWindow(controller).changeScreen(ScreenTypeAdmin.VIEW_HOTEL_ADMIN);			
 			}
 		});
 		

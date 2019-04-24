@@ -4,15 +4,15 @@ import javax.swing.*;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.gui.HotelGuestSearchingPanel;
+import es.deusto.spq.client.gui.views.guest.HotelGuestSearchingPanel;
 
 import org.apache.log4j.Logger;
 
-public class ClientWindow extends JInternalFrame {
+public class ClientWindowAdmin extends JInternalFrame {
 	
 	private static final long serialVersionUID = 1L;
-	private static ClientWindow clientWindow;
-	private ScreenType currentScreenType;
+	private static ClientWindowAdmin clientWindow;
+	private ScreenTypeAdmin currentScreenType;
 	private int screenWidth, screenHeight;
 	private HotelManagementController controller;
 	private JPanel mainPanel;
@@ -20,7 +20,7 @@ public class ClientWindow extends JInternalFrame {
 	
 
 	// private constructor using lazy singleton
-	private ClientWindow(HotelManagementController controller) {
+	private ClientWindowAdmin(HotelManagementController controller) {
 		log = ClientLogger.getLogger();
 		
 		this.controller = controller;
@@ -34,12 +34,12 @@ public class ClientWindow extends JInternalFrame {
 		this.screenWidth = (int) windowSize.getWidth();
 		this.screenHeight = (int) windowSize.getHeight();
 		
-		changeScreen(ScreenType.GUEST_SEARCH);
+		changeScreen(ScreenTypeAdmin.VIEW_HOTEL_ADMIN);
 		
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
-	public void changeScreen(ScreenType nextScreenType) {
+	public void changeScreen(ScreenTypeAdmin nextScreenType) {
 		this.currentScreenType = nextScreenType;
 		
 		switch(nextScreenType) {
@@ -49,9 +49,6 @@ public class ClientWindow extends JInternalFrame {
 		case CREATE_HOTEL_ADMIN:
 			mainPanel = new CreateHotel(screenWidth, screenHeight, controller);
 			break;
-		case GUEST_SEARCH:
-			mainPanel = new HotelGuestSearchingPanel(screenWidth, screenHeight, controller);
-			break;
 		default:
 			break;
 		}
@@ -60,9 +57,9 @@ public class ClientWindow extends JInternalFrame {
 	}
 
 	// lazy singleton
-	public static ClientWindow getClientWindow(HotelManagementController controller) {
+	public static ClientWindowAdmin getClientWindow(HotelManagementController controller) {
 		if (clientWindow == null)
-			clientWindow = new ClientWindow(controller);
+			clientWindow = new ClientWindowAdmin(controller);
 		return clientWindow;
 	}
 

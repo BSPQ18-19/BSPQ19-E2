@@ -27,4 +27,9 @@ public enum ViewType
      * Admin window to manage existing hotels, delete them and create new.
      */
     ADMIN_HOTELS,
+    
+    /**
+     * Guest window to manage requested hotels, searching them and booking rooms
+     */
+     GUEST_HOTELS
 }
