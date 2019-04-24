@@ -17,7 +17,7 @@ public class LocaleTest {
 	@Test
 	public void getMessage_DefaultLocale_IsEnglish() {
 
-        Locale englishLocale = new Locale("en", "EN");
+        Locale englishLocale = new Locale("en", "US");
 
         // Check expected default value
         Assert.assertEquals(englishLocale, LocaleManager.getDefaultLocale());
@@ -35,7 +35,7 @@ public class LocaleTest {
         Assert.assertEquals(spanishLocale, LocaleManager.getLocale());
 
         // Test again, in English
-        Locale englishLocale = new Locale("en", "EN");
+        Locale englishLocale = new Locale("en", "US");
         LocaleManager.setLocale(englishLocale);
         Assert.assertEquals(englishLocale, LocaleManager.getLocale());
 
