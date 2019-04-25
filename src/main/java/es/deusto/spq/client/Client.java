@@ -5,6 +5,7 @@ import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.locale.AllowedLocale;
+import es.deusto.spq.client.gui.locale.LocaleMode;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.client.gui.locale.LocaleManager;
@@ -63,6 +64,7 @@ public class Client {
 		viewManager = new ViewManager(this);
 		viewManager.initialize();
 		viewManager.openView(ViewFactory.buildView(ViewType.LOGIN, viewManager));
+		localeManager.setMode(LocaleMode.DEBUG);
 	}
 
 	public HotelManagementController getController() {
