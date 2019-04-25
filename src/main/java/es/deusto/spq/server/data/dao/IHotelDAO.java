@@ -13,16 +13,4 @@ public interface IHotelDAO {
 	public ArrayList<Hotel> getHotels();
 	public boolean deleteHotel(String hotelID);
 	public void cleanDB();
-	/**
-	 * Stores a review in the database
-	 * @param r the review we want to store
-	 * @param hotelID the hotel the Review is about
-	 * @return a detached copy of the new review or null if theres an error.
-	 */
-	public Review storeReview(Review r, String hotelID);
-	/**
-	 * Deletes a review from the DB
-	 * @param reviewID the id of the review we want to delete from the DB
-	 */
-	public void deleteReview(String reviewID);
 }

@@ -21,10 +21,6 @@ public class Hotel {
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
 	
-	//The list of the review of the hotel
-	@Persistent(defaultFetchGroup="true", mappedBy="hotel", dependentElement = "true")
-	private List<Review> reviews;
-	
 	public Hotel(String hotelId, String name, String location, Timestamp seasonStart,
 			Timestamp seasonEnding) {
 		
@@ -33,19 +29,6 @@ public class Hotel {
 		this.location = location;
 		this.seasonStart = seasonStart;
 		this.seasonEnding = seasonEnding;
-		reviews = new ArrayList<Review>();
-	}
-
-	public void addReview(Review r) {
-		reviews.add(r);
-	}
-	
-	public void deleteReview(Review r) {
-		reviews.remove(r);
-	}
-	
-	public List<Review> getReviews() {
-		return reviews;
 	}
 	
 	public String getHotelId() {

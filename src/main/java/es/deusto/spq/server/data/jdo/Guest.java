@@ -1,6 +1,8 @@
 package es.deusto.spq.server.data.jdo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -12,7 +14,7 @@ public class Guest extends User implements Serializable {
 	private String phone;
 	@Persistent(defaultFetchGroup="true")
 	private String address;
-
+	
 	public Guest(String userID, String name, String email, String password, String phone, String address) {
 		super(userID, name, email, password, address);
 		this.phone = phone;
@@ -22,7 +24,7 @@ public class Guest extends User implements Serializable {
 	public Guest(String userID, String name) {
 		super(userID, name);
 	}
-	
+
 	public String getPhone() {
 		return phone;
 	}
