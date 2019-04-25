@@ -20,7 +20,7 @@ public class Client {
 	/**
 	 * Manages all localized strings
 	 */
-	private LocaleManager localeManager = new LocaleManager();
+	private LocaleManager localeManager = new LocaleManager(this);
 
 	public ViewManager getViewManager() {
 		return viewManager;

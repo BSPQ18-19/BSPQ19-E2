@@ -1,7 +1,9 @@
 package es.deusto.spq.client.gui.locale;
 
+import es.deusto.spq.client.Client;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.Locale;
 
@@ -17,12 +19,14 @@ public class LocaleTest {
 	@Test
 	public void getMessage_DefaultLocale_IsEnglish() {
 
-	    LocaleManager localeManager = new LocaleManager();
+        Client client = Mockito.mock(Client.class);
+        LocaleManager localeManager = new LocaleManager(client);
 
         Locale englishLocale = new Locale("en", "US");
 
         // Check expected default value
-        Assert.assertEquals(englishLocale, localeManager.getDefaultLocale());
+        Assert.assertEquals(englishLocale, LocaleManager.DEFAULT_LOCALE);
+        Assert.assertEquals(localeManager.getLocale(), LocaleManager.DEFAULT_LOCALE);
     }
 
     /**
@@ -31,7 +35,8 @@ public class LocaleTest {
     @Test
     public void setLocale_GetterSetter_ExpectedBehaviour() {
 
-        LocaleManager localeManager = new LocaleManager();
+        Client client = Mockito.mock(Client.class);
+        LocaleManager localeManager = new LocaleManager(client);
 
         // Test to change the locale
         Locale spanishLocale = new Locale("es", "ES");
@@ -48,10 +53,11 @@ public class LocaleTest {
     @Test
     public void getMessage_LocaleChanges_CorrectMessage() {
 
-        LocaleManager localeManager = new LocaleManager();
+        Client client = Mockito.mock(Client.class);
+        LocaleManager localeManager = new LocaleManager(client);
 
         // First, with default locale
-        localeManager.setLocale(localeManager.getDefaultLocale());
+        localeManager.setLocale(LocaleManager.DEFAULT_LOCALE);
 
         Assert.assertEquals("Hello world!", localeManager.getMessage("test.hello"));
         Assert.assertEquals("Bye bye!", localeManager.getMessage("test.bye"));
@@ -65,7 +71,7 @@ public class LocaleTest {
         Assert.assertEquals("áéíóúÁÉÍÓÚñÑç¡¿\"\"", localeManager.getMessage("test.specialchars"));
 
         // Parametrized examples
-        localeManager.setLocale(localeManager.getDefaultLocale());
+        localeManager.setLocale(LocaleManager.DEFAULT_LOCALE);
         Assert.assertEquals("If you add 1 and 2, you get 3", localeManager.getMessage("test.parameters.1", 1+2));
         Assert.assertEquals("Hello, John. You have 2 pending payments.",
                 localeManager.getMessage("test.parameters.2", "John", 2));
@@ -78,7 +84,8 @@ public class LocaleTest {
     @Test
     public void getDefaultLocalMode_DefaultLocale_IsNormal() {
 
-        LocaleManager localeManager = new LocaleManager();
+        Client client = Mockito.mock(Client.class);
+        LocaleManager localeManager = new LocaleManager(client);
 
         Assert.assertEquals(LocaleMode.NORMAL, localeManager.getDefaultLocaleMode());
     }
@@ -89,7 +96,8 @@ public class LocaleTest {
     @Test
     public void getLocaleMode_GetterSetter_ExpectedBehaviour() {
 
-        LocaleManager localeManager = new LocaleManager();
+        Client client = Mockito.mock(Client.class);
+        LocaleManager localeManager = new LocaleManager(client);
 
         localeManager.setMode(LocaleMode.DEBUG);
         Assert.assertEquals(LocaleMode.DEBUG, localeManager.getMode());
@@ -106,7 +114,8 @@ public class LocaleTest {
     @Test
     public void getMessage_InvalidKeyNormalModePresentInDefault_DefaultFallback() {
 
-        LocaleManager localeManager = new LocaleManager();
+        Client client = Mockito.mock(Client.class);
+        LocaleManager localeManager = new LocaleManager(client);
 
         localeManager.setMode(LocaleMode.NORMAL);
         localeManager.setLocale(new Locale("es", "ES"));
@@ -122,7 +131,8 @@ public class LocaleTest {
     @Test
     public void getMessage_InvalidKeyDebugModePresentInDefault_NoFallback() {
 
-        LocaleManager localeManager = new LocaleManager();
+        Client client = Mockito.mock(Client.class);
+        LocaleManager localeManager = new LocaleManager(client);
 
         localeManager.setMode(LocaleMode.DEBUG);
         localeManager.setLocale(new Locale("es", "ES"));
@@ -137,7 +147,8 @@ public class LocaleTest {
     @Test
     public void getMessage_InvalidKeyNotPresent_PrintKey() {
 
-        LocaleManager localeManager = new LocaleManager();
+        Client client = Mockito.mock(Client.class);
+        LocaleManager localeManager = new LocaleManager(client);
 
         Assert.assertEquals("test.invalid", localeManager.getMessage("test.invalid"));
 
