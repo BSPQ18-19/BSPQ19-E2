@@ -2,20 +2,13 @@ package es.deusto.spq.server.data.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import es.deusto.spq.client.logger.ClientLogger;
 import javax.jdo.Extent;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
-
-import org.apache.log4j.Logger;
-
 import es.deusto.spq.server.data.jdo.Hotel;
-import es.deusto.spq.server.data.jdo.Review;
-import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
 public class HotelDAO implements IHotelDAO {

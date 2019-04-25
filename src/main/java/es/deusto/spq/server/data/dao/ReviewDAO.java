@@ -3,48 +3,49 @@ package es.deusto.spq.server.data.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
-import es.deusto.spq.server.data.dto.Assembler;
-import es.deusto.spq.server.data.dto.UserDTO;
-import es.deusto.spq.server.data.jdo.Guest;
-import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Review;
-import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
+/**
+ * The DAO class for the Review
+ *
+ * @author egoes
+ */
 public class ReviewDAO implements IReviewDAO {
-
+	//The persistence manger variable.
 	private PersistenceManager pm;
+	//The transaction variable needed to make operations on the DB.
 	private Transaction tx;
-	
+
 	public ReviewDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
 	}
-	
+
 	@Override
-	public Review storeReview(Review r, String hotelID, String userID) {	
-		if(!checkUserReview(hotelID, userID)) return null;
+	public Review storeReview(Review r, String hotelID, String userID) {
+		if (!checkUserReview(hotelID, userID))
+			return null;
 		tx = pm.currentTransaction();
 		try {
-			//Begin transaction
+			// Begin transaction
 			tx.begin();
-			
+
 			pm.makePersistent(r);
-			
+
 			tx.commit();
-			
+
 			Review re = pm.detachCopy(r);
 			return re;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			ServerLogger.getLogger().fatal("   $ Error Storing a review: " + e.getMessage());
-		}finally {
+		} finally {
 			close();
-	    }
+		}
 		return null;
 	}
 
@@ -84,15 +85,15 @@ public class ReviewDAO implements IReviewDAO {
 			Query<Review> query = pm.newQuery(Review.class);
 			@SuppressWarnings("unchecked")
 			List<Review> queryExecution = (List<Review>) query.execute();
-			
+
 			tx.commit();
 
-			for(Review r : queryExecution) {
-				if(r.getHotel().getHotelId().equals(hotelID) && r.getUser().getUserID().equals(userID)) {
+			for (Review r : queryExecution) {
+				if (r.getHotel().getHotelId().equals(hotelID) && r.getUser().getUserID().equals(userID)) {
 					return false;
 				}
 			}
-			
+
 			return true;
 		} catch (Exception e) {
 			ServerLogger.getLogger().fatal("Error in ReviewDAO:checkUserReview()");
@@ -102,7 +103,7 @@ public class ReviewDAO implements IReviewDAO {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public List<Review> getReviewsOfHotel(String hotelID) {
 		try {
@@ -114,9 +115,10 @@ public class ReviewDAO implements IReviewDAO {
 			List<Review> queryExecution = (List<Review>) query.execute();
 			List<Review> result = new ArrayList<Review>();
 			for (Review r : queryExecution) {
-				if(r.getHotel().getHotelId().equals(hotelID)) result.add(r);
+				if (r.getHotel().getHotelId().equals(hotelID))
+					result.add(r);
 			}
-				
+
 			tx.commit();
 
 			return result;
@@ -142,9 +144,10 @@ public class ReviewDAO implements IReviewDAO {
 			List<Review> queryExecution = (List<Review>) query.execute();
 			List<Review> result = new ArrayList<Review>();
 			for (Review r : queryExecution) {
-				if(r.getUser().getUserID().equals(userID)) result.add(r);
+				if (r.getUser().getUserID().equals(userID))
+					result.add(r);
 			}
-				
+
 			tx.commit();
 
 			return result;
@@ -157,12 +160,12 @@ public class ReviewDAO implements IReviewDAO {
 			close();
 		}
 		return null;
-	}	
-	
+	}
+
 	/**
 	 * Closes the transaction if it hasn't been closed before, and makes rollback.
 	 */
-	private final void close() {
+	private void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
 	}

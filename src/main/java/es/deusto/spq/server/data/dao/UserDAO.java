@@ -10,7 +10,6 @@ import javax.jdo.Transaction;
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.UserDTO;
-import es.deusto.spq.server.data.jdo.Review;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
