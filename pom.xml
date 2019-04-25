@@ -16,7 +16,7 @@
 		<server.IP>127.0.0.1</server.IP>
 		<server.port>1099</server.port>
 		<server.Name>HotelManagementServer</server.Name>
-		<paypal.port>45000</paypal.port>
+		<mastercard.port>45001</mastercard.port>
 		<policy.file>${basedir}/src/main/resources/security/java.policy</policy.file>
 		<config.files.dir>${basedir}/src/main/resources</config.files.dir>
 	</properties>
@@ -289,9 +289,9 @@
 			</build>
 		</profile>
 		
-		<!-- run as 'mvn exec:java -Ppaypal' -->
+		<!-- run as 'mvn exec:java -Pmastercard' -->
 		<profile>
-			<id>paypal</id>
+			<id>mastercard</id>
 			<build>
 				<plugins>
 					<plugin>
@@ -299,7 +299,7 @@
 						<artifactId>exec-maven-plugin</artifactId>
 						<version>1.2.1</version>
 						<configuration>
-							<mainClass>es.deusto.spq.payment.PayPal.PayPal</mainClass>
+							<mainClass>es.deusto.spq.payment.mastercard.Mastercard</mainClass>
 							<systemProperties>
 								<systemProperty>
 									<key>java.security.manager</key>
@@ -315,7 +315,7 @@
 								</systemProperty>
 							</systemProperties>
 							<arguments>
-								<argument>${paypal.port}</argument>
+								<argument>${mastercard.port}</argument>
 							</arguments>
 						</configuration>
 					</plugin>

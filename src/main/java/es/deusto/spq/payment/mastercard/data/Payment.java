@@ -1,10 +1,10 @@
-package es.deusto.spq.payment.PayPal.data;
+package es.deusto.spq.payment.mastercard.data;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
- * The Payment data model the PayPal server uses.
+ * The Payment data model the Mastercard server uses.
  * 
  * @author Iker
  *

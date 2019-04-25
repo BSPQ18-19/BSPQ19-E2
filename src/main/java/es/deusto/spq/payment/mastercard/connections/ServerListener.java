@@ -1,4 +1,4 @@
-package es.deusto.spq.payment.PayPal.connections;
+package es.deusto.spq.payment.mastercard.connections;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -9,28 +9,28 @@ import java.net.SocketException;
 
 import org.apache.log4j.Logger;
 
-import es.deusto.spq.payment.PayPal.PayPal;
-import es.deusto.spq.payment.PayPal.logger.PayPalLogger;
+import es.deusto.spq.payment.mastercard.Mastercard;
+import es.deusto.spq.payment.mastercard.logger.MastercardLogger;
 
 /**
- * <p>This is one type of thread that will run on the PayPal server. The only aim of this
+ * This is one type of thread that will run on the PayPal server. The only aim of this
  * thread is to wait for clients and create new threads for the registration and payment 
  * (no thread is created if the option is not valid). There's only one change to submit 
  * the proper option: if it is valid a new thread will be created and the client will 
  * continue its conversation with that new thread; but if the option is not available, 
- * an "ERROR" message will be sent to the client and the connection will be closed.</p>
- * 
- * <p>{@link es.deusto.spq.payment.PayPal.connections.Payer} to process the payment and 
- * {@link es.deusto.spq.payment.PayPal.connections.Registrator} to register new users are
- * the only options that can be executed.</p>
- * 
- * <p>In order to initialize a ServerListener, the port number must be provided (to be 
+ * an "ERROR" message will be sent to the client and the connection will be closed.
+ * <p>
+ * {@link es.deusto.spq.payment.mastercard.connections.Payer} to process the payment and 
+ * {@link es.deusto.spq.payment.mastercard.connections.Registrator} to register new users are
+ * the only options that can be executed.
+ * <p>
+ * In order to initialize a ServerListener, the port number must be provided (to be 
  * used by the server to wait for connections). After the initialization, the Thread's 
- * <code>start</code> method must be called to begin the execution.</p>
- * 
- * <p>Finally, <code>closeListener</code> method can be used to close this thread. Although 
- * this thread does not include itself in {@link es.deusto.spq.payment.PayPal.PayPal}'s 
- * listeners thread list, it removes itself from it before it ends the execution.</p>
+ * {@code start} method must be called to begin the execution.
+ * <p>
+ * Finally, {@code closeListener} method can be used to close this thread. Although 
+ * this thread does not include itself in {@link es.deusto.spq.payment.mastercard.Mastercard}'s 
+ * listeners thread list, it removes itself from it before it ends the execution.
  * 
  * @author Iker
  *
@@ -51,7 +51,7 @@ public class ServerListener extends Thread {
 	 * @throws IOException - launched by the connection.
 	 */
 	public ServerListener(int port) throws IOException {
-		log = PayPalLogger.getLogger();
+		log = MastercardLogger.getLogger();
 		server = new ServerSocket(port);
 		server.setReuseAddress(true);
 	}
@@ -77,14 +77,9 @@ public class ServerListener extends Thread {
 				
 				// The options the client has with its connection.
 				switch(message) {
-				case "REGISTER":
-					Registrator registrator = new Registrator(client, objectOutputStream, objectInputStream);
-					PayPal.addRegistrator(registrator);
-					registrator.start();
-					break;
 				case "PAY":
 					Payer payer = new Payer(client, objectOutputStream, objectInputStream);
-					PayPal.addPayer(payer);
+					Mastercard.addPayer(payer);
 					payer.start();
 					break;
 				default:
@@ -115,7 +110,7 @@ public class ServerListener extends Thread {
 	 */
 	public void closeListener() {
 		serverActive = false;
-		PayPal.removeListener(this);
+		Mastercard.removeListener(this);
 	}
 
 }
