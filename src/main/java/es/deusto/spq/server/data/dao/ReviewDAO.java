@@ -17,9 +17,9 @@ import es.deusto.spq.server.logger.ServerLogger;
  * @author egoes
  */
 public class ReviewDAO implements IReviewDAO {
-	//The persistence manger variable.
-	private PersistenceManager pm;
-	//The transaction variable needed to make operations on the DB.
+	// The persistence manger variable.
+	private final PersistenceManager pm;
+	// The transaction variable needed to make operations on the DB.
 	private Transaction tx;
 
 	public ReviewDAO() {
@@ -39,9 +39,9 @@ public class ReviewDAO implements IReviewDAO {
 
 			tx.commit();
 
-			Review re = pm.detachCopy(r);
+			final Review re = pm.detachCopy(r);
 			return re;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ServerLogger.getLogger().fatal("   $ Error Storing a review: " + e.getMessage());
 		} finally {
 			close();
@@ -55,10 +55,10 @@ public class ReviewDAO implements IReviewDAO {
 			tx = pm.currentTransaction();
 			tx.begin();
 
-			Query<Review> query = pm.newQuery(Review.class);
+			final Query<Review> query = pm.newQuery(Review.class);
 			query.setFilter("reviewID == '" + reviewID + "'");
 			@SuppressWarnings("unchecked")
-			List<Review> queryExecution = (List<Review>) query.execute();
+			final List<Review> queryExecution = (List<Review>) query.execute();
 			if (queryExecution.isEmpty() || queryExecution.size() > 1)
 				return false;
 			pm.deletePersistent(queryExecution.get(0));
@@ -67,7 +67,7 @@ public class ReviewDAO implements IReviewDAO {
 
 			return true;
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ServerLogger.getLogger().fatal("Error in ReviewDAO:deleteReview()");
 			e.printStackTrace();
 		} finally {
@@ -82,20 +82,18 @@ public class ReviewDAO implements IReviewDAO {
 			tx = pm.currentTransaction();
 			tx.begin();
 
-			Query<Review> query = pm.newQuery(Review.class);
+			final Query<Review> query = pm.newQuery(Review.class);
 			@SuppressWarnings("unchecked")
-			List<Review> queryExecution = (List<Review>) query.execute();
+			final List<Review> queryExecution = (List<Review>) query.execute();
 
 			tx.commit();
 
-			for (Review r : queryExecution) {
-				if (r.getHotel().getHotelId().equals(hotelID) && r.getUser().getUserID().equals(userID)) {
+			for (final Review r : queryExecution)
+				if (r.getHotel().getHotelId().equals(hotelID) && r.getUser().getUserID().equals(userID))
 					return false;
-				}
-			}
 
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ServerLogger.getLogger().fatal("Error in ReviewDAO:checkUserReview()");
 			e.printStackTrace();
 		} finally {
@@ -110,20 +108,19 @@ public class ReviewDAO implements IReviewDAO {
 			tx = pm.currentTransaction();
 			tx.begin();
 
-			Query<Review> query = pm.newQuery(Review.class);
+			final Query<Review> query = pm.newQuery(Review.class);
 			@SuppressWarnings("unchecked")
-			List<Review> queryExecution = (List<Review>) query.execute();
-			List<Review> result = new ArrayList<Review>();
-			for (Review r : queryExecution) {
+			final List<Review> queryExecution = (List<Review>) query.execute();
+			final List<Review> result = new ArrayList<Review>();
+			for (final Review r : queryExecution)
 				if (r.getHotel().getHotelId().equals(hotelID))
 					result.add(r);
-			}
 
 			tx.commit();
 
 			return result;
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ServerLogger.getLogger().fatal("Error in UserDAO:getUsers()");
 			e.printStackTrace();
 
@@ -139,20 +136,19 @@ public class ReviewDAO implements IReviewDAO {
 			tx = pm.currentTransaction();
 			tx.begin();
 
-			Query<Review> query = pm.newQuery(Review.class);
+			final Query<Review> query = pm.newQuery(Review.class);
 			@SuppressWarnings("unchecked")
-			List<Review> queryExecution = (List<Review>) query.execute();
-			List<Review> result = new ArrayList<Review>();
-			for (Review r : queryExecution) {
+			final List<Review> queryExecution = (List<Review>) query.execute();
+			final List<Review> result = new ArrayList<Review>();
+			for (final Review r : queryExecution)
 				if (r.getUser().getUserID().equals(userID))
 					result.add(r);
-			}
 
 			tx.commit();
 
 			return result;
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ServerLogger.getLogger().fatal("Error in UserDAO:getUsers()");
 			e.printStackTrace();
 

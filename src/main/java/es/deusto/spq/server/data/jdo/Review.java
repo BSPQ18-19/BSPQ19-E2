@@ -15,10 +15,10 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable(detachable = "true")
 public class Review {
 
-	//The id of the review
+	// The id of the review
 	@PrimaryKey
 	private String reviewID;
-	//The opinion written by the user
+	// The opinion written by the user
 	private String opinion;
 	// The score goes from 0 to 10
 	private int score;
@@ -41,13 +41,12 @@ public class Review {
 		super();
 		this.reviewID = reviewID;
 		this.opinion = opinion;
-		if (score < 0) {
+		if (score < 0)
 			this.score = 0;
-		} else if (score > 10) {
+		else if (score > 10)
 			this.score = 10;
-		} else {
+		else
 			this.score = score;
-		}
 		this.publishDate = publishDate;
 	}
 
@@ -109,7 +108,7 @@ public class Review {
 	public boolean equals(Object obj) {
 		// Two Review are equal objects if and only if they have the same reviewID.
 		if (obj instanceof Review) {
-			Review object = (Review) obj;
+			final Review object = (Review) obj;
 			return object.getReviewID().equals(reviewID);
 		}
 		return false;
