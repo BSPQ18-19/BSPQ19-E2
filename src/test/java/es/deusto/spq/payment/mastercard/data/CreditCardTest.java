@@ -42,7 +42,8 @@ public class CreditCardTest {
 		float amount = 15.5f;
 		float before = creditcard.getTotalDebt();
 		creditcard.makePayment(amount);
-		Assert.assertEquals(before - amount, creditcard.getTotalDebt());
+		// The debt is cumulative and absolute.
+		Assert.assertEquals(before + amount, creditcard.getTotalDebt());
 	}
 	
 	/**

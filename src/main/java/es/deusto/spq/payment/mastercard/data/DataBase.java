@@ -70,6 +70,7 @@ public class DataBase {
 			return false;
 		payments.put(creditCard, new ArrayList<Payment>());
 		cards.put(creditCard.getCardNumber(), creditCard);
+		log.info("Credit card added with number: " + creditCard.getCardNumber());
 		return true;
 	}
 	
@@ -86,6 +87,7 @@ public class DataBase {
 		List<Payment> tmp = payments.get(creditCard);
 		tmp.add(payment);
 		payments.put(creditCard, tmp);
+		log.info(payment.getAmount() + " has been charged to card with number: " + creditCard.getCardNumber());
 		return true;
 	}
 	

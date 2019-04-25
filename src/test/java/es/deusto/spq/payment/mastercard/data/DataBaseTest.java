@@ -38,7 +38,7 @@ public class DataBaseTest {
 	 */
 	@Before
 	public void registrationTest() {
-		CreditCard creditcard = new CreditCard(number, securityCode);
+		creditcard = new CreditCard(number, securityCode);
 		Assert.assertTrue(dataBase.addCreditCard(creditcard));
 		payment = new Payment(paymentAmount);
 	}
