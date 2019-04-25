@@ -15,26 +15,27 @@ public class ServerListenerTest {
 	/** Instanced to load data. */
 	@SuppressWarnings("unused")
 	private static Mastercard mastercard;
-	
+
 	/**
 	 * Initializes the necessary data to execute the test.
+	 * 
 	 * @throws IOException - launched by {@code java.net}.
 	 */
 	@BeforeClass
 	public static void initialize() throws IOException {
 		mastercard = new Mastercard();
-		serverListener = new ServerListener(45000);
+		serverListener = new ServerListener(45001);
 	}
-	
+
 	/** Sets up the necessary data. */
 	@Before
 	public void setUp() {
 		Mastercard.addListener(serverListener);
 	}
-	
+
 	/** Tests if the server listener closes correctly. */
 	@Test
 	public void closeListenerTest() {
 		serverListener.closeListener();
-}
+	}
 }
