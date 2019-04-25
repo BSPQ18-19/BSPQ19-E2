@@ -79,7 +79,7 @@ public class LoginView extends View {
         gbc_panel_2.gridy = 1;
         frame.getContentPane().add(panel_2, gbc_panel_2);
 
-        JLabel lblLogin = new JLabel(LocaleManager.getMessage("login.title"));
+        JLabel lblLogin = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("login.title"));
         panel_2.add(lblLogin);
 
         JPanel panel_1 = new JPanel();
@@ -90,7 +90,7 @@ public class LoginView extends View {
         gbc_panel_1.gridy = 2;
         frame.getContentPane().add(panel_1, gbc_panel_1);
 
-        JLabel lblEmail = new JLabel(LocaleManager.getMessage("login.label.email"));
+        JLabel lblEmail = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("login.label.email"));
         panel_1.add(lblEmail);
 
         tFEmail = new JTextField();
@@ -105,7 +105,7 @@ public class LoginView extends View {
         gbc_panel.gridy = 3;
         frame.getContentPane().add(panel, gbc_panel);
 
-        JLabel lblPassword = new JLabel(LocaleManager.getMessage("login.label.password"));
+        JLabel lblPassword = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("login.label.password"));
         panel.add(lblPassword);
 
         tFPassword = new JPasswordField();
@@ -117,7 +117,7 @@ public class LoginView extends View {
         frame.getContentPane().add(panel_3, gbc_panel_3);
 
 
-        JButton btnLogin = new JButton(LocaleManager.getMessage("login.submit"));
+        JButton btnLogin = new JButton(getViewManager().getClient().getLocaleManager().getMessage("login.submit"));
         btnLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 //This trigers when login in
@@ -133,7 +133,10 @@ public class LoginView extends View {
                 }
 
                 if(loggedUser == null)
-                    JOptionPane.showMessageDialog(frame, LocaleManager.getMessage("login.failed.body"), LocaleManager.getMessage("login.failed.title"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame,
+                            getViewManager().getClient().getLocaleManager().getMessage("login.failed.body"),
+                            getViewManager().getClient().getLocaleManager().getMessage("login.failed.title"),
+                            JOptionPane.ERROR_MESSAGE);
                 else {
                     if(loggedUser.isGuest())
                         ;//TODO guest GUI
@@ -141,13 +144,16 @@ public class LoginView extends View {
                         ;//TODO admin GUI
                     getViewManager().openView(ViewFactory.buildView(ViewType.ADMIN_HOTELS, getViewManager()));
                     dispose();
-                    JOptionPane.showMessageDialog(frame, "Succesfull login", "Succesfull login", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(frame,
+                            "Succesfull login",
+                            "Succesfull login",
+                            JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
         panel_3.add(btnLogin);
 
-        JButton btnRegister = new JButton(LocaleManager.getMessage("login.register"));
+        JButton btnRegister = new JButton(getViewManager().getClient().getLocaleManager().getMessage("login.register"));
         btnRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {

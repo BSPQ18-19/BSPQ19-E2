@@ -17,8 +17,21 @@ public class Client {
 
 	private ViewManager viewManager;
 
+	/**
+	 * Manages all localized strings
+	 */
+	private LocaleManager localeManager = new LocaleManager();
+
 	public ViewManager getViewManager() {
 		return viewManager;
+	}
+
+	/**
+	 * Get the current active LocaleManager for this Client
+	 * @return the LocaleManager for the Client
+	 */
+	public LocaleManager getLocaleManager() {
+		return localeManager;
 	}
 
 	public static void main(String[] args) {

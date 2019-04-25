@@ -75,42 +75,42 @@ public class RegisterView extends View {
 
         // I know this smells pretty badly. Sorry about that...
         // Name field
-        JLabel nameLabel = new JLabel(LocaleManager.getMessage("register.label.name"), JLabel.TRAILING);
+        JLabel nameLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.name"), JLabel.TRAILING);
         form.add(nameLabel);
         nameTextField = new JTextField(10);
         nameLabel.setLabelFor(nameTextField);
         form.add(nameTextField);
 
         // Email field
-        JLabel emailLabel = new JLabel(LocaleManager.getMessage("register.label.email"), JLabel.TRAILING);
+        JLabel emailLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.email"), JLabel.TRAILING);
         form.add(emailLabel);
         emailTextField = new JTextField(10);
         emailLabel.setLabelFor(emailTextField);
         form.add(emailTextField);
 
         // Password field
-        JLabel passwordLabel = new JLabel(LocaleManager.getMessage("register.label.password"), JLabel.TRAILING);
+        JLabel passwordLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.password"), JLabel.TRAILING);
         form.add(passwordLabel);
         passwordField = new JPasswordField(10);
         passwordLabel.setLabelFor(passwordField);
         form.add(passwordField);
 
         // Password confirmation field
-        JLabel passwordConfirmationLabel = new JLabel(LocaleManager.getMessage("register.label.password-confirmation"), JLabel.TRAILING);
+        JLabel passwordConfirmationLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.password-confirmation"), JLabel.TRAILING);
         form.add(passwordConfirmationLabel);
         passwordConfirmationField = new JPasswordField(10);
         passwordConfirmationLabel.setLabelFor(passwordConfirmationField);
         form.add(passwordConfirmationField);
 
         // Phone field
-        JLabel phoneLabel = new JLabel(LocaleManager.getMessage("register.label.phone"), JLabel.TRAILING);
+        JLabel phoneLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.phone"), JLabel.TRAILING);
         form.add(phoneLabel);
         phoneTextField = new JTextField(10);
         phoneLabel.setLabelFor(phoneTextField);
         form.add(phoneTextField);
 
         // Address field
-        JLabel addressLabel = new JLabel(LocaleManager.getMessage("register.label.address"), JLabel.TRAILING);
+        JLabel addressLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.address"), JLabel.TRAILING);
         form.add(addressLabel);
         addressTextField = new JTextField(10);
         addressLabel.setLabelFor(addressTextField);
@@ -128,7 +128,7 @@ public class RegisterView extends View {
 
 
         // Submit button
-        submitButton = new JButton(LocaleManager.getMessage("register.submit"));
+        submitButton = new JButton(getViewManager().getClient().getLocaleManager().getMessage("register.submit"));
         container.add(submitButton, BorderLayout.PAGE_END); // add it to the bottom
 
         // Register the click function
@@ -216,8 +216,8 @@ public class RegisterView extends View {
         if (result == null) {
             ClientLogger.getLogger().fatal("User not registered...");
             JOptionPane.showMessageDialog(frame,
-                    LocaleManager.getMessage("register.validation.errors.unknown"),
-                    LocaleManager.getMessage("register.validation.errors.unknown.title"),
+                    getViewManager().getClient().getLocaleManager().getMessage("register.validation.errors.unknown"),
+                    getViewManager().getClient().getLocaleManager().getMessage("register.validation.errors.unknown.title"),
                     JOptionPane.ERROR_MESSAGE);
 
             frame.dispose();
@@ -226,8 +226,8 @@ public class RegisterView extends View {
 
         // Success!
         JOptionPane.showMessageDialog(frame,
-                LocaleManager.getMessage("register.success.body"),
-                LocaleManager.getMessage("register.success.title"),
+                getViewManager().getClient().getLocaleManager().getMessage("register.success.body"),
+                getViewManager().getClient().getLocaleManager().getMessage("register.success.title"),
                 JOptionPane.INFORMATION_MESSAGE);
         frame.dispose();
 
@@ -258,8 +258,8 @@ public class RegisterView extends View {
         }
 
         JOptionPane.showMessageDialog(frame,
-                LocaleManager.getMessage(messageKey),
-                LocaleManager.getMessage("register.validation.title"),
+                getViewManager().getClient().getLocaleManager().getMessage(messageKey),
+                getViewManager().getClient().getLocaleManager().getMessage("register.validation.title"),
                 messageType);
     }
 

@@ -81,7 +81,7 @@ public class LocaleView extends View {
             jComboBox.addItem(item); // add the String to the combo box
 
             // Check if it's the current locale, and if so, select it
-            if (AllowedLocale.ALLOWED_LOCALES[i].getLocale().toLanguageTag().equals(LocaleManager.getLocale().toLanguageTag())) {
+            if (AllowedLocale.ALLOWED_LOCALES[i].getLocale().toLanguageTag().equals(getViewManager().getClient().getLocaleManager().getLocale().toLanguageTag())) {
                 jComboBox.setSelectedIndex(i);
             }
         }
@@ -111,12 +111,12 @@ public class LocaleView extends View {
                             .equals(allowedLocale.getEnglishName() + " (" + allowedLocale.getLocalizedName() + ")")) {
 
                         // We only want to trigger a locale set if the selected Locale is different than the current one
-                        if (!LocaleManager.getLocale().equals(allowedLocale.getLocale())) {
+                        if (!getViewManager().getClient().getLocaleManager().getLocale().equals(allowedLocale.getLocale())) {
                             // Disable inputs while we change Locale
                             jComboBox.setEnabled(false);
                             button.setEnabled(false);
                             ClientLogger.getLogger().info("Switching locale to " + allowedLocale.getCode());
-                            LocaleManager.setLocale(allowedLocale.getLocale()); // this will trigger a global repaint
+                            getViewManager().getClient().getLocaleManager().setLocale(allowedLocale.getLocale()); // this will trigger a global repaint
                         }
 
                         // Finally, dispose this window.

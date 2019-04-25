@@ -17,10 +17,12 @@ public class LocaleTest {
 	@Test
 	public void getMessage_DefaultLocale_IsEnglish() {
 
+	    LocaleManager localeManager = new LocaleManager();
+
         Locale englishLocale = new Locale("en", "US");
 
         // Check expected default value
-        Assert.assertEquals(englishLocale, LocaleManager.getDefaultLocale());
+        Assert.assertEquals(englishLocale, localeManager.getDefaultLocale());
     }
 
     /**
@@ -29,40 +31,44 @@ public class LocaleTest {
     @Test
     public void setLocale_GetterSetter_ExpectedBehaviour() {
 
+        LocaleManager localeManager = new LocaleManager();
+
         // Test to change the locale
         Locale spanishLocale = new Locale("es", "ES");
-        LocaleManager.setLocale(spanishLocale);
-        Assert.assertEquals(spanishLocale, LocaleManager.getLocale());
+        localeManager.setLocale(spanishLocale);
+        Assert.assertEquals(spanishLocale, localeManager.getLocale());
 
         // Test again, in English
         Locale englishLocale = new Locale("en", "US");
-        LocaleManager.setLocale(englishLocale);
-        Assert.assertEquals(englishLocale, LocaleManager.getLocale());
+        localeManager.setLocale(englishLocale);
+        Assert.assertEquals(englishLocale, localeManager.getLocale());
 
     }
 
     @Test
     public void getMessage_LocaleChanges_CorrectMessage() {
 
-        // First, with default locale
-        LocaleManager.setLocale(LocaleManager.getDefaultLocale());
+        LocaleManager localeManager = new LocaleManager();
 
-        Assert.assertEquals("Hello world!", LocaleManager.getMessage("test.hello"));
-        Assert.assertEquals("Bye bye!", LocaleManager.getMessage("test.bye"));
+        // First, with default locale
+        localeManager.setLocale(localeManager.getDefaultLocale());
+
+        Assert.assertEquals("Hello world!", localeManager.getMessage("test.hello"));
+        Assert.assertEquals("Bye bye!", localeManager.getMessage("test.bye"));
 
         // Switching locale...
-        LocaleManager.setLocale(new Locale("es", "ES"));
+        localeManager.setLocale(new Locale("es", "ES"));
 
         // Special chars test (note you might need to update to Java 9+ to make this test pass)
-        Assert.assertEquals("¡Hola!", LocaleManager.getMessage("test.hello"));
-        Assert.assertEquals("Adiós.", LocaleManager.getMessage("test.bye"));
-        Assert.assertEquals("áéíóúÁÉÍÓÚñÑç¡¿\"\"", LocaleManager.getMessage("test.specialchars"));
+        Assert.assertEquals("¡Hola!", localeManager.getMessage("test.hello"));
+        Assert.assertEquals("Adiós.", localeManager.getMessage("test.bye"));
+        Assert.assertEquals("áéíóúÁÉÍÓÚñÑç¡¿\"\"", localeManager.getMessage("test.specialchars"));
 
         // Parametrized examples
-        LocaleManager.setLocale(LocaleManager.getDefaultLocale());
-        Assert.assertEquals("If you add 1 and 2, you get 3", LocaleManager.getMessage("test.parameters.1", 1+2));
+        localeManager.setLocale(localeManager.getDefaultLocale());
+        Assert.assertEquals("If you add 1 and 2, you get 3", localeManager.getMessage("test.parameters.1", 1+2));
         Assert.assertEquals("Hello, John. You have 2 pending payments.",
-                LocaleManager.getMessage("test.parameters.2", "John", 2));
+                localeManager.getMessage("test.parameters.2", "John", 2));
 
     }
 
@@ -72,7 +78,9 @@ public class LocaleTest {
     @Test
     public void getDefaultLocalMode_DefaultLocale_IsNormal() {
 
-        Assert.assertEquals(LocaleMode.NORMAL, LocaleManager.getDefaultLocaleMode());
+        LocaleManager localeManager = new LocaleManager();
+
+        Assert.assertEquals(LocaleMode.NORMAL, localeManager.getDefaultLocaleMode());
     }
 
     /**
@@ -81,11 +89,13 @@ public class LocaleTest {
     @Test
     public void getLocaleMode_GetterSetter_ExpectedBehaviour() {
 
-        LocaleManager.setMode(LocaleMode.DEBUG);
-        Assert.assertEquals(LocaleMode.DEBUG, LocaleManager.getMode());
+        LocaleManager localeManager = new LocaleManager();
 
-        LocaleManager.setMode(LocaleMode.NORMAL);
-        Assert.assertEquals(LocaleMode.NORMAL, LocaleManager.getMode());
+        localeManager.setMode(LocaleMode.DEBUG);
+        Assert.assertEquals(LocaleMode.DEBUG, localeManager.getMode());
+
+        localeManager.setMode(LocaleMode.NORMAL);
+        Assert.assertEquals(LocaleMode.NORMAL, localeManager.getMode());
 
     }
 
@@ -96,11 +106,13 @@ public class LocaleTest {
     @Test
     public void getMessage_InvalidKeyNormalModePresentInDefault_DefaultFallback() {
 
-        LocaleManager.setMode(LocaleMode.NORMAL);
-        LocaleManager.setLocale(new Locale("es", "ES"));
+        LocaleManager localeManager = new LocaleManager();
+
+        localeManager.setMode(LocaleMode.NORMAL);
+        localeManager.setLocale(new Locale("es", "ES"));
 
         Assert.assertEquals("This message is only available in the english locale.",
-                LocaleManager.getMessage("test.exclusive"));
+                localeManager.getMessage("test.exclusive"));
     }
 
     /**
@@ -110,10 +122,12 @@ public class LocaleTest {
     @Test
     public void getMessage_InvalidKeyDebugModePresentInDefault_NoFallback() {
 
-        LocaleManager.setMode(LocaleMode.DEBUG);
-        LocaleManager.setLocale(new Locale("es", "ES"));
+        LocaleManager localeManager = new LocaleManager();
 
-        Assert.assertEquals("test.exclusive", LocaleManager.getMessage("test.exclusive"));
+        localeManager.setMode(LocaleMode.DEBUG);
+        localeManager.setLocale(new Locale("es", "ES"));
+
+        Assert.assertEquals("test.exclusive", localeManager.getMessage("test.exclusive"));
 
     }
 
@@ -123,7 +137,9 @@ public class LocaleTest {
     @Test
     public void getMessage_InvalidKeyNotPresent_PrintKey() {
 
-        Assert.assertEquals("test.invalid", LocaleManager.getMessage("test.invalid"));
+        LocaleManager localeManager = new LocaleManager();
+
+        Assert.assertEquals("test.invalid", localeManager.getMessage("test.invalid"));
 
     }
 

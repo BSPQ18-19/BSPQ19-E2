@@ -92,7 +92,7 @@ public class ViewManager {
 
         // Only initialize if we're not already initialized
         if (frame == null) {
-            frame = new JFrame(LocaleManager.getMessage("app.name"));
+            frame = new JFrame(getClient().getLocaleManager().getMessage("app.name"));
             desktopPane = new JDesktopPane();
             frame.getContentPane().add(desktopPane);
 
@@ -112,17 +112,17 @@ public class ViewManager {
         JMenuBar menuBar = new JMenuBar();
 
         // Main menu item (about, close)
-        JMenu menuMainItem = new JMenu(LocaleManager.getMessage("app.name"));
+        JMenu menuMainItem = new JMenu(getClient().getLocaleManager().getMessage("app.name"));
         menuMainItem.setFont(new Font("sans-serif", Font.BOLD, 14));
 
-        JMenuItem aboutMenuSubitem = new JMenuItem(LocaleManager.getMessage("menu.about.title"));
+        JMenuItem aboutMenuSubitem = new JMenuItem(getClient().getLocaleManager().getMessage("menu.about.title"));
         aboutMenuSubitem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(
                         frame,
-                        LocaleManager.getMessage("menu.about.body"),
-                        LocaleManager.getMessage("menu.about.title"),
+                        getClient().getLocaleManager().getMessage("menu.about.body"),
+                        getClient().getLocaleManager().getMessage("menu.about.title"),
                         JOptionPane.INFORMATION_MESSAGE
                 );
 
@@ -143,7 +143,7 @@ public class ViewManager {
 
         menuMainItem.addSeparator();
 
-        JMenuItem salirMenuItem = new JMenuItem(LocaleManager.getMessage("menu.quit"));
+        JMenuItem salirMenuItem = new JMenuItem(getClient().getLocaleManager().getMessage("menu.quit"));
         salirMenuItem.setAccelerator(KeyStroke.getKeyStroke('Q', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
         salirMenuItem.addActionListener(new ActionListener() {
 
