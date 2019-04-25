@@ -13,7 +13,7 @@ public class CreditCard {
 	/** The credit card's number. */
 	private long number;
 	/** The security code of the credit card. */
-	private int securtyCode;
+	private int securityCode;
 	/** The total debt of this credit card, in absolute value (always >= 0). */
 	private float totalDebt = 0;
 	
@@ -25,7 +25,7 @@ public class CreditCard {
 	public CreditCard(long cardNumber, int cardSecurtyCode) {
 		super();
 		this.number = cardNumber;
-		this.securtyCode = cardSecurtyCode;
+		this.securityCode = cardSecurtyCode;
 	}
 	
 	/**
@@ -48,8 +48,8 @@ public class CreditCard {
 	 * Returns the credit card's security code.
 	 * @return the code.
 	 */
-	public int getCardSecurtyCode() {
-		return securtyCode;
+	public int getCardSecurityCode() {
+		return securityCode;
 	}
 
 	/**
@@ -71,6 +71,6 @@ public class CreditCard {
 	
 	@Override
 	public int hashCode() {
-		return (int) number * securtyCode;
+		return (int) number * securityCode;
 	}
 }

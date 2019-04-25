@@ -66,7 +66,32 @@ public class Payer extends Thread {
 	public void run() {
 		if(client == null)
 			return;
-		// TODO finish
+		try {
+			objectOutputStream.writeObject("CARD_NUMBER");
+			long cardNumber = objectInputStream.readLong();
+			CreditCard creditCard = dataBase.getCreditCard(cardNumber);
+			objectOutputStream.writeObject("SEC_CODE");
+			int sec = objectInputStream.readInt();
+			if(creditCard.getCardSecurityCode() != sec) {
+				objectOutputStream.writeObject("ERROR");
+				return;
+			}
+			objectOutputStream.writeObject("AMOUNT");
+			float amount = objectInputStream.readFloat();
+			Payment payment = new Payment(amount);
+			boolean result = dataBase.makePayment(creditCard, payment);
+			objectOutputStream.writeObject(result ? "OK" : "ERROR");
+		} catch (Exception e) {
+			log.fatal(e.getMessage());
+		} finally {
+			try {
+				if(!client.isClosed())
+					client.close();
+				log.info("Payer closed");
+			} catch (Exception e){
+				log.warn(e.getMessage());
+			}
+		}
 	}
 	
 	/**
