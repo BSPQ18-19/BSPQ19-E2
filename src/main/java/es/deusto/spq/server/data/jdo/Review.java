@@ -107,7 +107,7 @@ public class Review {
 
 	@Override
 	public boolean equals(Object obj) {
-		// Two Review are equal objects if and only if they have the same userID.
+		// Two Review are equal objects if and only if they have the same reviewID.
 		if (obj instanceof Review) {
 			Review object = (Review) obj;
 			return object.getReviewID().equals(reviewID);
