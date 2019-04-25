@@ -6,11 +6,14 @@ import es.deusto.spq.client.gui.base.ViewPermission;
 import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.locale.AllowedLocale;
 import es.deusto.spq.client.gui.locale.LocaleManager;
+import es.deusto.spq.client.logger.ClientLogger;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LocaleView extends View {
 
@@ -90,8 +93,38 @@ public class LocaleView extends View {
          */
         JButton button = new JButton("Save changes");
         panel.add(button, BorderLayout.PAGE_END);
-        
-        // TODO add locale switch logic
+
+        // Save Locale change
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                for (AllowedLocale allowedLocale : AllowedLocale.ALLOWED_LOCALES) {
+                    /*
+                    Check if the name of the selected locale matches an AllowedLocale constant
+                    We have to check 2 things: first, the name just in English, because if there's no
+                    translation we don't include the localized name between parentheses.
+                    Then, we check including the name in English and then between parentheses, such as Spanish (Español)
+                     */
+                    if (jComboBox.getSelectedItem().equals(allowedLocale.getEnglishName())
+                            || jComboBox.getSelectedItem()
+                            .equals(allowedLocale.getEnglishName() + " (" + allowedLocale.getLocalizedName() + ")")) {
+
+                        // We only want to trigger a locale set if the selected Locale is different than the current one
+                        if (!LocaleManager.getLocale().equals(allowedLocale.getLocale())) {
+                            // Disable inputs while we change Locale
+                            jComboBox.setEnabled(false);
+                            button.setEnabled(false);
+                            ClientLogger.getLogger().info("Switching locale to " + allowedLocale.getCode());
+                            LocaleManager.setLocale(allowedLocale.getLocale()); // this will trigger a global repaint
+                        }
+
+                        // Finally, dispose this window.
+                        dispose();
+                    }
+                }
+            }
+        });
 
         internalFrame.add(panel);
         internalFrame.setSize(100, 100);
