@@ -15,7 +15,7 @@ import es.deusto.spq.payment.mastercard.connections.Payer;
 public class MastercardTest {
 
 	/** The port number to execute the server. */
-	public static final int PORT = 45000;
+	public static final int PORT = 45001;
 	/** Instanced to load data. */
 	private static Mastercard server;
 
