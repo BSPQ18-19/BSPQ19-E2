@@ -116,7 +116,8 @@ public class LocaleView extends View {
                             jComboBox.setEnabled(false);
                             button.setEnabled(false);
                             ClientLogger.getLogger().info("Switching locale to " + allowedLocale.getCode());
-                            getViewManager().getClient().getLocaleManager().setLocale(allowedLocale.getLocale()); // this will trigger a global repaint
+                            getViewManager().getClient().getLocaleManager().setLocale(allowedLocale.getLocale());
+                            getViewManager().repaintAll();  // this will trigger a global repaint
                         }
 
                         // Finally, dispose this window.

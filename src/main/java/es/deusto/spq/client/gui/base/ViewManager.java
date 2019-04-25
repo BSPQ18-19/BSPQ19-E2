@@ -71,6 +71,18 @@ public class ViewManager {
     }
 
     /**
+     * Force a repaint of all the currently opened windows
+     * Will also refresh the underlying view containing them all
+     * Useful for Locale changes.
+     */
+    public void repaintAll() {
+        for (View view : views) {
+            view.refresh();
+        }
+        repaintUI();
+    }
+
+    /**
      * The ViewPermission represents the current permission level for the UI. The
      * @return the ViewPermission for the ViewManager
      */

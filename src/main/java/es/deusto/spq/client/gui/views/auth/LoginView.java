@@ -21,6 +21,11 @@ public class LoginView extends View {
     private JInternalFrame frame;
     private JTextField tFEmail;
     private JTextField tFPassword;
+    private JLabel lblLogin;
+    private JLabel lblEmail;
+    private JLabel lblPassword;
+    private JButton btnLogin;
+    private JButton btnRegister;
     private final JPanel panel_3 = new JPanel();
     private Logger log;
     private HotelManagementController controller;
@@ -79,7 +84,7 @@ public class LoginView extends View {
         gbc_panel_2.gridy = 1;
         frame.getContentPane().add(panel_2, gbc_panel_2);
 
-        JLabel lblLogin = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("login.title"));
+        lblLogin = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("login.title"));
         panel_2.add(lblLogin);
 
         JPanel panel_1 = new JPanel();
@@ -90,7 +95,7 @@ public class LoginView extends View {
         gbc_panel_1.gridy = 2;
         frame.getContentPane().add(panel_1, gbc_panel_1);
 
-        JLabel lblEmail = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("login.label.email"));
+        lblEmail = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("login.label.email"));
         panel_1.add(lblEmail);
 
         tFEmail = new JTextField();
@@ -105,7 +110,7 @@ public class LoginView extends View {
         gbc_panel.gridy = 3;
         frame.getContentPane().add(panel, gbc_panel);
 
-        JLabel lblPassword = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("login.label.password"));
+        lblPassword = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("login.label.password"));
         panel.add(lblPassword);
 
         tFPassword = new JPasswordField();
@@ -117,7 +122,7 @@ public class LoginView extends View {
         frame.getContentPane().add(panel_3, gbc_panel_3);
 
 
-        JButton btnLogin = new JButton(getViewManager().getClient().getLocaleManager().getMessage("login.submit"));
+        btnLogin = new JButton(getViewManager().getClient().getLocaleManager().getMessage("login.submit"));
         btnLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 //This trigers when login in
@@ -153,7 +158,7 @@ public class LoginView extends View {
         });
         panel_3.add(btnLogin);
 
-        JButton btnRegister = new JButton(getViewManager().getClient().getLocaleManager().getMessage("login.register"));
+        btnRegister = new JButton(getViewManager().getClient().getLocaleManager().getMessage("login.register"));
         btnRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
@@ -164,6 +169,22 @@ public class LoginView extends View {
 
         frame.setVisible(true);
         addDisposeEventHandler();
+    }
+
+    @Override
+    public void refresh() {
+        onLocaleChange();
+    }
+
+    /**
+     * Update all the localized text
+     */
+    private void onLocaleChange() {
+        lblLogin.setText(getViewManager().getClient().getLocaleManager().getMessage("login.title"));
+        lblEmail.setText(getViewManager().getClient().getLocaleManager().getMessage("login.label.email"));
+        lblPassword.setText(getViewManager().getClient().getLocaleManager().getMessage("login.label.password"));
+        btnLogin.setText(getViewManager().getClient().getLocaleManager().getMessage("login.submit"));
+        btnRegister.setText(getViewManager().getClient().getLocaleManager().getMessage("login.register"));
     }
 
 }
