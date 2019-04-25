@@ -15,9 +15,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * View to allow the user to change the current active Locale
+ * The View contains a very simple and straightforward UI containing
+ * only a ComboBox and a button to save the locale selection
+ * @author Iñigo Apellániz
+ */
 public class LocaleView extends View {
 
     private JInternalFrame internalFrame;
+
+    // Internal components
+    private JLabel label;
+    private JComboBox jComboBox;
+    private JButton button;
 
     public LocaleView(ViewManager viewManager) {
         super(viewManager);
@@ -57,14 +68,14 @@ public class LocaleView extends View {
             Information label
          */
 
-        JLabel label = new JLabel("<html><b>Locale settings</b><br>Please select your desired language:</html>");
+        label = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("locale.heading"));
         label.setBorder(new EmptyBorder(6, 6, 6, 6));
         panel.add(label, BorderLayout.PAGE_START);
 
         /*
             Combo box
          */
-        JComboBox jComboBox = new JComboBox();
+        jComboBox = new JComboBox();
 
         // Fill the combo box
         for (int i = 0; i < AllowedLocale.ALLOWED_LOCALES.length; i++) {
@@ -91,7 +102,7 @@ public class LocaleView extends View {
         /*
             Save button
          */
-        JButton button = new JButton("Save changes");
+        button = new JButton(getViewManager().getClient().getLocaleManager().getMessage("locale.save"));
         panel.add(button, BorderLayout.PAGE_END);
 
         // Save Locale change
@@ -138,5 +149,18 @@ public class LocaleView extends View {
     @Override
     public void bringToFront() {
         getInternalFrame().toFront();
+    }
+
+    @Override
+    public void refresh() {
+        onLocaleChange();
+    }
+
+    /**
+     * Change the text on all static components taking into account current locale
+     */
+    private void onLocaleChange() {
+        label.setText(getViewManager().getClient().getLocaleManager().getMessage("locale.heading"));
+        button.setText(getViewManager().getClient().getLocaleManager().getMessage("locale.save"));
     }
 }
