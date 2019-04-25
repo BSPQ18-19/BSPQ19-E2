@@ -175,9 +175,9 @@ public class ViewHotel extends JPanel{
 				}
 				
 				if((hotel.getSeasonStart().getDate()+1) < 10) {
-					seasonStartDate = "0" + (hotel.getSeasonStart().getDate()+1);
+					seasonStartDate = "0" + (hotel.getSeasonStart().getDate());
 				}else {
-					seasonStartDate = "" + (hotel.getSeasonStart().getDate()+1);
+					seasonStartDate = "" + (hotel.getSeasonStart().getDate());
 				}
 				if((hotel.getSeasonEnding().getMonth()+1) < 10) {
 					seasonEndingMonth = "0" + (hotel.getSeasonEnding().getMonth()+1); 
@@ -185,9 +185,9 @@ public class ViewHotel extends JPanel{
 					seasonEndingMonth = "" + (hotel.getSeasonEnding().getMonth()+1); 
 				}
 				if((hotel.getSeasonEnding().getDate()+1) < 10) {
-					seasonEndingDate = "0" + (hotel.getSeasonEnding().getDate()+1);
+					seasonEndingDate = "0" + (hotel.getSeasonEnding().getDate());
 				}else {
-					seasonEndingDate = "" + (hotel.getSeasonEnding().getDate()+1);
+					seasonEndingDate = "" + (hotel.getSeasonEnding().getDate());
 				}
 				tableModel.addRow(new String[] {hotel.getHotelId(), hotel.getName(), hotel.getLocation(),
 						String.valueOf(hotel.getSeasonStart().getYear() + 1900)

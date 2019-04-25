@@ -6,9 +6,7 @@ import java.util.List;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import javax.jdo.Extent;
-import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
