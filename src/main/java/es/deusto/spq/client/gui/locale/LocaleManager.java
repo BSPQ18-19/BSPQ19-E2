@@ -1,5 +1,7 @@
 package es.deusto.spq.client.gui.locale;
 
+import es.deusto.spq.client.Client;
+
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -24,10 +26,16 @@ public class LocaleManager {
      * Will always be en_EN fue to teacher's requirements.
      * (the course is in English)
      */
-    private static final Locale DEFAULT_LOCALE = AllowedLocale.ENGLISH.getLocale();
+    public static final Locale DEFAULT_LOCALE = AllowedLocale.ENGLISH.getLocale();
+
+    /**
+     * The Client associated to this LocaleManager
+     */
+    private Client client;
 
     /**
      * The current locale of the system.
+     * Initialized to the default locale constant
      */
     private Locale locale = DEFAULT_LOCALE;
 
@@ -36,6 +44,18 @@ public class LocaleManager {
      * by default we fall back to the default locale
      */
     private LocaleMode mode = LocaleMode.NORMAL;
+
+    /**
+     * Create a new LocaleManager instance
+     * @param client the Client class that will be associated to the LocaleManager
+     */
+    public LocaleManager(Client client) {
+        this.client = client;
+    }
+
+    public Client getClient() {
+        return client;
+    }
 
     /**
      * Get the current locale for the system.
@@ -51,14 +71,6 @@ public class LocaleManager {
      */
     public void setLocale(Locale locale) {
         this.locale = locale;
-    }
-
-    /**
-     * Get the default system Locale
-     * @return the default Locale
-     */
-    public Locale getDefaultLocale() {
-        return DEFAULT_LOCALE;
     }
 
     /**
@@ -124,7 +136,7 @@ public class LocaleManager {
             }
 
             // In this case we use the default locale (key not found in Locale)
-            localeToUse = getDefaultLocale();
+            localeToUse = DEFAULT_LOCALE;
 
         }
 
