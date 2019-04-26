@@ -34,7 +34,7 @@ public class ReviewDAO implements IReviewDAO {
 	}
 
 	@Override
-	public Review storeReview(Review r, String hotelID, String userID) {
+	public Review storeReview(final Review r, final String hotelID, final String userID) {
 		if (!checkUserReview(hotelID, userID))
 			return null;
 		tx = pm.currentTransaction();
@@ -59,7 +59,7 @@ public class ReviewDAO implements IReviewDAO {
 	}
 
 	@Override
-	public boolean deleteReview(String reviewID) {
+	public boolean deleteReview(final String reviewID) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -88,7 +88,7 @@ public class ReviewDAO implements IReviewDAO {
 	}
 
 	@Override
-	public boolean checkUserReview(String hotelID, String userID) {
+	public boolean checkUserReview(final String hotelID, final String userID) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -115,7 +115,7 @@ public class ReviewDAO implements IReviewDAO {
 	}
 
 	@Override
-	public List<Review> getReviewsOfHotel(String hotelID) {
+	public List<Review> getReviewsOfHotel(final String hotelID) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -145,7 +145,7 @@ public class ReviewDAO implements IReviewDAO {
 	}
 
 	@Override
-	public List<Review> getReviewsByUser(String userID) {
+	public List<Review> getReviewsByUser(final String userID) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();

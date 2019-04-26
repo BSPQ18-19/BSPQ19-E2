@@ -173,8 +173,8 @@ public class Review {
 
 	@Override
 	public String toString() {
-		return "Review [reviewID=" + reviewID + ", opinion=" + opinion + ", score=" + score + ", publishDate="
-				+ publishDate + "]";
+		return "Review [reviewID=" + reviewID + ", opinion=" + opinion +
+				", score=" + score + ", publishDate=" + publishDate + "]";
 	}
 
 	@Override
