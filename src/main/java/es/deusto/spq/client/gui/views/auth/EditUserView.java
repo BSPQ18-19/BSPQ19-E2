@@ -36,13 +36,13 @@ import es.deusto.spq.server.locale.LocaleManager;
  */
 public class EditUserView extends View {
 
-	// The user that is actually logged in and we want to edit
-	private final UserDTO loggedUser;
-
-	public EditUserView(ViewManager viewManager) {
+	/**
+	 *
+	 * @param viewManager The class that manages the view
+	 */
+	public EditUserView(final ViewManager viewManager) {
 		super(viewManager);
 		hotelManagementController = viewManager.getClient().getController();
-		loggedUser = hotelManagementController.getLoggedUser();
 	}
 
 	private JInternalFrame frame;
@@ -51,7 +51,7 @@ public class EditUserView extends View {
 	// All the form fields and buttons
 	private JTextField nameTextField, emailTextField, phoneTextField, addressTextField;
 	private JPasswordField passwordField, passwordConfirmationField;
-	private JButton submitButton;
+	private JButton saveChanges, dontSave;
 
 	// Logger
 	private Logger log;
@@ -63,7 +63,7 @@ public class EditUserView extends View {
 
 	@Override
 	public ViewPermission getViewPermission() {
-		return ViewPermission.LOGGED_IN;
+		return ViewPermission.NOT_LOGGED_IN;
 	}
 
 	@Override
@@ -91,13 +91,14 @@ public class EditUserView extends View {
 
 		final JPanel form = new JPanel(new SpringLayout());
 
+		final JPanel bottomButtons = new JPanel(new BorderLayout());
+
 		// Name field
 		final JLabel nameLabel = new JLabel(LocaleManager.getMessage("editUser.label.name"), SwingConstants.TRAILING);
 		form.add(nameLabel);
 		nameTextField = new JTextField(10);
 		nameLabel.setLabelFor(nameTextField);
 		form.add(nameTextField);
-		nameTextField.setText(loggedUser.getName());
 
 		// Email field
 		final JLabel emailLabel = new JLabel(LocaleManager.getMessage("editUser.label.email"), SwingConstants.TRAILING);
@@ -128,7 +129,6 @@ public class EditUserView extends View {
 		phoneTextField = new JTextField(10);
 		phoneLabel.setLabelFor(phoneTextField);
 		form.add(phoneTextField);
-		phoneTextField.setText("phone");
 
 		// Address field
 		final JLabel addressLabel = new JLabel(LocaleManager.getMessage("editUser.label.address"),
@@ -137,7 +137,6 @@ public class EditUserView extends View {
 		addressTextField = new JTextField(10);
 		addressLabel.setLabelFor(addressTextField);
 		form.add(addressTextField);
-		addressTextField.setText("address");
 
 		// Lay out the form and make it a nice "responsive" grid
 		SpringUtilities.makeCompactGrid(form, 6, 2, // rows, cols
@@ -147,20 +146,37 @@ public class EditUserView extends View {
 		// Add the form to the center slot
 		container.add(form, BorderLayout.CENTER);
 
-		// Submit button
-		submitButton = new JButton(LocaleManager.getMessage("editUser.saveChanges"));
-		container.add(submitButton, BorderLayout.PAGE_END); // add it to the bottom
+		// Save Changes button
+		saveChanges = new JButton(LocaleManager.getMessage("editUser.saveChanges"));
+		bottomButtons.add(saveChanges, BorderLayout.PAGE_START); // add it to the bottom
 
 		// Register the click function
-		submitButton.addActionListener((ActionEvent e) -> {
+		saveChanges.addActionListener((final ActionEvent e) -> {
 			handleFormSubmission();
 		});
+
+		dontSave = new JButton(LocaleManager.getMessage("editUser.dontSave"));
+		bottomButtons.add(dontSave, BorderLayout.PAGE_END); // add it to the bottom
+
+		// Register the click function
+		dontSave.addActionListener((final ActionEvent e) -> {
+			closeWindow();
+		});
+
+		container.add(bottomButtons, BorderLayout.PAGE_END);
 
 		frame.add(container);
 
 		frame.setVisible(true);
 		frame.toFront();
 		addDisposeEventHandler();
+	}
+
+	/**
+	 * Closes the window
+	 */
+	private void closeWindow() {
+		frame.dispose();
 	}
 
 	/**
@@ -176,9 +192,9 @@ public class EditUserView extends View {
 	 */
 	private enum ValidationFailReason {
 		/**
-		 * A required field was left empty
+		 * All fields are empty
 		 */
-		REQUIRED_FIELD_EMPTY,
+		NO_CHANGES_MADE,
 
 		/**
 		 * The password confirmation is not the same as the password
@@ -195,21 +211,31 @@ public class EditUserView extends View {
 		// Disable all fields
 		toggleFields(false);
 
-		// Required fields
+		// Fields
 		final JTextComponent[] components = { nameTextField, emailTextField, phoneTextField, addressTextField,
 				passwordField, passwordConfirmationField, };
 
-		// Check that all required fields are filled, and if not, fail
-		for (final JTextComponent component : components)
+		// Check that at least one field have been edited
+		boolean allEmpty = true;
+		for (final JTextComponent component : components) {
 			if (component.getText().trim().isEmpty()) {
-				notifyValidationFail(ValidationFailReason.REQUIRED_FIELD_EMPTY);
-				// Re-enable fields
-				toggleFields(true);
-				return;
+				allEmpty = true;
+			} else {
+				allEmpty = false;
+				break;
 			}
+		}
+		if (allEmpty) {
+			notifyValidationFail(ValidationFailReason.NO_CHANGES_MADE);
+			// Re-enable fields
+			toggleFields(true);
+			return;
+		}
 
 		// Check if the password confirmation matches the password, and if not, fail
-		if (!(new String(passwordField.getPassword())).equals(new String(passwordConfirmationField.getPassword()))) {
+		if (!(new String(passwordField.getPassword())).equals(new String(passwordConfirmationField.getPassword()))
+				&& (!passwordConfirmationField.getText().trim().isEmpty()
+						| !passwordField.getText().trim().isEmpty())) {
 			notifyValidationFail(ValidationFailReason.PASSWORD_CONFIRMATION_DIFFERENT);
 			// Re-enable fields
 			toggleFields(true);
@@ -243,14 +269,14 @@ public class EditUserView extends View {
 	 *
 	 * @param reason the reason why the validation has failed
 	 */
-	private void notifyValidationFail(ValidationFailReason reason) {
+	private void notifyValidationFail(final ValidationFailReason reason) {
 
 		String messageKey;
 		int messageType;
 
 		switch (reason) {
-		case REQUIRED_FIELD_EMPTY:
-			messageKey = "editUser.validation.errors.required";
+		case NO_CHANGES_MADE:
+			messageKey = "editUser.validation.errors.noChanges";
 			messageType = JOptionPane.WARNING_MESSAGE;
 			break;
 		case PASSWORD_CONFIRMATION_DIFFERENT:
@@ -272,14 +298,14 @@ public class EditUserView extends View {
 	 *
 	 * @param enable whether or not to leave enabled the fields
 	 */
-	private void toggleFields(boolean enable) {
+	private void toggleFields(final boolean enable) {
 		nameTextField.setEnabled(enable);
 		emailTextField.setEnabled(enable);
 		passwordConfirmationField.setEnabled(enable);
 		passwordField.setEnabled(enable);
 		phoneTextField.setEnabled(enable);
 		addressTextField.setEnabled(enable);
-		submitButton.setEnabled(enable);
+		saveChanges.setEnabled(enable);
 	}
 
 	@Override

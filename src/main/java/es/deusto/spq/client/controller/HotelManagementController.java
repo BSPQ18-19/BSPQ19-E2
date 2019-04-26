@@ -137,9 +137,26 @@ public class HotelManagementController {
 	public UserDTO getLoggedUser() {
 		return loggedUser;
 	}
-
+/**
+ * The editUser method that asks the server for the new DTO of the edited User.
+ * @param name
+ * @param email
+ * @param password
+ * @param phone
+ * @param address
+ * @return return the new UserDTO.
+ */
 	public UserDTO editUser(String name, String email, String password, String phone, String address) {
 		// TODO Call the server to get the edited DTO
+		/*try {
+		 *UserDTO editedUser = rsl.editUser(loggedUser.getUserID, name, email, password, phone, address);
+		 *if(editedUser == null) return null;
+		 *loggedUser = editedUser;
+		 *return loggedUser;
+		} catch (final RemoteException e) {
+			log.fatal("Error updating user data: " + e.getMessage());
+		}
+		 */
 		return null;
 	}
 
