@@ -16,7 +16,7 @@ import es.deusto.spq.payment.PayPal.connections.ServerListener;
 public class PayPalTest {
 
 	/** The port number to execute the server. */
-	public static final int PORT = 45001;
+	public static final int PORT = 45000;
 	/** Instanced to load data. */
 	private static PayPal server;
 
