@@ -54,7 +54,7 @@ public abstract class View {
     @Nullable
     public JInternalFrame getInternalFrame() {
         ClientLogger.getLogger()
-                .warn("getInternalFrame method not implemented or calling super!");
+                .warn(getClass().getName() + " getInternalFrame method not implemented or calling super!");
         return null;
     }
 
@@ -71,7 +71,7 @@ public abstract class View {
      */
     public void initialize() {
         ClientLogger.getLogger()
-                .warn("initialize method not implemented or calling super!");
+                .warn(getClass().getName() + " initialize method not implemented or calling super!");
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class View {
      */
     public void bringToFront() {
         ClientLogger.getLogger()
-                .warn("bringToFront method not implemented or calling super!");
+                .warn(getClass().getName() + " bringToFront method not implemented or calling super!");
     }
 
     /**
@@ -87,7 +87,7 @@ public abstract class View {
      */
     public void minimize() {
         ClientLogger.getLogger()
-                .warn("minimize method not implemented or calling super!");
+                .warn(getClass().getName() + " minimize method not implemented or calling super!");
     }
 
     /**
@@ -96,7 +96,7 @@ public abstract class View {
      */
     public void refresh() {
         ClientLogger.getLogger()
-                .warn("refresh method not implemented or calling super!");
+                .warn(getClass().getName() + " refresh method not implemented or calling super!");
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class View {
                 }
             });
         } catch (NullPointerException e) {
-            ClientLogger.getLogger().warn("Trying to setup InternalFrame listeners before" +
+            ClientLogger.getLogger().warn(getClass().getName() + " Trying to setup InternalFrame listeners before" +
                     "creating the InternalFrame");
         }
     }
