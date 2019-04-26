@@ -1,13 +1,10 @@
 package es.deusto.spq.server.gateway;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+
 public interface IPayPalGateway {
 
-	/**
-	 * Establishes the connection with the server in the IP and port provided.
-	 * @param ip - IP to establish connection to.
-	 * @param port - port to establish connection to.
-	 */
-	public void establishConnection(String ip, int port);
 	/**
 	 * Registers the given account in the PayPal server.
 	 * @param username - the username of the new account.
@@ -26,7 +23,8 @@ public interface IPayPalGateway {
 	 */
 	public boolean registerAccount(String username, String password, float quantity);
 	/**
-	 * Pays the quantity to the given PayPal account.
+	 * Pays the quantity to the given PayPal account. Note that there must be enabled the 
+	 * option to add a quantity in the server (if it isn't, {@code false} will be returned.
 	 * @param username - the username of the account.
 	 * @param password - the password of the account.
 	 * @param quantity - the quantity of the account.
