@@ -20,6 +20,10 @@ public class MastercardGateway implements IMastercardGateway {
 	private Logger log;
 	public static final int SERVER_TIMEOUT = 20000;
 	
+	public MastercardGateway() {
+		log = ServerLogger.getLogger();
+	}
+	
 	public MastercardGateway(String IP, int port) {
 		this.IP = IP;
 		this.port = port;
@@ -33,7 +37,7 @@ public class MastercardGateway implements IMastercardGateway {
 	 * @throws UnknownHostException - launched by {@code java.net.Socket}.
 	 * @throws IOException - launched by {@code java.net.Socket}
 	 */
-	public void establishConnection(String ip, int port) throws UnknownHostException, IOException {
+	private void establishConnection(String ip, int port) throws UnknownHostException, IOException {
 		server = new Socket(IP, port);
 		server.setSoTimeout(SERVER_TIMEOUT);
 		server.setReuseAddress(true);

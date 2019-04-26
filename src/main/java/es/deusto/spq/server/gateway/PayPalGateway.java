@@ -20,6 +20,10 @@ public class PayPalGateway implements IPayPalGateway {
 	private Logger log;
 	public static final int SERVER_TIMEOUT = 20000;
 	
+	public PayPalGateway() {
+		log = ServerLogger.getLogger();
+	}
+	
 	public PayPalGateway(String IP, int port) {
 		this.IP = IP;
 		this.port = port;
