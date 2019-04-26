@@ -58,7 +58,7 @@ public class MastercardTest {
 	 * Tests the thread-pool of Payer.
 	 */
 	@Test
-	public void Payer() {
+	public void payerTest() {
 		Payer payer = new Payer(null, null, null);
 		Mastercard.addPayer(payer);
 		payer.closePayer();

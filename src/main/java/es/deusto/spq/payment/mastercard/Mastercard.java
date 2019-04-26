@@ -71,13 +71,17 @@ public class Mastercard {
 	 * Note that this method may take some time to do that, since it may be waiting
 	 * for the execution ending of another thread.
 	 * @param listener - the listener to be added.
+	 * @return {@code true} if the server accepts the thread, and {@code false} if not.
 	 */
-	public static void addListener(ServerListener listener) {
-		if(listener == null)
-			return;
-		listenerLock.lock();
-		activeListeners.add(listener);
-		listenerLock.unlock();
+	public static boolean addListener(ServerListener listener) {
+		if (closingServer)
+			return false;
+		if (listener != null) {
+			listenerLock.lock();
+			activeListeners.add(listener);
+			listenerLock.unlock();
+		}
+		return true;
 	}
 	
 	/**
@@ -99,13 +103,17 @@ public class Mastercard {
 	 * Note that this method may take some time to do that, since it may be waiting
 	 * for the execution ending of another thread.
 	 * @param payer - the payer to be added.
+	 * @return {@code true} if the server accepts the thread, and {@code false} if not.
 	 */
-	public static void addPayer(Payer payer) {
-		if(payer == null)
-			return;
-		payerLock.lock();
-		activePayers.add(payer);
-		payerLock.unlock();
+	public static boolean addPayer(Payer payer) {
+		if (closingServer)
+			return false;
+		if (payer != null) {
+			payerLock.lock();
+			activePayers.add(payer);
+			payerLock.unlock();
+		}
+		return true;
 	}
 	
 	/**
@@ -133,14 +141,30 @@ public class Mastercard {
 		initialListener.start();
 	}
 	
+	/** If {@code true} new threads are no longer accepted. */
+	private static boolean closingServer = false;
+
 	/**
 	 * Closes all the threads in the pool, both the active and ready ones.
 	 */
 	public static void closeServer() {
-		for(ServerListener serverListener : activeListeners)
-			serverListener.closeListener();
-		for(Payer payer : activePayers)
-			payer.closePayer();
+		closingServer = true;
+		List<ServerListener> listenersToBeRemoved = new ArrayList<ServerListener>();
+		listenerLock.lock();
+		for (ServerListener serverListener : activeListeners)
+			listenersToBeRemoved.add(serverListener);
+		listenerLock.unlock();
+		for (ServerListener l : listenersToBeRemoved)
+			l.closeListener();
+		log.info("All ServerListener closed");
+		List<Payer> payersToBeRemoved = new ArrayList<Payer>();
+		payerLock.lock();
+		for (Payer payer : activePayers)
+			payersToBeRemoved.add(payer);
+		payerLock.unlock();
+		for (Payer p : payersToBeRemoved)
+			p.closePayer();
+		log.info("All Payer closed");
 		log.info("PayPal server is closed and shut down...");
 	}
 	

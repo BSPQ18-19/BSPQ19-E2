@@ -79,8 +79,8 @@ public class ServerListener extends Thread {
 				switch(message) {
 				case "PAY":
 					Payer payer = new Payer(client, objectOutputStream, objectInputStream);
-					Mastercard.addPayer(payer);
-					payer.start();
+					if(Mastercard.addPayer(payer))
+						payer.start();
 					break;
 				default:
 					objectOutputStream.writeObject("ERROR");
