@@ -12,11 +12,18 @@ import junit.framework.Assert;
 @RunWith(MockitoJUnitRunner.class)
 public class PayPalGatewayTest {
 
+	/** The gateway to be tested. */
 	private static PayPalGateway payPalGateway;
+	/** The username of the user to be tested. */
 	private static String username;
+	/** The password of the user to be tested. */
 	private static String password;
+	/** The quantity of money to do tests. */
 	private static float quantity;
 	
+	/**
+	 * Initializes all the data needed to perform tests.
+	 */
 	@BeforeClass
 	public static void initialize() {
 		payPalGateway = Mockito.spy(new PayPalGateway());
@@ -25,6 +32,9 @@ public class PayPalGatewayTest {
 		quantity = 5.0f;
 	}
 	
+	/**
+	 * Tests the registration account without the quantity parameter.
+	 */
 	@Test
 	public void registerAccountTest() {
 		Mockito.doReturn(true).when(payPalGateway).registerAccount(username, password);
@@ -37,6 +47,9 @@ public class PayPalGatewayTest {
 		payPalGateway.registerAccount(newUsername, newPassword);
 	}
 	
+	/**
+	 * Tests the registration account with the quantity parameter.
+	 */
 	@Test
 	public void registerAccountQuantityTest() {
 		Mockito.doReturn(true).when(payPalGateway).registerAccount(username, password, quantity);
@@ -49,6 +62,9 @@ public class PayPalGatewayTest {
 		payPalGateway.registerAccount(newUsername, newPassword, quantity);
 	}
 
+	/**
+	 * Tests the payment
+	 */
 	@Test
 	public void payTest() {
 		Mockito.doReturn(true).when(payPalGateway).pay(username, password, quantity);

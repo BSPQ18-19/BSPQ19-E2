@@ -10,11 +10,18 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class MastercardGatewayTest {
 
+	/** The gateway to be tested. */
 	private static MastercardGateway mastercardGateway;
+	/** The card number of the mastercard card to be tested. */
 	private static long cardNumber;
+	/** The security code of the mastercard card to be tested. */
 	private static int securityCode;
+	/** The amount of money to perform tests. */
 	private static float amount;
 	
+	/**
+	 * Initializes all the data needed to perform tests.
+	 */
 	@BeforeClass
 	public static void initialize() {
 		mastercardGateway = Mockito.spy(new MastercardGateway());
@@ -23,6 +30,9 @@ public class MastercardGatewayTest {
 		amount = 10.5f;
 	}
 	
+	/**
+	 * Tests the payment
+	 */
 	@Test
 	public void payTest() {
 		Mockito.doReturn(true).when(mastercardGateway).pay(cardNumber, securityCode, amount);
