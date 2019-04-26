@@ -151,20 +151,20 @@ public class ViewManager {
 
         menuMainItem.addSeparator();
 
-        JMenuItem salirMenuItem = new JMenuItem(LocaleManager.getMessage("menu.quit"));
-        salirMenuItem.setAccelerator(KeyStroke.getKeyStroke('Q', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
-        salirMenuItem.addActionListener(new ActionListener() {
+        JMenuItem quitMenuItem = new JMenuItem(LocaleManager.getMessage("menu.quit"));
+        quitMenuItem.setAccelerator(KeyStroke.getKeyStroke('Q', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+        quitMenuItem.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Salir del programa con código 0 (correcto, sin errores)
+                // Exit the program with code 0, no errors
                 System.exit(0);
 
             }
         });
-        menuMainItem.add(salirMenuItem);
+        menuMainItem.add(quitMenuItem);
 
-        // Menú SESIÓN (dcha) ----------------------------
+        // Session menu ----------------------------
         String lblSesion;
         if(getPermission() == ViewPermission.LOGGED_IN) {
             if(getPermission() == ViewPermission.LOGGED_IN_ADMIN) {
@@ -183,23 +183,24 @@ public class ViewManager {
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    // Mark as not logged in and open the login window
                     setPermission(ViewPermission.NOT_LOGGED_IN);
-                    //openView(ViewFactory.buildView(ViewType.LOGIN, getViewManager()));
+                    openView(ViewFactory.buildView(ViewType.LOGIN, getViewManager()));
 
                 }
             });
             sesionMenu.add(logInMenuItem);
         } else {
 
-            JMenuItem iniciarSesionMenuItem = new JMenuItem(LocaleManager.getMessage("menu.session.login"));
-            iniciarSesionMenuItem.addActionListener(new ActionListener() {
+            JMenuItem loginMenuItem = new JMenuItem(LocaleManager.getMessage("menu.session.login"));
+            loginMenuItem.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     openView(ViewFactory.buildView(ViewType.LOGIN, getViewManager()));
                 }
             });
-            sesionMenu.add(iniciarSesionMenuItem);
+            sesionMenu.add(loginMenuItem);
         }
 
         menuBar.add(menuMainItem);
