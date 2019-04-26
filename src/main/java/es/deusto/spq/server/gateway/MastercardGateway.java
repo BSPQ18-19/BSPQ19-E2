@@ -12,18 +12,35 @@ import es.deusto.spq.server.logger.ServerLogger;
 
 public class MastercardGateway implements IMastercardGateway {
 
+	/** The server socket to connect to. */
 	private Socket server = null;
+	/** The output stream to send objects. */
 	private ObjectInputStream objectInputStream;
+	/** The input stream to read objects from. */
 	private ObjectOutputStream objectOutputStream;
+	/** The IP address to connect to. */
 	private String IP = "localhost";
+	/** The port number to connect to. */
 	private int port = 45001;
+	/** The logger to log to. */
 	private Logger log;
+	/** The default timeout to read a message from the server. */
 	public static final int SERVER_TIMEOUT = 20000;
 	
+	/**
+	 * Creates a new instance of the PayPalGateway.
+	 * <p>
+	 * Since no IP and port are given, the default values are used: localhost:45000.
+	 */
 	public MastercardGateway() {
 		log = ServerLogger.getLogger();
 	}
 	
+	/**
+	 * Creates a new instance of the PayPalGateway with the given server's parameters.
+	 * @param IP - the IP to connect to.
+	 * @param port - the port to connect to.
+	 */
 	public MastercardGateway(String IP, int port) {
 		this.IP = IP;
 		this.port = port;
@@ -46,6 +63,9 @@ public class MastercardGateway implements IMastercardGateway {
 		log.info("Server connected to Mastercard");
 	}
 	
+	/**
+	 * Closes the connection with the current server.
+	 */
 	private void closeConnection() {
 		try {
 			server.close();
