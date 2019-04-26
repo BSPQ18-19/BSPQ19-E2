@@ -23,7 +23,7 @@ public class ServerListenerTest {
 	@BeforeClass
 	public static void initialize() throws IOException {
 		mastercard = new Mastercard();
-		serverListener = new ServerListener(45002);
+		serverListener = new ServerListener(45003);
 	}
 	
 	/** Sets up the necessary data. */
