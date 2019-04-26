@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 
 import org.apache.log4j.Logger;
 
@@ -79,8 +78,8 @@ public class ServerListener extends Thread {
 				switch(message) {
 				case "PAY":
 					Payer payer = new Payer(client, objectOutputStream, objectInputStream);
-					Mastercard.addPayer(payer);
-					payer.start();
+					if(Mastercard.addPayer(payer))
+						payer.start();
 					break;
 				default:
 					objectOutputStream.writeObject("ERROR");

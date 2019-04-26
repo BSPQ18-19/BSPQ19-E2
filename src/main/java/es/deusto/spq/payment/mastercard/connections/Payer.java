@@ -90,6 +90,8 @@ public class Payer extends Thread {
 				log.info("Payer closed");
 			} catch (Exception e){
 				log.warn(e.getMessage());
+			} finally {
+				closePayer();
 			}
 		}
 	}
@@ -100,14 +102,15 @@ public class Payer extends Thread {
 	 * {@link es.deusto.spq.payment.mastercard.Mastercard} class.
 	 */
 	public void closePayer() {
-		if(client == null)
-			return;
 		try {
-			client.close();
+			if(client != null && !client.isClosed())
+				client.close();
 		} catch (IOException e) {
 			log.warn(e.getMessage());
 		} finally {
 			Mastercard.removePayer(this);
+			interrupt();
+			log.info("Payer closed");
 		}
 	}
 	
