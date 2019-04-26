@@ -6,11 +6,12 @@ import org.junit.Test;
 
 import es.deusto.spq.payment.PayPal.PayPal;
 
-public class RegistratorTest {
+public class RegistrarTest {
 
 	/** The registrator class to be tested. */
-	private static Registrator registrator;
+	private static Registrar registrator;
 	/** Instanced to load data. */
+	@SuppressWarnings("unused")
 	private static PayPal paypal;
 	
 	/**
@@ -19,19 +20,19 @@ public class RegistratorTest {
 	@BeforeClass
 	public static void initialize() {
 		paypal = new PayPal();
-		registrator = new Registrator(null, null, null);
+		registrator = new Registrar(null, null, null);
 	}
 	
 	/** Sets up the necessary data. */
 	@Before
 	public void setUp() {
-		PayPal.addRegistrator(registrator);
+		PayPal.addRegistrar(registrator);
 	}
 	
 	/** Tests if the server listener closes correctly. */
 	@Test
 	public void closeRegistratorTest() {
-		registrator.closeRegistrator();
+		registrator.closeRegistrar();
 	}
 
 }

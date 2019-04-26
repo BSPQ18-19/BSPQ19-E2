@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import es.deusto.spq.payment.PayPal.connections.Payer;
-import es.deusto.spq.payment.PayPal.connections.Registrator;
+import es.deusto.spq.payment.PayPal.connections.Registrar;
 import es.deusto.spq.payment.PayPal.connections.ServerListener;
 
 public class PayPalTest {
@@ -59,7 +59,7 @@ public class PayPalTest {
 	 * Tests the thread-pool of Payer.
 	 */
 	@Test
-	public void Payer() {
+	public void payerTest() {
 		Payer payer = new Payer(null, null, null);
 		PayPal.addPayer(payer);
 		payer.closePayer();
@@ -71,9 +71,9 @@ public class PayPalTest {
 	 */
 	@Test
 	public void registratorTest() {
-		Registrator registrator = new Registrator(null, null, null);
-		PayPal.addRegistrator(registrator);
-		registrator.closeRegistrator();
+		Registrar registrator = new Registrar(null, null, null);
+		PayPal.addRegistrar(registrator);
+		registrator.closeRegistrar();
 	}
 	
 	/**

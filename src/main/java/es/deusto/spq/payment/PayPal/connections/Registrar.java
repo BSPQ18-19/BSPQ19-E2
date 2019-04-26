@@ -30,7 +30,7 @@ import es.deusto.spq.payment.PayPal.logger.PayPalLogger;
  * @author Iker
  *
  */
-public class Registrator extends Thread {
+public class Registrar extends Thread {
 
 	/** The socket of the client processing the payment. */
 	private Socket client;
@@ -52,7 +52,7 @@ public class Registrator extends Thread {
 	 * @param objectOutputStream - the ObjectOutputStream of the client's socket.
 	 * @param objectInputStream - the ObjectInputStream of the client's socket.
 	 */
-	public Registrator(Socket client, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
+	public Registrar(Socket client, ObjectOutputStream objectOutputStream, ObjectInputStream objectInputStream) {
 		this.log = PayPalLogger.getLogger();
 		this.client = client;
 		this.objectOutputStream = objectOutputStream;
@@ -92,11 +92,11 @@ public class Registrator extends Thread {
 			try {
 				if(!client.isClosed())
 					client.close();
-				log.info("Registrator closed");
 			} catch (Exception e) {
 				log.warn(e.getMessage());
+			} finally {
+				closeRegistrar();
 			}
-			PayPal.removeRegistrator(this);
 		}
 	}
 	
@@ -105,15 +105,16 @@ public class Registrator extends Thread {
 	 * the logger. At the end, this thread is removed from the pool of Registrators in 
 	 * {@link es.deusto.spq.payment.PayPal.PayPal} class.
 	 */
-	public void closeRegistrator() {
-		if(client == null)
-			return;
+	public void closeRegistrar() {
 		try {
-			client.close();
+			if(client != null && !client.isClosed())
+				client.close();
 		} catch (IOException e) {
 			log.warn(e.getMessage());
 		} finally {
-			PayPal.removeRegistrator(this);
+			PayPal.removeRegistrar(this);
+			interrupt();
+			log.info("Registrar closed");
 		}
 	}
 

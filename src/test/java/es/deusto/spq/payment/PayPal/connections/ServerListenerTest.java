@@ -13,6 +13,7 @@ public class ServerListenerTest {
 	/** An instance of the class to be tested. */
 	private static ServerListener serverListener;
 	/** Instanced to load data. */
+	@SuppressWarnings("unused")
 	private static PayPal paypal;
 	
 	/**

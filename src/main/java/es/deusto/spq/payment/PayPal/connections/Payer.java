@@ -84,12 +84,11 @@ public class Payer extends Thread {
 			try {
 				if(!client.isClosed())
 					client.close();
-				log.info("Payer closed");
 			} catch (Exception e) {
 				log.warn(e.getMessage());
+			} finally {
+				closePayer();
 			}
-			// Removes itself from the Payer-pool in the PayPal class.
-			PayPal.removePayer(this);
 		}
 	}
 	
@@ -99,14 +98,15 @@ public class Payer extends Thread {
 	 * {@link es.deusto.spq.payment.PayPal.PayPal} class.
 	 */
 	public void closePayer() {
-		if(client == null)
-			return;
 		try {
-			client.close();
+			if(client != null && !client.isClosed())
+				client.close();
 		} catch (IOException e) {
 			log.warn(e.getMessage());
 		} finally {
 			PayPal.removePayer(this);
+			interrupt();
+			log.info("Payer closed");
 		}
 	}
 	
