@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Manages the whole UI View system.
@@ -42,7 +43,7 @@ public class ViewManager {
     /**
      * List of active views.
      */
-    private List<View> views = new ArrayList<View>();
+    private List<View> views = new CopyOnWriteArrayList<View>();
 
     /**
      * Creates a new ViewManager with no Views.
