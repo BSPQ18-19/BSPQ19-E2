@@ -12,18 +12,22 @@ import es.deusto.spq.server.data.jdo.Review;
 import es.deusto.spq.server.logger.ServerLogger;
 
 /**
- * The DAO class for the Review
+ * The DAO class for the Review.
  *
  * @author egoes
  */
 public class ReviewDAO implements IReviewDAO {
-	// The persistence manger variable.
+	/**
+	 * The persistance manager variable
+	 */
 	private final PersistenceManager pm;
-	// The transaction variable needed to make operations on the DB.
+	/**
+	 * The transaction variable needed to make operations on the DB.
+	 */
 	private Transaction tx;
 
 	/**
-	 * Sets the persistence manager to use it later on the methods
+	 * The constructor sets the persistence manager to use it later on the methods.
 	 */
 	public ReviewDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
