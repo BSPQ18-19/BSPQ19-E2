@@ -1,20 +1,25 @@
-package es.deusto.spq.server.data.jdo;
+package es.deusto.spq.server.data.dto;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.jdo.annotations.ForeignKey;
-import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
 
+import es.deusto.spq.server.data.jdo.Review;
+
 /**
- * The class that defines the Review object
+ * The DTO of the review object
  *
  * @author egoes
  *
  */
-@PersistenceCapable(detachable = "true")
-public class Review {
+public class ReviewDTO implements Serializable {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	// The id of the review
 	@PrimaryKey
 	private String reviewID;
@@ -23,12 +28,11 @@ public class Review {
 	// The score goes from 0 to 10
 	private int score;
 	private Timestamp publishDate;
-	// The hotel where the review is posted
+	// The hotel DTO where the review is posted
 	@ForeignKey
-	private Hotel hotel;
-	// The user that posts the review
-	@ForeignKey
-	private User user;
+	private HotelDTO hotel;
+	// The user DTO that posts the review
+	private UserDTO user;
 
 	/**
 	 *
@@ -36,30 +40,10 @@ public class Review {
 	 * @param opinion     the opinion of the user about a hotel
 	 * @param score       the score that a user gives a hotel. From 0 to 10
 	 * @param publishDate the publishDate of the review
+	 * @param hotel       the hotel DTO from the hotel that is the review about
+	 * @param user        the user DTO of the user that has posted the review
 	 */
-	public Review(String reviewID, String opinion, int score, Timestamp publishDate) {
-		super();
-		this.reviewID = reviewID;
-		this.opinion = opinion;
-		if (score < 0)
-			this.score = 0;
-		else if (score > 10)
-			this.score = 10;
-		else
-			this.score = score;
-		this.publishDate = publishDate;
-	}
-
-	/**
-	 *
-	 * @param reviewID    the id to identify the review if needed
-	 * @param opinion     the opinion of the user about a hotel
-	 * @param score       the score that a user gives a hotel. From 0 to 10
-	 * @param publishDate the publishDate of the review
-	 * @param hotel       the hotel from the hotel that is the review about
-	 * @param user        the user of the user that has posted the review
-	 */
-	public Review(String reviewID, String opinion, int score, Timestamp publishDate, Hotel hotel, User user) {
+	public ReviewDTO(String reviewID, String opinion, int score, Timestamp publishDate, HotelDTO hotel, UserDTO user) {
 		super();
 		this.reviewID = reviewID;
 		this.opinion = opinion;
@@ -106,19 +90,19 @@ public class Review {
 		this.publishDate = publishDate;
 	}
 
-	public Hotel getHotel() {
+	public HotelDTO getHotel() {
 		return hotel;
 	}
 
-	public void setHotel(Hotel hotel) {
+	public void setHotel(HotelDTO hotel) {
 		this.hotel = hotel;
 	}
 
-	public User getUser() {
+	public UserDTO getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserDTO user) {
 		this.user = user;
 	}
 
