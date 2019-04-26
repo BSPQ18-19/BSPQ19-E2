@@ -14,8 +14,8 @@ public class AllowedLocale {
     public final static AllowedLocale ENGLISH = new AllowedLocale(
             new Locale("en", "US"),
             "en_US",
-            "English",
-            "English"
+            "English/US",
+            "English/US"
     );
 
     /**
@@ -24,8 +24,8 @@ public class AllowedLocale {
     public final static AllowedLocale SPANISH = new AllowedLocale(
             new Locale("es", "ES"),
             "es_ES",
-            "Spanish",
-            "Español"
+            "Spanish/Spain",
+            "Español/España"
     );
 
     /**
