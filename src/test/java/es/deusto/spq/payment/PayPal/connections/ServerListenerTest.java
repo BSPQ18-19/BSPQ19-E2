@@ -23,7 +23,7 @@ public class ServerListenerTest {
 	@BeforeClass
 	public static void initialize() throws IOException {
 		paypal = new PayPal();
-		serverListener = new ServerListener(45000);
+		serverListener = new ServerListener(45001);
 	}
 	
 	/** Sets up the necessary data. */
