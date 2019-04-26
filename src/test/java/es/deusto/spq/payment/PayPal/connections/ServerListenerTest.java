@@ -13,6 +13,7 @@ public class ServerListenerTest {
 	/** An instance of the class to be tested. */
 	private static ServerListener serverListener;
 	/** Instanced to load data. */
+	@SuppressWarnings("unused")
 	private static PayPal paypal;
 	
 	/**
@@ -22,7 +23,7 @@ public class ServerListenerTest {
 	@BeforeClass
 	public static void initialize() throws IOException {
 		paypal = new PayPal();
-		serverListener = new ServerListener(45000);
+		serverListener = new ServerListener(45001);
 	}
 	
 	/** Sets up the necessary data. */

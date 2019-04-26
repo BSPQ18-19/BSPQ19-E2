@@ -21,7 +21,7 @@ import es.deusto.spq.payment.PayPal.logger.PayPalLogger;
  * an "ERROR" message will be sent to the client and the connection will be closed.</p>
  * 
  * <p>{@link es.deusto.spq.payment.PayPal.connections.Payer} to process the payment and 
- * {@link es.deusto.spq.payment.PayPal.connections.Registrator} to register new users are
+ * {@link es.deusto.spq.payment.PayPal.connections.Registrar} to register new users are
  * the only options that can be executed.</p>
  * 
  * <p>In order to initialize a ServerListener, the port number must be provided (to be 
@@ -78,14 +78,14 @@ public class ServerListener extends Thread {
 				// The options the client has with its connection.
 				switch(message) {
 				case "REGISTER":
-					Registrator registrator = new Registrator(client, objectOutputStream, objectInputStream);
-					PayPal.addRegistrator(registrator);
-					registrator.start();
+					Registrar registrator = new Registrar(client, objectOutputStream, objectInputStream);
+					if(PayPal.addRegistrar(registrator))
+						registrator.start();
 					break;
 				case "PAY":
 					Payer payer = new Payer(client, objectOutputStream, objectInputStream);
-					PayPal.addPayer(payer);
-					payer.start();
+					if(PayPal.addPayer(payer))
+						payer.start();
 					break;
 				default:
 					objectOutputStream.writeObject("ERROR");
@@ -97,9 +97,10 @@ public class ServerListener extends Thread {
 				try {
 					if(!client.isClosed())
 						client.close();
-					log.info("Client listened.");
 				} catch (IOException e) {
 					log.warn("Error closing connection with client.");
+				} finally {
+					closeListener();
 				}
 			}
 		}
@@ -116,6 +117,8 @@ public class ServerListener extends Thread {
 	public void closeListener() {
 		serverActive = false;
 		PayPal.removeListener(this);
+		interrupt();
+		log.info("ServerListener closed");
 	}
 
 }

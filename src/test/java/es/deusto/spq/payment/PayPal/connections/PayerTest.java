@@ -11,6 +11,7 @@ public class PayerTest {
 	/** The payer class to be tested. */
 	private static Payer payer;
 	/** Instanced to load data. */
+	@SuppressWarnings("unused")
 	private static PayPal paypal;
 
 	/**
