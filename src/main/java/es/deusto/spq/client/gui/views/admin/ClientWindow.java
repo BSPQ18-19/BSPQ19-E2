@@ -7,21 +7,22 @@ import es.deusto.spq.client.controller.HotelManagementController;
 import org.apache.log4j.Logger;
 
 public class ClientWindow extends JInternalFrame {
-	
-	private static final long serialVersionUID = 1L;
-	private static ClientWindow clientWindow;
+
+	private HotelAdminView adminView;
+	private ClientWindow clientWindow;
 	private ScreenType currentScreenType;
 	private int screenWidth, screenHeight;
 	private HotelManagementController controller;
 	private JPanel mainPanel;
 	private Logger log;
-	
 
-	// private constructor using lazy singleton
-	private ClientWindow(HotelManagementController controller) {
+	ClientWindow(HotelAdminView adminView) {
+
+		this.adminView = adminView;
+
 		log = ClientLogger.getLogger();
-		
-		this.controller = controller;
+
+		this.controller = adminView.getViewManager().getClient().getController();
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setTitle("Hotel client");
@@ -42,10 +43,10 @@ public class ClientWindow extends JInternalFrame {
 		
 		switch(nextScreenType) {
 		case VIEW_HOTEL_ADMIN:
-			mainPanel = new ViewHotel(screenWidth, screenHeight, controller);
+			mainPanel = new ViewHotel(screenWidth, screenHeight, this);
 			break;
 		case CREATE_HOTEL_ADMIN:
-			mainPanel = new CreateHotel(screenWidth, screenHeight, controller);
+			mainPanel = new CreateHotel(screenWidth, screenHeight, this);
 			break;
 		default:
 			break;
@@ -54,14 +55,11 @@ public class ClientWindow extends JInternalFrame {
 		this.revalidate();
 	}
 
-	// lazy singleton
-	public static ClientWindow getClientWindow(HotelManagementController controller) {
-		if (clientWindow == null)
-			clientWindow = new ClientWindow(controller);
-		return clientWindow;
-	}
-
 	public HotelManagementController getController() {
 		return controller;
+	}
+
+	public HotelAdminView getAdminView() {
+		return adminView;
 	}
 }

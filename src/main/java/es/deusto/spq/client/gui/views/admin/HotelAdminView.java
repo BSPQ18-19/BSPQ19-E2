@@ -10,7 +10,7 @@ import javax.swing.*;
 
 public class HotelAdminView extends View {
 
-    ClientWindow clientWindow;
+    private ClientWindow clientWindow;
 
     public HotelAdminView(ViewManager viewManager) {
         super(viewManager);
@@ -33,18 +33,19 @@ public class HotelAdminView extends View {
 
     @Override
     public void initialize() {
-        clientWindow = ClientWindow.getClientWindow(getViewManager().getClient().getController());
+        clientWindow = new ClientWindow(this);
         clientWindow.setVisible(true);
+        addDisposeEventHandler();
     }
 
     @Override
     public void dispose() {
-        getInternalFrame().dispose();
+        clientWindow.dispose();
     }
 
     @Override
     public void bringToFront() {
-        getInternalFrame().toFront();
+        clientWindow.toFront();
     }
 
     @Override

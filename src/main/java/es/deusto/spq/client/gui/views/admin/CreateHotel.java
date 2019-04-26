@@ -22,10 +22,6 @@ import es.deusto.spq.client.controller.HotelManagementController;
 
 public class CreateHotel extends JPanel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private JLabel idLabel, nameLabel, locationLabel, seasonStartLabel, seasonEndingLabel;
 	private TextField idTextField, nameTextField, locationTextField;
 	private TextField seasonStartTextField, seasonEndingTextField;
@@ -35,8 +31,12 @@ public class CreateHotel extends JPanel {
 	private int screenWidth, screenHeight;
 	private HotelManagementController controller;
 	private Logger log;
+	private ClientWindow clientWindow;
 	
-	public CreateHotel(int screenWidth, int screenHeight, HotelManagementController controller) {
+	public CreateHotel(int screenWidth, int screenHeight, ClientWindow clientWindow) {
+
+		this.clientWindow = clientWindow;
+
 		log = ClientLogger.getLogger();
 		
 		this.setLayout(new BorderLayout());
@@ -50,10 +50,10 @@ public class CreateHotel extends JPanel {
 		locationLabel = new JLabel("Location");
 		locationLabel.setFont(new Font(locationLabel.getName(), Font.PLAIN, 25));
 		
-		seasonStartLabel = new JLabel("Season start (YYYY-MM-DD)");
+		seasonStartLabel = new JLabel("Season start (YYYY-MM-DD hh:mm:ss)");
 		seasonStartLabel.setFont(new Font(seasonStartLabel.getName(), Font.PLAIN, 25));
 		
-		seasonEndingLabel = new JLabel("Season ending (YYYY-MM-DD)");
+		seasonEndingLabel = new JLabel("Season ending (YYYY-MM-DD hh:mm:ss)");
 		seasonEndingLabel.setFont(new Font(seasonEndingLabel.getName(), Font.PLAIN, 25));
 		
 		idTextField = new TextField("", 20);
@@ -72,7 +72,7 @@ public class CreateHotel extends JPanel {
 		seasonEndingTextField.setFont(new Font(seasonEndingTextField.getName(), Font.PLAIN, 25));
 		
 		
-		this.controller = controller;
+		this.controller = clientWindow.getController();
 		
 		this.setLayout(new BorderLayout());
 		this.screenWidth = screenWidth;
@@ -84,7 +84,7 @@ public class CreateHotel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindow.getClientWindow(controller).changeScreen(ScreenType.CREATE_HOTEL_ADMIN);
+				clientWindow.changeScreen(ScreenType.CREATE_HOTEL_ADMIN);
 				confirm.setEnabled(true);
 				
 			}
@@ -96,7 +96,7 @@ public class CreateHotel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindow.getClientWindow(controller).changeScreen(ScreenType.VIEW_HOTEL_ADMIN);		
+				clientWindow.changeScreen(ScreenType.VIEW_HOTEL_ADMIN);
 			}
 		});
 		
@@ -133,6 +133,13 @@ public class CreateHotel extends JPanel {
 		logout = new JButton("Log out");
 		logout.setSize(100, 30);
 		logout.setBackground(Color.white);
+
+		logout.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clientWindow.dispose();
+			}
+		});
 		
 		upperButtons = new JPanel();
 		upperButtons.setBackground(Color.LIGHT_GRAY);

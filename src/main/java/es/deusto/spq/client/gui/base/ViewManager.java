@@ -85,22 +85,14 @@ public class ViewManager {
     public void setPermission(ViewPermission permission) {
         this.permission = permission;
 
-        List<View> viewsToDispose = new ArrayList<>();
-
         // Close all Views that don't meet the new permission level
         for (Iterator<View> iterator = views.iterator(); iterator.hasNext();) {
             View view = iterator.next();
 
             if (!ViewPermission.hasPermission(permission, view.getViewPermission())) {
-                viewsToDispose.add(view);
+                view.dispose();
             }
         }
-
-        for (View view : views) {
-            view.dispose();
-        }
-
-
         repaintUI();
     }
 

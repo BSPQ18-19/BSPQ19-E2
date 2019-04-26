@@ -29,11 +29,7 @@ import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.server.data.dto.HotelDTO;
 
 public class ViewHotel extends JPanel{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+
 	private DefaultTableModel tableModel;
 	private JTable hotelsTable;
 	private JScrollPane tableScrollPane;
@@ -42,8 +38,12 @@ public class ViewHotel extends JPanel{
 	private JPanel upperButtons, centerPanel;
 	private int screenWidth, screenHeight;
 	private Logger log;
+	private ClientWindow clientWindow;
 
-	public ViewHotel(int screenWidth, int screenHeight, HotelManagementController controller) {
+	public ViewHotel(int screenWidth, int screenHeight, ClientWindow clientWindow) {
+
+		this.clientWindow = clientWindow;
+
 		log = ClientLogger.getLogger();
 		
 		this.setLayout(new BorderLayout());
@@ -56,7 +56,7 @@ public class ViewHotel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindow.getClientWindow(controller).changeScreen(ScreenType.CREATE_HOTEL_ADMIN);
+				clientWindow.changeScreen(ScreenType.CREATE_HOTEL_ADMIN);
 				confirm.setEnabled(true);
 				
 			}
@@ -68,7 +68,7 @@ public class ViewHotel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindow.getClientWindow(controller).changeScreen(ScreenType.VIEW_HOTEL_ADMIN);			
+				clientWindow.changeScreen(ScreenType.VIEW_HOTEL_ADMIN);
 			}
 		});
 		
@@ -79,7 +79,7 @@ public class ViewHotel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for(int i = 0; i < hotelsTable.getRowCount(); i++) {
-					controller.createHotel((String) hotelsTable.getValueAt(i, 0),
+					clientWindow.getController().createHotel((String) hotelsTable.getValueAt(i, 0),
 							(String) hotelsTable.getValueAt(i, 1), 
 							(String) hotelsTable.getValueAt(i, 2),
 							Timestamp.valueOf((String) hotelsTable.getValueAt(i, 3)),
@@ -96,7 +96,7 @@ public class ViewHotel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				if(hotelsTable.getSelectedRow() != -1) {
 					String id = (String) (hotelsTable.getValueAt(hotelsTable.getSelectedRow(), 0));
-					if(controller.deleteHotel(id)) {
+					if(clientWindow.getController().deleteHotel(id)) {
 						JOptionPane.showMessageDialog(null, "Hotel deleted", "Done", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}else {
@@ -151,13 +151,13 @@ public class ViewHotel extends JPanel{
 		this.add(upperButtons, BorderLayout.NORTH);
 		this.add(tableScrollPane, BorderLayout.CENTER);
 		
-		controller.setCurrentHotels();
-		controller.getCurrentHotels();
-		List<HotelDTO> retrievedHotels = controller.retrieveHotels();
+		clientWindow.getController().setCurrentHotels();
+		clientWindow.getController().getCurrentHotels();
+		List<HotelDTO> retrievedHotels = clientWindow.getController().retrieveHotels();
 		if(retrievedHotels == null || retrievedHotels.size() == 0) {
 			JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);
 		}else {
-			controller.setCurrentHotels();
+			clientWindow.getController().setCurrentHotels();
 			if(tableModel.getRowCount() != 0) {
 				for(int i = tableModel.getRowCount()-1; i >= 0; i--) {
 					tableModel.removeRow(i);
@@ -198,7 +198,7 @@ public class ViewHotel extends JPanel{
 						+ "-" + seasonEndingMonth
 						+ "-" + seasonEndingDate});
 
-				controller.setCurrentHotels(hotel);
+				clientWindow.getController().setCurrentHotels(hotel);
 			}
 		}
 
