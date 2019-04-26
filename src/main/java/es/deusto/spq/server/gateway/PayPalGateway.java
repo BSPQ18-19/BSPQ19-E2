@@ -49,7 +49,6 @@ public class PayPalGateway implements IPayPalGateway {
 		} catch (IOException e) {
 			log.warn("Could not close connection with PayPal - " + e.getMessage());
 		}
-
 	}
 
 	@Override
