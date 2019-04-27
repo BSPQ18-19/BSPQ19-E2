@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.text.JTextComponent;
 
@@ -26,7 +25,6 @@ import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.util.SpringUtilities;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
-import es.deusto.spq.server.locale.LocaleManager;
 
 /**
  * The GUI for editing the user data
@@ -52,6 +50,7 @@ public class EditUserView extends View {
 	private JTextField nameTextField, emailTextField, phoneTextField, addressTextField;
 	private JPasswordField passwordField, passwordConfirmationField;
 	private JButton saveChanges, dontSave;
+	 private JLabel nameLabel, emailLabel, passwordLabel, passwordConfirmationLabel, phoneLabel, addressLabel;
 
 	// Logger
 	private Logger log;
@@ -94,45 +93,42 @@ public class EditUserView extends View {
 		final JPanel bottomButtons = new JPanel(new BorderLayout());
 
 		// Name field
-		final JLabel nameLabel = new JLabel(LocaleManager.getMessage("editUser.label.name"), SwingConstants.TRAILING);
+		nameLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.name"), JLabel.TRAILING);
 		form.add(nameLabel);
 		nameTextField = new JTextField(10);
 		nameLabel.setLabelFor(nameTextField);
 		form.add(nameTextField);
 
 		// Email field
-		final JLabel emailLabel = new JLabel(LocaleManager.getMessage("editUser.label.email"), SwingConstants.TRAILING);
+		emailLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.email"), JLabel.TRAILING);
 		form.add(emailLabel);
 		emailTextField = new JTextField(10);
 		emailLabel.setLabelFor(emailTextField);
 		form.add(emailTextField);
 
 		// Password field
-		final JLabel passwordLabel = new JLabel(LocaleManager.getMessage("editUser.label.password"),
-				SwingConstants.TRAILING);
+		passwordLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.password"), JLabel.TRAILING);
 		form.add(passwordLabel);
 		passwordField = new JPasswordField(10);
 		passwordLabel.setLabelFor(passwordField);
 		form.add(passwordField);
 
 		// Password confirmation field
-		final JLabel passwordConfirmationLabel = new JLabel(
-				LocaleManager.getMessage("editUser.label.password-confirmation"), SwingConstants.TRAILING);
+		passwordConfirmationLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.password-confirmation"), JLabel.TRAILING);
 		form.add(passwordConfirmationLabel);
 		passwordConfirmationField = new JPasswordField(10);
 		passwordConfirmationLabel.setLabelFor(passwordConfirmationField);
 		form.add(passwordConfirmationField);
 
 		// Phone field
-		final JLabel phoneLabel = new JLabel(LocaleManager.getMessage("editUser.label.phone"), SwingConstants.TRAILING);
+		phoneLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.phone"), JLabel.TRAILING);
 		form.add(phoneLabel);
 		phoneTextField = new JTextField(10);
 		phoneLabel.setLabelFor(phoneTextField);
 		form.add(phoneTextField);
 
 		// Address field
-		final JLabel addressLabel = new JLabel(LocaleManager.getMessage("editUser.label.address"),
-				SwingConstants.TRAILING);
+		addressLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.address"), JLabel.TRAILING);
 		form.add(addressLabel);
 		addressTextField = new JTextField(10);
 		addressLabel.setLabelFor(addressTextField);
@@ -147,7 +143,7 @@ public class EditUserView extends View {
 		container.add(form, BorderLayout.CENTER);
 
 		// Save Changes button
-		saveChanges = new JButton(LocaleManager.getMessage("editUser.saveChanges"));
+		saveChanges = new JButton(getViewManager().getClient().getLocaleManager().getMessage("editUser.saveChanges"));
 		bottomButtons.add(saveChanges, BorderLayout.PAGE_START); // add it to the bottom
 
 		// Register the click function
@@ -155,7 +151,7 @@ public class EditUserView extends View {
 			handleFormSubmission();
 		});
 
-		dontSave = new JButton(LocaleManager.getMessage("editUser.dontSave"));
+		dontSave = new JButton(getViewManager().getClient().getLocaleManager().getMessage("editUser.dontSave"));
 		bottomButtons.add(dontSave, BorderLayout.PAGE_END); // add it to the bottom
 
 		// Register the click function
@@ -203,7 +199,7 @@ public class EditUserView extends View {
 	}
 
 	/**
-	 * All the logic for registrations: validates, sends data to server, checks
+	 * All the logic for edit User data: validates, sends data to server, checks
 	 * response
 	 */
 	private void handleFormSubmission() {
@@ -217,14 +213,13 @@ public class EditUserView extends View {
 
 		// Check that at least one field have been edited
 		boolean allEmpty = true;
-		for (final JTextComponent component : components) {
-			if (component.getText().trim().isEmpty()) {
+		for (final JTextComponent component : components)
+			if (component.getText().trim().isEmpty())
 				allEmpty = true;
-			} else {
+			else {
 				allEmpty = false;
 				break;
 			}
-		}
 		if (allEmpty) {
 			notifyValidationFail(ValidationFailReason.NO_CHANGES_MADE);
 			// Re-enable fields
@@ -250,16 +245,16 @@ public class EditUserView extends View {
 		// If it fails, tell the user and dispose the frame
 		if (result == null) {
 			ClientLogger.getLogger().fatal("User not registered...");
-			JOptionPane.showMessageDialog(frame, LocaleManager.getMessage("editUser.validation.errors.unknown"),
-					LocaleManager.getMessage("editUser.validation.errors.unknown.title"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame, getViewManager().getClient().getLocaleManager().getMessage("editUser.validation.errors.unknown"),
+					getViewManager().getClient().getLocaleManager().getMessage("editUser.validation.errors.unknown.title"), JOptionPane.ERROR_MESSAGE);
 
 			frame.dispose();
 			return;
 		}
 
 		// Success!
-		JOptionPane.showMessageDialog(frame, LocaleManager.getMessage("editUser.success.body"),
-				LocaleManager.getMessage("editUser.success.title"), JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(frame, getViewManager().getClient().getLocaleManager().getMessage("editUser.success.body"),
+				getViewManager().getClient().getLocaleManager().getMessage("editUser.success.title"), JOptionPane.INFORMATION_MESSAGE);
 		frame.dispose();
 
 	}
@@ -289,8 +284,8 @@ public class EditUserView extends View {
 			break;
 		}
 
-		JOptionPane.showMessageDialog(frame, LocaleManager.getMessage(messageKey),
-				LocaleManager.getMessage("editUser.validation.title"), messageType);
+		JOptionPane.showMessageDialog(frame, getViewManager().getClient().getLocaleManager().getMessage(messageKey),
+				getViewManager().getClient().getLocaleManager().getMessage("editUser.validation.title"), messageType);
 	}
 
 	/**
@@ -306,10 +301,32 @@ public class EditUserView extends View {
 		phoneTextField.setEnabled(enable);
 		addressTextField.setEnabled(enable);
 		saveChanges.setEnabled(enable);
+		dontSave.setEnabled(enable);
 	}
+
+
 
 	@Override
 	public void bringToFront() {
 		getInternalFrame().toFront();
 	}
+
+	@Override
+    public void refresh() {
+        onLocaleChange();
+    }
+
+	/**
+	 * Apply localization changes
+	 */
+    private void onLocaleChange() {
+        nameLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.name"));
+        emailLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.email"));
+        passwordLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.password"));
+        passwordConfirmationLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.password-confirmation"));
+        phoneLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.phone"));
+        addressLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.address"));
+        saveChanges.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.saveChanges"));
+        dontSave.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.dontSave"));
+    }
 }
