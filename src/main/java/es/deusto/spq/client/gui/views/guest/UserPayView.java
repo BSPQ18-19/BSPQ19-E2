@@ -1,7 +1,6 @@
 package es.deusto.spq.client.gui.views.guest;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
@@ -11,7 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.SpringLayout;
 import javax.swing.WindowConstants;
 import javax.swing.text.JTextComponent;
 
@@ -25,34 +23,14 @@ import es.deusto.spq.client.gui.base.ViewManager;
  */
 public class UserPayView extends View{
 
-	//TODO ADD THE LOSCALIZATION ON ALL THE TEXT
-
 	private JFrame frame;
 
 	private JRadioButton rdbtnMasterCard, rdbtnPaypal;
 	private JButton btnMakePayment, btnCancelPayment;
-	private JTextField tFUsername, tFPassword;
-	private JLabel lblUsername, lblPassword;
-	private JPanel formPaypal, formMasterCard;
-	private HotelManagementController controller;
-
-	/**
-	 * Launch the application.
-	 */
-	//TODO DELETE THIS IS ONLY FOR TESTING REASONS
-	public static void main(final String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					final UserPayView window = new UserPayView(null);
-					window.frame.setVisible(true);
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JTextField tFUsername, tFPassword, tFCreditCardNumber, tFSecurityCode;
+	private JLabel lblUsername, lblPassword, lblCreditCardNumber, lblSecurityCode;
+	private JPanel form, formMasterCard;
+	private final HotelManagementController controller;
 
 	/**
 	 * Class constructor
@@ -60,8 +38,7 @@ public class UserPayView extends View{
 	 */
 	public UserPayView(ViewManager viewManager) {
 		super(viewManager);
-		// TODO Auto-generated constructor stub
-		initialize();
+		controller = viewManager.getClient().getController();
 	}
 
 	/**
@@ -70,7 +47,7 @@ public class UserPayView extends View{
 	@Override
 	public void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 307, 300);
+		frame.setBounds(100, 100, 307, 201);
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -79,18 +56,18 @@ public class UserPayView extends View{
 		final JPanel bottomPanel = new JPanel();
 		bottomPanel.setBackground(Color.LIGHT_GRAY);
 
-		formPaypal = new JPanel();
-		formMasterCard = new JPanel(new SpringLayout());
+		form = new JPanel();
+		frame.getContentPane().add(form, BorderLayout.CENTER);
 
 		// Selectors of payment method
-		rdbtnMasterCard = new JRadioButton("Pay with MasterCard");
+		rdbtnMasterCard = new JRadioButton(getViewManager().getClient().getLocaleManager().getMessage("pay.radioButton.mastercard"));
 		topPanel.add(rdbtnMasterCard);
 
 		rdbtnMasterCard.addActionListener((final ActionEvent e) -> {
 			payWithMasterCard();
 		});
 
-		rdbtnPaypal = new JRadioButton("Pay with Paypal");
+		rdbtnPaypal = new JRadioButton(getViewManager().getClient().getLocaleManager().getMessage("pay.radioButton.paypal"));
 		topPanel.add(rdbtnPaypal);
 
 		rdbtnPaypal.addActionListener((final ActionEvent e) -> {
@@ -100,14 +77,14 @@ public class UserPayView extends View{
 		frame.getContentPane().add(topPanel, BorderLayout.PAGE_START);
 
 		// Buttons at the bottom
-		btnMakePayment = new JButton("Make Payment");
+		btnMakePayment = new JButton(getViewManager().getClient().getLocaleManager().getMessage("pay.button.makePayment"));
 		bottomPanel.add(btnMakePayment);
 
 		btnMakePayment.addActionListener((final ActionEvent e) -> {
 			handleMakePayment();
 		});
 
-		btnCancelPayment = new JButton("Cancel Payment");
+		btnCancelPayment = new JButton(getViewManager().getClient().getLocaleManager().getMessage("pay.button.cancelPayment"));
 		bottomPanel.add(btnCancelPayment);
 
 		btnCancelPayment.addActionListener((final ActionEvent e) -> {
@@ -115,54 +92,81 @@ public class UserPayView extends View{
 		});
 
 		frame.getContentPane().add(bottomPanel, BorderLayout.PAGE_END);
-
-		frame.getContentPane().add(formPaypal);
-		final SpringLayout sl_formPaypal = new SpringLayout();
-		formPaypal.setLayout(sl_formPaypal);
+		form.setLayout(null);
 
 		//MasterCard fields
-		//TODO add the MasterCard fields
+		lblCreditCardNumber = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("pay.label.cardNumber"), JLabel.TRAILING);
+		lblCreditCardNumber.setBounds(12, 28, 111, 16);
+		lblCreditCardNumber.setVisible(false);
+		form.add(lblCreditCardNumber);
+
+		tFCreditCardNumber = new JTextField();
+		tFCreditCardNumber.setBounds(141, 26, 121, 20);
+		tFCreditCardNumber.setVisible(false);
+		form.add(tFCreditCardNumber);
+		tFCreditCardNumber.setColumns(10);
+
+		lblSecurityCode = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("pay.label.securityCode"), JLabel.TRAILING);
+		lblSecurityCode.setBounds(44, 53, 79, 16);
+		lblSecurityCode.setVisible(false);
+		form.add(lblSecurityCode);
+
+		tFSecurityCode = new JTextField();
+		tFSecurityCode.setBounds(141, 51, 121, 20);
+		form.add(tFSecurityCode);
+		tFSecurityCode.setVisible(false);
+		tFSecurityCode.setColumns(10);
 
 		// Paypal fields
-		lblUsername = new JLabel("Username");
-		sl_formPaypal.putConstraint(SpringLayout.NORTH, lblUsername, 20, SpringLayout.NORTH, formPaypal);
-		sl_formPaypal.putConstraint(SpringLayout.WEST, lblUsername, 54, SpringLayout.WEST, formPaypal);
-		lblUsername.setBounds(41, 73, 60, 14);
-		formPaypal.add(lblUsername);
+		lblUsername = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("pay.label.username"), JLabel.TRAILING);
+		lblUsername.setBounds(64, 28, 59, 16);
+		lblUsername.setVisible(false);
+		form.add(lblUsername);
 
 		tFUsername = new JTextField();
-		sl_formPaypal.putConstraint(SpringLayout.NORTH, tFUsername, 0, SpringLayout.NORTH, lblUsername);
-		sl_formPaypal.putConstraint(SpringLayout.WEST, tFUsername, 44, SpringLayout.EAST, lblUsername);
-		tFUsername.setBounds(141, 70, 86, 20);
+		form.add(tFUsername);
+		tFUsername.setBounds(141, 26, 121, 20);
+		tFUsername.setVisible(false);
 		tFUsername.setColumns(10);
-		formPaypal.add(tFUsername);
 
-		lblPassword = new JLabel("Password");
-		sl_formPaypal.putConstraint(SpringLayout.NORTH, lblPassword, 26, SpringLayout.SOUTH, lblUsername);
-		sl_formPaypal.putConstraint(SpringLayout.WEST, lblPassword, 0, SpringLayout.WEST, lblUsername);
-		lblPassword.setBounds(41, 116, 60, 14);
-		formPaypal.add(lblPassword);
+		lblPassword = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("pay.label.password"), JLabel.TRAILING);
+		lblPassword.setBounds(64, 53, 59, 16);
+		lblPassword.setVisible(false);
+		form.add(lblPassword);
 
 		tFPassword = new JTextField();
-		sl_formPaypal.putConstraint(SpringLayout.NORTH, tFPassword, -3, SpringLayout.NORTH, lblPassword);
-		sl_formPaypal.putConstraint(SpringLayout.WEST, tFPassword, 0, SpringLayout.WEST, tFUsername);
-		tFPassword.setBounds(141, 113, 86, 20);
+		tFPassword.setBounds(141, 51, 121, 20);
 		tFPassword.setColumns(10);
-		formPaypal.add(tFPassword);
-		formPaypal.setVisible(false);
-
+		tFPassword.setVisible(false);
+		form.add(tFPassword);
 	}
 
 	/**
-	 * When paying with paypal shows teh fields
+	 * When paying with paypal shows the fields
 	 */
 	private void payWithPaypal() {
 		if (rdbtnPaypal.isSelected()) {
 			rdbtnMasterCard.setSelected(false);
-			formPaypal.setVisible(true);
-			formMasterCard.setVisible(false);
-		} else
-			formPaypal.setVisible(false);
+
+			//To show
+			lblUsername.setVisible(true);
+			tFUsername.setVisible(true);
+			lblPassword.setVisible(true);
+			tFPassword.setVisible(true);
+
+			//To hide
+			lblCreditCardNumber.setVisible(false);
+			tFCreditCardNumber.setVisible(false);
+			lblSecurityCode.setVisible(false);
+			tFCreditCardNumber.setVisible(false);
+
+		} else {
+			//To hide
+			lblUsername.setVisible(false);
+			tFUsername.setVisible(false);
+			lblPassword.setVisible(false);
+			tFPassword.setVisible(false);
+		}
 	}
 
 	/**
@@ -171,9 +175,26 @@ public class UserPayView extends View{
 	private void payWithMasterCard() {
 		if (rdbtnMasterCard.isSelected()) {
 			rdbtnPaypal.setSelected(false);
-			formPaypal.setVisible(false);
-		} else
-			formMasterCard.setVisible(false);
+
+			//To show
+			lblCreditCardNumber.setVisible(true);
+			tFCreditCardNumber.setVisible(true);
+			lblSecurityCode.setVisible(true);
+			tFSecurityCode.setVisible(true);
+
+			//To hide
+			lblUsername.setVisible(false);
+			tFUsername.setVisible(false);
+			lblPassword.setVisible(false);
+			tFPassword.setVisible(false);
+
+		} else {
+			//To hide
+			lblCreditCardNumber.setVisible(false);
+			tFCreditCardNumber.setVisible(false);
+			lblSecurityCode.setVisible(false);
+			tFSecurityCode.setVisible(false);
+		}
 	}
 
 	/**
@@ -204,7 +225,8 @@ public class UserPayView extends View{
         };
 
 		final JTextComponent[] componentsMasterCard = {
-				//TODO Add the master card fields
+				tFCreditCardNumber,
+				tFSecurityCode,
         };
 		//Check that all the required field are filled,if not fails
 		if(rdbtnMasterCard.isSelected()) {
@@ -248,7 +270,10 @@ public class UserPayView extends View{
 		btnCancelPayment.setEnabled(enable);
 		rdbtnMasterCard.setEnabled(enable);
 		rdbtnPaypal.setEnabled(enable);
-		//TODO add the master card fields
+		lblCreditCardNumber.setEnabled(enable);
+		tFCreditCardNumber.setEnabled(enable);
+		lblSecurityCode.setEnabled(enable);
+		tFSecurityCode.setEnabled(enable);
 	}
 
 	/**
@@ -262,24 +287,23 @@ public class UserPayView extends View{
 
         switch (reason) {
             case REQUIRED_FIELD_EMPTY:
-                messageKey = "register.validation.errors.required";
+                messageKey = "pay.validation.errors.required";
                 messageType = JOptionPane.WARNING_MESSAGE;
                 break;
             case SELECT_PAYMENT_METHOD:
-                messageKey = "register.validation.errors.password-confirmation";
+                messageKey = "pay.validation.errors.noMethod";
                 messageType = JOptionPane.WARNING_MESSAGE;
                 break;
             default:
-                messageKey = "register.validation.errors.unknown";
+                messageKey = "pay.validation.errors.unknown";
                 messageType = JOptionPane.ERROR_MESSAGE;
                 break;
         }
 
-        //TODO ADD THE LOCALIZATION
-        /*JOptionPane.showMessageDialog(frame,
+        JOptionPane.showMessageDialog(frame,
                 getViewManager().getClient().getLocaleManager().getMessage(messageKey),
-                getViewManager().getClient().getLocaleManager().getMessage("register.validation.title"),
-                messageType);*/
+                getViewManager().getClient().getLocaleManager().getMessage("pay.validation.title"),
+                messageType);
     }
 
 	@Override
@@ -291,12 +315,13 @@ public class UserPayView extends View{
 	 * Changes the localization
 	 */
 	private void onLocalChange() {
-		//TODO ADD THE LOCALIZATION
-		lblUsername.setText("");
-		lblPassword.setText("");
-		btnCancelPayment.setText("");
-		btnMakePayment.setText("");
-		rdbtnMasterCard.setText("");
-		rdbtnPaypal.setText("");
+		lblUsername.setText(getViewManager().getClient().getLocaleManager().getMessage("pay.label.username"));
+		lblPassword.setText(getViewManager().getClient().getLocaleManager().getMessage("pay.label.password"));
+		btnCancelPayment.setText(getViewManager().getClient().getLocaleManager().getMessage("pay.button.cancelPayment"));
+		btnMakePayment.setText(getViewManager().getClient().getLocaleManager().getMessage("pay.button.makePayment"));
+		rdbtnMasterCard.setText(getViewManager().getClient().getLocaleManager().getMessage("pay.radioButton.mastercard"));
+		rdbtnPaypal.setText(getViewManager().getClient().getLocaleManager().getMessage("pay.radioButton.paypal"));
+		lblCreditCardNumber.setText(getViewManager().getClient().getLocaleManager().getMessage("pay.label.cardNumber"));
+		lblSecurityCode.setText(getViewManager().getClient().getLocaleManager().getMessage("pay.label.securityCode"));
 	}
 }
