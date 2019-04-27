@@ -10,6 +10,7 @@ import javax.jdo.Transaction;
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -178,5 +179,42 @@ public class UserDAO implements IDAO, IUserDAO {
 	private final void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
+	}
+
+	@Override
+	public boolean updateGuest(String userId, String name, String email, String password, String phone, String address) {
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			final Query<Guest> query = pm.newQuery(Guest.class);
+			query.setFilter("userID == '" + userId + "'");
+			@SuppressWarnings("unchecked")
+			final
+			List<Guest> result = (List<Guest>) query.execute();
+			tx.commit();
+
+			if(result == null || result.isEmpty() || result.size() > 1)
+				return false;
+			Guest guest = result.get(0);
+			
+			pm.makePersistent(guest);
+			guest.setName(name);
+			guest.setEmail(email);
+			guest.setPassword(password);
+			guest.setPhone(phone);
+			guest.setAddress(address);
+			
+			tx.commit();
+			return true;
+			
+		} catch (final Exception e) {
+			ServerLogger.getLogger().fatal("Did not update data of guest with ID: " + userId);
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+		return false;
 	}
 }

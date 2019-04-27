@@ -3,6 +3,7 @@ package es.deusto.spq.server.data.dao;
 import java.util.List;
 
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.User;
 
 public interface IUserDAO {
@@ -41,4 +42,17 @@ public interface IUserDAO {
 	boolean deleteUserbyID(UserDTO authorization, String ID);
 
 	UserDTO logIn(String email, String password);
+	
+	/**
+	 * Updates the data of the guest with the given ID.
+	 * @param userId - the ID of the guest to edit data.
+	 * @param name - the new name of the guest.
+	 * @param email - the new email of the guest.
+	 * @param password - the new password of the guest.
+	 * @param phone - the new phone of the guest.
+	 * @param address - the new address of the guest.
+	 * @return {@code true} if data was updated successfully, and 
+	 * 			{@code false} if not.
+	 */
+	public boolean updateGuest(String userId, String name, String email, String password, String phone, String address);
 }
