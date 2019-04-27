@@ -27,7 +27,7 @@ public interface IHotelManager extends Remote {
 	 * @return {@code true} if the the user has been successfully registered, and 
 	 * 			{@code false} if not.
 	 */
-	public boolean registerPayPal(String username, String password);
+	public boolean registerPayPal(String username, String password) throws RemoteException;
 	/**
 	 * Registers the user to the PayPal server.
 	 * @param username - the username of the new account.
@@ -36,7 +36,7 @@ public interface IHotelManager extends Remote {
 	 * @return {@code true} if the the user has been successfully registered, and 
 	 * 			{@code false} if not.
 	 */
-	public boolean registerPayPal(String username, String password, float quantity);
+	public boolean registerPayPal(String username, String password, float quantity) throws RemoteException;
 	/**
 	 * Makes a payment of the given quantity to the PayPal account.
 	 * @param username - the username of the account to make the payment.
@@ -45,7 +45,7 @@ public interface IHotelManager extends Remote {
 	 * @return {@code true} if the payment has been done successfully and 
 	 * 			{@code false} if not.
 	 */
-	public boolean payPayPal(String username, String password, float quantity);
+	public boolean payPayPal(String username, String password, float quantity) throws RemoteException;
 	/**
 	 * Makes a payment of the given quantity to the credit card.
 	 * @param cardNumber - the card number to make the payment.
@@ -54,5 +54,5 @@ public interface IHotelManager extends Remote {
 	 * @return {@code true} if the payment has been done successfully, and 
 	 * 		{@code false} if not.
 	 */
-	public boolean payMastercard(long cardNumber, int securityCode, float amount);
+	public boolean payMastercard(long cardNumber, int securityCode, float amount) throws RemoteException;
 }

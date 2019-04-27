@@ -65,13 +65,14 @@ public class Registrar extends Thread {
 	 * of money (100).
 	 * If true, requests the user to introduce the amount of money of the account.
 	 */
-	private boolean requestAmount = false;
+	private boolean requestAmount = true;
 	
 	@Override
 	public void run() {
 		if(client == null)
 			return;
 		try {
+			log.debug("Started client registration...");
 			objectOutputStream.writeObject("USERNAME");
 			String username = (String) objectInputStream.readObject();
 			objectOutputStream.writeObject("PASSWORD");
@@ -79,30 +80,25 @@ public class Registrar extends Thread {
 			User toBeRegistered;
 			if(requestAmount) {
 				objectOutputStream.writeObject("QUANTITY");
-				float amount = objectInputStream.readFloat();
+				float amount = (float) objectInputStream.readObject();
 				toBeRegistered = new User(username, password, amount);
 			} else {
 				toBeRegistered = new User(username, password, 100);
 			}
+			if(client.isClosed())
+				return;
 			boolean result = dataBase.registerUser(toBeRegistered);
 			objectOutputStream.writeObject(result ? "OK" : "ERROR");
 		} catch (Exception e) {
-			log.fatal(e.getMessage());
+			log.fatal("Error registering new user: " + e.getMessage());
 		} finally {
-			try {
-				if(!client.isClosed())
-					client.close();
-			} catch (Exception e) {
-				log.warn(e.getMessage());
-			} finally {
-				closeRegistrar();
-			}
+			closeRegistrar();
 		}
 	}
 	
 	/**
 	 * Closes the connection with the client. If an IOException arises, it is logged to
-	 * the logger. At the end, this thread is removed from the pool of Registrators in 
+	 * the logger. At the end, this thread is removed from the pool of Registrars in 
 	 * {@link es.deusto.spq.payment.PayPal.PayPal} class.
 	 */
 	public void closeRegistrar() {

@@ -69,6 +69,7 @@ public class PayPalGateway implements IPayPalGateway {
 	private void closeConnection() {
 		try {
 			server.close();
+			server = null;
 			log.info("Closed connection with PayPal");
 		} catch (IOException e) {
 			log.warn("Could not close connection with PayPal - " + e.getMessage());
@@ -101,6 +102,9 @@ public class PayPalGateway implements IPayPalGateway {
 			if(message.equals("OK")) {
 				result = true;
 				log.info("PayPal registration completed");
+			} else if(message.equals("QUANTITY")) {
+				log.warn("Server is configured to register with quantities");
+				return false;
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			log.warn(e.getMessage());
@@ -126,6 +130,7 @@ public class PayPalGateway implements IPayPalGateway {
 		boolean result = false;
 		try {
 			objectOutputStream.writeObject("REGISTER");
+			Thread.sleep(10);
 			message = (String) objectInputStream.readObject();
 			if(!message.equals("USERNAME"))
 				return false;
@@ -135,9 +140,16 @@ public class PayPalGateway implements IPayPalGateway {
 				return false;
 			objectOutputStream.writeObject(password);
 			message = (String) objectInputStream.readObject();
-			if(!message.equals("QUANTITY"))
-				return false;
-			objectOutputStream.writeFloat(quantity);
+			if(!message.equals("QUANTITY")) {
+				if(message.equals("OK")) {
+					log.warn("Created account with default quantity");
+					return true;
+				} else if(message.equals("ERROR")) {
+					log.warn("Did not create a user");
+					return false;
+				}
+			}
+			objectOutputStream.writeObject(quantity);
 			message = (String) objectInputStream.readObject();
 			if(message.equals("OK")) {
 				result = true;
@@ -147,6 +159,9 @@ public class PayPalGateway implements IPayPalGateway {
 			log.warn(e.getMessage());
 			log.warn("Did not complete registration");
 			return false;
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} finally {
 			closeConnection();
 		}
@@ -178,7 +193,7 @@ public class PayPalGateway implements IPayPalGateway {
 			message = (String) objectInputStream.readObject();
 			if(!message.equals("PRICE"))
 				return false;
-			objectOutputStream.writeFloat(quantity);
+			objectOutputStream.writeObject(quantity);
 			message = (String) objectInputStream.readObject();
 			if(message.equals("OK")) {
 				result = true;

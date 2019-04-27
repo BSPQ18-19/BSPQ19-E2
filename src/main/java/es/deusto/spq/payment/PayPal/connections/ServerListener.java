@@ -64,8 +64,9 @@ public class ServerListener extends Thread {
 	
 	@Override
 	public void run() {
-		log.info("New ServerListener active and waiting on port " + server.getLocalPort() + "...");
+		log.info("New ServerListener on port " + server.getLocalPort() + "...");
 		while(serverActive) {
+			log.info("Waiting for clients...");
 			try {
 				client = server.accept();
 				log.info("New client accepted. Remote address: " + client.getRemoteSocketAddress().toString());
@@ -93,15 +94,6 @@ public class ServerListener extends Thread {
 				}
 			} catch (Exception e) {
 				log.fatal(e.getMessage());
-			} finally {
-				try {
-					if(!client.isClosed())
-						client.close();
-				} catch (IOException e) {
-					log.warn("Error closing connection with client.");
-				} finally {
-					closeListener();
-				}
 			}
 		}
 	}

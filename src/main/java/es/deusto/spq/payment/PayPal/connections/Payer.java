@@ -67,14 +67,15 @@ public class Payer extends Thread {
 		if(client == null)
 			return;
 		try {
+			log.debug("Started client payment...");
 			objectOutputStream.writeObject("USERNAME");
 			String username = (String) objectInputStream.readObject();
 			objectOutputStream.writeObject("PASSWORD");
 			String password = (String) objectInputStream.readObject();
 			objectOutputStream.writeObject("PRICE");
-			float amount = objectInputStream.readFloat();
+			float amount = (float) objectInputStream.readObject();
 			Payment payment = new Payment(amount);
-			// Does not ask to input again the payment. If it's wrong, an error arises.
+			// Does not ask to input again the amount. If it's wrong, an error arises.
 			boolean result = dataBase.makePayment(username, password, payment);
 			objectOutputStream.writeObject(result ? "OK" : "ERROR");
 		} catch (Exception e) {
