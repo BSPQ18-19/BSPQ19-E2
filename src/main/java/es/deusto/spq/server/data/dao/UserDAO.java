@@ -10,6 +10,8 @@ import javax.jdo.Transaction;
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.Administrator;
+import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -168,6 +170,50 @@ public class UserDAO implements IDAO, IUserDAO {
 		return null;
 	}
 	
+	@Override
+	public List<Guest> getGuests(UserDTO authorization) {
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			Query<Guest> query = pm.newQuery(Guest.class);
+			@SuppressWarnings("unchecked")
+			List<Guest> result = (List<Guest>) query.execute();
+			tx.commit();
+
+			return result;
+		} catch (final Exception e) {
+			ServerLogger.getLogger().fatal("Error while retrieving guests from the database");
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+		return null;
+	}
+	
+	@Override
+	public List<Administrator> getAdministrators(UserDTO authorization) {
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			Query<Administrator> query = pm.newQuery(Administrator.class);
+			@SuppressWarnings("unchecked")
+			List<Administrator> result = (List<Administrator>) query.execute();
+			tx.commit();
+
+			return result;
+		} catch (final Exception e) {
+			ServerLogger.getLogger().fatal("Error while retrieving guests from the database");
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+		return null;
+	}
+
 	/**
 	 * Closes the transaction if it hasn't been closed before, and makes rollback.
 	 */
@@ -175,5 +221,5 @@ public class UserDAO implements IDAO, IUserDAO {
 		if (tx != null && tx.isActive())
 			tx.rollback();
 	}
-	
+
 }
