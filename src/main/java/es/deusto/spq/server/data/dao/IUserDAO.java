@@ -22,9 +22,10 @@ public interface IUserDAO {
 	 */
 	public UserDTO getUserbyID(UserDTO authorization, String ID);
 	/**
-	 * Creates the user in the data base, and returns a detached copy.
-	 * @param user the new user to be stored.
-	 * @return a detached copy of the new user, and null if an error has arised.
+	 * Stores the new user into the database. Note that User is an abstract class, so the 
+	 * argument must an instance of it to store properly. If not, exceptions may arise.
+	 * @param either a Guest or an Administrator, to be stores in the database.
+	 * @return a detached copy of the new user, and null if an error has arisen.
 	 */
 	public UserDTO createUser(User user);
 	/**
