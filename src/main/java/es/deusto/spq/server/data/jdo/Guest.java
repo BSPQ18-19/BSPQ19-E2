@@ -1,9 +1,9 @@
 package es.deusto.spq.server.data.jdo;
 
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.*;
 
 @PersistenceCapable(detachable = "true")
+@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public class Guest extends User {
 
 	@Persistent(defaultFetchGroup="true")

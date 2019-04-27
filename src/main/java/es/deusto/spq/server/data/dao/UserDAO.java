@@ -93,15 +93,27 @@ public class UserDAO implements IDAO, IUserDAO {
 	@Override
 	public UserDTO createUser(User user) {
 		try {
+			User result;
+			Guest guest;
+			Administrator administrator;
+			
 			tx = pm.currentTransaction();
 			tx.begin();
 
-			pm.makePersistent(user);
+			
+			if(user instanceof Guest) {
+				guest = (Guest) user;
+				pm.makePersistent(guest);
+				result = pm.detachCopy(guest);
+			} else {
+				administrator = (Administrator) user;
+				pm.makePersistent(administrator);
+				result = pm.detachCopy(administrator);
+			}
 
 			tx.commit();
 
-			User detachedCopy = pm.detachCopy(user);
-			return assembler.assembleUser(detachedCopy);
+			return assembler.assembleUser(result);
 
 		} catch (Exception e) {
 			ServerLogger.getLogger().fatal("Error in UserDAO:createUser()");

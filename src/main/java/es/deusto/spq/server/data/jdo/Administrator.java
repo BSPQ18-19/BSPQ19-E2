@@ -1,11 +1,18 @@
 package es.deusto.spq.server.data.jdo;
 
 import java.util.List;
+
+import javax.jdo.annotations.*;
+
 import java.util.ArrayList;
 
+@PersistenceCapable(detachable = "true")
+@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public class Administrator extends User {
 
 	/** The list of hotels created by this administrator. */
+	@Persistent(defaultFetchGroup="true")
+	@Join
 	private List<Hotel> createdHotels;
 
 	public Administrator(String userId, String name, String email, String password, String address) {
