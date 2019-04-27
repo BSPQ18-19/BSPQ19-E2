@@ -126,6 +126,13 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		return hotelAssembler.assemble(hotel);
 	}
 
+	@Override
+	public boolean updateGuestProfileData(String userId, String name, String email, String password, String phone,
+			String address) throws RemoteException {
+		if(userId == null)
+			return false;
+		return userDAO.updateGuest(userId, name, email, password, phone, address);
+	}
 
 	@Override
 	public boolean deleteHotel(String id) throws RemoteException {
@@ -144,5 +151,6 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		dao.cleanDB();
 		return false;
 	}
+
 
 }

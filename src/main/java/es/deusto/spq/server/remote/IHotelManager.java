@@ -19,4 +19,6 @@ public interface IHotelManager extends Remote {
 	boolean cleanDB() throws RemoteException;
 	//TODO getRoomsOfHotelbyID
 	//TODO getRoombyID
+	public boolean updateGuestProfileData(String userId, String name, String email, 
+			String password, String phone, String address) throws RemoteException;
 }

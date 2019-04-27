@@ -199,11 +199,16 @@ public class UserDAO implements IDAO, IUserDAO {
 			Guest guest = result.get(0);
 			
 			pm.makePersistent(guest);
-			guest.setName(name);
-			guest.setEmail(email);
-			guest.setPassword(password);
-			guest.setPhone(phone);
-			guest.setAddress(address);
+			if(name != null && !name.isEmpty())
+				guest.setName(name);
+			if(email != null && !name.isEmpty())
+				guest.setEmail(email);
+			if(password != null && !password.isEmpty())
+				guest.setPassword(password);
+			if(phone != null && !phone.isEmpty())
+				guest.setPhone(phone);
+			if(address != null && !address.isEmpty())
+				guest.setAddress(address);
 			
 			tx.commit();
 			return true;
