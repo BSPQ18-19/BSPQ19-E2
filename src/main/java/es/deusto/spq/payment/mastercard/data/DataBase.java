@@ -40,6 +40,16 @@ public class DataBase {
 		log = MastercardLogger.getLogger();
 		payments = new HashMap<CreditCard, List<Payment>>();
 		cards = new HashMap<Long, CreditCard>();
+		new DataLoader(this).loadCreditCards();
+		log.info("Loaded " + cards.size() + " cards, " + payments.size() + " payments.");
+	}
+	
+	public synchronized void addPayments(Map<CreditCard, List<Payment>> payments) {
+		this.payments.putAll(payments);
+	}
+	
+	public synchronized void addCards(Map<Long, CreditCard> cards) {
+		this.cards.putAll(cards);
 	}
 	
 	/**
@@ -65,7 +75,7 @@ public class DataBase {
 	 * @return {@code true} if the credit card was successfully added, and
 	 * 			{@code false} if not.
 	 */
-	public boolean addCreditCard(CreditCard creditCard) {
+	public synchronized boolean addCreditCard(CreditCard creditCard) {
 		if(creditCard == null || payments.containsKey(creditCard))
 			return false;
 		payments.put(creditCard, new ArrayList<Payment>());
@@ -81,13 +91,13 @@ public class DataBase {
 	 * @return {@code true} if the payment is processed, and
 	 * 			{@code false} if not.
 	 */
-	public boolean makePayment(CreditCard creditCard, Payment payment) {
+	public synchronized boolean makePayment(CreditCard creditCard, Payment payment) {
 		if(creditCard == null || payment == null || !payments.containsKey(creditCard))
 			return false;
 		List<Payment> tmp = payments.get(creditCard);
 		tmp.add(payment);
 		payments.put(creditCard, tmp);
-		log.info(payment.getAmount() + " has been charged to card with number: " + creditCard.getCardNumber());
+		log.info(payment.getAmount() + " charged to card " + creditCard.getCardNumber());
 		return true;
 	}
 	

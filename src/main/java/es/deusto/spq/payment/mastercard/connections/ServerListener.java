@@ -8,6 +8,7 @@ import java.net.Socket;
 
 import org.apache.log4j.Logger;
 
+import es.deusto.spq.payment.PayPal.data.DataBase;
 import es.deusto.spq.payment.mastercard.Mastercard;
 import es.deusto.spq.payment.mastercard.logger.MastercardLogger;
 
@@ -42,7 +43,8 @@ public class ServerListener extends Thread {
 	private ServerSocket server;
 	/** The client that establishes the connection to this server. */
 	private Socket client;
-	
+	/** Initialization of the database to load all the data. */
+	private DataBase dataBase;
 	/**
 	 * Creates a new instance of the current ServerListener. In order to get it started,
 	 * the Thread's <code>start</code> method must be called.
@@ -51,8 +53,10 @@ public class ServerListener extends Thread {
 	 */
 	public ServerListener(int port) throws IOException {
 		log = MastercardLogger.getLogger();
+		dataBase = DataBase.getDataBase();
 		server = new ServerSocket(port);
 		server.setReuseAddress(true);
+		setName("Mastercard - " + getId() + " - ServerListener");
 	}
 	
 	/** The output stream to write data. */
@@ -63,8 +67,9 @@ public class ServerListener extends Thread {
 	
 	@Override
 	public void run() {
-		log.info("New ServerListener active and waiting on port " + server.getLocalPort() + "...");
+		log.info("New ServerListener on port " + server.getLocalPort() + "...");
 		while(serverActive) {
+			log.info("Waiting for clients...");
 			try {
 				client = server.accept();
 				log.info("New client accepted. Remote address: " + client.getRemoteSocketAddress().toString());
@@ -78,6 +83,7 @@ public class ServerListener extends Thread {
 				switch(message) {
 				case "PAY":
 					Payer payer = new Payer(client, objectOutputStream, objectInputStream);
+					payer.setName("Mastercard - " + payer.getId() + " - Payer");
 					if(Mastercard.addPayer(payer))
 						payer.start();
 					break;
@@ -87,14 +93,6 @@ public class ServerListener extends Thread {
 				}
 			} catch (Exception e) {
 				log.fatal(e.getMessage());
-			} finally {
-				try {
-					if(!client.isClosed())
-						client.close();
-					log.info("Client listened.");
-				} catch (IOException e) {
-					log.warn("Error closing connection with client.");
-				}
 			}
 		}
 	}
@@ -110,6 +108,8 @@ public class ServerListener extends Thread {
 	public void closeListener() {
 		serverActive = false;
 		Mastercard.removeListener(this);
+		interrupt();
+		log.info("ServerListener closed");
 	}
 
 }

@@ -61,6 +61,11 @@ public class CreditCard {
 	}
 
 	@Override
+	public String toString() {
+		return "CreditCard [number=" + number + ", securityCode=" + securityCode + "]";
+	}
+
+	@Override
 	public boolean equals(Object object) {
 		if(object instanceof CreditCard) {
 			CreditCard u = (CreditCard) object;
@@ -71,6 +76,6 @@ public class CreditCard {
 	
 	@Override
 	public int hashCode() {
-		return (int) number * securityCode;
+		return (int) number;
 	}
 }

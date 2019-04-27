@@ -69,6 +69,7 @@ public class MastercardGateway implements IMastercardGateway {
 	private void closeConnection() {
 		try {
 			server.close();
+			server = null;
 			log.info("Closed connection with Mastercard");
 		} catch (IOException e) {
 			log.warn("Could not close connection with Mastercard - " + e.getMessage());
@@ -99,14 +100,15 @@ public class MastercardGateway implements IMastercardGateway {
 			objectOutputStream.writeObject(securityCode);
 			message = (String) objectInputStream.readObject();
 			if(message.equals("ERROR")) {
-				result = true;
-				log.info("Mastercar payment error - incorrect parameters.");
+				log.warn("Mastercar payment error - incorrect parameters.");
 			} else if (message.equals("AMOUNT")){
-				objectOutputStream.writeFloat(amount);
+				objectOutputStream.writeObject(amount);
 				message = (String) objectInputStream.readObject();
-				if(!message.equals("OK")) {
+				if(message.equals("OK")) {
 					log.info("Mastercard payment completed");
 					return true;
+				} else {
+					return false;
 				}
 			} else {
 				log.warn("Unexpected server response");

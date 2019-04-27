@@ -69,4 +69,9 @@ public class Payment {
 		this.amount = amount;
 	}
 
+	@Override
+	public String toString() {
+		return "Payment [timestamp=" + timestamp + ", amount=" + amount + "]";
+	}
+
 }
