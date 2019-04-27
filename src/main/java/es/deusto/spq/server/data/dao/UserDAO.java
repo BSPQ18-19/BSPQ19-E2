@@ -192,7 +192,6 @@ public class UserDAO implements IDAO, IUserDAO {
 			@SuppressWarnings("unchecked")
 			final
 			List<Guest> result = (List<Guest>) query.execute();
-			tx.commit();
 
 			if(result == null || result.isEmpty() || result.size() > 1)
 				return false;
