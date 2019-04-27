@@ -13,16 +13,13 @@ import es.deusto.spq.payment.mastercard.Mastercard;
 import es.deusto.spq.payment.mastercard.logger.MastercardLogger;
 
 /**
- * This is one type of thread that will run on the PayPal server. The only aim of this
- * thread is to wait for clients and create new threads for the registration and payment 
- * (no thread is created if the option is not valid). There's only one change to submit 
- * the proper option: if it is valid a new thread will be created and the client will 
- * continue its conversation with that new thread; but if the option is not available, 
- * an "ERROR" message will be sent to the client and the connection will be closed.
- * <p>
- * {@link es.deusto.spq.payment.mastercard.connections.Payer} to process the payment and 
- * {@link es.deusto.spq.payment.mastercard.connections.Registrator} to register new users are
- * the only options that can be executed.
+ * This is one type of thread that will run on the Mastercard server. The only aim of this
+ * thread is to wait for clients and create new threads for the payment (no thread is 
+ * created if the option is not valid). There's only one change to submit the proper option: 
+ * if it is valid a new thread will be created and the client will continue its conversation 
+ * with that new thread; but if the option is not available, an "ERROR" message will be sent 
+ * to the client and the connection will be closed. The payment is processed in the 
+ * {@link es.deusto.spq.payment.mastercard.connections.Payer} class.
  * <p>
  * In order to initialize a ServerListener, the port number must be provided (to be 
  * used by the server to wait for connections). After the initialization, the Thread's 
