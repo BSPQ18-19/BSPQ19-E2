@@ -54,6 +54,7 @@ public class ServerListener extends Thread {
 		log = PayPalLogger.getLogger();
 		server = new ServerSocket(port);
 		server.setReuseAddress(true);
+		setName("PayPal - " + getId() + " - ServerListener");
 	}
 	
 	/** The output stream to write data. */
@@ -79,12 +80,14 @@ public class ServerListener extends Thread {
 				// The options the client has with its connection.
 				switch(message) {
 				case "REGISTER":
-					Registrar registrator = new Registrar(client, objectOutputStream, objectInputStream);
-					if(PayPal.addRegistrar(registrator))
-						registrator.start();
+					Registrar registrar = new Registrar(client, objectOutputStream, objectInputStream);
+					registrar.setName("PayPal - " + registrar.getId() + " - Registrar");
+					if(PayPal.addRegistrar(registrar))
+						registrar.start();
 					break;
 				case "PAY":
 					Payer payer = new Payer(client, objectOutputStream, objectInputStream);
+					payer.setName("PayPal - " + payer.getId() + " - Payer");
 					if(PayPal.addPayer(payer))
 						payer.start();
 					break;

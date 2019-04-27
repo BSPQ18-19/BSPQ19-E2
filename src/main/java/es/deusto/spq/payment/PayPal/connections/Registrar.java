@@ -65,7 +65,7 @@ public class Registrar extends Thread {
 	 * of money (100).
 	 * If true, requests the user to introduce the amount of money of the account.
 	 */
-	private boolean requestAmount = true;
+	private boolean requestAmount = false;
 	
 	@Override
 	public void run() {
