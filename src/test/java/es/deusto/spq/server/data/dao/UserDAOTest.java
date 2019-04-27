@@ -1,4 +1,4 @@
-package es.deusto.spq;
+package es.deusto.spq.server.data.dao;
 
 
 import org.junit.BeforeClass;
