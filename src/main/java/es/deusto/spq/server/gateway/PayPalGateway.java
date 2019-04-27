@@ -130,7 +130,6 @@ public class PayPalGateway implements IPayPalGateway {
 		boolean result = false;
 		try {
 			objectOutputStream.writeObject("REGISTER");
-			Thread.sleep(10);
 			message = (String) objectInputStream.readObject();
 			if(!message.equals("USERNAME"))
 				return false;
@@ -159,9 +158,6 @@ public class PayPalGateway implements IPayPalGateway {
 			log.warn(e.getMessage());
 			log.warn("Did not complete registration");
 			return false;
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} finally {
 			closeConnection();
 		}
