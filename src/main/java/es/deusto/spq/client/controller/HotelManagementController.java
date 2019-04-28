@@ -139,5 +139,28 @@ public boolean createHotel(String id, String name, String location, String seaso
 	public UserDTO getLoggedUser() {
 		return loggedUser;
 	}
+	
+	/**
+	 * 
+	 * @param arg1 In case of Paypal username, MasterCard cardNumber
+	 * @param arg2 In case of Paypal password, MasterCard cardNumber
+	 * @param amount The amount it cost
+	 * @param type The type of paymentMethods true paypal, false masterCard
+	 * @return
+	 */
+	public boolean payReservation(String arg1, String arg2, float amount, boolean type) {
+		try {
+			if(type) {
+				return rsl.getHotelManager().payPayPal(arg1, arg2, amount);
+			}else {
+				long cardNumber = Long.parseLong(arg1);
+				int securityCode = Integer.parseInt(arg2);
+				return rsl.getHotelManager().payMastercard(cardNumber, securityCode, amount);
+			}
+		}catch (Exception e) {
+			log.fatal("Error making payment: " + e);
+		}
+		return false;
+	}
 
 }

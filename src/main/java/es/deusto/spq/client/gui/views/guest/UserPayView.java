@@ -16,6 +16,7 @@ import javax.swing.text.JTextComponent;
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewManager;
+import es.deusto.spq.client.logger.ClientLogger;
 /**
  * The view where guest make the payment
  * @author egoes
@@ -209,7 +210,12 @@ public class UserPayView extends View{
 		/**
 		 * Payment method not selected
 		 */
-		SELECT_PAYMENT_METHOD
+		SELECT_PAYMENT_METHOD,
+
+		/**
+		 * 
+		 */
+		MASTERCARD_FIELDS_NOT_NUMBERS
 	}
 
 	/**
@@ -236,6 +242,14 @@ public class UserPayView extends View{
 					toggleFields(true);
 					return;
 				}
+			try {
+				long cardNumber = Long.parseLong(tFCreditCardNumber.getText());
+				int securityCode = Integer.parseInt(tFSecurityCode.getText());
+			}catch (NumberFormatException e) {
+				notifyValidationFail(ValidationFailReason.MASTERCARD_FIELDS_NOT_NUMBERS);
+				toggleFields(true);
+				return;
+			}
 		}else if(rdbtnPaypal.isSelected()){
 			for(final JTextComponent component : componentsPaypal)
 				if(component.getText().trim().isEmpty()) {
@@ -249,7 +263,42 @@ public class UserPayView extends View{
 			 return;
 		}
 
-		//TODO Call the paymentMethod
+		//Call Payment
+		if(rdbtnMasterCard.isSelected()) {
+			String cardNumber = tFCreditCardNumber.getText();
+			String securityCode = tFSecurityCode.getText();
+			if(!controller.payReservation(cardNumber, securityCode, 0, false)) {
+				ClientLogger.getLogger().fatal("Payment cant be done...");
+	            JOptionPane.showMessageDialog(frame,
+	                    getViewManager().getClient().getLocaleManager().getMessage("pay.validation.errors.unknown"),
+	                    getViewManager().getClient().getLocaleManager().getMessage("pay.validation.errors.unknown.title"),
+	                    JOptionPane.ERROR_MESSAGE);
+
+	            frame.dispose();
+	            return;
+			}
+		}else if(rdbtnPaypal.isSelected()) {
+			String username = tFUsername.getText();
+			String password = tFPassword.getText();
+			//TODO AMOUNT
+			if(!controller.payReservation(username, password, 0, true)) {
+				ClientLogger.getLogger().fatal("Payment cant be done...");
+	            JOptionPane.showMessageDialog(frame,
+	                    getViewManager().getClient().getLocaleManager().getMessage("pay.validation.errors.unknown"),
+	                    getViewManager().getClient().getLocaleManager().getMessage("pay.validation.errors.unknown.title"),
+	                    JOptionPane.ERROR_MESSAGE);
+
+	            frame.dispose();
+	            return;
+			}
+		}
+
+		// Success!
+        JOptionPane.showMessageDialog(frame,
+                getViewManager().getClient().getLocaleManager().getMessage("pay.success.body"),
+                getViewManager().getClient().getLocaleManager().getMessage("pay.success.title"),
+                JOptionPane.INFORMATION_MESSAGE);
+        frame.dispose();
 	}
 
 	/**
@@ -294,6 +343,10 @@ public class UserPayView extends View{
                 messageKey = "pay.validation.errors.noMethod";
                 messageType = JOptionPane.WARNING_MESSAGE;
                 break;
+            case MASTERCARD_FIELDS_NOT_NUMBERS:
+            	messageKey = "pay.validation.errors.notNumbers";
+            	messageType = JOptionPane.WARNING_MESSAGE;
+            	break;
             default:
                 messageKey = "pay.validation.errors.unknown";
                 messageType = JOptionPane.ERROR_MESSAGE;
