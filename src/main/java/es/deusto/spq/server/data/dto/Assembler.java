@@ -1,5 +1,6 @@
 package es.deusto.spq.server.data.dto;
 
+import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Room;
@@ -40,7 +41,7 @@ public class Assembler {
 		if(user.isGuest())
 			return new Guest(user.getUserID(), user.getName());
 		else
-			return null; //TODO return an admin
+			return new Administrator(user.getUserID(), user.getName());
 	}
 	
 }
