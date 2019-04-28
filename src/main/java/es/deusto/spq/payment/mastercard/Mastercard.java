@@ -1,4 +1,4 @@
-package es.deusto.spq.payment.PayPal;
+package es.deusto.spq.payment.mastercard;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,32 +7,31 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.log4j.Logger;
 
-import es.deusto.spq.payment.PayPal.connections.Payer;
-import es.deusto.spq.payment.PayPal.connections.Registrar;
-import es.deusto.spq.payment.PayPal.connections.ServerListener;
-import es.deusto.spq.payment.PayPal.logger.PayPalLogger;
+import es.deusto.spq.payment.mastercard.connections.Payer;
+import es.deusto.spq.payment.mastercard.connections.ServerListener;
+import es.deusto.spq.payment.mastercard.logger.MastercardLogger;
 
 /**
- * <p>The main class of the PayPal server. The whole server is initialized, including the
+ * The main class of the Mastercard server. The whole server is initialized, including the
  * pools of the new threads that have not been closed. Nevertheless, the initialization
- * can also be done from another class through the <code>start</code> method. In order
- * to shut down the server, call the <code>closeServer</code> method. Thread pools that
- * keep track of the active or waiting threads are thread-safe.</p>
- * 
- * <p>The server will run in the port on the first argument, no other arguments are needed
- * (not checked, ignored).</p>
+ * can also be done from another class through the {@code start} method. In order
+ * to shut down the server, call the {@code closeServer} method. Thread pools that
+ * keep track of the active or waiting threads are thread-safe.
+ * <p>
+ * The server will run in the port on the first argument, no other arguments are needed
+ * (not checked, ignored).
  * 
  * @author Iker
  *
  */
-public class PayPal {
+public class Mastercard {
 
-	/** The logger to log to, just for the PayPal's server. */
+	/** The logger to log to, just for the Mastercard's server. */
 	private static Logger log;
 	
 	public static void main(String [] args) {
 		int port = Integer.parseInt(args[0]);
-		PayPal server = new PayPal();
+		Mastercard server = new Mastercard();
 		try {
 			// Initializes the execution of the server.
 			server.start(port);
@@ -46,11 +45,10 @@ public class PayPal {
 	 * initialized in this constructor, so creating a new instance would clear all the
 	 * lists.
 	 */
-	public PayPal() {
-		log = PayPalLogger.getLogger();
+	public Mastercard() {
+		log = MastercardLogger.getLogger();
 		activeListeners = new ArrayList<ServerListener>();
 		activePayers = new ArrayList<Payer>();
-		activeRegistrars = new ArrayList<Registrar>();
 	}
 	
 	/**
@@ -67,13 +65,6 @@ public class PayPal {
 	private static ReentrantLock payerLock = new ReentrantLock();
 	/** The pool of active payers in the server (both ready and running). */
 	private static List<Payer> activePayers;
-	/**
-	 * A lock to ensure mutual exclusion between threads that want to either add or
-	 * remove the an active listener to the pool.
-	 */
-	private static ReentrantLock registrarLock = new ReentrantLock();
-	/** The pool of active registrars in the server (both ready and running). */
-	private static List<Registrar> activeRegistrars;
 	
 	/**
 	 * Adds a ServerListener to its pool.
@@ -83,9 +74,9 @@ public class PayPal {
 	 * @return {@code true} if the server accepts the thread, and {@code false} if not.
 	 */
 	public static boolean addListener(ServerListener listener) {
-		if(closingServer)
+		if (closingServer)
 			return false;
-		if(listener != null) {
+		if (listener != null) {
 			listenerLock.lock();
 			activeListeners.add(listener);
 			listenerLock.unlock();
@@ -115,9 +106,9 @@ public class PayPal {
 	 * @return {@code true} if the server accepts the thread, and {@code false} if not.
 	 */
 	public static boolean addPayer(Payer payer) {
-		if(closingServer)
+		if (closingServer)
 			return false;
-		if(payer != null) {
+		if (payer != null) {
 			payerLock.lock();
 			activePayers.add(payer);
 			payerLock.unlock();
@@ -140,39 +131,6 @@ public class PayPal {
 	}
 	
 	/**
-	 * Adds a Registrar to its pool.
-	 * Note that this method may take some time to do that, since it may be waiting
-	 * for the execution ending of another thread.
-	 * @param registrator - the registrar to be added.
-	 * @return {@code true} if the server accepts the thread, and {@code false} if not.
-	 */
-	public static boolean addRegistrar(Registrar registrator) {
-		if(closingServer)
-			return false;
-		if(registrator != null) {
-			registrarLock.lock();
-			activeRegistrars.add(registrator);
-			registrarLock.unlock();
-			log.debug("Registrar added");
-		}
-		return true;
-	}
-	
-	/**
-	 * Removes a ServerListener from its pool.
-	 * Note that this method may take some time to do that, since it may be waiting
-	 * for the execution ending of another thread.
-	 * @param registrator - the registrar to be removed.
-	 */
-	public static void removeRegistrar(Registrar registrator) {
-		if(registrator == null)
-			return;
-		registrarLock.lock();
-		activeRegistrars.add(registrator);
-		registrarLock.unlock();
-	}
-	
-	/**
 	 * Starts the execution of the PayPal server.
 	 * @param port - the port this server will be using.
 	 * @throws IOException - may be launched by the connection.
@@ -185,7 +143,7 @@ public class PayPal {
 	
 	/** If {@code true} new threads are no longer accepted. */
 	private static boolean closingServer = false;
-	
+
 	/**
 	 * Closes all the threads in the pool, both the active and ready ones.
 	 */
@@ -193,28 +151,20 @@ public class PayPal {
 		closingServer = true;
 		List<ServerListener> listenersToBeRemoved = new ArrayList<ServerListener>();
 		listenerLock.lock();
-		for(ServerListener serverListener : activeListeners)
+		for (ServerListener serverListener : activeListeners)
 			listenersToBeRemoved.add(serverListener);
 		listenerLock.unlock();
-		for(ServerListener l : listenersToBeRemoved)
+		for (ServerListener l : listenersToBeRemoved)
 			l.closeListener();
 		log.info("All ServerListener closed");
 		List<Payer> payersToBeRemoved = new ArrayList<Payer>();
 		payerLock.lock();
-		for(Payer payer : activePayers)
+		for (Payer payer : activePayers)
 			payersToBeRemoved.add(payer);
 		payerLock.unlock();
-		for(Payer p : payersToBeRemoved)
+		for (Payer p : payersToBeRemoved)
 			p.closePayer();
 		log.info("All Payer closed");
-		List<Registrar> registrarsToBeRemoved = new ArrayList<Registrar>();
-		registrarLock.lock();
-		for(Registrar registrars : activeRegistrars)
-			registrarsToBeRemoved.add(registrars);
-		for(Registrar registrar : registrarsToBeRemoved)
-			registrar.closeRegistrar();
-		registrarLock.unlock();
-		log.info("All Registrar closed");
 		log.info("PayPal server is closed and shut down...");
 	}
 	
