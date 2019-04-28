@@ -36,12 +36,12 @@ public class Mastercard {
 			// Initializes the execution of the server.
 			server.start(port);
 		} catch (IOException e) {
-			log.fatal("Could not initialize PayPal server - " + e.getMessage());
+			log.fatal("Could not initialize MasterCard server - " + e.getMessage());
 		}
 	}
 	
 	/**
-	 * Creates the instance of the PayPal server. The pools of threads are static and
+	 * Creates the instance of the MasterCard server. The pools of threads are static and
 	 * initialized in this constructor, so creating a new instance would clear all the
 	 * lists.
 	 */
@@ -131,7 +131,7 @@ public class Mastercard {
 	}
 	
 	/**
-	 * Starts the execution of the PayPal server.
+	 * Starts the execution of the MasterCard server.
 	 * @param port - the port this server will be using.
 	 * @throws IOException - may be launched by the connection.
 	 */
@@ -165,7 +165,7 @@ public class Mastercard {
 		for (Payer p : payersToBeRemoved)
 			p.closePayer();
 		log.info("All Payer closed");
-		log.info("PayPal server is closed and shut down...");
+		log.info("MasterCard server is closed and shut down...");
 	}
 	
 }
