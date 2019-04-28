@@ -1,5 +1,23 @@
 package es.deusto.spq.client.gui.views.auth;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.rmi.RemoteException;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SpringLayout;
+import javax.swing.text.JTextComponent;
+
+import org.apache.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
+
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewManager;
@@ -8,17 +26,6 @@ import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.util.SpringUtilities;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
-import es.deusto.spq.client.gui.locale.LocaleManager;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
-
-import org.apache.log4j.Logger;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.rmi.RemoteException;
 
 public class RegisterAdminView extends View {
 
@@ -28,7 +35,7 @@ public class RegisterAdminView extends View {
     }
 
     private JInternalFrame frame;
-    private HotelManagementController hotelManagementController;
+    private final HotelManagementController hotelManagementController;
 
     // All the form fields and buttons
     private JTextField nameTextField, emailTextField, phoneTextField, addressTextField;
@@ -41,11 +48,13 @@ public class RegisterAdminView extends View {
 
     @Override
     public ViewType getViewType() {
+    	//TODO Change View Type
         return ViewType.REGISTRATION;
     }
 
     @Override
     public ViewPermission getViewPermission() {
+    	//TODO REVISAR COMO PONER ESTO
         return ViewPermission.NOT_LOGGED_IN;
     }
 
@@ -62,7 +71,8 @@ public class RegisterAdminView extends View {
     /**
      * All the Swing code for showing the actual frame
      */
-    public void initialize() {
+    @Override
+	public void initialize() {
         frame = new JInternalFrame();
         frame.setClosable(true);
         //frame.setTitle(LocaleManager.getMessage("register.title"));
@@ -70,11 +80,11 @@ public class RegisterAdminView extends View {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // The container is using BorderLayout so that
-        JPanel container = new JPanel(new BorderLayout());
+        final JPanel container = new JPanel(new BorderLayout());
 
-        JPanel form = new JPanel(new SpringLayout());
+        final JPanel form = new JPanel(new SpringLayout());
 
-        // I know this smells pretty badly. Sorry about that...
+        //TODO REVISAR LOS FIELDS
         // Name field
         nameLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.name"), JLabel.TRAILING);
         form.add(nameLabel);
@@ -170,11 +180,13 @@ public class RegisterAdminView extends View {
      */
     private void handleFormSubmission() {
 
+    	//TODO CAMBIAR LLAMADA Y LSO FIELDS A LOS DE REGISTER
+
         // Disable all fields
         toggleFields(false);
 
         // Required fields
-        JTextComponent[] components = {
+        final JTextComponent[] components = {
                 nameTextField,
                 emailTextField,
                 phoneTextField,
@@ -184,14 +196,13 @@ public class RegisterAdminView extends View {
         };
 
         // Check that all required fields are filled, and if not, fail
-        for (JTextComponent component : components) {
-            if (component.getText().trim().isEmpty()) {
+        for (final JTextComponent component : components)
+			if (component.getText().trim().isEmpty()) {
                 notifyValidationFail(ValidationFailReason.REQUIRED_FIELD_EMPTY);
                 // Re-enable fields
                 toggleFields(true);
                 return;
             }
-        }
 
         // Check if the password confirmation matches the password, and if not, fail
         if (!(new String(passwordField.getPassword())).equals(new String(passwordConfirmationField.getPassword()))) {
@@ -209,7 +220,7 @@ public class RegisterAdminView extends View {
                     new String(passwordField.getPassword()),
                     phoneTextField.getText(),
                     addressTextField.getText());
-        } catch (RemoteException e) {
+        } catch (final RemoteException e) {
             log.info("Remote exception trying to create a UserDTO");
         }
 
