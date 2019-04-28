@@ -16,6 +16,7 @@ import javax.swing.SpringLayout;
 import javax.swing.text.JTextComponent;
 
 import org.apache.log4j.Logger;
+import org.datanucleus.store.rdbms.sql.method.SumFunction;
 import org.jetbrains.annotations.Nullable;
 
 import es.deusto.spq.client.controller.HotelManagementController;
@@ -27,8 +28,7 @@ import es.deusto.spq.client.gui.util.SpringUtilities;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
 /**
- * The register admin view
- * @author egoes
+ * The register admit view
  *
  */
 public class RegisterAdminView extends View {
@@ -61,8 +61,7 @@ public class RegisterAdminView extends View {
 
     @Override
     public ViewPermission getViewPermission() {
-    	//TODO REVISAR COMO PONER ESTO
-        return ViewPermission.NOT_LOGGED_IN;
+        return ViewPermission.LOGGED_IN_ADMIN;
     }
 
     @Override
@@ -91,7 +90,6 @@ public class RegisterAdminView extends View {
 
         final JPanel form = new JPanel(new SpringLayout());
 
-        //TODO REVISAR LOS FIELDS
         // Name field
         nameLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.admin..label.name"), JLabel.TRAILING);
         form.add(nameLabel);
@@ -120,13 +118,6 @@ public class RegisterAdminView extends View {
         passwordConfirmationLabel.setLabelFor(passwordConfirmationField);
         form.add(passwordConfirmationField);
 
-        // Phone field
-        phoneLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.admin.label.phone"), JLabel.TRAILING);
-        form.add(phoneLabel);
-        phoneTextField = new JTextField(10);
-        phoneLabel.setLabelFor(phoneTextField);
-        form.add(phoneTextField);
-
         // Address field
         addressLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.admin.label.address"), JLabel.TRAILING);
         form.add(addressLabel);
@@ -143,7 +134,6 @@ public class RegisterAdminView extends View {
 
         // Add the form to the center slot
         container.add(form, BorderLayout.CENTER);
-
 
         // Submit button
         submitButton = new JButton(getViewManager().getClient().getLocaleManager().getMessage("register.admin.submit"));
@@ -196,7 +186,6 @@ public class RegisterAdminView extends View {
         final JTextComponent[] components = {
                 nameTextField,
                 emailTextField,
-                phoneTextField,
                 addressTextField,
                 passwordField,
                 passwordConfirmationField,
@@ -222,7 +211,7 @@ public class RegisterAdminView extends View {
         // Create a new User and send it to the server
         UserDTO result = null;
         try {
-            result = hotelManagementController.signInGuest(nameTextField.getText(),
+            result = hotelManagementController.signInAdmin(nameTextField.getText(),
                     emailTextField.getText(),
                     new String(passwordField.getPassword()),
                     phoneTextField.getText(),
@@ -311,7 +300,7 @@ public class RegisterAdminView extends View {
         emailLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("register.admin.label.email"));
         passwordLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("register.admin.label.password"));
         passwordConfirmationLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("register.admin.label.password-confirmation"));
-        phoneLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("register.admin.label.phone"));
         addressLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("register.admin.label.address"));
+        submitButton.setText(getViewManager().getClient().getLocaleManager().getMessage("register.admin.submit"));
     }
 }
