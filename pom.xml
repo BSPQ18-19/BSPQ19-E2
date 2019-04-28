@@ -104,6 +104,10 @@
 					</execution>
 				</executions>
 				<configuration>
+				    <excludes>
+                        <exclude>**/client/gui/**</exclude>
+                        <exclude>**/server/data/jdo/**</exclude>
+					</excludes>
 					<rules>
 						<rule>
 							<element>BUNDLE</element>
