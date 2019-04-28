@@ -12,7 +12,7 @@ import javax.jdo.annotations.PrimaryKey;
 public abstract class User {
 
 	@PrimaryKey
-	private final String userID;
+	private String userID;
 	@Persistent(defaultFetchGroup="true")
 	private String name;
 	@Persistent(defaultFetchGroup="true")
