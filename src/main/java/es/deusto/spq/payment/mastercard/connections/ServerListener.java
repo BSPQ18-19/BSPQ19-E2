@@ -13,7 +13,7 @@ import es.deusto.spq.payment.mastercard.Mastercard;
 import es.deusto.spq.payment.mastercard.logger.MastercardLogger;
 
 /**
- * This is one type of thread that will run on the PayPal server. The only aim of this
+ * This is one type of thread that will run on the MasterCard server. The only aim of this
  * thread is to wait for clients and create new threads for the registration and payment 
  * (no thread is created if the option is not valid). There's only one change to submit 
  * the proper option: if it is valid a new thread will be created and the client will 
@@ -37,7 +37,7 @@ import es.deusto.spq.payment.mastercard.logger.MastercardLogger;
  */
 public class ServerListener extends Thread {
 
-	/** The logger to log to in the PayPal server. */
+	/** The logger to log to in the MasterCard server. */
 	private Logger log;
 	/** The ServerSocket of this ServerListener. */
 	private ServerSocket server;
