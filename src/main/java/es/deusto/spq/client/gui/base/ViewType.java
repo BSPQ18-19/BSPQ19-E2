@@ -32,4 +32,9 @@ public enum ViewType
      * View to change the current locale.
      */
     LOCALE_SETTINGS,
+
+    /**
+     * View to register an admin
+     */
+    REGISTRATION_ADMIN,
 }
