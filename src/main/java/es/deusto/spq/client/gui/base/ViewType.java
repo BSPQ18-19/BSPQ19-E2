@@ -27,9 +27,4 @@ public enum ViewType
      * Admin window to manage existing hotels, delete them and create new.
      */
     ADMIN_HOTELS,
-
-    /**
-     * View to change the current locale.
-     */
-    LOCALE_SETTINGS,
 }

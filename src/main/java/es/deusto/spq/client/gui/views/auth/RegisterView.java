@@ -8,7 +8,7 @@ import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.util.SpringUtilities;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.UserDTO;
-import es.deusto.spq.client.gui.locale.LocaleManager;
+import es.deusto.spq.server.locale.LocaleManager;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -34,7 +34,6 @@ public class RegisterView extends View {
     private JTextField nameTextField, emailTextField, phoneTextField, addressTextField;
     private JPasswordField passwordField, passwordConfirmationField;
     private JButton submitButton;
-    private JLabel nameLabel, emailLabel, passwordLabel, passwordConfirmationLabel, phoneLabel, addressLabel;
 
     // Logger
     private Logger log;
@@ -76,42 +75,42 @@ public class RegisterView extends View {
 
         // I know this smells pretty badly. Sorry about that...
         // Name field
-        nameLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.name"), JLabel.TRAILING);
+        JLabel nameLabel = new JLabel(LocaleManager.getMessage("register.label.name"), JLabel.TRAILING);
         form.add(nameLabel);
         nameTextField = new JTextField(10);
         nameLabel.setLabelFor(nameTextField);
         form.add(nameTextField);
 
         // Email field
-        emailLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.email"), JLabel.TRAILING);
+        JLabel emailLabel = new JLabel(LocaleManager.getMessage("register.label.email"), JLabel.TRAILING);
         form.add(emailLabel);
         emailTextField = new JTextField(10);
         emailLabel.setLabelFor(emailTextField);
         form.add(emailTextField);
 
         // Password field
-        passwordLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.password"), JLabel.TRAILING);
+        JLabel passwordLabel = new JLabel(LocaleManager.getMessage("register.label.password"), JLabel.TRAILING);
         form.add(passwordLabel);
         passwordField = new JPasswordField(10);
         passwordLabel.setLabelFor(passwordField);
         form.add(passwordField);
 
         // Password confirmation field
-        passwordConfirmationLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.password-confirmation"), JLabel.TRAILING);
+        JLabel passwordConfirmationLabel = new JLabel(LocaleManager.getMessage("register.label.password-confirmation"), JLabel.TRAILING);
         form.add(passwordConfirmationLabel);
         passwordConfirmationField = new JPasswordField(10);
         passwordConfirmationLabel.setLabelFor(passwordConfirmationField);
         form.add(passwordConfirmationField);
 
         // Phone field
-        phoneLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.phone"), JLabel.TRAILING);
+        JLabel phoneLabel = new JLabel(LocaleManager.getMessage("register.label.phone"), JLabel.TRAILING);
         form.add(phoneLabel);
         phoneTextField = new JTextField(10);
         phoneLabel.setLabelFor(phoneTextField);
         form.add(phoneTextField);
 
         // Address field
-        addressLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.label.address"), JLabel.TRAILING);
+        JLabel addressLabel = new JLabel(LocaleManager.getMessage("register.label.address"), JLabel.TRAILING);
         form.add(addressLabel);
         addressTextField = new JTextField(10);
         addressLabel.setLabelFor(addressTextField);
@@ -129,7 +128,7 @@ public class RegisterView extends View {
 
 
         // Submit button
-        submitButton = new JButton(getViewManager().getClient().getLocaleManager().getMessage("register.submit"));
+        submitButton = new JButton(LocaleManager.getMessage("register.submit"));
         container.add(submitButton, BorderLayout.PAGE_END); // add it to the bottom
 
         // Register the click function
@@ -217,8 +216,8 @@ public class RegisterView extends View {
         if (result == null) {
             ClientLogger.getLogger().fatal("User not registered...");
             JOptionPane.showMessageDialog(frame,
-                    getViewManager().getClient().getLocaleManager().getMessage("register.validation.errors.unknown"),
-                    getViewManager().getClient().getLocaleManager().getMessage("register.validation.errors.unknown.title"),
+                    LocaleManager.getMessage("register.validation.errors.unknown"),
+                    LocaleManager.getMessage("register.validation.errors.unknown.title"),
                     JOptionPane.ERROR_MESSAGE);
 
             frame.dispose();
@@ -227,8 +226,8 @@ public class RegisterView extends View {
 
         // Success!
         JOptionPane.showMessageDialog(frame,
-                getViewManager().getClient().getLocaleManager().getMessage("register.success.body"),
-                getViewManager().getClient().getLocaleManager().getMessage("register.success.title"),
+                LocaleManager.getMessage("register.success.body"),
+                LocaleManager.getMessage("register.success.title"),
                 JOptionPane.INFORMATION_MESSAGE);
         frame.dispose();
 
@@ -259,8 +258,8 @@ public class RegisterView extends View {
         }
 
         JOptionPane.showMessageDialog(frame,
-                getViewManager().getClient().getLocaleManager().getMessage(messageKey),
-                getViewManager().getClient().getLocaleManager().getMessage("register.validation.title"),
+                LocaleManager.getMessage(messageKey),
+                LocaleManager.getMessage("register.validation.title"),
                 messageType);
     }
 
@@ -281,19 +280,5 @@ public class RegisterView extends View {
     @Override
     public void bringToFront() {
         getInternalFrame().toFront();
-    }
-
-    @Override
-    public void refresh() {
-        onLocaleChange();
-    }
-
-    private void onLocaleChange() {
-        nameLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("register.label.name"));
-        emailLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("register.label.email"));
-        passwordLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("register.label.password"));
-        passwordConfirmationLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("register.label.password-confirmation"));
-        phoneLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("register.label.phone"));
-        addressLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("register.label.address"));
     }
 }

@@ -1,10 +1,12 @@
 package es.deusto.spq.server.data.jdo;
 
-import javax.jdo.annotations.*;
+import java.io.Serializable;
+
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 
 @PersistenceCapable(detachable = "true")
-@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-public class Guest extends User {
+public class Guest extends User implements Serializable {
 
 	@Persistent(defaultFetchGroup = "true")
 	private String phone;

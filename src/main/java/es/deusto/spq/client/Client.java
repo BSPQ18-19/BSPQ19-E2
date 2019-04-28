@@ -4,11 +4,10 @@ import es.deusto.spq.client.controller.*;
 import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewType;
-import es.deusto.spq.client.gui.locale.AllowedLocale;
-import es.deusto.spq.client.gui.locale.LocaleMode;
+import es.deusto.spq.client.gui.views.auth.LoginView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
-import es.deusto.spq.client.gui.locale.LocaleManager;
+import es.deusto.spq.server.locale.LocaleManager;
 
 import java.util.Locale;
 
@@ -18,21 +17,8 @@ public class Client {
 
 	private ViewManager viewManager;
 
-	/**
-	 * Manages all localized strings
-	 */
-	private LocaleManager localeManager = new LocaleManager(this);
-
 	public ViewManager getViewManager() {
 		return viewManager;
-	}
-
-	/**
-	 * Get the current active LocaleManager for this Client
-	 * @return the LocaleManager for the Client
-	 */
-	public LocaleManager getLocaleManager() {
-		return localeManager;
 	}
 
 	public static void main(String[] args) {
@@ -60,11 +46,11 @@ public class Client {
 		controller = HotelManagementController.getController();
 		rsl = RMIServiceLocator.getServiceLocator();
 		rsl.setService(ip, port, serviceName);
+		LocaleManager.setLocale(new Locale("es", "ES"));
 
 		viewManager = new ViewManager(this);
 		viewManager.initialize();
 		viewManager.openView(ViewFactory.buildView(ViewType.LOGIN, viewManager));
-		localeManager.setMode(LocaleMode.DEBUG);
 	}
 
 	public HotelManagementController getController() {

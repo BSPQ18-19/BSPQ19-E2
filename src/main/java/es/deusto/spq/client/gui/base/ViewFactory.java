@@ -1,6 +1,5 @@
 package es.deusto.spq.client.gui.base;
 
-import es.deusto.spq.client.gui.views.LocaleView;
 import es.deusto.spq.client.gui.views.admin.HotelAdminView;
 import es.deusto.spq.client.gui.views.auth.LoginView;
 import es.deusto.spq.client.gui.views.auth.RegisterView;
@@ -33,9 +32,6 @@ public class ViewFactory {
             case ADMIN_HOTELS:
                 view = new HotelAdminView(viewManager);
                 break;
-
-            case LOCALE_SETTINGS:
-                view = new LocaleView(viewManager);
         }
 
         return view;

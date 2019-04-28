@@ -1,7 +1,7 @@
 dist: xenial
 language: java
 jdk:
-  - openjdk10
+  - openjdk9
 services:
   - xvfb
   - mysql

@@ -1,6 +1,4 @@
-package es.deusto.spq.client.gui.locale;
-
-import es.deusto.spq.client.Client;
+package es.deusto.spq.server.locale;
 
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -17,6 +15,12 @@ import java.util.ResourceBundle;
 public class LocaleManager {
 
     /**
+     * The singleton instance of the class.
+     * Will be the only active instance for it.
+     */
+    private static LocaleManager instance = null;
+
+    /**
      * The name of the ResourceBundle files
      */
     private static final String RESOURCE_BUNDLE_FILE_NAME = "localization";
@@ -26,42 +30,39 @@ public class LocaleManager {
      * Will always be en_EN fue to teacher's requirements.
      * (the course is in English)
      */
-    public static final Locale DEFAULT_LOCALE = AllowedLocale.ENGLISH.getLocale();
-
-    /**
-     * The Client associated to this LocaleManager
-     */
-    private Client client;
+    private static final Locale DEFAULT_LOCALE = new Locale("en", "EN");
 
     /**
      * The current locale of the system.
-     * Initialized to the default locale constant
      */
-    private Locale locale = DEFAULT_LOCALE;
+    private static Locale locale = new Locale("en", "EN");
 
     /**
      * The mode for displaying non-localized keys
      * by default we fall back to the default locale
      */
-    private LocaleMode mode = LocaleMode.NORMAL;
+    private static LocaleMode mode = LocaleMode.NORMAL;
+
+    private LocaleManager() { }
 
     /**
-     * Create a new LocaleManager instance
-     * @param client the Client class that will be associated to the LocaleManager
+     * Get the single instance of the Class.
+     * @return the static instance for the class
      */
-    public LocaleManager(Client client) {
-        this.client = client;
-    }
+    public static LocaleManager getInstance()
+    {
+        if (instance == null) {
+            instance = new LocaleManager();
+        }
 
-    public Client getClient() {
-        return client;
+        return instance;
     }
 
     /**
      * Get the current locale for the system.
      * @return the current locale
      */
-    public Locale getLocale() {
+    public static Locale getLocale() {
         return locale;
     }
 
@@ -69,15 +70,23 @@ public class LocaleManager {
      * Set the locale of the system
      * @param locale the locale to be set as active
      */
-    public void setLocale(Locale locale) {
-        this.locale = locale;
+    public static void setLocale(Locale locale) {
+        LocaleManager.locale = locale;
+    }
+
+    /**
+     * Get the default system Locale
+     * @return the default Locale
+     */
+    public static Locale getDefaultLocale() {
+        return DEFAULT_LOCALE;
     }
 
     /**
      *
      * @return the current LocaleMode
      */
-    public LocaleMode getMode() {
+    public static LocaleMode getMode() {
         return mode;
     }
 
@@ -85,15 +94,15 @@ public class LocaleManager {
      * Sets the current LocaleMode for future translations
      * @param mode the mode to set as active
      */
-    public void setMode(LocaleMode mode) {
-        this.mode = mode;
+    public static void setMode(LocaleMode mode) {
+        LocaleManager.mode = mode;
     }
 
     /**
      * Get the default LocaleMode
      * @return the default LocaleMode
      */
-    public LocaleMode getDefaultLocaleMode() {
+    public static LocaleMode getDefaultLocaleMode() {
         return LocaleMode.NORMAL;
     }
 
@@ -101,7 +110,7 @@ public class LocaleManager {
      * Get the current ResourceBundle for the selected Locale
      * @return the ResourceBundle associated to the current locale
      */
-    private ResourceBundle getResourceBundle() {
+    private static ResourceBundle getResourceBundle() {
         return ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
     }
 
@@ -110,7 +119,7 @@ public class LocaleManager {
      * Get the ResourceBundle for the specified Locale
      * @return the ResourceBundle associated to the specified locale
      */
-    private ResourceBundle getResourceBundle(Locale locale) {
+    private static ResourceBundle getResourceBundle(Locale locale) {
         return ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
     }
 
@@ -121,7 +130,7 @@ public class LocaleManager {
      * @param parameters vararg of the parameters for the resource
      * @return an already-formatted String
      */
-    public String getMessage(String key, Object... parameters) {
+    public static String getMessage(String key, Object... parameters) {
 
         // The locale to use for the formatting below
         Locale localeToUse = getLocale();
@@ -136,7 +145,7 @@ public class LocaleManager {
             }
 
             // In this case we use the default locale (key not found in Locale)
-            localeToUse = DEFAULT_LOCALE;
+            localeToUse = getDefaultLocale();
 
         }
 
