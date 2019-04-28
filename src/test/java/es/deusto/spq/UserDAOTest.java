@@ -36,7 +36,7 @@ public class UserDAOTest {
 	public static void initialize() {
 		userDao = new UserDAO();
 		userID = "1";
-//		user = new Guest(userID, "name", "email", "password", 1, "address");
+		user = new Guest(userID, "name", "email", "password", "1", "address");
 		//TODO initialize user correctly
 	}
 	

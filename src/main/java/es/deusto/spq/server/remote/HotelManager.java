@@ -25,6 +25,10 @@ import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.User;
+import es.deusto.spq.server.gateway.IMastercardGateway;
+import es.deusto.spq.server.gateway.IPayPalGateway;
+import es.deusto.spq.server.gateway.MastercardGateway;
+import es.deusto.spq.server.gateway.PayPalGateway;
 import es.deusto.spq.server.logger.ServerLogger;
 
 public class HotelManager extends UnicastRemoteObject implements IHotelManager {
@@ -38,27 +42,31 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	
 	public HotelManager() throws RemoteException {
 		super();
-		new Assembler();
-		this.userDAO = new UserDAO();
-		new HotelDAO();
-		loggedUsers = new HashSet<UserDTO>();
+//		new Assembler();
+//		this.userDAO = new UserDAO();
+//		new HotelDAO();
+//		loggedUsers = new HashSet<UserDTO>();
 		log = ServerLogger.getLogger();
-		r = new Random();
+//		r = new Random();
+		payPalGateway = new PayPalGateway();
+		mastercardGateway = new MastercardGateway();
 		
-		LocalDate localDate = LocalDate.of(2019, 04, 01);
+		/////////////////////////////////////////////////
 		
-		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H03", new Hotel("H03", "Hotel3", "Madrid", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H04", new Hotel("H04", "Hotel4", "Sevilla", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-		
-		this.dao = new HotelDAO();
-		dao.cleanDB();
-		for(Hotel hotel: hotels.values()) {
-			dao.storeHotel(hotel);
-		}
+//		LocalDate localDate = LocalDate.of(2019, 04, 01);
+//		
+//		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+//		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+//		hotels.put("H03", new Hotel("H03", "Hotel3", "Madrid", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+//		hotels.put("H04", new Hotel("H04", "Hotel4", "Sevilla", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+//		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+//		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
+//		
+//		this.dao = new HotelDAO();
+//		dao.cleanDB();
+//		for(Hotel hotel: hotels.values()) {
+//			dao.storeHotel(hotel);
+//		}
 	}
 
 	private Random r;
@@ -110,7 +118,6 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		return hotelsDTO;
 	}
 
-
 	@Override
 	public HotelDTO createHotel(String id, String name, String location, String seasonStart,
 			String seasonEnd) throws RemoteException {
@@ -130,7 +137,6 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		return hotelAssembler.assemble(hotel);
 	}
 
-
 	@Override
 	public boolean deleteHotel(String id) throws RemoteException {
 		hotels.remove(id);
@@ -142,12 +148,49 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		}
 	}
 
-
 	@Override
 	public boolean cleanDB() throws RemoteException {
 		hotels.clear();
 		dao.cleanDB();
 		return false;
 	}
+
+	/** The PayPal Gateway to interact with. */
+	private IPayPalGateway payPalGateway;
+
+	@Override
+	public boolean registerPayPal(String username, String password) throws RemoteException {
+		if(username == null || username.isEmpty() ||
+				password == null || password.isEmpty())
+			return false;
+		return payPalGateway.registerAccount(username, password);
+	}
+
+	@Override
+	public boolean registerPayPal(String username, String password, float quantity) throws RemoteException{
+		if(username == null || username.isEmpty() || 
+				password == null || password.isEmpty() ||
+				quantity <= 0)
+			return false;
+		return payPalGateway.registerAccount(username, password, quantity);
+	}
+
+	@Override
+	public boolean payPayPal(String username, String password, float quantity) throws RemoteException{
+		if(username == null || username.isEmpty() ||
+				password == null || password.isEmpty() ||
+				quantity <= 0)
+			return false;
+		return payPalGateway.pay(username, password, quantity);
+	}
 	
+	/** The Mastercard Gateway to interact with. */
+	private IMastercardGateway mastercardGateway;
+	
+	@Override
+	public boolean payMastercard(long cardNumber, int securityCode, float amount) throws RemoteException{
+		if(cardNumber <= 0 || securityCode <= 0 || amount <= 0)
+			return false;
+		return mastercardGateway.pay(cardNumber, securityCode, amount);
+	}
 }
