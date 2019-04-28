@@ -49,11 +49,11 @@ public class HotelDAO implements IHotelDAO {
 	    	if (tx != null && tx.isActive()) {
 	    		tx.rollback();
 	    	}
-//			if(pm != null && !pm.isClosed()) {
-//				pm.close();
-//			}
 	    }
 	}
+	
+	
+	//TODO This method does not work well
 	
 	public Hotel getHotel(String hotelID) {
 		/* By default only 1 level is retrieved from the db
@@ -81,14 +81,12 @@ public class HotelDAO implements IHotelDAO {
 	    } finally {
 	    	if (tx != null && tx.isActive()) {
 	    		tx.rollback();
-	    	}
-
-//    		pm.close();    		
+	    	}	
 	    }
 	    				
 		return null;
 	}
-
+ 
 
 	public ArrayList<Hotel> getHotels() {
 		pm.getFetchPlan().setMaxFetchDepth(3);
@@ -114,9 +112,6 @@ public class HotelDAO implements IHotelDAO {
 	    		ServerLogger.getLogger().info("rollback");
 	    		tx.rollback();
 	    	}
-//			if(pm != null && !pm.isClosed()) {
-//				pm.close();
-//			}
 	    }
 	    return hotels;
 	}
@@ -134,7 +129,7 @@ public class HotelDAO implements IHotelDAO {
 			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
 
 			for (Hotel hotel : extent) {
-				if(hotel.getSeasonStart().getTime() < arrivalDate.getTime())
+				if(hotel.getSeasonStart().getTime() <= arrivalDate.getTime())
 					hotels.add(hotel);
 			}
 			
@@ -178,9 +173,6 @@ public class HotelDAO implements IHotelDAO {
 	    		ServerLogger.getLogger().debug("rollback");
 	    		tx.rollback();
 	    	}
-//			if(pm != null && !pm.isClosed()) {
-//				pm.close();
-//			}
 	    }
 		return false;
 	}
@@ -207,10 +199,6 @@ public class HotelDAO implements IHotelDAO {
 			if (tx != null && tx.isActive()) {
 				tx.rollback();
 			}
-
-//			if (pm != null && !pm.isClosed()) {
-//				pm.close();
-//			}
 		}
 	}	
 }
