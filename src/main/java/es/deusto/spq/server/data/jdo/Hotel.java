@@ -7,7 +7,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable(detachable = "true")
 public class Hotel {
-	
+
 	@PrimaryKey
 	private String hotelId;
 	private String name;
