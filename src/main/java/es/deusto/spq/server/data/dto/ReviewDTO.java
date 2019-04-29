@@ -164,9 +164,4 @@ public class ReviewDTO implements Serializable {
 		ReviewDTO reviewDTO = (ReviewDTO) o;
 		return getReviewID().equals(reviewDTO.getReviewID());
 	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getReviewID());
-	}
 }
