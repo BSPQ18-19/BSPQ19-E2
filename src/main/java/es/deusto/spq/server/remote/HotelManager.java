@@ -6,8 +6,6 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -15,12 +13,10 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import es.deusto.spq.server.data.dao.HotelDAO;
 import es.deusto.spq.server.data.dao.IHotelDAO;
 import es.deusto.spq.server.data.dao.UserDAO;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.HotelDTO;
-import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
@@ -106,7 +102,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		log.info("NAME: " + listHotels);
 		log.info("LOCATION: " + listHotels.get(1).getLocation());
 		for(Hotel hotel : listHotels) {
-			hotelsDTO.add(hotelAssembler.assemble(hotel));
+			hotelsDTO.add(hotelAssembler.assembleHotel(hotel));
 		}
 		log.info("Arraylist size: "+hotelsDTO.size());
 		
@@ -134,7 +130,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		dao.storeHotel(hotel);
 		
 		Assembler hotelAssembler = new Assembler();
-		return hotelAssembler.assemble(hotel);
+		return hotelAssembler.assembleHotel(hotel);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package es.deusto.spq.server.data.dto;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 import es.deusto.spq.server.data.jdo.RoomType;
 
@@ -73,4 +74,19 @@ public class RoomDTO implements Serializable {
 		this.features = features;
 	}
 
+	/**
+	 * Check if the RoomDTO corresponds to the same object
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		RoomDTO roomDTO = (RoomDTO) o;
+		return getRoomID().equals(roomDTO.getRoomID());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getRoomID());
+	}
 }
