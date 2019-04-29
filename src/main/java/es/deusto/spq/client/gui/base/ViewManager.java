@@ -2,7 +2,8 @@ package es.deusto.spq.client.gui.base;
 
 import es.deusto.spq.client.Client;
 import es.deusto.spq.client.logger.ClientLogger;
-import es.deusto.spq.server.locale.LocaleManager;
+import es.deusto.spq.client.gui.locale.LocaleManager;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -11,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 /**
  * Manages the whole UI View system.
@@ -71,6 +71,18 @@ public class ViewManager {
     }
 
     /**
+     * Force a repaint of all the currently opened windows
+     * Will also refresh the underlying view containing them all
+     * Useful for Locale changes.
+     */
+    public void repaintAll() {
+        for (View view : views) {
+            view.refresh();
+        }
+        repaintUI();
+    }
+
+    /**
      * The ViewPermission represents the current permission level for the UI. The
      * @return the ViewPermission for the ViewManager
      */
@@ -92,7 +104,7 @@ public class ViewManager {
 
         // Only initialize if we're not already initialized
         if (frame == null) {
-            frame = new JFrame(LocaleManager.getMessage("app.name"));
+            frame = new JFrame(getClient().getLocaleManager().getMessage("app.name"));
             desktopPane = new JDesktopPane();
             frame.getContentPane().add(desktopPane);
 
@@ -112,17 +124,17 @@ public class ViewManager {
         JMenuBar menuBar = new JMenuBar();
 
         // Main menu item (about, close)
-        JMenu menuMainItem = new JMenu(LocaleManager.getMessage("app.name"));
+        JMenu menuMainItem = new JMenu(getClient().getLocaleManager().getMessage("app.name"));
         menuMainItem.setFont(new Font("sans-serif", Font.BOLD, 14));
 
-        JMenuItem aboutMenuSubitem = new JMenuItem(LocaleManager.getMessage("menu.about.title"));
+        JMenuItem aboutMenuSubitem = new JMenuItem(getClient().getLocaleManager().getMessage("menu.about.title"));
         aboutMenuSubitem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(
                         frame,
-                        LocaleManager.getMessage("menu.about.body"),
-                        LocaleManager.getMessage("menu.about.title"),
+                        getClient().getLocaleManager().getMessage("menu.about.body"),
+                        getClient().getLocaleManager().getMessage("menu.about.title"),
                         JOptionPane.INFORMATION_MESSAGE
                 );
 
@@ -132,7 +144,18 @@ public class ViewManager {
 
         menuMainItem.addSeparator();
 
-        JMenuItem salirMenuItem = new JMenuItem(LocaleManager.getMessage("menu.quit"));
+        JMenuItem localeMenuItem = new JMenuItem("Locale settings");
+        localeMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openView(ViewFactory.buildView(ViewType.LOCALE_SETTINGS, getViewManager()));
+            }
+        });
+        menuMainItem.add(localeMenuItem);
+
+        menuMainItem.addSeparator();
+
+        JMenuItem salirMenuItem = new JMenuItem(getClient().getLocaleManager().getMessage("menu.quit"));
         salirMenuItem.setAccelerator(KeyStroke.getKeyStroke('Q', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
         salirMenuItem.addActionListener(new ActionListener() {
 
@@ -228,5 +251,10 @@ public class ViewManager {
         desktopPane.add(view.getInternalFrame());
         view.bringToFront();
 
+    }
+
+    @Contract(value = " -> this", pure = true)
+    private ViewManager getViewManager() {
+        return this;
     }
 }

@@ -11,7 +11,7 @@ import javax.jdo.annotations.PrimaryKey;
  * @author gonzalo
  *
  */
-@PersistenceCapable
+@PersistenceCapable(detachable = "true")
 public class Hotel {
 	
 	@PrimaryKey
@@ -38,6 +38,7 @@ public class Hotel {
 		this.seasonStart = seasonStart;
 		this.seasonEnding = seasonEnding;
 	}
+	
 	/**
 	 * @return ID of hotel
 	 */
@@ -107,5 +108,4 @@ public class Hotel {
 	public void setSeasonEnding(Timestamp seasonEnding) {
 		this.seasonEnding = seasonEnding;
 	}
-
 }

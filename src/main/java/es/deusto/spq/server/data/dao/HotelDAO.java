@@ -3,15 +3,13 @@ package es.deusto.spq.server.data.dao;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-import es.deusto.spq.client.logger.ClientLogger;
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
-
 import org.apache.log4j.Logger;
 
+import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.logger.ServerLogger;
@@ -72,14 +70,13 @@ public class HotelDAO implements IHotelDAO {
 			
 			tx.begin();			
 			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
-			
+			tx.commit();
 			for (Hotel hotel : extent) {
-				if (hotel.getName().equals(hotelID)) {
+				if (hotel.getHotelId().equals(hotelID)) {
 				    return hotel;
                 }
 			}
-
-			tx.commit();			
+			
 		} catch (Exception ex) {
 			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
 	    } finally {

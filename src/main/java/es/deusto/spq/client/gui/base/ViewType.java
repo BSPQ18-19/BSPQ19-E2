@@ -29,6 +29,12 @@ public enum ViewType
     ADMIN_HOTELS,
     
     /**
+     * View to change the current locale.
+     */
+    LOCALE_SETTINGS,
+    
+    
+    /**
      * Guest window to manage requested hotels, searching them and booking rooms
      */
      GUEST_HOTELS

@@ -103,5 +103,4 @@ public class RoomDTO implements Serializable {
 	public void setType(RoomType type) {
 		this.type = type;
 	}
-	
 }
