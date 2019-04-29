@@ -8,51 +8,46 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
+
+import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.logger.ServerLogger;
 
 public class HotelDAO implements IHotelDAO {
 	
-	private PersistenceManagerFactory pmf;
+	private PersistenceManager pm;
+	private Transaction tx;
 
 	public HotelDAO(){
-		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
+		pm = MyPersistenceManager.getPersistenceManager();
 	}
 	
-	public void storeHotel(Hotel hotel) {
-		this.storeObject(hotel);
-	}
-	
-	private void storeObject(Object object) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		Transaction tx = pm.currentTransaction();
+	public Hotel storeHotel(Hotel hotel) {
+		tx = pm.currentTransaction();
 	   
 	    try {
 	       tx.begin();
-	       ServerLogger.getLogger().info("   * Storing an object: " + object);
-	       pm.makePersistent(object);
+	       ServerLogger.getLogger().info("   * Storing an object: " + hotel);
+	       pm.makePersistent(hotel);
+	       Hotel h = pm.detachCopy(hotel);
 	       tx.commit();
-
+	       
+	       return h;
 	    } catch (Exception ex) {
 	    	ServerLogger.getLogger().fatal("   $ Error storing an object: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		tx.rollback();
-	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+	    	close();
 	    }
+	    return null;
 	}
 	
 	public Hotel getHotel(String hotelID) {
-		PersistenceManager pm = pmf.getPersistenceManager();
 		/* By default only 1 level is retrieved from the db
 		 * so if we wish to fetch more than one level, we must indicate it
 		 */
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
-		Transaction tx = pm.currentTransaction();
+		tx = pm.currentTransaction();
 		
 		try {
 			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
@@ -69,11 +64,7 @@ public class HotelDAO implements IHotelDAO {
 		} catch (Exception ex) {
 			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		tx.rollback();
-	    	}
-
-    		pm.close();    		
+	    	close();
 	    }
 	    				
 		return null;
@@ -81,10 +72,9 @@ public class HotelDAO implements IHotelDAO {
 
 
 	public ArrayList<Hotel> getHotels() {
-		PersistenceManager pm = pmf.getPersistenceManager();
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
-		Transaction tx = pm.currentTransaction();
+		tx = pm.currentTransaction();
 	    ArrayList<Hotel> hotels = new ArrayList<>();
 	        
 	    try {
@@ -101,22 +91,14 @@ public class HotelDAO implements IHotelDAO {
 	    } catch (Exception ex) {
 	    	ServerLogger.getLogger().fatal("   $ Error retreiving an extent: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		ServerLogger.getLogger().info("rollback");
-	    		tx.rollback();
-	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+	    	close();
 	    }
 	    return hotels;
 	}
 
 	@Override
-	public boolean deleteHotel(String hotelID) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		
-		Transaction tx = pm.currentTransaction();
+	public boolean deleteHotel(String hotelID) {		
+		tx = pm.currentTransaction();
 		try {
 			tx.begin();
 			
@@ -135,23 +117,16 @@ public class HotelDAO implements IHotelDAO {
 		} catch (Exception ex) {
 			ServerLogger.getLogger().fatal("   $ Error deleting an hotel: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		ServerLogger.getLogger().debug("rollback");
-	    		tx.rollback();
-	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+	    	close();
 	    }
 		return false;
 	}
 	
 	public void cleanDB() {
 		ServerLogger.getLogger().info("- Cleaning the DB...");			
-		PersistenceManager pm = pmf.getPersistenceManager();
 		pm.getFetchPlan().setMaxFetchDepth(3);
 
-		Transaction tx = pm.currentTransaction();
+		tx = pm.currentTransaction();
 		//Start the transaction
 		try {
 			tx.begin();
@@ -166,13 +141,16 @@ public class HotelDAO implements IHotelDAO {
 			ServerLogger.getLogger().fatal(" $ Error cleaning the DB: " + ex.getMessage());
 			ex.printStackTrace();
 		} finally {
-			if (tx != null && tx.isActive()) {
-				tx.rollback();
-			}
-
-			if (pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+			close();
 		}
-	}	
+	}
+
+
+	/**
+	 * Closes the transaction if it hasn't been closed before, and makes rollback.
+	 */
+	private final void close() {
+		if (tx != null && tx.isActive())
+			tx.rollback();
+	}
 }

@@ -6,9 +6,9 @@ import es.deusto.spq.server.data.jdo.Hotel;
 
 public interface IHotelDAO {
 
-	void storeHotel(Hotel hotel);
-	Hotel getHotel(String hotelID);
-	ArrayList<Hotel> getHotels();
-	boolean deleteHotel(String hotelID);
-	void cleanDB();
+	public Hotel storeHotel(Hotel hotel);
+	public Hotel getHotel(String hotelID);
+	public ArrayList<Hotel> getHotels();
+	public boolean deleteHotel(String hotelID);
+	public void cleanDB();
 }
