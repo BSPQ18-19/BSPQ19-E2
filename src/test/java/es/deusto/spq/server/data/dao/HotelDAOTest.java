@@ -28,6 +28,7 @@ public class HotelDAOTest {
 		hotel1 = new Hotel("Z", "Hotel", "Bilbao", Timestamp.valueOf(LocalDate.of(2020, 01, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2020, 04, 28).atStartOfDay()));
 		
 		dao = new HotelDAO();
+		dao.cleanDB();
 		dao.storeHotel(hotel1);
 	}
 	

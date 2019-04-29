@@ -19,6 +19,10 @@ import org.apache.log4j.Logger;
 import es.deusto.spq.client.Client;
 import es.deusto.spq.client.controller.HotelManagementController;
 
+/** Panel for creating hotels as an admin
+ * @author gonzalo
+ *
+ */
 public class CreateHotel extends JPanel {
 
 	/**

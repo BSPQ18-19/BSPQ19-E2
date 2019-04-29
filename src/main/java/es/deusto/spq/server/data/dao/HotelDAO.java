@@ -16,6 +16,10 @@ import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.logger.ServerLogger;
 
+/** DAO class for hotels
+ * @author gonzalo
+ *
+ */
 public class HotelDAO implements IHotelDAO {
 	
 	private PersistenceManager pm;

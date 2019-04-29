@@ -26,6 +26,10 @@ import es.deusto.spq.client.Client;
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.server.data.dto.HotelDTO;
 
+/** Panel for seeing and editing all the hotels in the db
+ * @author gonzalo
+ *
+ */
 public class ViewHotel extends JPanel{
 	
 	/**

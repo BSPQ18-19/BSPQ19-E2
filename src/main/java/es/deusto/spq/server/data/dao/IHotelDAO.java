@@ -6,6 +6,10 @@ import java.util.List;
 
 import es.deusto.spq.server.data.jdo.Hotel;
 
+/** DAO interface for Hotels
+ * @author gonzalo
+ *
+ */
 public interface IHotelDAO {
 	
 	/** Stores the Hotel object into the database

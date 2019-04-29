@@ -16,6 +16,10 @@ import es.deusto.spq.client.gui.views.admin.ScreenTypeAdmin;
 import es.deusto.spq.client.gui.views.admin.ViewHotel;
 import es.deusto.spq.client.logger.ClientLogger;
 
+/** Main frame of the guest user
+ * @author gonzalo
+ *
+ */
 public class ClientWindowGuest extends JInternalFrame{
 
 	private static final long serialVersionUID = 1L;
@@ -66,6 +70,10 @@ public class ClientWindowGuest extends JInternalFrame{
 	}
 
 	// lazy singleton
+	/** 
+	 * @param controller Object of HotelManagementController class
+	 * @return ClientWindowAdmin object
+	 */
 	public static ClientWindowGuest getClientWindow(HotelManagementController controller) {
 		if (clientWindow == null)
 			clientWindow = new ClientWindowGuest(controller);

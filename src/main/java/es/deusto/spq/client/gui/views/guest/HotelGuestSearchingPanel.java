@@ -27,6 +27,10 @@ import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.HotelDTO;
 
+/** Panel for searching all the hotels as a guest user
+ * @author gonzalo
+ *
+ */
 public class HotelGuestSearchingPanel extends JPanel {
 
 	private DefaultTableModel tableModel;

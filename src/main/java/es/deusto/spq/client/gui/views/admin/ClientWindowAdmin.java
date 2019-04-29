@@ -4,10 +4,13 @@ import javax.swing.*;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.gui.views.guest.HotelGuestSearchingPanel;
 
 import org.apache.log4j.Logger;
 
+/** Main frame of the admin user
+ * @author gonzalo
+ *
+ */
 public class ClientWindowAdmin extends JInternalFrame {
 	
 	private static final long serialVersionUID = 1L;
@@ -60,6 +63,10 @@ public class ClientWindowAdmin extends JInternalFrame {
 	}
 
 	// lazy singleton
+	/** 
+	 * @param controller Object of HotelManagementController class
+	 * @return ClientWindowAdmin object
+	 */
 	public static ClientWindowAdmin getClientWindow(HotelManagementController controller) {
 		if (clientWindow == null)
 			clientWindow = new ClientWindowAdmin(controller);

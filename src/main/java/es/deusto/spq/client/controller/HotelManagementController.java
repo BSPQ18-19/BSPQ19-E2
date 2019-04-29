@@ -112,12 +112,7 @@ public class HotelManagementController {
     public ArrayList<HotelDTO> retrieveHotels() {
     	log.info("Getting list of hotels.");
     	try {
-			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();
-//			for(HotelDTO hotelDTO: hotel) {
-//				System.out.println(hotelDTO.getLocation());
-//			}
-//			HotelDTO[] hotels = hotel.toArray(new HotelDTO[hotel.size()]);
-			
+			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();			
 			
 			if(hotel != null && hotel.size() != 0) {
 				log.info("List of hotels retrieved succesfully.");
