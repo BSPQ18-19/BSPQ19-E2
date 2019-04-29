@@ -22,7 +22,7 @@ public class Assembler {
 		return hotelDTO;
 	}
 
-	public Hotel dissasembleHotel(HotelDTO hotel) {
+	public Hotel disassembleHotel(HotelDTO hotel) {
 		return new Hotel(hotel.getHotelId(), hotel.getName(), hotel.getLocation(), hotel.getSeasonStart(),
 				hotel.getSeasonEnding());
 	}
@@ -70,6 +70,6 @@ public class Assembler {
 	 */
 	public Review disassembleReview(ReviewDTO review) {
 		return new Review(review.getReviewID(), review.getOpinion(), review.getScore(), review.getPublishDate(),
-				dissasembleHotel(review.getHotel()), disassembleUser(review.getUser()));
+				disassembleHotel(review.getHotel()), disassembleUser(review.getUser()));
 	}
 }
