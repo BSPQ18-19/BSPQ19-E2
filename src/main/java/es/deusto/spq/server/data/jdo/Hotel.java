@@ -6,7 +6,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable(detachable = "true")
 public class Hotel {
-	
+
 	@PrimaryKey
 	private String hotelId;
 	private String name;
@@ -62,5 +62,17 @@ public class Hotel {
 
 	public void setSeasonEnding(Timestamp seasonEnding) {
 		this.seasonEnding = seasonEnding;
+	}
+
+	/**
+	 * Returns true if the ID is the same
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Hotel) {
+			final Hotel object = (Hotel) obj;
+			return object.getHotelId().equals(hotelId);
+		}
+		return false;
 	}
 }

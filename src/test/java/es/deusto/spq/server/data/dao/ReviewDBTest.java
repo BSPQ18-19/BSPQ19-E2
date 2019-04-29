@@ -25,6 +25,7 @@ import junit.framework.Assert;
  * @author egoes
  *
  */
+@SuppressWarnings("deprecation")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ReviewDBTest {
 
@@ -69,7 +70,6 @@ public class ReviewDBTest {
 	 * Stores a review and the DAO return the stored review to see if the review was
 	 * correctly stored If the review is the same the test success
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void aStoreReview() {
 		r.setHotel(h);
@@ -83,7 +83,6 @@ public class ReviewDBTest {
 	 * the one we created If the list contains the review we stored the test is a
 	 * success
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void bRetriveReviewsOfHotel() {
 		final List<Review> reviews = reviewDAO.getReviewsOfHotel(hotelID);
@@ -95,7 +94,6 @@ public class ReviewDBTest {
 	 * Retrieves the reviews posted by a user from the DB If the list contains the
 	 * review we stored the test is a success
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void cRetrieveReviewsPostedByUser() {
 		final List<Review> reviews = reviewDAO.getReviewsByUser(userID);
@@ -107,7 +105,6 @@ public class ReviewDBTest {
 	 * Deletes the review from the DB If the method return true the test is a
 	 * success Here the hotel and the user are also deleted
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void dDeletesReview() {
 		Assert.assertTrue(reviewDAO.deleteReview(reviewID));
