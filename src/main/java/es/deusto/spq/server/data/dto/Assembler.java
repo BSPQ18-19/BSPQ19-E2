@@ -13,7 +13,7 @@ public class Assembler {
 	public Assembler() {}
 	
 	// Hotel
-	public HotelDTO assemble(Hotel hotel) {
+	public HotelDTO assembleHotel(Hotel hotel) {
 		if (hotel == null)
 			return null;
 		HotelDTO hotelDTO = new HotelDTO(hotel.getHotelId(), hotel.getName(), hotel.getLocation(),
@@ -54,12 +54,12 @@ public class Assembler {
 	/**
 	 * Converts from Review to ReviewDTO
 	 *
-	 * @param review the Review we want to assemble
+	 * @param review the Review we want to assembleHotel
 	 * @return the ReviewDTO of the assembles Review
 	 */
 	public ReviewDTO assembleReview(Review review) {
 		return new ReviewDTO(review.getReviewID(), review.getOpinion(), review.getScore(), review.getPublishDate(),
-				assemble(review.getHotel()), assembleUser(review.getUser()));
+				assembleHotel(review.getHotel()), assembleUser(review.getUser()));
 	}
 
 	/**
