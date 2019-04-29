@@ -36,21 +36,24 @@ public class HotelGuestSearchingPanel extends JPanel {
 	private DefaultTableModel tableModel;
 	private JTable hotelsTable;
 	private JScrollPane tableScrollPane;
-	private JButton	logout, confirm;
+	private JButton confirm;
 	private JButton	viewHotel;
 	private JPanel upperButtons, southPanel;
 	private int screenWidth, screenHeight;
 	private Logger log;
 	private CalendarPanel calendar;
+	private ClientWindowGuest clientWindowGuest;
 	
-	public HotelGuestSearchingPanel(int screenWidth, int screenHeight, HotelManagementController controller) {
+	public HotelGuestSearchingPanel(int screenWidth, int screenHeight, ClientWindowGuest clientWindowGuest) {
 		log = ClientLogger.getLogger();
+		
+		this.clientWindowGuest = clientWindowGuest;
 		
 		this.setLayout(new BorderLayout());
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		
-		viewHotel = new JButton("View hotels");
+		viewHotel = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.button.view"));
 		viewHotel.setSize(100, 30);
 		viewHotel.addActionListener(new ActionListener() {
 			
@@ -60,8 +63,8 @@ public class HotelGuestSearchingPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Please select a date", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				else {
-					controller.setCurrentHotels();
-					ArrayList<HotelDTO> retrievedHotels = controller.retrieveHotels(calendar.getSelectedDate().toString());
+					clientWindowGuest.getController().setCurrentHotels();
+					ArrayList<HotelDTO> retrievedHotels = clientWindowGuest.getController().retrieveHotels(calendar.getSelectedDate().toString());
 					if(retrievedHotels == null || retrievedHotels.size() == 0) {
 						JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);
 						if(tableModel.getRowCount() != 0) {
@@ -70,7 +73,7 @@ public class HotelGuestSearchingPanel extends JPanel {
 							}
 						}
 					}else {
-						controller.setCurrentHotels();
+						clientWindowGuest.getController().setCurrentHotels();
 						if(tableModel.getRowCount() != 0) {
 							for(int i = tableModel.getRowCount()-1; i >= 0; i--) {
 								tableModel.removeRow(i);
@@ -111,39 +114,21 @@ public class HotelGuestSearchingPanel extends JPanel {
 									+ "-" + seasonEndingMonth
 									+ "-" + seasonEndingDate});
 
-							controller.setCurrentHotels(hotel);
+							clientWindowGuest.getController().setCurrentHotels(hotel);
 						}
 					}
 				}
 			}
 		});
 		
-		confirm = new JButton("Confirm");
+		confirm = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.button.confirm "));
 		confirm.setSize(100, 30);
 		confirm.setBackground(Color.GREEN);
-				
-		logout = new JButton("Log out");
-		logout.setSize(100, 30);
-		logout.setBackground(Color.white);
-		logout.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					controller.logOut();
-					JOptionPane.showMessageDialog(null,  "Successfully logged out", "Logged out",JOptionPane.INFORMATION_MESSAGE);
-					ClientWindowAdmin.getClientWindow(controller).dispose();
-				} catch (RemoteException e1) {
-					log.info("Error while trying to log out: " + e1.getMessage());
-				}
-			}
-		});
 		
 		upperButtons = new JPanel();
 		upperButtons.setBackground(Color.LIGHT_GRAY);
 		upperButtons.add(viewHotel);
 		upperButtons.add(confirm);
-		upperButtons.add(logout);
 		
 		calendar = new CalendarPanel();
 		calendar.setSize(600, 200);
@@ -154,10 +139,10 @@ public class HotelGuestSearchingPanel extends JPanel {
 		hotelsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
 		tableModel.addColumn("Id");
-		tableModel.addColumn("Name");
-		tableModel.addColumn("Location");
-		tableModel.addColumn("Season start");
-		tableModel.addColumn("Season end");
+		tableModel.addColumn(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.table.label.name"));
+		tableModel.addColumn(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.table.label.location"));
+		tableModel.addColumn(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.table.label.seasonStart"));
+		tableModel.addColumn(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.table.label.seasonEnding"));
 		
 		hotelsTable.addMouseListener(new MouseAdapter() {
 			

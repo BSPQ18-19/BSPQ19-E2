@@ -32,31 +32,32 @@ public class CreateHotel extends JPanel {
 	private JLabel idLabel, nameLabel, locationLabel, seasonStartLabel, seasonEndingLabel;
 	private TextField idTextField, nameTextField, locationTextField;
 	private TextField seasonStartTextField, seasonEndingTextField;
-	private JButton	logout, confirm;
+	private JButton	confirm;
 	private JButton	createHotel, viewHotel, editHotel, deleteHotel;
 	private JPanel upperButtons, centerPanel;
 	private int screenWidth, screenHeight;
-	private HotelManagementController controller;
 	private Logger log;
+	private ClientWindowAdmin clientWindowAdmin;
 	
-	public CreateHotel(int screenWidth, int screenHeight, HotelManagementController controller) {
+	public CreateHotel(int screenWidth, int screenHeight, ClientWindowAdmin clientWindowAdmin) {
 		log = ClientLogger.getLogger();
 		
 		this.setLayout(new BorderLayout());
 		
+		this.clientWindowAdmin = clientWindowAdmin;
 		idLabel = new JLabel("ID");
 		idLabel.setFont(new Font(idLabel.getName(), Font.PLAIN, 25));
 		
-		nameLabel = new JLabel("Name");
+		nameLabel = new JLabel(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.label.name"));
 		nameLabel.setFont(new Font(nameLabel.getName(), Font.PLAIN, 25));
 		
-		locationLabel = new JLabel("Location");
+		locationLabel = new JLabel(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.label.location"));
 		locationLabel.setFont(new Font(locationLabel.getName(), Font.PLAIN, 25));
 		
-		seasonStartLabel = new JLabel("Season start (YYYY-MM-DD)");
+		seasonStartLabel = new JLabel(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.label.seasonStart"));
 		seasonStartLabel.setFont(new Font(seasonStartLabel.getName(), Font.PLAIN, 25));
 		
-		seasonEndingLabel = new JLabel("Season ending (YYYY-MM-DD)");
+		seasonEndingLabel = new JLabel(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.label.seasonEnding"));
 		seasonEndingLabel.setFont(new Font(seasonEndingLabel.getName(), Font.PLAIN, 25));
 		
 		idTextField = new TextField("", 20);
@@ -74,44 +75,41 @@ public class CreateHotel extends JPanel {
 		seasonEndingTextField = new TextField("", 20);
 		seasonEndingTextField.setFont(new Font(seasonEndingTextField.getName(), Font.PLAIN, 25));
 		
-		
-		this.controller = controller;
-		
 		this.setLayout(new BorderLayout());
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		
-		createHotel = new JButton("New hotel");
+		createHotel = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.button.create"));
 		createHotel.setSize(100, 30);
 		createHotel.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindowAdmin.getClientWindow(controller).changeScreen(ScreenTypeAdmin.CREATE_HOTEL_ADMIN);
+				clientWindowAdmin.changeScreen(ScreenTypeAdmin.CREATE_HOTEL_ADMIN);
 				confirm.setEnabled(true);
 				
 			}
 		});
 		
-		viewHotel = new JButton("View hotels");
+		viewHotel = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.button.view"));
 		viewHotel.setSize(100, 30);
 		viewHotel.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindowAdmin.getClientWindow(controller).changeScreen(ScreenTypeAdmin.VIEW_HOTEL_ADMIN);		
+				clientWindowAdmin.changeScreen(ScreenTypeAdmin.VIEW_HOTEL_ADMIN);		
 			}
 		});
 		
-		editHotel = new JButton("Edit hotel");
+		editHotel = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.button.edit"));
 		editHotel.setSize(100, 30);
 		editHotel.setEnabled(false);
 		
-		deleteHotel = new JButton("Delete hotel");
+		deleteHotel = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.button.delete"));
 		deleteHotel.setSize(100, 30);
 		deleteHotel.setEnabled(false);
 		
-		confirm = new JButton("Confirm");
+		confirm = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.button.confirm"));
 		confirm.setSize(100, 30);
 		confirm.setBackground(Color.GREEN);
 		confirm.addActionListener(new ActionListener() {
@@ -125,16 +123,12 @@ public class CreateHotel extends JPanel {
 						|| seasonEndingTextField.getText().equals("")){
 					JOptionPane.showMessageDialog(null, "Please fill everything.", "Error", JOptionPane.ERROR_MESSAGE);
 				}else {
-					controller.createHotel(idTextField.getText(), nameTextField.getText(), locationTextField.getText(),
+					clientWindowAdmin.getController().createHotel(idTextField.getText(), nameTextField.getText(), locationTextField.getText(),
 							seasonStartTextField.getText(), seasonEndingTextField.getText());
 					JOptionPane.showMessageDialog(null, "Hotel created", "Done", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
-				
-		logout = new JButton("Log out");
-		logout.setSize(100, 30);
-		logout.setBackground(Color.white);
 		
 		upperButtons = new JPanel();
 		upperButtons.setBackground(Color.LIGHT_GRAY);
@@ -143,7 +137,6 @@ public class CreateHotel extends JPanel {
 		upperButtons.add(editHotel);
 		upperButtons.add(deleteHotel);
 		upperButtons.add(confirm);
-		upperButtons.add(logout);
 		
 		centerPanel = new JPanel();
 		centerPanel.setLayout(new GridLayout(12, 1));

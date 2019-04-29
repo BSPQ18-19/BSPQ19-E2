@@ -33,8 +33,9 @@ public class HotelAdminView extends View {
 
     @Override
     public void initialize() {
-        clientWindow = ClientWindowAdmin.getClientWindow(getViewManager().getClient().getController());
-        clientWindow.setVisible(true);
+    	  clientWindow = new ClientWindowAdmin(this);
+          clientWindow.setVisible(true);
+          addDisposeEventHandler();
     }
 
     @Override

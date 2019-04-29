@@ -8,6 +8,7 @@ import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewPermission;
 import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 
 public class HotelGuestView extends View{
 
@@ -34,8 +35,9 @@ public class HotelGuestView extends View{
 
     @Override
     public void initialize() {
-        clientWindow = ClientWindowGuest.getClientWindow(getViewManager().getClient().getController());
+    	clientWindow = new ClientWindowGuest(this);
         clientWindow.setVisible(true);
+        addDisposeEventHandler();
     }
 
     @Override

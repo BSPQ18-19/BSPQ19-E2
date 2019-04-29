@@ -20,7 +20,6 @@ public class Hotel {
 	private String location;
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
-	private ArrayList<Room> room;
 	
 	/** Constructor of Hotel
 	 * @param hotelId Id of hotel

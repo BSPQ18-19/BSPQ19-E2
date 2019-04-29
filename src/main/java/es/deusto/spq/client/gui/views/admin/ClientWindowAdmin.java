@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.gui.locale.LocaleManager;
 
 import org.apache.log4j.Logger;
 
@@ -20,16 +21,18 @@ public class ClientWindowAdmin extends JInternalFrame {
 	private HotelManagementController controller;
 	private JPanel mainPanel;
 	private Logger log;
-	
+	private HotelAdminView adminView;
 
+	
 	// private constructor using lazy singleton
-	private ClientWindowAdmin(HotelManagementController controller) {
+	public ClientWindowAdmin(HotelAdminView adminView) {
 		log = ClientLogger.getLogger();
 		
-		this.controller = controller;
+		this.adminView = adminView;
+		this.controller = adminView.getViewManager().getClient().getController();
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setTitle("Hotel client");
+		this.setTitle(adminView.getViewManager().getClient().getLocaleManager().getMessage("windowAdmin.title"));
 		Dimension windowSize = new Dimension((int) (screenSize.getWidth() / 1.3), (int) (screenSize.getHeight() / 1.3));
 		this.setSize(windowSize);
 		mainPanel = (JPanel) this.getContentPane();
@@ -50,10 +53,10 @@ public class ClientWindowAdmin extends JInternalFrame {
 		
 		switch(nextScreenType) {
 		case VIEW_HOTEL_ADMIN:
-			mainPanel = new ViewHotel(screenWidth, screenHeight, controller);
+			mainPanel = new ViewHotel(screenWidth, screenHeight, this);
 			break;
 		case CREATE_HOTEL_ADMIN:
-			mainPanel = new CreateHotel(screenWidth, screenHeight, controller);
+			mainPanel = new CreateHotel(screenWidth, screenHeight, this);
 			break;
 		default:
 			break;
@@ -61,17 +64,11 @@ public class ClientWindowAdmin extends JInternalFrame {
 		this.setContentPane(mainPanel);
 		this.revalidate();
 	}
-
-	// lazy singleton
-	/** 
-	 * @param controller Object of HotelManagementController class
-	 * @return ClientWindowAdmin object
-	 */
-	public static ClientWindowAdmin getClientWindow(HotelManagementController controller) {
-		if (clientWindow == null)
-			clientWindow = new ClientWindowAdmin(controller);
-		return clientWindow;
+	
+	public HotelAdminView getAdminView() {
+		return adminView;
 	}
+
 
 	public HotelManagementController getController() {
 		return controller;

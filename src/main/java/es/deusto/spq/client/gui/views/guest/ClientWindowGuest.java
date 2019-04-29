@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 import es.deusto.spq.client.gui.views.admin.CreateHotel;
+import es.deusto.spq.client.gui.views.admin.HotelAdminView;
 import es.deusto.spq.client.gui.views.admin.ScreenTypeAdmin;
 import es.deusto.spq.client.gui.views.admin.ViewHotel;
 import es.deusto.spq.client.logger.ClientLogger;
@@ -29,16 +29,17 @@ public class ClientWindowGuest extends JInternalFrame{
 	private HotelManagementController controller;
 	private JPanel mainPanel;
 	private Logger log;
-	
+	private HotelGuestView guestView;
 
 	// private constructor using lazy singleton
-	private ClientWindowGuest(HotelManagementController controller) {
+	public ClientWindowGuest(HotelGuestView guestView) {
 		log = ClientLogger.getLogger();
 		
-		this.controller = controller;
+		this.guestView = guestView;
+		this.controller = guestView.getViewManager().getClient().getController();;
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setTitle("Hotel client");
+		this.setTitle(guestView.getViewManager().getClient().getLocaleManager().getMessage("windowGuest.title"));
 		Dimension windowSize = new Dimension((int) (screenSize.getWidth() / 1.3), (int) (screenSize.getHeight() / 1.3));
 		this.setSize(windowSize);
 		mainPanel = (JPanel) this.getContentPane();
@@ -60,7 +61,7 @@ public class ClientWindowGuest extends JInternalFrame{
 		switch(nextScreenType) {
 	
 		case GUEST_SEARCH:
-			mainPanel = new HotelGuestSearchingPanel(screenWidth, screenHeight, controller);
+			mainPanel = new HotelGuestSearchingPanel(screenWidth, screenHeight, this);
 			break;
 		default:
 			break;
@@ -69,15 +70,8 @@ public class ClientWindowGuest extends JInternalFrame{
 		this.revalidate();
 	}
 
-	// lazy singleton
-	/** 
-	 * @param controller Object of HotelManagementController class
-	 * @return ClientWindowAdmin object
-	 */
-	public static ClientWindowGuest getClientWindow(HotelManagementController controller) {
-		if (clientWindow == null)
-			clientWindow = new ClientWindowGuest(controller);
-		return clientWindow;
+	public HotelGuestView getGuestView() {
+		return guestView;
 	}
 
 	public HotelManagementController getController() {
