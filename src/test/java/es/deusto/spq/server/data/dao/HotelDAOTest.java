@@ -63,7 +63,7 @@ public class HotelDAOTest {
 
 	/**
 	 * Test the method that gets all the hotels.
-	 * Checks if the one we have stored is on the list
+	 * Checks if the one we have stored is on the list.
 	 */
 	@Test
 	public void bGetHotels() {
