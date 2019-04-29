@@ -1,9 +1,7 @@
 package es.deusto.spq.server.data.jdo;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.Objects;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
 
@@ -13,7 +11,7 @@ import javax.jdo.annotations.PrimaryKey;
  */
 @PersistenceCapable(detachable = "true")
 public class Hotel {
-	
+
 	@PrimaryKey
 	private String hotelId;
 	private String name;
@@ -106,5 +104,18 @@ public class Hotel {
 	 */
 	public void setSeasonEnding(Timestamp seasonEnding) {
 		this.seasonEnding = seasonEnding;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Hotel hotel = (Hotel) o;
+		return getHotelId().equals(hotel.getHotelId());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getHotelId());
 	}
 }

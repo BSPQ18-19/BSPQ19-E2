@@ -1,6 +1,7 @@
 package es.deusto.spq.server.data.jdo;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
@@ -102,5 +103,18 @@ public class Room {
 	 */
 	public void setOccupied(boolean isOccupied) {
 		this.isOccupied = isOccupied;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Room room = (Room) o;
+		return getRoomId().equals(room.getRoomId());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getRoomId());
 	}
 }

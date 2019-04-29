@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -20,7 +19,6 @@ import es.deusto.spq.server.data.dao.IHotelDAO;
 import es.deusto.spq.server.data.dao.UserDAO;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.HotelDTO;
-import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
@@ -98,7 +96,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		
 		ArrayList<Hotel> listHotels = dao.getHotels();
 		for(Hotel hotel : listHotels) {
-			hotelsDTO.add(hotelAssembler.assemble(hotel));
+			hotelsDTO.add(hotelAssembler.assembleHotel(hotel));
 		}
 		
 		if(hotelsDTO.isEmpty()) {
@@ -120,7 +118,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		log.info("Retrieving hotels...");
 		ArrayList<Hotel> listHotels = dao.getHotels(Timestamp.valueOf(localDateStart.atStartOfDay()));
 		for(Hotel hotel : listHotels) {
-			hotelsDTO.add(hotelAssembler.assemble(hotel));
+			hotelsDTO.add(hotelAssembler.assembleHotel(hotel));
 		}
 		
 		if(hotelsDTO.isEmpty()) {
@@ -147,7 +145,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		dao.storeHotel(hotel);
 		
 		Assembler hotelAssembler = new Assembler();
-		return hotelAssembler.assemble(hotel);
+		return hotelAssembler.assembleHotel(hotel);
 	}
 
 	@Override

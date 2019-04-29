@@ -10,20 +10,23 @@ import es.deusto.spq.server.data.jdo.Hotel;
  *
  */
 public interface IHotelDAO {
-	
-	/** Stores the Hotel object into the database
-	 * @param hotel Object of Hotel class
+	/**
+	 * Stores a hotel in to the DB
+	 * @param hotel the hotel you want to store
+	 * @return
 	 */
-	public void storeHotel(Hotel hotel);
-	
-	/** Retrieves a hotel from the database according to the ID requested
-	 * @param hotelID Id of the hotel
-	 * @return Hotel object
+	public Hotel storeHotel(Hotel hotel);
+
+	/**
+	 * Gets Hotel by ID from the DB
+	 * @param hotelID the ID from the hotel we want to search
+	 * @return
 	 */
 	public Hotel getHotel(String hotelID);
-	
-	/** Retrieve all the hotels from the database
-	 * @return ArrayList of Hotel objects
+
+	/**
+	 * Gets all the hotels from the DB
+	 * @return arraylist of hotels
 	 */
 	public ArrayList<Hotel> getHotels();
 	
@@ -32,15 +35,16 @@ public interface IHotelDAO {
 	 * @return ArrayList of Hotel objects
 	 */
 	public ArrayList<Hotel> getHotels(Timestamp arrivalDate);
-	
-	/** Delete a hotel form the database with the requested ID
-	 * @param HotelID Id of the hotel
-	 * @return true if the database was clean successfully
+
+	/**
+	 * Deletes a hotel by ID
+	 * @param hotelID
+	 * @return true if its been deleted, false if not
 	 */
 	public boolean deleteHotel(String hotelID);
-	
+
 	/**
-	 * Remove all the hotels form the database
+	 * Clean all the DB
 	 */
 	public void cleanDB();
 }
