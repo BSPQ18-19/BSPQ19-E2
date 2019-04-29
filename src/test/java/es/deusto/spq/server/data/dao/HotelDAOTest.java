@@ -71,12 +71,18 @@ public class HotelDAOTest {
 		Assert.assertTrue(hotels.contains(hotel));
 	}
 
+	@Test
+	public void cGetHotelsByArrivalDate() {
+		Hotel hotel = hotelDAO.getHotels(Timestamp.valueOf(LocalDate.of(2020, 01, 01).atStartOfDay())).get(0);
+		Assert.assertEquals(Timestamp.valueOf(LocalDate.of(2019, 04, 01).atStartOfDay()), hotel.getSeasonStart());
+	}
+	
 	/**
 	 * Test the method for deleting a hotel from the ID.
 	 * Checks if return is true, if it is hotel was deleted.
 	 */
 	@Test
-	public void cDeleteHotel() {
+	public void dDeleteHotel() {
 		Assert.assertTrue(hotelDAO.deleteHotel(hotelID));
 	}
 }

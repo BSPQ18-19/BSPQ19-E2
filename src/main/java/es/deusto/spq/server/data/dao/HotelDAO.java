@@ -1,5 +1,6 @@
 package es.deusto.spq.server.data.dao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.jdo.Extent;
@@ -85,6 +86,32 @@ public class HotelDAO implements IHotelDAO {
 
 			for (Hotel hotel : extent) {
 				hotels.add(hotel);
+			}
+			
+	        tx.commit();
+	    } catch (Exception ex) {
+	    	ServerLogger.getLogger().fatal("   $ Error retreiving an extent: " + ex.getMessage());
+	    } finally {
+	    	close();
+	    }
+	    return hotels;
+	}
+	
+	public ArrayList<Hotel> getHotels(Timestamp arrivalDate) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		tx = pm.currentTransaction();
+	    ArrayList<Hotel> hotels = new ArrayList<>();
+	        
+	    try {
+	    	ServerLogger.getLogger().info("   * Retrieving all the hotels ");
+	    	
+	    	tx.begin();	    	
+			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
+
+			for (Hotel hotel : extent) {
+				if(hotel.getSeasonStart().getTime() <= arrivalDate.getTime())
+					hotels.add(hotel);
 			}
 			
 	        tx.commit();

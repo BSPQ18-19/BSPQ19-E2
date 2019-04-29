@@ -29,13 +29,13 @@ public class Assembler {
 
 	// Room
 	public RoomDTO assembleRoom(Room room) {
-		return new RoomDTO(room.getRoomId(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied(),
-				room.getFeatures());
+		if(room == null)
+			return null;
+		return new RoomDTO(room.getRoomId(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied());
 	}
 	
 	public Room disassembleRoom(RoomDTO room) {
-		return new Room(room.getRoomID(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied(),
-				room.getFeatures());
+		return new Room(room.getRoomID(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied());
 	}
 	
 	// User

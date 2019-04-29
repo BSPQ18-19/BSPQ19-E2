@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
+import es.deusto.spq.server.data.dao.HotelDAO;
 import es.deusto.spq.server.data.dao.IHotelDAO;
 import es.deusto.spq.server.data.dao.UserDAO;
 import es.deusto.spq.server.data.dto.Assembler;
@@ -38,35 +40,32 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	
 	public HotelManager() throws RemoteException {
 		super();
-//		new Assembler();
-//		this.userDAO = new UserDAO();
-//		new HotelDAO();
-//		loggedUsers = new HashSet<UserDTO>();
+		new Assembler();
+		this.userDAO = new UserDAO();
+		new HotelDAO();
+		loggedUsers = new HashSet<UserDTO>();
 		log = ServerLogger.getLogger();
-//		r = new Random();
+		r = new Random();
 		payPalGateway = new PayPalGateway();
 		mastercardGateway = new MastercardGateway();
 		
-		/////////////////////////////////////////////////
-		
-//		LocalDate localDate = LocalDate.of(2019, 04, 01);
-//		
-//		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-//		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-//		hotels.put("H03", new Hotel("H03", "Hotel3", "Madrid", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-//		hotels.put("H04", new Hotel("H04", "Hotel4", "Sevilla", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-//		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-//		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay())));
-//		
-//		this.dao = new HotelDAO();
-//		dao.cleanDB();
-//		for(Hotel hotel: hotels.values()) {
-//			dao.storeHotel(hotel);
-//		}
+		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", Timestamp.valueOf(LocalDate.of(2019, 04, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 12, 31).atStartOfDay())));
+		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", Timestamp.valueOf(LocalDate.of(2019, 06, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 9, 30).atStartOfDay())));
+		hotels.put("H03", new Hotel("H03", "Hotel3", "Madrid", Timestamp.valueOf(LocalDate.of(2019, 04, 15).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 06, 20).atStartOfDay())));
+		hotels.put("H04", new Hotel("H04", "Hotel4", "Sevilla", Timestamp.valueOf(LocalDate.of(2019, 05, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 10, 01).atStartOfDay())));
+		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", Timestamp.valueOf(LocalDate.of(2019, 05, 14).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 11, 30).atStartOfDay())));
+		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", Timestamp.valueOf(LocalDate.of(2019, 04, 20).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 11, 30).atStartOfDay())));
+	
+		this.dao = new HotelDAO();
+		dao.cleanDB();
+		for(Hotel hotel: hotels.values()) {
+			dao.storeHotel(hotel);
+		}
 	}
 
 	private Random r;
 	private String generateRandomId() {
+		System.out.println(Integer.toString(r.nextInt(Integer.MAX_VALUE)));
 		return Integer.toString(r.nextInt(Integer.MAX_VALUE));
 	}
 	
@@ -95,16 +94,32 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		ArrayList<HotelDTO> hotelsDTO = new ArrayList<>();
 		Assembler hotelAssembler = new Assembler();
 		
-		log.info("Retrieving hotels...");
 		ArrayList<Hotel> listHotels = dao.getHotels();
-		log.info(" --> SERVER:");
-		log.info("ID: " + listHotels.get(1).getHotelId());
-		log.info("NAME: " + listHotels);
-		log.info("LOCATION: " + listHotels.get(1).getLocation());
 		for(Hotel hotel : listHotels) {
 			hotelsDTO.add(hotelAssembler.assembleHotel(hotel));
 		}
-		log.info("Arraylist size: "+hotelsDTO.size());
+		
+		if(hotelsDTO.isEmpty()) {
+			log.fatal("New exception - There are no hotels for the requested information.");
+			throw new RemoteException("HOTELS - There are no hotels for the requested information.");
+		}
+
+		return hotelsDTO;
+	}
+	
+	@Override
+	public ArrayList<HotelDTO> retrieveHotels(String arrivalDate) throws RemoteException {
+		ArrayList<HotelDTO> hotelsDTO = new ArrayList<>();
+		Assembler hotelAssembler = new Assembler();
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
+		LocalDate localDateStart = LocalDate.parse(arrivalDate.trim(), formatter);
+		
+		log.info("Retrieving hotels...");
+		ArrayList<Hotel> listHotels = dao.getHotels(Timestamp.valueOf(localDateStart.atStartOfDay()));
+		for(Hotel hotel : listHotels) {
+			hotelsDTO.add(hotelAssembler.assembleHotel(hotel));
+		}
 		
 		if(hotelsDTO.isEmpty()) {
 			log.fatal("New exception - There are no hotels for the requested information.");

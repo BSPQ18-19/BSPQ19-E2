@@ -94,10 +94,8 @@ public class AssemblerTest {
 
         Assembler assembler = new Assembler();
 
-        final List<String> features = Arrays.asList("views", "jacuzzi", "tv");
-
-        Room room = new Room("roomtest", 26f, 42f, RoomType.SINGLE, false, features);
-        RoomDTO roomDTO = new RoomDTO("roomtest", 26f, 42f, RoomType.SINGLE, false, features);
+        Room room = new Room("roomtest", 26f, 42f, RoomType.SINGLE, false);
+        RoomDTO roomDTO = new RoomDTO("roomtest", 26f, 42f, RoomType.SINGLE, false);
 
         Assert.assertEquals(roomDTO, assembler.assembleRoom(room));
 
@@ -114,8 +112,8 @@ public class AssemblerTest {
 
         final List<String> features = Arrays.asList("views", "jacuzzi", "tv");
 
-        Room room = new Room("roomtest", 26f, 42f, RoomType.SINGLE, false, features);
-        RoomDTO roomDTO = new RoomDTO("roomtest", 26f, 42f, RoomType.SINGLE, false, features);
+        Room room = new Room("roomtest", 26f, 42f, RoomType.SINGLE, false);
+        RoomDTO roomDTO = new RoomDTO("roomtest", 26f, 42f, RoomType.SINGLE, false);
 
         Assert.assertEquals(room, assembler.disassembleRoom(roomDTO));
 
