@@ -3,8 +3,10 @@ package es.deusto.spq.server.data.dao;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -27,6 +29,9 @@ import junit.framework.Assert;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ReviewDBTest {
+
+	@Rule
+	public ContiPerfRule rule = new ContiPerfRule();
 
 	// The review used for testing
 	private static String reviewID;
