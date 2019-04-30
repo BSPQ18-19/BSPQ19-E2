@@ -112,6 +112,7 @@
 				    <excludes>
                         <exclude>**/client/gui/**</exclude>
                         <exclude>**/server/data/jdo/**</exclude>
+						<exclude>**/server/gateway/**</exclude>
 					</excludes>
 					<rules>
 						<rule>
