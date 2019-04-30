@@ -49,7 +49,6 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		r = new Random();
 		payPalGateway = new PayPalGateway();
 		mastercardGateway = new MastercardGateway();
-		
 		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", Timestamp.valueOf(LocalDate.of(2019, 04, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 12, 31).atStartOfDay())));
 		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", Timestamp.valueOf(LocalDate.of(2019, 06, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 9, 30).atStartOfDay())));
 		hotels.put("H03", new Hotel("H03", "Hotel3", "Madrid", Timestamp.valueOf(LocalDate.of(2019, 04, 15).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 06, 20).atStartOfDay())));
@@ -65,6 +64,9 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		
 		//The default admin because only one admin can register another
 		User defaultAdmin = new  Administrator("DEFAULT", "admin", "admin", "admin", "admin");
+		Assembler assembler = new Assembler();
+		UserDTO authorization = assembler.assembleUser(defaultAdmin);
+		userDAO.deleteUserbyID(authorization, defaultAdmin.getUserID());
 		userDAO.createUser(defaultAdmin);
 	}
 

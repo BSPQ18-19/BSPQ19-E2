@@ -9,6 +9,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import es.deusto.spq.client.gui.base.ViewFactory;
+import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.logger.ClientLogger;
 
 import javax.swing.JButton;
@@ -58,7 +60,7 @@ public class ViewHotel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				clientWindowAdmin.changeScreen(ScreenTypeAdmin.REGISTER_ADMINISTRATOR);
+				clientWindowAdmin.getAdminView().getViewManager().openView(ViewFactory.buildView(ViewType.REGISTER_ADMINISTRATOR, clientWindowAdmin.getAdminView().getViewManager()));
 			}
 		});
 		

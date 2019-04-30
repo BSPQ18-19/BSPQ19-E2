@@ -18,6 +18,9 @@ import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.Client;
 import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.gui.base.ViewFactory;
+import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.client.gui.views.auth.RegisterAdminView;
 
 /** Panel for creating hotels as an admin
  * @author gonzalo
@@ -86,7 +89,7 @@ public class CreateHotel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				clientWindowAdmin.changeScreen(ScreenTypeAdmin.REGISTER_ADMINISTRATOR);
+				clientWindowAdmin.getAdminView().getViewManager().openView(ViewFactory.buildView(ViewType.REGISTER_ADMINISTRATOR, clientWindowAdmin.getAdminView().getViewManager()));
 			}
 		});
 
