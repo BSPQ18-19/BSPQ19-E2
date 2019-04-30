@@ -89,5 +89,6 @@ public class HotelDAOTest {
 	@Test
 	public void dDeleteHotel() {
 		Assert.assertTrue(hotelDAO.deleteHotel(hotelID));
+		hotelDAO.cleanHotelsDB();
 	}
 }

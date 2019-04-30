@@ -58,5 +58,6 @@ public class RoomDAOTest {
 		@Test
 		public void cDeleteRoom() {
 			Assert.assertTrue(roomDAO.deleteRoom(rooms.get(0).getRoomId()));
+			hotelDAO.cleanHotelsDB();
 		}
 }
