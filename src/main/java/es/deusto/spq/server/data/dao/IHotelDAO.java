@@ -46,5 +46,5 @@ public interface IHotelDAO {
 	/**
 	 * Clean all the DB
 	 */
-	public void cleanDB();
+	public void cleanHotelsDB();
 }
