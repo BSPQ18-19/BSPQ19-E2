@@ -41,7 +41,7 @@ public class HotelDAOTest {
 	public static void setUpBeforeClass() throws Exception {
 		hotelDAO = new HotelDAO();
 
-		hotelID = "1";
+		hotelID = "5";
 		LocalDate localDate = LocalDate.of(2019, 04, 01);
 		hotel = new Hotel(hotelID, "TEST", "TEST", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay()));
 	}
@@ -89,5 +89,6 @@ public class HotelDAOTest {
 	@Test
 	public void dDeleteHotel() {
 		Assert.assertTrue(hotelDAO.deleteHotel(hotelID));
+		hotelDAO.cleanHotelsDB();
 	}
 }

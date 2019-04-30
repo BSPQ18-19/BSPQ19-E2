@@ -1,8 +1,11 @@
 package es.deusto.spq.server.data.jdo;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 /** Hotel class
@@ -19,6 +22,9 @@ public class Hotel {
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
 	
+	@Persistent(mappedBy="hotel")
+	private List<Room> listRooms;
+	
 	/** Constructor of Hotel
 	 * @param hotelId Id of hotel
 	 * @param name name of hotel
@@ -34,6 +40,7 @@ public class Hotel {
 		this.location = location;
 		this.seasonStart = seasonStart;
 		this.seasonEnding = seasonEnding;
+		this.listRooms = new ArrayList<Room>();
 	}
 	
 	/**
@@ -104,6 +111,21 @@ public class Hotel {
 	 */
 	public void setSeasonEnding(Timestamp seasonEnding) {
 		this.seasonEnding = seasonEnding;
+	}
+
+		
+	/**
+	 * @return list of rooms associated with the hotel
+	 */
+	public List<Room> getListRooms() {
+		return listRooms;
+	}
+
+	/** Set a list of rooms associated with the hotel
+	 * @param listRooms list of rooms associated with the hotel
+	 */
+	public void setListRooms(List<Room> listRooms) {
+		this.listRooms = listRooms;
 	}
 
 	@Override

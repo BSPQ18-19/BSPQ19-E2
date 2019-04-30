@@ -15,6 +15,7 @@ import es.deusto.spq.client.gui.views.admin.HotelAdminView;
 import es.deusto.spq.client.gui.views.admin.ScreenTypeAdmin;
 import es.deusto.spq.client.gui.views.admin.ViewHotel;
 import es.deusto.spq.client.logger.ClientLogger;
+import es.deusto.spq.server.data.jdo.Room;
 
 /** Main frame of the guest user
  * @author gonzalo
@@ -55,13 +56,16 @@ public class ClientWindowGuest extends JInternalFrame{
 	/** Change the UI of the Guest panel
 	 * @param nextScreenType Type of the next screen that is wanted to be displayed
 	 */
-	public void changeScreen(ScreenTypeGuest nextScreenType) {
+	public void changeScreen(ScreenTypeGuest nextScreenType, String... hotelId) {
 		this.currentScreenType = nextScreenType;
 		
 		switch(nextScreenType) {
 	
 		case GUEST_SEARCH:
 			mainPanel = new HotelGuestSearchingPanel(screenWidth, screenHeight, this);
+			break;
+		case ROOM_PANEL:
+			mainPanel = new RoomPanel(screenWidth, screenHeight, this, hotelId[0]);
 			break;
 		default:
 			break;
