@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.RoomType;
 
 public interface IHotelManager extends Remote {
 
@@ -20,6 +22,14 @@ public interface IHotelManager extends Remote {
 	public boolean deleteHotel(String id) throws RemoteException;
 	public boolean cleanDB() throws RemoteException;
 	//TODO getRoomsOfHotelbyID
+	public ArrayList<RoomDTO> retrieveRooms() throws RemoteException;
+	public RoomDTO updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) throws RemoteException;
+	public boolean deleteRoom(String id) throws RemoteException;
+	public ArrayList<RoomDTO> retrieveRoomsById(String hotelID) throws RemoteException;
+	
+	
+	
+	
 	//TODO getRoombyID
 	/**
 	 * Registers the user to the PayPal server.

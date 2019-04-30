@@ -20,6 +20,8 @@ public class Room {
 	private RoomType type;
 	private boolean isOccupied;
 	
+	private Hotel hotel;
+	
 	/** Constructor of Room class
 	 * @param roomId Id of the room
 	 * @param size Size in square meters
@@ -105,6 +107,21 @@ public class Room {
 		this.isOccupied = isOccupied;
 	}
 	
+	
+	/**
+	 * @return hotel associated with the room
+	 */
+	public Hotel getHotel() {
+		return hotel;
+	}
+
+	/** Set the hotel associated with the room
+	 * @param hotel Hotel associated with the room
+	 */
+	public void setHotel(Hotel hotel) {
+		this.hotel = hotel;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
