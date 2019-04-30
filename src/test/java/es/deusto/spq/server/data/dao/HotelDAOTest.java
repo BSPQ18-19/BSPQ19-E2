@@ -4,8 +4,10 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -25,6 +27,9 @@ import junit.framework.Assert;
 @SuppressWarnings("deprecation")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HotelDAOTest {
+
+	@Rule
+	public ContiPerfRule rule = new ContiPerfRule();
 
 	//The DAO class
 	private static HotelDAO hotelDAO;

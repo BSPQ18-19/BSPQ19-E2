@@ -12,7 +12,11 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import org.databene.contiperf.PerfTest;
+import org.databene.contiperf.Required;
+import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 
 import junit.framework.Assert;
@@ -22,6 +26,9 @@ import junit.framework.Assert;
  *
  */
 public class RMITest {
+
+	@Rule
+	public ContiPerfRule rule = new ContiPerfRule();
 
 	private static Registry locateRegistry;
 	private static String serverUrl;
@@ -45,6 +52,8 @@ public class RMITest {
 	}
 		
 	@SuppressWarnings("deprecation")
+	@PerfTest(invocations = 20)
+	@Required(max = 200)
 	@Test
 	public void clientServerRMITest() throws RemoteException, MalformedURLException, NotBoundException {
 		// Server side

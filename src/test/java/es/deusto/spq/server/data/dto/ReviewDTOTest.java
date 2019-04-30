@@ -1,12 +1,17 @@
 package es.deusto.spq.server.data.dto;
 
 import es.deusto.spq.server.data.jdo.Review;
+import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.sql.Timestamp;
 
 public class ReviewDTOTest {
+
+    @Rule
+    public ContiPerfRule rule = new ContiPerfRule();
 
     @Test
     public void test_toString() {
