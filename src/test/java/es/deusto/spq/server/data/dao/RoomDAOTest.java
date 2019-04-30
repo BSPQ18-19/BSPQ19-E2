@@ -27,6 +27,9 @@ public class RoomDAOTest {
 		private static Hotel hotel;
 		private static ArrayList<Room> rooms;
 		
+		/** Executes initial variables for testing RoomDAO
+		 * @throws Exception
+		 */
 		@BeforeClass
 		public static void setUpBeforeClass() throws Exception {
 			hotelDAO = new HotelDAO();
@@ -43,18 +46,27 @@ public class RoomDAOTest {
 			hotelDAO.storeHotel(hotel);
 		}
 		
+		/**
+		 *  Test the method for retrieving all the rooms from the DB
+		 */
 		@Test
 		public void aGetRooms() {
 			ArrayList<Room> listRooms = roomDAO.getRooms();
 			Assert.assertTrue(listRooms.contains(rooms.get(0)));
 		}
 		
+		/**
+		 * Test the method for retrieving all the rooms from the DB accordint to a hotel ID
+		 */
 		@Test
 		public void bGetRoomById() {
 			List<Room> listRooms = roomDAO.getRoom(hotelID);
 			Assert.assertTrue(listRooms.contains(rooms.get(0)));
 		}
 		
+		/**
+		 * Test the method for deleting a room from the DB
+		 */
 		@Test
 		public void cDeleteRoom() {
 			Assert.assertTrue(roomDAO.deleteRoom(rooms.get(0).getRoomId()));
