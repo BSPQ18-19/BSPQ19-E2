@@ -149,7 +149,7 @@ public class HotelDAO implements IHotelDAO {
 		return false;
 	}
 	
-	public void cleanDB() {
+	public void cleanHotelsDB() {
 		ServerLogger.getLogger().info("- Cleaning the DB...");			
 		pm.getFetchPlan().setMaxFetchDepth(3);
 

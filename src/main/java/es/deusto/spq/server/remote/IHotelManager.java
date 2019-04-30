@@ -52,7 +52,7 @@ public interface IHotelManager extends Remote {
 	 * @return True if the DB has cleaned successfully
 	 * @throws RemoteException
 	 */
-	public boolean cleanDB() throws RemoteException;
+	public boolean cleanHotelsDB() throws RemoteException;
 	
 	/** Retrieve a list of rooms from the DB
 	 * @return List of rooms of type ArrayList<RoomDTO>

@@ -154,9 +154,9 @@ public class HotelManagementController {
     /** Clean all the hotels from the DB
      * @return true if its properly cleaned
      */
-    public boolean cleanDB() {
+    public boolean cleanHotelsDB() {
     	try {
-    		rsl.getHotelManager().cleanDB();
+    		rsl.getHotelManager().cleanHotelsDB();
 			return true;
 		} catch (RemoteException e) {
 			log.fatal("Error cleaning db: " + e.getMessage());

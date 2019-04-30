@@ -180,9 +180,9 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
-	public boolean cleanDB() throws RemoteException {
+	public boolean cleanHotelsDB() throws RemoteException {
 		hotels.clear();
-		hotelDao.cleanDB();
+		hotelDao.cleanHotelsDB();
 		return false;
 	}
 
