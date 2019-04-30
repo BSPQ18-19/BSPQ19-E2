@@ -34,7 +34,8 @@ public class CreateHotel extends JPanel {
 	private TextField seasonStartTextField, seasonEndingTextField;
 	private JButton	confirm;
 	private JButton	createHotel, viewHotel, editHotel, deleteHotel;
-	private JPanel upperButtons, centerPanel;
+	private JButton registerAdmin;
+	private JPanel upperButtons, centerPanel, bottomPanel;
 	private int screenWidth, screenHeight;
 	private Logger log;
 	private ClientWindowAdmin clientWindowAdmin;
@@ -79,6 +80,16 @@ public class CreateHotel extends JPanel {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		
+		registerAdmin = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.button.register"));
+		registerAdmin.setSize(100, 30);
+		registerAdmin.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clientWindowAdmin.changeScreen(ScreenTypeAdmin.REGISTER_ADMINISTRATOR);
+			}
+		});
+
 		createHotel = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.button.create"));
 		createHotel.setSize(100, 30);
 		createHotel.addActionListener(new ActionListener() {
@@ -138,6 +149,10 @@ public class CreateHotel extends JPanel {
 		upperButtons.add(deleteHotel);
 		upperButtons.add(confirm);
 		
+		bottomPanel = new JPanel();
+		bottomPanel.setBackground(Color.LIGHT_GRAY);
+		bottomPanel.add(registerAdmin);
+		
 		centerPanel = new JPanel();
 		centerPanel.setLayout(new GridLayout(12, 1));
 				
@@ -153,6 +168,7 @@ public class CreateHotel extends JPanel {
 		centerPanel.add(seasonEndingTextField);
 		
 		this.add(upperButtons, BorderLayout.NORTH);
+		this.add(bottomPanel, BorderLayout.PAGE_END);
 		this.add(centerPanel, BorderLayout.CENTER);
 	}	
 }

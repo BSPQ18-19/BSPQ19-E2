@@ -62,6 +62,10 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		for(Hotel hotel: hotels.values()) {
 			dao.storeHotel(hotel);
 		}
+		
+		//The default admin because only one admin can register another
+		User defaultAdmin = new  Administrator("DEFAULT", "admin", "admin", "admin", "admin");
+		userDAO.createUser(defaultAdmin);
 	}
 
 	private Random r;

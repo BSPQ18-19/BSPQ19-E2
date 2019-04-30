@@ -16,7 +16,6 @@ import javax.swing.SpringLayout;
 import javax.swing.text.JTextComponent;
 
 import org.apache.log4j.Logger;
-import org.datanucleus.store.rdbms.sql.method.SumFunction;
 import org.jetbrains.annotations.Nullable;
 
 import es.deusto.spq.client.controller.HotelManagementController;
@@ -46,22 +45,22 @@ public class RegisterAdminView extends View {
     private final HotelManagementController hotelManagementController;
 
     // All the form fields and buttons
-    private JTextField nameTextField, emailTextField, phoneTextField, addressTextField;
+    private JTextField nameTextField, emailTextField, addressTextField;
     private JPasswordField passwordField, passwordConfirmationField;
     private JButton submitButton;
-    private JLabel nameLabel, emailLabel, passwordLabel, passwordConfirmationLabel, phoneLabel, addressLabel;
+    private JLabel nameLabel, emailLabel, passwordLabel, passwordConfirmationLabel, addressLabel;
 
     // Logger
     private Logger log;
 
     @Override
     public ViewType getViewType() {
-    	return ViewType.REGISTRATION_ADMIN;
+    	return ViewType.REGISTER_ADMINISTRATOR;
     }
 
     @Override
     public ViewPermission getViewPermission() {
-        return ViewPermission.LOGGED_IN_ADMIN;
+        return ViewPermission.NONE;
     }
 
     @Override
@@ -81,7 +80,6 @@ public class RegisterAdminView extends View {
 	public void initialize() {
         frame = new JInternalFrame();
         frame.setClosable(true);
-        //frame.setTitle(LocaleManager.getMessage("register.title"));
         frame.setSize(400, 400);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -125,13 +123,12 @@ public class RegisterAdminView extends View {
         addressLabel.setLabelFor(addressTextField);
         form.add(addressTextField);
 
-
         // Lay out the form and make it a nice "responsive" grid
         SpringUtilities.makeCompactGrid(form,
-                6, 2, //rows, cols
+                5, 2, //rows, cols
                 6, 6,        //initX, initY
                 6, 6);       //xPad, yPad
-
+        
         // Add the form to the center slot
         container.add(form, BorderLayout.CENTER);
 
@@ -177,8 +174,6 @@ public class RegisterAdminView extends View {
      */
     private void handleFormSubmission() {
 
-    	//TODO CAMBIAR LLAMADA Y LOS FIELDS A LOS DE REGISTER
-
         // Disable all fields
         toggleFields(false);
 
@@ -214,7 +209,6 @@ public class RegisterAdminView extends View {
             result = hotelManagementController.signInAdmin(nameTextField.getText(),
                     emailTextField.getText(),
                     new String(passwordField.getPassword()),
-                    phoneTextField.getText(),
                     addressTextField.getText());
         } catch (final RemoteException e) {
             log.info("Remote exception trying to create a UserDTO");
@@ -280,7 +274,6 @@ public class RegisterAdminView extends View {
         emailTextField.setEnabled(enable);
         passwordConfirmationField.setEnabled(enable);
         passwordField.setEnabled(enable);
-        phoneTextField.setEnabled(enable);
         addressTextField.setEnabled(enable);
         submitButton.setEnabled(enable);
     }

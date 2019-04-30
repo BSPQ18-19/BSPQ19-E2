@@ -36,7 +36,7 @@ public enum ViewType
     /**
      * View to register an admin
      */
-    REGISTRATION_ADMIN,
+    REGISTER_ADMINISTRATOR,
     
     /**
      * Guest window to manage requested hotels, searching them and booking rooms
