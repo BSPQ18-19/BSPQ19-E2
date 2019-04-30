@@ -71,7 +71,15 @@ public class HotelManagementController {
 		return true;
 	}
 	
-public boolean createHotel(String id, String name, String location, String seasonStart, String seasonEnd) {
+	/** Create a new hotel
+	 * @param id Id of the hotel
+	 * @param name Name of the hotel
+	 * @param location Location of the hotel
+	 * @param seasonStart Day where the hotel starts being available
+	 * @param seasonEnd Day where the hotel ends being available
+	 * @return true if its properly created
+	 */
+	public boolean createHotel(String id, String name, String location, String seasonStart, String seasonEnd) {
     	
     	try {
     		log.info("Creating new hotel...");
@@ -88,6 +96,10 @@ public boolean createHotel(String id, String name, String location, String seaso
     	return false;
     }
     
+    /** Delete a hotel using the hotelID
+     * @param id Id of the hotel
+     * @return true if its properly deleted
+     */
     public boolean deleteHotel(String id) {
     	try {
     		log.info("Deleting hotel with ID: " + id);
@@ -103,15 +115,13 @@ public boolean createHotel(String id, String name, String location, String seaso
     	return false;
     }
     
+    /** Retrieve all the hotels from DB
+     * @return An array list of HotelDTO objects
+     */
     public ArrayList<HotelDTO> retrieveHotels() {
     	log.info("Getting list of hotels.");
     	try {
-			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();
-//			for(HotelDTO hotelDTO: hotel) {
-//				System.out.println(hotelDTO.getLocation());
-//			}
-//			HotelDTO[] hotels = hotel.toArray(new HotelDTO[hotel.size()]);
-			
+			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();			
 			
 			if(hotel != null && hotel.size() != 0) {
 				log.info("List of hotels retrieved succesfully.");
@@ -125,6 +135,30 @@ public boolean createHotel(String id, String name, String location, String seaso
 		return null;
     }
     
+    /** Retrieve available hotels with the requested arrival date
+     * @param arrivalDate Date when a guest wants to arrive at the hotel
+     * @return An array list of HotelDTO objects
+     */
+    public ArrayList<HotelDTO> retrieveHotels(String arrivalDate) {
+    	log.info("Getting list of hotels.");
+    	try {
+			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels(arrivalDate);			
+			
+			if(hotel != null && hotel.size() != 0) {
+				log.info("List of hotels retrieved succesfully.");
+				return hotel;
+			}else {
+				log.info("Could not retrieve list of hotels");
+			}
+    	} catch (RemoteException e) {
+    		log.fatal("Error getting list of hotels: " + e.getMessage());
+		}
+		return null;
+    }    
+    
+    /** Clean all the hotels from the DB
+     * @return true if its properly cleaned
+     */
     public boolean cleanDB() {
     	try {
     		rsl.getHotelManager().cleanDB();
@@ -135,12 +169,22 @@ public boolean createHotel(String id, String name, String location, String seaso
     	return false;
     }
     
+	/**
+	 * @return An array list of HotelDTO objects
+	 */
 	public ArrayList<HotelDTO> getCurrentHotels() {
 		return currentHotels;
 	}
+	
+	/** Set the current hotels available
+	 * @param hotelDTO HotelDTO object
+	 */
 	public void setCurrentHotels(HotelDTO hotelDTO) {
 		this.currentHotels.add(hotelDTO);
 	}
+	/**
+	 * Clear the list of the current hotels
+	 */
 	public void setCurrentHotels() {
 		this.currentHotels.clear();
 	}

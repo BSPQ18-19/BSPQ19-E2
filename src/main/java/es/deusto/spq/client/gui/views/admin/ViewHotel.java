@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import es.deusto.spq.client.logger.ClientLogger;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,11 +20,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
-
-import es.deusto.spq.client.Client;
-import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.server.data.dto.HotelDTO;
 
+/** Panel for seeing and editing all the hotels in the db
+ * @author gonzalo
+ *
+ */
 public class ViewHotel extends JPanel{
 	
 	/**
@@ -35,50 +35,53 @@ public class ViewHotel extends JPanel{
 	private DefaultTableModel tableModel;
 	private JTable hotelsTable;
 	private JScrollPane tableScrollPane;
-	private JButton	logout, confirm;
+	private JButton	confirm;
 	private JButton	createHotel, viewHotel, editHotel, deleteHotel;
 	private JPanel upperButtons, centerPanel;
 	private int screenWidth, screenHeight;
 	private Logger log;
+	private ClientWindowAdmin clientWindowAdmin;
 
-	public ViewHotel(int screenWidth, int screenHeight, HotelManagementController controller) {
+	public ViewHotel(int screenWidth, int screenHeight, ClientWindowAdmin clientWindowAdmin) {
 		log = ClientLogger.getLogger();
+		
+		this.clientWindowAdmin = clientWindowAdmin;
 		
 		this.setLayout(new BorderLayout());
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		
-		createHotel = new JButton("New hotel");
+		createHotel = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.button.create"));
 		createHotel.setSize(100, 30);
 		createHotel.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindow.getClientWindow(controller).changeScreen(ScreenType.CREATE_HOTEL_ADMIN);
+				clientWindowAdmin.changeScreen(ScreenTypeAdmin.CREATE_HOTEL_ADMIN);
 				confirm.setEnabled(true);
 				
 			}
 		});
 		
-		viewHotel = new JButton("View hotels");
+		viewHotel = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.button.view"));
 		viewHotel.setSize(100, 30);
 		viewHotel.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClientWindow.getClientWindow(controller).changeScreen(ScreenType.VIEW_HOTEL_ADMIN);			
+				clientWindowAdmin.changeScreen(ScreenTypeAdmin.VIEW_HOTEL_ADMIN);			
 			}
 		});
 		
-		editHotel = new JButton("Edit hotel");
+		editHotel = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.button.edit"));
 		editHotel.setSize(100, 30);
 		editHotel.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.cleanDB();
+				clientWindowAdmin.getController().cleanDB();
 				for(int i = 0; i < hotelsTable.getRowCount(); i++) {
-					controller.createHotel((String) hotelsTable.getValueAt(i, 0),
+					clientWindowAdmin.getController().createHotel((String) hotelsTable.getValueAt(i, 0),
 							(String) hotelsTable.getValueAt(i, 1), 
 							(String) hotelsTable.getValueAt(i, 2),
 							(String) hotelsTable.getValueAt(i, 3), 
@@ -87,7 +90,7 @@ public class ViewHotel extends JPanel{
 			}
 		});
 		
-		deleteHotel = new JButton("Delete hotel");
+		deleteHotel = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.button.delete"));
 		deleteHotel.setSize(100, 30);
 		deleteHotel.addActionListener(new ActionListener() {
 			
@@ -95,7 +98,7 @@ public class ViewHotel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				if(hotelsTable.getSelectedRow() != -1) {
 					String id = (String) (hotelsTable.getValueAt(hotelsTable.getSelectedRow(), 0));
-					if(controller.deleteHotel(id)) {
+					if(clientWindowAdmin.getController().deleteHotel(id)) {
 						JOptionPane.showMessageDialog(null, "Hotel deleted", "Done", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}else {
@@ -106,13 +109,9 @@ public class ViewHotel extends JPanel{
 			}
 		});
 		
-		confirm = new JButton("Confirm");
+		confirm = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.button.confirm"));
 		confirm.setSize(100, 30);
 		confirm.setBackground(Color.GREEN);
-				
-		logout = new JButton("Log out");
-		logout.setSize(100, 30);
-		logout.setBackground(Color.white);
 		
 		upperButtons = new JPanel();
 		upperButtons.setBackground(Color.LIGHT_GRAY);
@@ -121,7 +120,6 @@ public class ViewHotel extends JPanel{
 		upperButtons.add(editHotel);
 		upperButtons.add(deleteHotel);
 		upperButtons.add(confirm);
-		upperButtons.add(logout);		
 		
 		hotelsTable = new JTable();
 		tableModel = (DefaultTableModel) hotelsTable.getModel();
@@ -129,10 +127,10 @@ public class ViewHotel extends JPanel{
 		hotelsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
 		tableModel.addColumn("Id");
-		tableModel.addColumn("Name");
-		tableModel.addColumn("Location");
-		tableModel.addColumn("Season start");
-		tableModel.addColumn("Season end");
+		tableModel.addColumn(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.table.label.name"));
+		tableModel.addColumn(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.table.label.location"));
+		tableModel.addColumn(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.table.label.seasonStart"));
+		tableModel.addColumn(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.table.label.seasonEnding"));
 		
 		hotelsTable.addMouseListener(new MouseAdapter() {
 			
@@ -150,13 +148,13 @@ public class ViewHotel extends JPanel{
 		this.add(upperButtons, BorderLayout.NORTH);
 		this.add(tableScrollPane, BorderLayout.CENTER);
 		
-		controller.setCurrentHotels();
-		controller.getCurrentHotels();
-		ArrayList<HotelDTO> retrievedHotels = controller.retrieveHotels();
+		clientWindowAdmin.getController().setCurrentHotels();
+		clientWindowAdmin.getController().getCurrentHotels();
+		ArrayList<HotelDTO> retrievedHotels = clientWindowAdmin.getController().retrieveHotels();
 		if(retrievedHotels == null || retrievedHotels.size() == 0) {
 			JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);
 		}else {
-			controller.setCurrentHotels();
+			clientWindowAdmin.getController().setCurrentHotels();
 			if(tableModel.getRowCount() != 0) {
 				for(int i = tableModel.getRowCount()-1; i >= 0; i--) {
 					tableModel.removeRow(i);
@@ -175,9 +173,9 @@ public class ViewHotel extends JPanel{
 				}
 				
 				if((hotel.getSeasonStart().getDate()+1) < 10) {
-					seasonStartDate = "0" + (hotel.getSeasonStart().getDate()+1);
+					seasonStartDate = "0" + (hotel.getSeasonStart().getDate());
 				}else {
-					seasonStartDate = "" + (hotel.getSeasonStart().getDate()+1);
+					seasonStartDate = "" + (hotel.getSeasonStart().getDate());
 				}
 				if((hotel.getSeasonEnding().getMonth()+1) < 10) {
 					seasonEndingMonth = "0" + (hotel.getSeasonEnding().getMonth()+1); 
@@ -185,9 +183,9 @@ public class ViewHotel extends JPanel{
 					seasonEndingMonth = "" + (hotel.getSeasonEnding().getMonth()+1); 
 				}
 				if((hotel.getSeasonEnding().getDate()+1) < 10) {
-					seasonEndingDate = "0" + (hotel.getSeasonEnding().getDate()+1);
+					seasonEndingDate = "0" + (hotel.getSeasonEnding().getDate());
 				}else {
-					seasonEndingDate = "" + (hotel.getSeasonEnding().getDate()+1);
+					seasonEndingDate = "" + (hotel.getSeasonEnding().getDate());
 				}
 				tableModel.addRow(new String[] {hotel.getHotelId(), hotel.getName(), hotel.getLocation(),
 						String.valueOf(hotel.getSeasonStart().getYear() + 1900)
@@ -197,17 +195,9 @@ public class ViewHotel extends JPanel{
 						+ "-" + seasonEndingMonth
 						+ "-" + seasonEndingDate});
 
-				controller.setCurrentHotels(hotel);
+				clientWindowAdmin.getController().setCurrentHotels(hotel);
 			}
 		}
-		
-		
-		
-
-//		tableModel.addColumn("Rooms");
-		
-		
-
 	}
 	static class MyTableCellRenderer extends DefaultTableCellRenderer {
 
