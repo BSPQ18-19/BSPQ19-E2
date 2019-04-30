@@ -44,7 +44,7 @@ public class ViewFactory {
             	view = new HotelGuestView(viewManager);
             	break;
             case REGISTER_ADMINISTRATOR:
-            	view = new RegisterView(viewManager);
+            	view = new RegisterAdminView(viewManager);
             	break;
         }
         return view;

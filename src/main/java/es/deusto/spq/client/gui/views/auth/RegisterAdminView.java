@@ -89,7 +89,7 @@ public class RegisterAdminView extends View {
         final JPanel form = new JPanel(new SpringLayout());
 
         // Name field
-        nameLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.admin..label.name"), JLabel.TRAILING);
+        nameLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.admin.label.name"), JLabel.TRAILING);
         form.add(nameLabel);
         nameTextField = new JTextField(10);
         nameLabel.setLabelFor(nameTextField);
