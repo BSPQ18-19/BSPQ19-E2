@@ -1,8 +1,12 @@
 package es.deusto.spq.server.data.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
+import es.deusto.spq.server.data.jdo.Reservation;
 import es.deusto.spq.server.data.jdo.Review;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.User;
@@ -71,5 +75,24 @@ public class Assembler {
 	public Review disassembleReview(ReviewDTO review) {
 		return new Review(review.getReviewID(), review.getOpinion(), review.getScore(), review.getPublishDate(),
 				disassembleHotel(review.getHotel()), disassembleUser(review.getUser()));
+	}
+	
+	// Reservation
+	public ReservationDTO assembleReservation(Reservation reservation) {
+		List<Room> rooms = reservation.getRooms();
+		List<RoomDTO> assembledRooms = new ArrayList<RoomDTO>();
+		for(Room room : rooms)
+			assembledRooms.add(assembleRoom(room));
+		return new ReservationDTO(reservation.getReservationID(), 
+				reservation.getGuest().getUserID(),
+				assembledRooms);
+	}
+	
+	public Reservation disassembleReservation(ReservationDTO reservation) {
+		List<RoomDTO> rooms = reservation.getRooms();
+		List<Room> disassembledRooms = new ArrayList<Room>();
+		for(RoomDTO room : rooms)
+			disassembledRooms.add(disassembleRoom(room));
+		return new Reservation(reservation.getId(), disassembledRooms);
 	}
 }

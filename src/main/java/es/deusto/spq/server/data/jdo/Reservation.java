@@ -46,6 +46,14 @@ public class Reservation {
 		date = Timestamp.valueOf(LocalDateTime.now());
 	}
 	
+	public Reservation(String reservationID, List<Room> rooms) {
+		super();
+		this.reservationID = reservationID;
+		this.guest = null;
+		this.rooms = rooms;
+		date = Timestamp.valueOf(LocalDateTime.now());
+	}
+	
 	public Guest getGuest() {
 		return guest;
 	}
