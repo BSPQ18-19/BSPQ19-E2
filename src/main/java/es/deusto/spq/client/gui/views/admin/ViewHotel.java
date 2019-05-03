@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import es.deusto.spq.client.logger.ClientLogger;
 
@@ -150,7 +151,7 @@ public class ViewHotel extends JPanel{
 		
 		clientWindowAdmin.getController().setCurrentHotels();
 		clientWindowAdmin.getController().getCurrentHotels();
-		ArrayList<HotelDTO> retrievedHotels = clientWindowAdmin.getController().retrieveHotels();
+		List<HotelDTO> retrievedHotels = clientWindowAdmin.getController().retrieveHotels();
 		if(retrievedHotels == null || retrievedHotels.size() == 0) {
 			JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);
 		}else {
