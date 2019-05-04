@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 @PersistenceCapable(detachable = "true")
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-public class sAdministrator extends User {
+public class Administrator extends User {
 
 	/** The list of hotels created by this administrator. */
 	@Persistent(defaultFetchGroup="true")
