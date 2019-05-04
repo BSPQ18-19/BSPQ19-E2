@@ -12,5 +12,5 @@ public enum ScreenTypeAdmin {
 	/**
 	 * Screen where the admin can create a new hotel
 	 */
-	CREATE_HOTEL_ADMIN
+	CREATE_HOTEL_ADMIN, 
 }

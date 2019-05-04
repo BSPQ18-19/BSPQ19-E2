@@ -24,6 +24,7 @@ import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Room;
@@ -81,6 +82,13 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		for(Hotel hotel: hotels.values()) {
 			hotelDao.storeHotel(hotel);
 		}
+		
+		//The default admin because only one admin can register another
+		User defaultAdmin = new  Administrator("DEFAULT", "admin", "admin", "admin", "admin");
+		Assembler assembler = new Assembler();
+		UserDTO authorization = assembler.assembleUser(defaultAdmin);
+		userDAO.deleteUserbyID(authorization, defaultAdmin.getUserID());
+		userDAO.createUser(defaultAdmin);
 	}
 
 	private Random r;
@@ -94,6 +102,15 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		String randomID = generateRandomId();
 		log.info("Selected random ID for new user: " + randomID);
 		User user = new Guest(randomID, name, email, password, phone, address); //TODO generate correctly the IDs
+		return userDAO.createUser(user);
+	}
+
+	@Override
+	public UserDTO signInAdmin(String name, String email, String password, String address)
+			throws RemoteException {
+		String randomID = generateRandomId();
+		log.info("Selected random ID for new user: " + randomID);
+		User user = new Administrator(randomID, name, email, password, address);
 		return userDAO.createUser(user);
 	}
 
