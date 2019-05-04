@@ -15,10 +15,17 @@ import es.deusto.spq.server.logger.ServerLogger;
 
 public class ReservationDAO implements IReservationDAO {
 
+	/** The persistence manager to deal with objects. */
 	private PersistenceManager pm;
+	/** The transactions to be made. */
 	private Transaction tx;
+	/** The log to log to. */
 	private Logger log;
 	
+	/**Creates a new instance of the ReservationDAO.
+	 * Initializes the persistence manager and the logger, retrieving from the 
+	 * managers in the server.
+	 */
 	public ReservationDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
 		log = ServerLogger.getLogger();
@@ -119,6 +126,9 @@ public class ReservationDAO implements IReservationDAO {
 		return false;
 	}
 	
+	/**Closes the transaction if it's still active.
+	 * Note that if no commit has been done, a rollback is performed.
+	 */
 	private final void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
