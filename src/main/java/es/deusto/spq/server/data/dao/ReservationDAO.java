@@ -80,7 +80,7 @@ public class ReservationDAO implements IReservationDAO {
 	}
 
 	@Override
-	public Reservation createReservation(Reservation reservation) {
+	public synchronized Reservation createReservation(Reservation reservation) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -89,6 +89,7 @@ public class ReservationDAO implements IReservationDAO {
 			Reservation detachedCopy = pm.detachCopy(reservation);
 			tx.commit();
 			
+			log.info("Created reservation with ID: " + reservation.getReservationID());
 			return detachedCopy;
 			
 		} catch (Exception e) {
@@ -96,12 +97,12 @@ public class ReservationDAO implements IReservationDAO {
 		} finally {
 			close();
 		}
-
+		log.warn("Did not create reservation with ID: " + reservation.getReservationID());
 		return null;
 	}
 	
 	@Override
-	public boolean deleteReservationByID(String ID) {
+	public synchronized boolean deleteReservationByID(String ID) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -115,7 +116,7 @@ public class ReservationDAO implements IReservationDAO {
 			pm.deletePersistent(queryExecution.get(0));
 
 			tx.commit();
-
+			log.info("Deleted reservation with ID: " + ID);
 			return true;
 
 		} catch (Exception e) {
@@ -123,6 +124,7 @@ public class ReservationDAO implements IReservationDAO {
 		} finally {
 			close();
 		}
+		log.warn("Did not delete reservation with ID: " + ID);
 		return false;
 	}
 	
