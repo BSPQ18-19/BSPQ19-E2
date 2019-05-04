@@ -3,6 +3,7 @@ package es.deusto.spq.server.data.dto;
 import es.deusto.spq.server.data.jdo.*;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.sql.Timestamp;
@@ -20,7 +21,12 @@ public class AssemblerTest {
      * Use the same timestamp across all tests to avoid unrealistic failures due to millisecond delays in testing.
      */
     private static Timestamp timestamp;
-
+    private static Assembler assembler;
+    
+    @BeforeClass
+    public static void initialize() {
+    	assembler = new Assembler();
+    }
     @Before
     public void setUp() throws Exception {
         timestamp = new Timestamp(System.currentTimeMillis());
@@ -40,9 +46,6 @@ public class AssemblerTest {
      */
     @Test
     public void assembleHotel_Hotel_Assemble() {
-
-        Assembler assembler = new Assembler();
-
         Hotel hotel = new Hotel("test",
                 "Test Hotel",
                 "Isle of France",
@@ -65,9 +68,6 @@ public class AssemblerTest {
      */
     @Test
     public void disassembleHotel_Hotel_Dissasemble() {
-
-        Assembler assembler = new Assembler();
-
         Hotel hotel = new Hotel("test",
                 "Test Hotel",
                 "Isle of France",
@@ -91,9 +91,6 @@ public class AssemblerTest {
      */
     @Test
     public void assembleRoom_Room_Assemble() {
-
-        Assembler assembler = new Assembler();
-
         Room room = new Room("roomtest", 26f, 42f, RoomType.SINGLE, false);
         RoomDTO roomDTO = new RoomDTO("roomtest", 26f, 42f, RoomType.SINGLE, false);
 
@@ -107,9 +104,6 @@ public class AssemblerTest {
      */
     @Test
     public void disassembleRoom_Room_Disassemble() {
-
-        Assembler assembler = new Assembler();
-
         final List<String> features = Arrays.asList("views", "jacuzzi", "tv");
 
         Room room = new Room("roomtest", 26f, 42f, RoomType.SINGLE, false);
@@ -124,9 +118,6 @@ public class AssemblerTest {
      */
     @Test
     public void assembleUser_Guest_Assemble() {
-
-        Assembler assembler = new Assembler();
-
         Guest guest = new Guest(
                 "testguest",
                 "John Doe",
@@ -152,9 +143,6 @@ public class AssemblerTest {
      */
     @Test
     public void disassembleUser_Guest_Disassemble() {
-
-        Assembler assembler = new Assembler();
-
         Guest guest = new Guest(
                 "testguest",
                 "John Doe",
@@ -181,9 +169,6 @@ public class AssemblerTest {
      */
     @Test
     public void disassembleUser_Admin_Disassemble() {
-
-        Assembler assembler = new Assembler();
-
         Administrator administrator = new Administrator(
                 "testadmin",
                 "John Doe",
@@ -208,10 +193,7 @@ public class AssemblerTest {
      */
     @Test
     public void assembleReview_Review_Assemble() {
-
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
-        Assembler assembler = new Assembler();
 
         Hotel hotel = new Hotel("test",
                 "Test Hotel",
@@ -258,9 +240,6 @@ public class AssemblerTest {
      */
     @Test
     public void disassembleReview_Review_Disassemble() {
-
-        Assembler assembler = new Assembler();
-
         Hotel hotel = new Hotel("test",
                 "Test Hotel",
                 "Isle of France",
@@ -300,7 +279,20 @@ public class AssemblerTest {
 
     }
 
-
-
+    @Test
+    public void assembleReservationTest() {
+    	Reservation reservation = new Reservation("RID", new ArrayList<Room>());
+    	ReservationDTO expectedAssembling = new ReservationDTO("RID", null);
+    	ReservationDTO assemblingResult = assembler.assembleReservation(reservation);
+    	Assert.assertEquals(expectedAssembling, assemblingResult);
+    }
+    
+    @Test
+    public void disassembleReservationTest() {
+    	ReservationDTO reservation = new ReservationDTO("RID", null);
+    	Reservation expectedDisassembling = new Reservation("RID", new ArrayList<Room>());
+    	Reservation disassemblingResult = assembler.disassembleReservation(reservation);
+    	Assert.assertEquals(expectedDisassembling, disassemblingResult);
+    }
 
 }

@@ -77,4 +77,13 @@ public class ReservationDTO {
 		this.rooms = RoomDTOs;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof ReservationDTO) {
+			ReservationDTO object = (ReservationDTO) o;
+			return object.getId().equals(id);
+		}
+		return false;
+	}
+	
 }

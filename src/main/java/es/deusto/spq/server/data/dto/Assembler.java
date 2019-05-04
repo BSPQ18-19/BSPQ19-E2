@@ -84,7 +84,7 @@ public class Assembler {
 		for(Room room : rooms)
 			assembledRooms.add(assembleRoom(room));
 		return new ReservationDTO(reservation.getReservationID(), 
-				reservation.getGuest().getUserID(),
+				reservation.getGuest() == null ? null : reservation.getGuest().getUserID(),
 				assembledRooms);
 	}
 	
