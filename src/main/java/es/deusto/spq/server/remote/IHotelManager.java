@@ -18,7 +18,6 @@ public interface IHotelManager extends Remote {
 	 * @param name
 	 * @param email
 	 * @param password
-	 * @param phone
 	 * @param address
 	 * @return The UserDTO of the created user
 	 * @throws RemoteException
