@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -16,12 +17,18 @@ import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.dao.HotelDAO;
 import es.deusto.spq.server.data.dao.IHotelDAO;
+import es.deusto.spq.server.data.dao.IRoomDAO;
+import es.deusto.spq.server.data.dao.RoomDAO;
 import es.deusto.spq.server.data.dao.UserDAO;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
+import es.deusto.spq.server.data.jdo.Room;
+import es.deusto.spq.server.data.jdo.RoomType;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.gateway.IMastercardGateway;
 import es.deusto.spq.server.gateway.IPayPalGateway;
@@ -36,18 +43,31 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	private Set<UserDTO> loggedUsers;
 	private Logger log;
 	private Map<String, Hotel> hotels = new TreeMap<String, Hotel>();
-	private IHotelDAO dao;
+	private ArrayList<Room> rooms1, rooms2;
+	private IHotelDAO hotelDao;
+	private IRoomDAO roomDao;
 	
 	public HotelManager() throws RemoteException {
 		super();
 		new Assembler();
 		this.userDAO = new UserDAO();
-		new HotelDAO();
+		this.roomDao = new RoomDAO();
 		loggedUsers = new HashSet<UserDTO>();
 		log = ServerLogger.getLogger();
 		r = new Random();
 		payPalGateway = new PayPalGateway();
 		mastercardGateway = new MastercardGateway();
+		
+		this.rooms1 = new ArrayList<>();
+		this.rooms2 = new ArrayList<>();
+		
+		rooms1.add(new Room("R01", 250, 150, RoomType.DOUBLE, false));
+		rooms1.add(new Room("R02", 450, 400, RoomType.SUITE, false));
+		rooms1.add(new Room("R03", 350, 400, RoomType.TRIPLE, false));
+		rooms2.add(new Room("R05", 250, 150, RoomType.DOUBLE, false));
+		rooms2.add(new Room("R06", 250, 150, RoomType.DOUBLE, false));
+		rooms2.add(new Room("R07", 250, 150, RoomType.DOUBLE, false));
+		rooms2.add(new Room("R08", 200, 100, RoomType.SINGLE, false));
 		
 		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", Timestamp.valueOf(LocalDate.of(2019, 04, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 12, 31).atStartOfDay())));
 		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", Timestamp.valueOf(LocalDate.of(2019, 06, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 9, 30).atStartOfDay())));
@@ -56,11 +76,19 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", Timestamp.valueOf(LocalDate.of(2019, 05, 14).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 11, 30).atStartOfDay())));
 		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", Timestamp.valueOf(LocalDate.of(2019, 04, 20).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 11, 30).atStartOfDay())));
 	
-		this.dao = new HotelDAO();
-		dao.cleanDB();
+		this.hotelDao = new HotelDAO();
+		hotels.get("H01").setListRooms(rooms1);
+		hotels.get("H02").setListRooms(rooms2);
 		for(Hotel hotel: hotels.values()) {
-			dao.storeHotel(hotel);
+			hotelDao.storeHotel(hotel);
 		}
+		
+		//The default admin because only one admin can register another
+		User defaultAdmin = new  Administrator("DEFAULT", "admin", "admin", "admin", "admin");
+		Assembler assembler = new Assembler();
+		UserDTO authorization = assembler.assembleUser(defaultAdmin);
+		userDAO.deleteUserbyID(authorization, defaultAdmin.getUserID());
+		userDAO.createUser(defaultAdmin);
 	}
 
 	private Random r;
@@ -74,6 +102,15 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		String randomID = generateRandomId();
 		log.info("Selected random ID for new user: " + randomID);
 		User user = new Guest(randomID, name, email, password, phone, address); //TODO generate correctly the IDs
+		return userDAO.createUser(user);
+	}
+
+	@Override
+	public UserDTO signInAdmin(String name, String email, String password, String address)
+			throws RemoteException {
+		String randomID = generateRandomId();
+		log.info("Selected random ID for new user: " + randomID);
+		User user = new Administrator(randomID, name, email, password, address);
 		return userDAO.createUser(user);
 	}
 
@@ -94,7 +131,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		ArrayList<HotelDTO> hotelsDTO = new ArrayList<>();
 		Assembler hotelAssembler = new Assembler();
 		
-		ArrayList<Hotel> listHotels = dao.getHotels();
+		ArrayList<Hotel> listHotels = hotelDao.getHotels();
 		for(Hotel hotel : listHotels) {
 			hotelsDTO.add(hotelAssembler.assembleHotel(hotel));
 		}
@@ -116,7 +153,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		LocalDate localDateStart = LocalDate.parse(arrivalDate.trim(), formatter);
 		
 		log.info("Retrieving hotels...");
-		ArrayList<Hotel> listHotels = dao.getHotels(Timestamp.valueOf(localDateStart.atStartOfDay()));
+		ArrayList<Hotel> listHotels = hotelDao.getHotels(Timestamp.valueOf(localDateStart.atStartOfDay()));
 		for(Hotel hotel : listHotels) {
 			hotelsDTO.add(hotelAssembler.assembleHotel(hotel));
 		}
@@ -142,7 +179,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		Hotel hotel = new Hotel(id.trim(), name.trim(), location.trim(),
 				Timestamp.valueOf(localDateStart.atStartOfDay()), Timestamp.valueOf(localDateEnding.atStartOfDay()));
 		hotels.put(hotel.getHotelId(), hotel);
-		dao.storeHotel(hotel);
+		hotelDao.storeHotel(hotel);
 		
 		Assembler hotelAssembler = new Assembler();
 		return hotelAssembler.assembleHotel(hotel);
@@ -151,7 +188,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	@Override
 	public boolean deleteHotel(String id) throws RemoteException {
 		hotels.remove(id);
-		dao.deleteHotel(id);
+		hotelDao.deleteHotel(id);
 		if(hotels.containsKey(id) == false) {
 			return true;
 		}else {
@@ -160,9 +197,9 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
-	public boolean cleanDB() throws RemoteException {
+	public boolean cleanHotelsDB() throws RemoteException {
 		hotels.clear();
-		dao.cleanDB();
+		hotelDao.cleanHotelsDB();
 		return false;
 	}
 
@@ -203,5 +240,81 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		if(cardNumber <= 0 || securityCode <= 0 || amount <= 0)
 			return false;
 		return mastercardGateway.pay(cardNumber, securityCode, amount);
+	}
+	
+	
+	@Override
+	public ArrayList<RoomDTO> retrieveRooms() throws RemoteException {
+		ArrayList<RoomDTO> roomsDTO = new ArrayList<>();
+		Assembler roomAssembler = new Assembler();
+		
+		ArrayList<Room> listRooms = roomDao.getRooms();
+		for(Room room : listRooms) {
+			roomsDTO.add(roomAssembler.assembleRoom(room));
+		}
+		
+		if(roomsDTO.isEmpty()) {
+			log.fatal("New exception - There are no rooms for the requested information.");
+			throw new RemoteException("ROOMS - There are no rooms for the requested information.");
+		}
+	
+		return roomsDTO;
+	}
+
+	@Override
+	public RoomDTO updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) throws RemoteException {
+		for(int i = 0; i < rooms1.size(); i++) {
+			if(rooms1.get(i).getRoomId().equals(roomId))
+				rooms1.get(i).setOccupied(isOccupied);
+		}
+		for(int i = 0; i < rooms2.size(); i++) {
+			if(rooms2.get(i).getRoomId().equals(roomId))
+				rooms2.get(i).setOccupied(isOccupied);
+		}
+		
+		Room room = new Room(roomId, size, price, roomtype, isOccupied);
+		roomDao.updateRoom(room);
+		
+		Assembler roomAssembler = new Assembler();
+		
+		return roomAssembler.assembleRoom(room);
+	}
+
+	@Override
+	public boolean deleteRoom(String id) throws RemoteException {
+		for(int i = 0; i < rooms1.size(); i++) {
+			if(rooms1.get(i).getRoomId().equals(id)) {
+				rooms1.remove(i);
+				roomDao.deleteRoom(id);
+				return true;
+			}	
+		}
+		for(int i = 0; i < rooms2.size(); i++) {
+			if(rooms2.get(i).getRoomId().equals(id)) {
+				rooms2.remove(i);
+				roomDao.deleteRoom(id);
+				return true;
+			}
+				
+		}
+		return false;
+	}
+
+	@Override
+	public ArrayList<RoomDTO> retrieveRoomsById(String hotelID) throws RemoteException {
+		ArrayList<RoomDTO> roomsDTO = new ArrayList<>();
+		Assembler roomAssembler = new Assembler();
+		
+		List<Room> listRooms = roomDao.getRoom(hotelID);
+		for(Room room : listRooms) {
+			roomsDTO.add(roomAssembler.assembleRoom(room));
+		}
+		
+		if(roomsDTO.isEmpty()) {
+			log.fatal("New exception - There are no rooms for the requested information.");
+			throw new RemoteException("ROOMS - There are no rooms for the requested information.");
+		}
+	
+		return roomsDTO;
 	}
 }

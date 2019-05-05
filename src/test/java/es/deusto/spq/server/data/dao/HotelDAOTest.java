@@ -4,8 +4,10 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -26,6 +28,9 @@ import junit.framework.Assert;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HotelDAOTest {
 
+	@Rule
+	public ContiPerfRule rule = new ContiPerfRule();
+
 	//The DAO class
 	private static HotelDAO hotelDAO;
 	
@@ -36,7 +41,7 @@ public class HotelDAOTest {
 	public static void setUpBeforeClass() throws Exception {
 		hotelDAO = new HotelDAO();
 
-		hotelID = "1";
+		hotelID = "5";
 		LocalDate localDate = LocalDate.of(2019, 04, 01);
 		hotel = new Hotel(hotelID, "TEST", "TEST", Timestamp.valueOf(localDate.atStartOfDay()), Timestamp.valueOf(localDate.atStartOfDay()));
 	}
@@ -84,5 +89,6 @@ public class HotelDAOTest {
 	@Test
 	public void dDeleteHotel() {
 		Assert.assertTrue(hotelDAO.deleteHotel(hotelID));
+		hotelDAO.cleanHotelsDB();
 	}
 }

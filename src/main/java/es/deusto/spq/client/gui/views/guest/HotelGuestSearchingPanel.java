@@ -121,9 +121,21 @@ public class HotelGuestSearchingPanel extends JPanel {
 			}
 		});
 		
-		confirm = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.button.confirm "));
+		confirm = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.button.confirm"));
 		confirm.setSize(100, 30);
 		confirm.setBackground(Color.GREEN);
+		confirm.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(hotelsTable.getSelectedRow() != -1) {
+					clientWindowGuest.changeScreen(ScreenTypeGuest.ROOM_PANEL, (String)hotelsTable.getValueAt(hotelsTable.getSelectedRow(), 0));
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "There are no rooms available for that hotel", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		
 		upperButtons = new JPanel();
 		upperButtons.setBackground(Color.LIGHT_GRAY);

@@ -1,6 +1,7 @@
 package es.deusto.spq.server.data.dto;
 
 import es.deusto.spq.server.data.jdo.*;
+import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;

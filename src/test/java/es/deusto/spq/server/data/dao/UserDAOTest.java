@@ -2,8 +2,10 @@ package es.deusto.spq.server.data.dao;
 
 import java.util.List;
 
+import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -28,6 +30,9 @@ import junit.framework.Assert;
 @SuppressWarnings("deprecation")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserDAOTest {
+
+	@Rule
+	public ContiPerfRule rule = new ContiPerfRule();
 
 	//The DAO Class
 	private static UserDAO userDAO;
