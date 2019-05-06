@@ -168,26 +168,26 @@ public class UserDAO implements IDAO, IUserDAO {
 			Query<Administrator> queryAdmin;
 			Query<Guest> queryGuest;
 			
-			queryAdmin = pm.newQuery(Administrator.class);
-			queryAdmin.setFilter("email == '" + email + "'");
+			queryGuest = pm.newQuery(Guest.class);
+			queryGuest.setFilter("email == '" + email + "'");
 			@SuppressWarnings("unchecked")
-			List<Administrator> resultAdmin = (List<Administrator>) queryAdmin.execute();
+			List<Guest> resultGuest = (List<Guest>) queryGuest.execute();
 			
-			if(resultAdmin == null || resultAdmin.isEmpty()) {
-				//No administrator found, searching for guests...
-				queryGuest = pm.newQuery(Guest.class);
-				queryGuest.setFilter("email == '" + email + "'");
+			if(resultGuest == null || resultGuest.isEmpty()) {
+				//No guests found, searching for guests...
+				queryAdmin = pm.newQuery(Administrator.class);
+				queryAdmin.setFilter("email == '" + email + "'");
 				@SuppressWarnings("unchecked")
-				List<Guest> resultGuest = (List<Guest>) queryGuest.execute();
+				List<Administrator> resultAdmin = (List<Administrator>) queryAdmin.execute();
 				tx.commit();
-				
-				if(resultGuest == null || resultGuest.isEmpty())
+
+				if(resultAdmin == null || resultAdmin.isEmpty())
 					log.debug("Neither Guests nor Administrators with such email");
-				return assembler.assembleUser(resultGuest.get(0));
-			} else {
-				//At least an administrator was found
-				tx.commit();
 				return assembler.assembleUser(resultAdmin.get(0));
+			} else {
+				//At least an guest was found
+				tx.commit();
+				return assembler.assembleUser(resultGuest.get(0));
 			}
 
 		} catch (Exception e) {
