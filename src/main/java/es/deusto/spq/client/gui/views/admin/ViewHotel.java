@@ -10,6 +10,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.deusto.spq.client.gui.base.ViewFactory;
+import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.logger.ClientLogger;
 
 import javax.swing.JButton;
@@ -38,7 +40,8 @@ public class ViewHotel extends JPanel{
 	private JScrollPane tableScrollPane;
 	private JButton	confirm;
 	private JButton	createHotel, viewHotel, editHotel, deleteHotel;
-	private JPanel upperButtons, centerPanel;
+	private JButton registerAdmin;
+	private JPanel upperButtons, centerPanel, bottomPanel;
 	private int screenWidth, screenHeight;
 	private Logger log;
 	private ClientWindowAdmin clientWindowAdmin;
@@ -51,6 +54,16 @@ public class ViewHotel extends JPanel{
 		this.setLayout(new BorderLayout());
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
+		
+		registerAdmin = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.button.register"));
+		registerAdmin.setSize(100, 30);
+		registerAdmin.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clientWindowAdmin.getAdminView().getViewManager().openView(ViewFactory.buildView(ViewType.REGISTER_ADMINISTRATOR, clientWindowAdmin.getAdminView().getViewManager()));
+			}
+		});
 		
 		createHotel = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.button.create"));
 		createHotel.setSize(100, 30);
@@ -122,6 +135,10 @@ public class ViewHotel extends JPanel{
 		upperButtons.add(deleteHotel);
 		upperButtons.add(confirm);
 		
+		bottomPanel = new JPanel();
+		bottomPanel.setBackground(Color.LIGHT_GRAY);
+		bottomPanel.add(registerAdmin);
+		
 		hotelsTable = new JTable();
 		tableModel = (DefaultTableModel) hotelsTable.getModel();
 		hotelsTable.setSize(700, 100);
@@ -147,6 +164,7 @@ public class ViewHotel extends JPanel{
 		tableScrollPane.setLocation((int) (screenWidth / 2.05 - tableScrollPane.getWidth() / 2), (int) (screenHeight / 3 - tableScrollPane.getHeight() / 2));
 		
 		this.add(upperButtons, BorderLayout.NORTH);
+		this.add(bottomPanel, BorderLayout.PAGE_END);
 		this.add(tableScrollPane, BorderLayout.CENTER);
 		
 		clientWindowAdmin.getController().setCurrentHotels();

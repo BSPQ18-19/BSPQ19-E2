@@ -44,6 +44,15 @@ public class HotelManagementController {
 		return result;
 	}
 	
+	public UserDTO signInAdmin(String name, String email, String password, String address) throws RemoteException {
+		UserDTO result = rsl.getHotelManager().signInAdmin(name, email, password, address);
+		if(result != null)
+			log.info("Signed in user with email: " + email);
+		else
+			log.info("Did not signed in user with email: " + email);
+		return result;
+	}
+	
 	public UserDTO logIn(String email, String password) throws RemoteException {
 		if(loggedUser != null)
 			logOut();
