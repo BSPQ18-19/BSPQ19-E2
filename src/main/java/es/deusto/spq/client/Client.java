@@ -65,6 +65,7 @@ public class Client {
 		viewManager.initialize();
 		viewManager.openView(ViewFactory.buildView(ViewType.LOGIN, viewManager));
 		localeManager.setMode(LocaleMode.DEBUG);
+		viewManager.openView(ViewFactory.buildView(ViewType.RESERVATION_LIST, viewManager)); // TODO remove debug when finished
 	}
 
 	public HotelManagementController getController() {

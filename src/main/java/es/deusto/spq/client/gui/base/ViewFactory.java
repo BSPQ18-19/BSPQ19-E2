@@ -6,6 +6,7 @@ import es.deusto.spq.client.gui.views.auth.LoginView;
 import es.deusto.spq.client.gui.views.auth.RegisterAdminView;
 import es.deusto.spq.client.gui.views.auth.RegisterView;
 import es.deusto.spq.client.gui.views.guest.HotelGuestView;
+import es.deusto.spq.client.gui.views.reservations.ReservationListView;
 
 /**
  * Factory for View
@@ -20,7 +21,7 @@ public class ViewFactory {
      * @return View of the corresponding ViewType
      */
     public static View buildView(ViewType type, ViewManager viewManager) {
-
+        // TODO allow passing of extra parameters to the Factory
         View view = null;
         switch (type) {
 
@@ -47,6 +48,9 @@ public class ViewFactory {
             case REGISTER_ADMINISTRATOR:
             	view = new RegisterAdminView(viewManager);
             	break;
+
+            case RESERVATION_LIST:
+                view = new ReservationListView(viewManager);
         }
         return view;
 
