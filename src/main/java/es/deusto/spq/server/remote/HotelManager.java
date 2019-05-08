@@ -115,8 +115,13 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
-	public UserDTO logIn(String email, String password) throws RemoteException{
+	public UserDTO logIn(String email, String password) throws RemoteException {
+		log.debug("Trying to login: " + email);
 		UserDTO user = userDAO.logIn(email, password);
+		if(user == null)
+			log.debug("user is null");
+		else
+			log.debug("UserDAO finished: " + user.getName());
 		loggedUsers.add(user);
 		return user;
 	}
