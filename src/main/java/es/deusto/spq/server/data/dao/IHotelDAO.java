@@ -2,6 +2,7 @@ package es.deusto.spq.server.data.dao;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 import es.deusto.spq.server.data.jdo.Hotel;
 
@@ -26,15 +27,15 @@ public interface IHotelDAO {
 
 	/**
 	 * Gets all the hotels from the DB
-	 * @return arraylist of hotels
+	 * @return list of hotels
 	 */
-	public ArrayList<Hotel> getHotels();
+	public List<Hotel> getHotels();
 	
 	/** Retrieve all the hotels available since the requested arrival date
 	 * @param arrivalDate Requested arrival date to book a hotel
 	 * @return ArrayList of Hotel objects
 	 */
-	public ArrayList<Hotel> getHotels(Timestamp arrivalDate);
+	public List<Hotel> getHotels(Timestamp arrivalDate);
 
 	/**
 	 * Deletes a hotel by ID

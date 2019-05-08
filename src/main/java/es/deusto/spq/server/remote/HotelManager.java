@@ -132,11 +132,11 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
-	public ArrayList<HotelDTO> retrieveHotels() throws RemoteException {
-		ArrayList<HotelDTO> hotelsDTO = new ArrayList<>();
+	public List<HotelDTO> retrieveHotels() throws RemoteException {
+		List<HotelDTO> hotelsDTO = new ArrayList<>();
 		Assembler hotelAssembler = new Assembler();
 		
-		ArrayList<Hotel> listHotels = hotelDao.getHotels();
+		List<Hotel> listHotels = hotelDao.getHotels();
 		for(Hotel hotel : listHotels) {
 			hotelsDTO.add(hotelAssembler.assembleHotel(hotel));
 		}
@@ -150,7 +150,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 	
 	@Override
-	public ArrayList<HotelDTO> retrieveHotels(String arrivalDate) throws RemoteException {
+	public List<HotelDTO> retrieveHotels(String arrivalDate) throws RemoteException {
 		ArrayList<HotelDTO> hotelsDTO = new ArrayList<>();
 		Assembler hotelAssembler = new Assembler();
 		
@@ -158,7 +158,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		LocalDate localDateStart = LocalDate.parse(arrivalDate.trim(), formatter);
 		
 		log.info("Retrieving hotels...");
-		ArrayList<Hotel> listHotels = hotelDao.getHotels(Timestamp.valueOf(localDateStart.atStartOfDay()));
+		List<Hotel> listHotels = hotelDao.getHotels(Timestamp.valueOf(localDateStart.atStartOfDay()));
 		for(Hotel hotel : listHotels) {
 			hotelsDTO.add(hotelAssembler.assembleHotel(hotel));
 		}

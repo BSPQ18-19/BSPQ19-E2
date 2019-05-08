@@ -30,14 +30,14 @@ public interface IHotelManager extends Remote {
 	 * @return A list of HotelDTO of type ArrayList
 	 * @throws RemoteException
 	 */
-	public ArrayList<HotelDTO> retrieveHotels() throws RemoteException;
+	public List<HotelDTO> retrieveHotels() throws RemoteException;
 	
-	/** Retrieve a list of hotels from the DB accordint to an arrival date
+	/** Retrieve a list of hotels from the DB according to an arrival date
 	 * @param arrivalDate Date to arrive to the hotel
-	 * @return A list of HotelDTO of type ArrayList
+	 * @return A list of HotelDTO of type List
 	 * @throws RemoteException
 	 */
-	public ArrayList<HotelDTO> retrieveHotels(String arrivalDate) throws RemoteException;
+	public List<HotelDTO> retrieveHotels(String arrivalDate) throws RemoteException;
 	
 	/** Create a new Hotel of type HotelDTO
 	 * @param id Id of the hotel

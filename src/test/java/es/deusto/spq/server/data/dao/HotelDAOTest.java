@@ -3,6 +3,7 @@ package es.deusto.spq.server.data.dao;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.BeforeClass;
@@ -72,7 +73,7 @@ public class HotelDAOTest {
 	 */
 	@Test
 	public void bGetHotels() {
-		ArrayList<Hotel> hotels = hotelDAO.getHotels();
+		List<Hotel> hotels = hotelDAO.getHotels();
 		Assert.assertTrue(hotels.contains(hotel));
 	}
 

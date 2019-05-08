@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -64,7 +65,7 @@ public class HotelGuestSearchingPanel extends JPanel {
 				}
 				else {
 					clientWindowGuest.getController().setCurrentHotels();
-					ArrayList<HotelDTO> retrievedHotels = clientWindowGuest.getController().retrieveHotels(calendar.getSelectedDate().toString());
+					List<HotelDTO> retrievedHotels = clientWindowGuest.getController().retrieveHotels(calendar.getSelectedDate().toString());
 					if(retrievedHotels == null || retrievedHotels.size() == 0) {
 						JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);
 						if(tableModel.getRowCount() != 0) {

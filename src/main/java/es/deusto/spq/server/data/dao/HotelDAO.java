@@ -72,11 +72,11 @@ public class HotelDAO implements IHotelDAO {
 	}
 
 
-	public ArrayList<Hotel> getHotels() {
+	public List<Hotel> getHotels() {
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
 		tx = pm.currentTransaction();
-	    ArrayList<Hotel> hotels = new ArrayList<>();
+	    List<Hotel> hotels = new ArrayList<>();
 	        
 	    try {
 	    	ServerLogger.getLogger().info("   * Retrieving all the hotels ");
@@ -97,7 +97,7 @@ public class HotelDAO implements IHotelDAO {
 	    return hotels;
 	}
 	
-	public ArrayList<Hotel> getHotels(Timestamp arrivalDate) {
+	public List<Hotel> getHotels(Timestamp arrivalDate) {
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
 		tx = pm.currentTransaction();

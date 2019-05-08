@@ -122,10 +122,10 @@ public class HotelManagementController {
     /** Retrieve all the hotels from DB
      * @return An array list of HotelDTO objects
      */
-    public ArrayList<HotelDTO> retrieveHotels() {
+    public List<HotelDTO> retrieveHotels() {
     	log.info("Getting list of hotels.");
     	try {
-			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();			
+			List<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();			
 			
 			if(hotel != null && hotel.size() != 0) {
 				log.info("List of hotels retrieved succesfully.");
@@ -143,10 +143,10 @@ public class HotelManagementController {
      * @param arrivalDate Date when a guest wants to arrive at the hotel
      * @return An array list of HotelDTO objects
      */
-    public ArrayList<HotelDTO> retrieveHotels(String arrivalDate) {
+    public List<HotelDTO> retrieveHotels(String arrivalDate) {
     	log.info("Getting list of hotels.");
     	try {
-			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels(arrivalDate);			
+			List<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels(arrivalDate);			
 			
 			if(hotel != null && hotel.size() != 0) {
 				log.info("List of hotels retrieved succesfully.");
