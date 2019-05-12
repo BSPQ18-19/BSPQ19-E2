@@ -55,11 +55,11 @@ public class SimpleBloomFilter<T> {
 		if(maximumNumberElements == -1 || 
 				(maximumNumberElements > 0 && numberAddedElements < maximumNumberElements)) {
 			int hashCode = object.hashCode();
-			hashes.set(hashCode % size);
+			hashes.set(Math.abs(hashCode) % size);
 			String sha1 = HashProvider.sha1(object);
-			hashes.set(sha1.hashCode() % size);
+			hashes.set(Math.abs(sha1.hashCode()) % size);
 			String sha256 = HashProvider.sha256(object);
-			hashes.set(sha256.hashCode() % size);
+			hashes.set(Math.abs(sha256.hashCode()) % size);
 			numberAddedElements += 1;
 			log.debug(object.getClass().getName() + " object added to the filter");
 		} else {

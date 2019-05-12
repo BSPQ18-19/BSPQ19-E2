@@ -24,12 +24,12 @@ public class HashProvider {
 			MessageDigest messageDigest = null;
 			try {
 				messageDigest = MessageDigest.getInstance("SHA-1");
-				byte [] serializedObject = serialize(object);
-				return new String(messageDigest.digest(serializedObject));
+				byte [] serializedObject = toByteArray(object);
+				return new String(messageDigest.digest(serializedObject).toString());
 			} catch (NoSuchAlgorithmException e) {
-				ServerLogger.getLogger().warn(e.getMessage());
+				ServerLogger.getLogger().warn("SHA-1 1: " + e.getMessage());
 			} catch (IOException e) {
-				ServerLogger.getLogger().warn(e.getMessage());
+				ServerLogger.getLogger().warn("SHA-1 2: " + e.getMessage());
 			}
 		}
 		return new String("");
@@ -44,12 +44,12 @@ public class HashProvider {
 			MessageDigest messageDigest = null;
 			try {
 				messageDigest = MessageDigest.getInstance("SHA-256");
-				byte [] serializedObject = serialize(object);
-				return new String(messageDigest.digest(serializedObject));
+				byte [] serializedObject = toByteArray(object);
+				return new String(messageDigest.digest(serializedObject).toString());
 			} catch (NoSuchAlgorithmException e) {
-				ServerLogger.getLogger().warn(e.getMessage());
+				ServerLogger.getLogger().warn("SHA-256 1: " + e.getMessage());
 			} catch (IOException e) {
-				ServerLogger.getLogger().warn(e.getMessage());
+				ServerLogger.getLogger().warn("SHA-256 2: " + e.getMessage());
 			}
 		}
 		return new String("");
@@ -64,12 +64,12 @@ public class HashProvider {
 			MessageDigest messageDigest = null;
 			try {
 				messageDigest = MessageDigest.getInstance("SHA-384");
-				byte [] serializedObject = serialize(object);
-				return new String(messageDigest.digest(serializedObject));
+				byte [] serializedObject = toByteArray(object);
+				return new String(messageDigest.digest(serializedObject).toString());
 			} catch (NoSuchAlgorithmException e) {
-				ServerLogger.getLogger().warn(e.getMessage());
+				ServerLogger.getLogger().warn("SHA-384: " + e.getMessage());
 			} catch (IOException e) {
-				ServerLogger.getLogger().warn(e.getMessage());
+				ServerLogger.getLogger().warn("SHA-384: " + e.getMessage());
 			}
 		}
 		return new String("");
@@ -84,27 +84,41 @@ public class HashProvider {
 			MessageDigest messageDigest = null;
 			try {
 				messageDigest = MessageDigest.getInstance("SHA-512");
-				byte [] serializedObject = serialize(object);
-				return new String(messageDigest.digest(serializedObject));
+				byte [] serializedObject = toByteArray(object);
+				return new String(messageDigest.digest(serializedObject).toString());
 			} catch (NoSuchAlgorithmException e) {
-				ServerLogger.getLogger().warn(e.getMessage());
+				ServerLogger.getLogger().warn("SHA-512: " + e.getMessage());
 			} catch (IOException e) {
-				ServerLogger.getLogger().warn(e.getMessage());
+				ServerLogger.getLogger().warn("SHA-512: " + e.getMessage());
 			}
 		}
 		return new String("");
 	}
 	
-	/**Serializes the object into an array of bytes.
+	/**Parses the object to an array of bytes.
 	 * @param obj the object to be serialized.
 	 * @return an array of bytes - the serialized object.
 	 * @throws IOException launched while trying to serialize.
 	 */
-	private static byte[] serialize(Object obj) throws IOException {
-	    ByteArrayOutputStream out = new ByteArrayOutputStream();
-	    ObjectOutputStream os = new ObjectOutputStream(out);
-	    os.writeObject(obj);
-	    return out.toByteArray();
-	}
+    public static byte[] toByteArray(Object obj) throws IOException {
+        byte[] bytes = null;
+        ByteArrayOutputStream bos = null;
+        ObjectOutputStream oos = null;
+        try {
+            bos = new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(bos);
+            oos.writeObject(obj);
+            oos.flush();
+            bytes = bos.toByteArray();
+        } finally {
+            if (oos != null) {
+                oos.close();
+            }
+            if (bos != null) {
+                bos.close();
+            }
+        }
+        return bytes;
+    }
 	
 }
