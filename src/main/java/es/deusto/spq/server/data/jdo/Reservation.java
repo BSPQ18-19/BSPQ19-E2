@@ -1,5 +1,6 @@
 package es.deusto.spq.server.data.jdo;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import javax.jdo.annotations.PrimaryKey;
  *
  */
 @PersistenceCapable(detachable="true")
-public class Reservation {
+public class Reservation implements Serializable {
 
 	/** The ID of the reservation. */
 	@Persistent(defaultFetchGroup="true")
