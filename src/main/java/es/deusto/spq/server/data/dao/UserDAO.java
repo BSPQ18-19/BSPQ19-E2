@@ -182,7 +182,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public boolean updateGuest(String userId, String name, String email, String password, String phone, String address) {
+	public UserDTO updateGuest(String userId, String name, String email, String password, String phone, String address) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -194,7 +194,7 @@ public class UserDAO implements IDAO, IUserDAO {
 			List<Guest> result = (List<Guest>) query.execute();
 
 			if(result == null || result.isEmpty() || result.size() > 1)
-				return false;
+				return null;
 			Guest guest = result.get(0);
 			
 			pm.makePersistent(guest);
@@ -210,7 +210,8 @@ public class UserDAO implements IDAO, IUserDAO {
 				guest.setAddress(address);
 			
 			tx.commit();
-			return true;
+			UserDTO editedUser = assembler.assembleUser(pm.detachCopy(guest));
+			return editedUser;
 			
 		} catch (final Exception e) {
 			ServerLogger.getLogger().fatal("Did not update data of guest with ID: " + userId);
@@ -219,6 +220,6 @@ public class UserDAO implements IDAO, IUserDAO {
 		} finally {
 			close();
 		}
-		return false;
+		return null;
 	}
 }

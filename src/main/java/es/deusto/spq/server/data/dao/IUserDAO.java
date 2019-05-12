@@ -51,8 +51,7 @@ public interface IUserDAO {
 	 * @param password - the new password of the guest.
 	 * @param phone - the new phone of the guest.
 	 * @param address - the new address of the guest.
-	 * @return {@code true} if data was updated successfully, and 
-	 * 			{@code false} if not.
+	 * @return UserDTO of the edited user to replace it on the logging system.
 	 */
-	public boolean updateGuest(String userId, String name, String email, String password, String phone, String address);
+	public UserDTO updateGuest(String userId, String name, String email, String password, String phone, String address);
 }

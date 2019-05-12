@@ -138,7 +138,7 @@ public class HotelManagementController {
 		return loggedUser;
 	}
 /**
- * The editUser method that asks the server for the new DTO of the edited User.
+ * The updateUser method that asks the server for the new DTO of the updated User.
  * @param name
  * @param email
  * @param password
@@ -146,18 +146,15 @@ public class HotelManagementController {
  * @param address
  * @return return the new UserDTO.
  */
-	public UserDTO editUser(String name, String email, String password, String phone, String address) {
-		// TODO Call the server to get the edited DTO
-		/*try {
-		 *UserDTO editedUser = rsl.editUser(loggedUser.getUserID, name, email, password, phone, address);
-		 *if(editedUser == null) return null;
-		 *loggedUser = editedUser;
-		 *return loggedUser;
-		} catch (final RemoteException e) {
-			log.fatal("Error updating user data: " + e.getMessage());
+	public UserDTO updateUser(String name, String email, String password, String phone, String address) {
+		UserDTO updatedUser;
+		try {
+			updatedUser = rsl.getHotelManager().updateGuestProfileData(loggedUser.getUserID(), name, email, password, phone, address);
+			if(updatedUser == null) return null;
+			loggedUser = updatedUser;
+			return loggedUser;
+		} catch (RemoteException e) {
+			return null;
 		}
-		 */
-		return null;
 	}
-
 }

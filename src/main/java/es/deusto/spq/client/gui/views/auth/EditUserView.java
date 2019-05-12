@@ -239,7 +239,7 @@ public class EditUserView extends View {
 
 		// Send the new properties of the current user to the server
 		UserDTO result = null;
-		result = hotelManagementController.editUser(nameTextField.getText(), emailTextField.getText(),
+		result = hotelManagementController.updateUser(nameTextField.getText(), emailTextField.getText(),
 				new String(passwordField.getPassword()), phoneTextField.getText(), addressTextField.getText());
 
 		// If it fails, tell the user and dispose the frame

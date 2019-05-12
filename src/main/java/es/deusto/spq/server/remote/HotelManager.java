@@ -127,11 +127,23 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
-	public boolean updateGuestProfileData(String userId, String name, String email, String password, String phone,
+	public UserDTO updateGuestProfileData(String userId, String name, String email, String password, String phone,
 			String address) throws RemoteException {
-		if(userId == null)
-			return false;
-		return userDAO.updateGuest(userId, name, email, password, phone, address);
+		if(userId == null) return null;
+		//Return the updatedUser
+		UserDTO updatedUser = userDAO.updateGuest(userId, name, email, password, phone, address);
+		//Searches on the loggedUsers list the actual user(Without the update)
+		UserDTO actualUser = null;
+		for(UserDTO userDTO : loggedUsers) {
+			if(userDTO.getUserID().equals(userId)) {
+				actualUser = userDTO;
+				break;
+			}
+		}
+		//Deletes the User from logged users and replace it with the one updated
+		loggedUsers.remove(actualUser);
+		loggedUsers.add(updatedUser);
+		return updatedUser;
 	}
 
 	@Override
@@ -151,6 +163,5 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		dao.cleanDB();
 		return false;
 	}
-
 
 }
