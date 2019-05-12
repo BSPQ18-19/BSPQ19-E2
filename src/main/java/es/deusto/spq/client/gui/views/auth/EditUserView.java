@@ -244,7 +244,7 @@ public class EditUserView extends View {
 
 		// If it fails, tell the user and dispose the frame
 		if (result == null) {
-			ClientLogger.getLogger().fatal("User not registered...");
+			ClientLogger.getLogger().fatal("User data not updated...");
 			JOptionPane.showMessageDialog(frame, getViewManager().getClient().getLocaleManager().getMessage("editUser.validation.errors.unknown"),
 					getViewManager().getClient().getLocaleManager().getMessage("editUser.validation.errors.unknown.title"), JOptionPane.ERROR_MESSAGE);
 

@@ -24,6 +24,8 @@ import org.apache.log4j.Logger;
 import com.github.lgooddatepicker.components.CalendarPanel;
 
 import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.gui.base.ViewFactory;
+import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.HotelDTO;
@@ -39,6 +41,7 @@ public class HotelGuestSearchingPanel extends JPanel {
 	private JScrollPane tableScrollPane;
 	private JButton confirm;
 	private JButton	viewHotel;
+	private JButton updateUser;
 	private JPanel upperButtons, southPanel;
 	private int screenWidth, screenHeight;
 	private Logger log;
@@ -124,7 +127,6 @@ public class HotelGuestSearchingPanel extends JPanel {
 		
 		confirm = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.button.confirm"));
 		confirm.setSize(100, 30);
-		confirm.setBackground(Color.GREEN);
 		confirm.addActionListener(new ActionListener() {
 			
 			@Override
@@ -137,11 +139,23 @@ public class HotelGuestSearchingPanel extends JPanel {
 				}
 			}
 		});
-		
+
+		updateUser = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.button.updateUser"));
+		updateUser.setSize(100, 30);
+		updateUser.setBackground(Color.GREEN);
+		updateUser.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clientWindowGuest.getGuestView().getViewManager().openView(ViewFactory.buildView(ViewType.EDIT_USER, clientWindowGuest.getGuestView().getViewManager()));
+			}
+		});
+
 		upperButtons = new JPanel();
 		upperButtons.setBackground(Color.LIGHT_GRAY);
 		upperButtons.add(viewHotel);
 		upperButtons.add(confirm);
+		upperButtons.add(updateUser);
 		
 		calendar = new CalendarPanel();
 		calendar.setSize(600, 200);
