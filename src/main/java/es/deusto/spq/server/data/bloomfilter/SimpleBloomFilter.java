@@ -32,8 +32,10 @@ public class SimpleBloomFilter<T> {
 				(maximumNumberElements > 0 && numberAddedElements < maximumNumberElements)) {
 			int hashCode = object.hashCode();
 			hashes.set(hashCode % size);
-			hashes.set((hashCode >> 16) % size); // TODO implement a nice hash function
-			hashes.set((hashCode >> 8) % size); // TODO implement a nice hash function
+			String sha1 = HashProvider.sha1(object);
+			hashes.set(sha1.hashCode() % size);
+			String sha256 = HashProvider.sha256(object);
+			hashes.set(sha256.hashCode() % size);
 			numberAddedElements += 1;
 			log.debug(object.getClass().getName() + " object added to the filter");
 		} else {
