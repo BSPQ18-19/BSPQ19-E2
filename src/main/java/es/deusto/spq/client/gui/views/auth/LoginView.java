@@ -157,11 +157,16 @@ public class LoginView extends View {
                             getViewManager().getClient().getLocaleManager().getMessage("login.failed.title"),
                             JOptionPane.ERROR_MESSAGE);
                 else {
-                    if(loggedUser.isGuest())
-                        ;//TODO guest GUI
-                    else
-                        ;//TODO admin GUI
-                    getViewManager().openView(ViewFactory.buildView(ViewType.ADMIN_HOTELS, getViewManager()));
+                    if(loggedUser.isGuest()) {
+                    	getViewManager().openView(ViewFactory.buildView(ViewType.GUEST_HOTELS, getViewManager()));
+                    	getViewManager().openView(ViewFactory.buildView(ViewType.ADMIN_HOTELS, getViewManager()));
+                    }
+                    
+                    else {
+                    	getViewManager().openView(ViewFactory.buildView(ViewType.ADMIN_HOTELS, getViewManager()));
+                    }
+                    
+                    
                     dispose();
                     JOptionPane.showMessageDialog(frame,
                             "Succesfull login",

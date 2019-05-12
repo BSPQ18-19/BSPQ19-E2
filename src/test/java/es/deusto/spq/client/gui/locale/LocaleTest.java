@@ -1,7 +1,9 @@
 package es.deusto.spq.client.gui.locale;
 
 import es.deusto.spq.client.Client;
+import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -12,6 +14,9 @@ import java.util.Locale;
  * @author Iñigo Apellániz
  */
 public class LocaleTest {
+
+    @Rule
+    public ContiPerfRule rule = new ContiPerfRule();
 
     /**
      * The default locale should always be English (en_EN)

@@ -153,6 +153,7 @@ public class PayPal {
 			registrarLock.lock();
 			activeRegistrars.add(registrator);
 			registrarLock.unlock();
+			log.debug("Registrar added");
 		}
 		return true;
 	}

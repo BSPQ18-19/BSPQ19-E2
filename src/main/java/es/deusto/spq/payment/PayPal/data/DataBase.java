@@ -57,13 +57,14 @@ public class DataBase {
 	 * @return <code>true</code> if the user is correctly created.
 	 * 			<code>false</code> if the user was created before, and no new user is created.
 	 */
-	public boolean registerUser(User user) {
+	public synchronized boolean registerUser(User user) {
 		if(users.containsKey(user.getUsername())) {
 			log.warn("User '" + user.getUsername() + "' is already registered.");
 			return false;
 		}
 		users.put(user.getUsername(), user);
 		payments.put(user, null);
+		log.info("New user in the database: '" + user.getUsername() + "'");
 		return true;
 	}
 	
@@ -76,7 +77,7 @@ public class DataBase {
 	 * @return <code>true</code> if the payment is successfully completed.
 	 * 			<code>false</code> if the user isn't registered or the password is wrong.
 	 */
-	public boolean makePayment(String username, String password, Payment payment) {
+	public synchronized boolean makePayment(String username, String password, Payment payment) {
 		if(!users.containsKey(username)) {//User not registered
 			log.warn("User '" + username + "' is not registered.");
 			return false;

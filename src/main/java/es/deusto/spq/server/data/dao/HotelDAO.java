@@ -1,9 +1,8 @@
 package es.deusto.spq.server.data.dao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-import es.deusto.spq.client.logger.ClientLogger;
 import javax.jdo.Extent;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
@@ -11,89 +10,73 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
-import org.apache.log4j.Logger;
-
+import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.logger.ServerLogger;
 
 public class HotelDAO implements IHotelDAO {
 	
-	private PersistenceManagerFactory pmf;
-	private Logger log;
+	private PersistenceManager pm;
+	private Transaction tx;
 
 	public HotelDAO(){
-		log = ClientLogger.getLogger();
-		pmf = JDOHelper.getPersistenceManagerFactory("datanucleus.properties");
+		pm = MyPersistenceManager.getPersistenceManager();
 	}
 	
-	public void storeHotel(Hotel hotel) {
-		this.storeObject(hotel);
-	}
-	
-	private void storeObject(Object object) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		Transaction tx = pm.currentTransaction();
+	public Hotel storeHotel(Hotel hotel) {
+		tx = pm.currentTransaction();
 	   
 	    try {
 	       tx.begin();
-	       ServerLogger.getLogger().info("   * Storing an object: " + object);
-	       pm.makePersistent(object);
+	       ServerLogger.getLogger().info("   * Storing an object: " + hotel);
+	       pm.makePersistent(hotel);
+	       Hotel h = pm.detachCopy(hotel);
 	       tx.commit();
-
+	       
+	       return h;
 	    } catch (Exception ex) {
 	    	ServerLogger.getLogger().fatal("   $ Error storing an object: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		tx.rollback();
-	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+	    	close();
 	    }
+	    return null;
 	}
 	
 	public Hotel getHotel(String hotelID) {
-		PersistenceManager pm = pmf.getPersistenceManager();
 		/* By default only 1 level is retrieved from the db
 		 * so if we wish to fetch more than one level, we must indicate it
 		 */
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
-		Transaction tx = pm.currentTransaction();
+		tx = pm.currentTransaction();
 		
 		try {
 			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
 			
 			tx.begin();			
 			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
-			
+			tx.commit();
 			for (Hotel hotel : extent) {
-				if (hotel.getName().equals(hotelID)) {
+				if (hotel.getHotelId().equals(hotelID)) {
 				    return hotel;
                 }
 			}
-
-			tx.commit();			
+			
 		} catch (Exception ex) {
 			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		tx.rollback();
-	    	}
-
-    		pm.close();    		
+	    	close();
 	    }
 	    				
 		return null;
 	}
 
 
-	public ArrayList<Hotel> getHotels() {
-		PersistenceManager pm = pmf.getPersistenceManager();
+	public List<Hotel> getHotels() {
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
-		Transaction tx = pm.currentTransaction();
-	    ArrayList<Hotel> hotels = new ArrayList<>();
+		tx = pm.currentTransaction();
+	    List<Hotel> hotels = new ArrayList<>();
 	        
 	    try {
 	    	ServerLogger.getLogger().info("   * Retrieving all the hotels ");
@@ -109,22 +92,40 @@ public class HotelDAO implements IHotelDAO {
 	    } catch (Exception ex) {
 	    	ServerLogger.getLogger().fatal("   $ Error retreiving an extent: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		ServerLogger.getLogger().info("rollback");
-	    		tx.rollback();
-	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
+	    	close();
+	    }
+	    return hotels;
+	}
+	
+	public List<Hotel> getHotels(Timestamp arrivalDate) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		tx = pm.currentTransaction();
+	    ArrayList<Hotel> hotels = new ArrayList<>();
+	        
+	    try {
+	    	ServerLogger.getLogger().info("   * Retrieving all the hotels ");
+	    	
+	    	tx.begin();	    	
+			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
+
+			for (Hotel hotel : extent) {
+				if(hotel.getSeasonStart().getTime() <= arrivalDate.getTime())
+					hotels.add(hotel);
 			}
+			
+	        tx.commit();
+	    } catch (Exception ex) {
+	    	ServerLogger.getLogger().fatal("   $ Error retreiving an extent: " + ex.getMessage());
+	    } finally {
+	    	close();
 	    }
 	    return hotels;
 	}
 
 	@Override
-	public boolean deleteHotel(String hotelID) {
-		PersistenceManager pm = pmf.getPersistenceManager();
-		
-		Transaction tx = pm.currentTransaction();
+	public boolean deleteHotel(String hotelID) {		
+		tx = pm.currentTransaction();
 		try {
 			tx.begin();
 			
@@ -143,23 +144,16 @@ public class HotelDAO implements IHotelDAO {
 		} catch (Exception ex) {
 			ServerLogger.getLogger().fatal("   $ Error deleting an hotel: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		ServerLogger.getLogger().debug("rollback");
-	    		tx.rollback();
-	    	}
-			if(pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+	    	close();
 	    }
 		return false;
 	}
 	
-	public void cleanDB() {
+	public void cleanHotelsDB() {
 		ServerLogger.getLogger().info("- Cleaning the DB...");			
-		PersistenceManager pm = pmf.getPersistenceManager();
 		pm.getFetchPlan().setMaxFetchDepth(3);
 
-		Transaction tx = pm.currentTransaction();
+		tx = pm.currentTransaction();
 		//Start the transaction
 		try {
 			tx.begin();
@@ -174,13 +168,16 @@ public class HotelDAO implements IHotelDAO {
 			ServerLogger.getLogger().fatal(" $ Error cleaning the DB: " + ex.getMessage());
 			ex.printStackTrace();
 		} finally {
-			if (tx != null && tx.isActive()) {
-				tx.rollback();
-			}
-
-			if (pm != null && !pm.isClosed()) {
-				pm.close();
-			}
+			close();
 		}
-	}	
+	}
+
+
+	/**
+	 * Closes the transaction if it hasn't been closed before, and makes rollback.
+	 */
+	private final void close() {
+		if (tx != null && tx.isActive())
+			tx.rollback();
+	}
 }

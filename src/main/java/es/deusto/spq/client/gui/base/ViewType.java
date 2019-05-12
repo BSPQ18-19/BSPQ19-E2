@@ -28,7 +28,6 @@ public enum ViewType
      */
     ADMIN_HOTELS,
 
-
     /**
      * User view where you can edit the your actual user
      */
@@ -38,5 +37,15 @@ public enum ViewType
      * View to change the current locale.
      */
     LOCALE_SETTINGS,
+
+    /**
+     * View to register an admin
+     */
+    REGISTER_ADMINISTRATOR,
+    
+    /**
+     * Guest window to manage requested hotels, searching them and booking rooms
+     */
+     GUEST_HOTELS
 
 }
