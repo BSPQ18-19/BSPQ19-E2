@@ -187,5 +187,10 @@ public class Review implements Serializable {
 		}
 		return false;
 	}
+	
+	@Override
+	public int hashCode() {
+		return reviewID.hashCode();
+	}
 
 }

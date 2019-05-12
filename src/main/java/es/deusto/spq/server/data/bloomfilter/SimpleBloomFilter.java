@@ -86,7 +86,7 @@ public class SimpleBloomFilter<T> {
 	 * 			{@code true} when the object has been added (or a false positive).
 	 */
 	public boolean contains(T object) {
-		int hashCode = object.hashCode();
+		int hashCode = Math.abs(object.hashCode());
 		if(hashes.get(hashCode % size) || hashes.get((hashCode >> 16) % size) || hashes.get((hashCode >> 8) % size))
 			return true;
 		return false;

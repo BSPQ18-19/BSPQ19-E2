@@ -121,5 +121,10 @@ public class Reservation implements Serializable {
 		return "Reservation [reservationID=" + reservationID + ", guest=" + guest + ", numberRooms=" + rooms.size() + ", date="
 				+ date + "]";
 	}
+	
+	@Override
+	public int hashCode() {
+		return reservationID.hashCode();
+	}
 
 }

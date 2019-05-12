@@ -79,5 +79,10 @@ public abstract class User implements Serializable {
 		}
 		return false;
 	}
+	
+	@Override
+	public int hashCode() {
+		return userID.hashCode();
+	}
 
 }

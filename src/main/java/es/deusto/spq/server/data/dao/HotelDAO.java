@@ -11,6 +11,7 @@ import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
+import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -18,9 +19,11 @@ public class HotelDAO implements IHotelDAO {
 	
 	private PersistenceManager pm;
 	private Transaction tx;
+	private SimpleBloomFilter<Hotel> filter;
 
 	public HotelDAO(){
 		pm = MyPersistenceManager.getPersistenceManager();
+		filter = new SimpleBloomFilter<Hotel>();
 	}
 	
 	public Hotel storeHotel(Hotel hotel) {
@@ -31,6 +34,7 @@ public class HotelDAO implements IHotelDAO {
 	       ServerLogger.getLogger().info("   * Storing an object: " + hotel);
 	       pm.makePersistent(hotel);
 	       Hotel h = pm.detachCopy(hotel);
+	       filter.add(h);
 	       tx.commit();
 	       
 	       return h;
@@ -43,6 +47,10 @@ public class HotelDAO implements IHotelDAO {
 	}
 	
 	public Hotel getHotel(String hotelID) {
+		Hotel tmpHotel = new Hotel(hotelID, null, null, null, null);
+		if(!filter.contains(tmpHotel))
+			return null;
+		
 		/* By default only 1 level is retrieved from the db
 		 * so if we wish to fetch more than one level, we must indicate it
 		 */
@@ -124,7 +132,11 @@ public class HotelDAO implements IHotelDAO {
 	}
 
 	@Override
-	public boolean deleteHotel(String hotelID) {		
+	public boolean deleteHotel(String hotelID) {
+		Hotel tmpHotel = new Hotel(hotelID, null, null, null, null);
+		if(!filter.contains(tmpHotel))
+			return false;
+
 		tx = pm.currentTransaction();
 		try {
 			tx.begin();
