@@ -10,6 +10,7 @@ public class SimpleBloomFilter<T> {
 
 	private BitSet hashes;
 	private int size = 1024 * 1024 * 8; // Default size: 1 MiB
+	private int numberHashFunctions = 3; // The number of hash functions used in the current filter
 	private int maximumNumberElements = -1;
 	private int numberAddedElements = 0;
 	private Logger log;
@@ -41,6 +42,25 @@ public class SimpleBloomFilter<T> {
 		} else {
 			log.warn("Maximum number of elements exceeded");
 		}
+	}
+	
+	public void merge(SimpleBloomFilter<T> toBeMerged) throws IllegalArgumentException {
+		if(toBeMerged == null || toBeMerged.getSize() != size || toBeMerged.getNumberHashFunctions() != numberHashFunctions)
+			throw new IllegalArgumentException("Filter's size and hash functions must be equal to be merged");
+		hashes.or(toBeMerged.getHashes());
+		log.info("Merged another SimpleBloomFilter");
+	}
+	
+	public int getSize() {
+		return size;
+	}
+	
+	public int getNumberHashFunctions() {
+		return numberHashFunctions;
+	}
+	
+	public BitSet getHashes() {
+		return hashes;
 	}
 	
 	public boolean contains(T object) {
