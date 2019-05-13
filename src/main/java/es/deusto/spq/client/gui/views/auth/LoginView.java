@@ -40,9 +40,9 @@ public class LoginView extends View {
     private JLabel lblPassword;
     private JButton btnLogin;
     private JButton btnRegister;
-    private final JPanel panel_3 = new JPanel();
-    private final Logger log;
-    private final HotelManagementController controller;
+    private JPanel panel_3 = new JPanel();
+    private Logger log;
+    private HotelManagementController controller;
 
     /**
      *
@@ -83,15 +83,15 @@ public class LoginView extends View {
         frame = new JInternalFrame();
         frame.setBounds(100, 100, 223, 231);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        final GridBagLayout gridBagLayout = new GridBagLayout();
+        GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0};
         gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
         gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
         gridBagLayout.rowWeights = new double[]{0.0, 1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
         frame.getContentPane().setLayout(gridBagLayout);
 
-        final JPanel panel_2 = new JPanel();
-        final GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+        JPanel panel_2 = new JPanel();
+        GridBagConstraints gbc_panel_2 = new GridBagConstraints();
         gbc_panel_2.insets = new Insets(0, 0, 5, 0);
         gbc_panel_2.fill = GridBagConstraints.BOTH;
         gbc_panel_2.gridx = 3;
@@ -101,8 +101,8 @@ public class LoginView extends View {
         lblLogin = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("login.title"));
         panel_2.add(lblLogin);
 
-        final JPanel panel_1 = new JPanel();
-        final GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+        JPanel panel_1 = new JPanel();
+        GridBagConstraints gbc_panel_1 = new GridBagConstraints();
         gbc_panel_1.anchor = GridBagConstraints.NORTH;
         gbc_panel_1.insets = new Insets(0, 0, 5, 0);
         gbc_panel_1.gridx = 3;
@@ -116,8 +116,8 @@ public class LoginView extends View {
         panel_1.add(tFEmail);
         tFEmail.setColumns(10);
 
-        final JPanel panel = new JPanel();
-        final GridBagConstraints gbc_panel = new GridBagConstraints();
+        JPanel panel = new JPanel();
+        GridBagConstraints gbc_panel = new GridBagConstraints();
         gbc_panel.insets = new Insets(0, 0, 5, 0);
         gbc_panel.anchor = GridBagConstraints.NORTH;
         gbc_panel.gridx = 3;
@@ -130,7 +130,7 @@ public class LoginView extends View {
         tFPassword = new JPasswordField();
         panel.add(tFPassword);
         tFPassword.setColumns(10);
-        final GridBagConstraints gbc_panel_3 = new GridBagConstraints();
+        GridBagConstraints gbc_panel_3 = new GridBagConstraints();
         gbc_panel_3.gridx = 3;
         gbc_panel_3.gridy = 4;
         frame.getContentPane().add(panel_3, gbc_panel_3);
@@ -140,13 +140,13 @@ public class LoginView extends View {
             @Override
 			public void actionPerformed(ActionEvent arg0) {
                 //This trigers when login in
-                final String email = tFEmail.getText();
-                final String password = tFPassword.getText();
+                String email = tFEmail.getText();
+                String password = tFPassword.getText();
 
                 UserDTO loggedUser = null;
                 try {
                     loggedUser = controller.logIn(email, password);
-                } catch (final RemoteException e) {
+                } catch (RemoteException e) {
                     log.info("Remote exception trying to create a UserDTO");
 
                 }

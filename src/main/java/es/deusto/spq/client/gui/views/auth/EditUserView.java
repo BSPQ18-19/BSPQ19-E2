@@ -62,7 +62,7 @@ public class EditUserView extends View {
 
 	@Override
 	public ViewPermission getViewPermission() {
-		return ViewPermission.NOT_LOGGED_IN;
+		return ViewPermission.LOGGED_IN_GUEST;
 	}
 
 	@Override
@@ -75,6 +75,15 @@ public class EditUserView extends View {
 		return frame;
 	}
 
+	@Override
+	public void dispose() {
+        try {
+            getInternalFrame().dispose();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+	
 	/**
 	 * All the Swing code for showing the actual frame
 	 */

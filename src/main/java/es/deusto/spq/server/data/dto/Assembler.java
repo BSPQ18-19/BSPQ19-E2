@@ -20,7 +20,7 @@ public class Assembler {
 	public HotelDTO assembleHotel(Hotel hotel) {
 		if (hotel == null)
 			return null;
-		final HotelDTO hotelDTO = new HotelDTO(hotel.getHotelId(), hotel.getName(), hotel.getLocation(),
+		HotelDTO hotelDTO = new HotelDTO(hotel.getHotelId(), hotel.getName(), hotel.getLocation(),
 				hotel.getSeasonStart(), hotel.getSeasonEnding());
 		ServerLogger.getLogger().debug("Assembling hotel...");
 		return hotelDTO;

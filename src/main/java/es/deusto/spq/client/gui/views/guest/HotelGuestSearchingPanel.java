@@ -127,6 +127,7 @@ public class HotelGuestSearchingPanel extends JPanel {
 		
 		confirm = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.button.confirm"));
 		confirm.setSize(100, 30);
+		confirm.setBackground(Color.GREEN);
 		confirm.addActionListener(new ActionListener() {
 			
 			@Override
@@ -142,7 +143,6 @@ public class HotelGuestSearchingPanel extends JPanel {
 
 		updateUser = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.button.updateUser"));
 		updateUser.setSize(100, 30);
-		updateUser.setBackground(Color.GREEN);
 		updateUser.addActionListener(new ActionListener() {
 			
 			@Override

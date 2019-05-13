@@ -3,7 +3,6 @@ package es.deusto.spq.client.remote;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
-import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.remote.IHotelManager;
 
 public class RMIServiceLocator {
