@@ -87,7 +87,9 @@ public class SimpleBloomFilter<T> {
 	 */
 	public boolean contains(T object) {
 		int hashCode = Math.abs(object.hashCode());
-		if(hashes.get(hashCode % size) || hashes.get((hashCode >> 16) % size) || hashes.get((hashCode >> 8) % size))
+		if(hashes.get(hashCode % size) || 
+				hashes.get(Math.abs(HashProvider.sha1(object).hashCode()) % size) || 
+				hashes.get(Math.abs(HashProvider.sha256(object).hashCode()) % size))
 			return true;
 		return false;
 	}
