@@ -12,6 +12,7 @@ import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.jdo.Hotel;
+import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.logger.ServerLogger;
 
 public class HotelDAO implements IHotelDAO {
@@ -179,5 +180,35 @@ public class HotelDAO implements IHotelDAO {
 	private final void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
+	}
+
+	@Override
+	public Hotel updateHotel(Hotel hotel) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		tx = pm.currentTransaction();
+		
+		try {
+			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
+			
+			tx.begin();			
+			Query<Hotel> query = pm.newQuery(Hotel.class);
+			query.setFilter("hotelId == '" + hotel.getHotelId() + "'");
+			@SuppressWarnings("unchecked")
+			List<Hotel> result = (List<Hotel>) query.execute();
+			result.get(0).setName(hotel.getName());
+			result.get(0).setLocation(hotel.getLocation());
+			result.get(0).setSeasonStart(hotel.getSeasonStart());
+			result.get(0).setSeasonEnding(hotel.getSeasonEnding());
+			tx.commit();
+			
+			return result.get(0);
+		} catch (Exception ex) {
+			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
+	    } finally {
+	    	close();
+	    }
+	    				
+		return null;
 	}
 }

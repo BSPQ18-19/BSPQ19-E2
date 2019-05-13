@@ -100,6 +100,30 @@ public class HotelManagementController {
     	return false;
     }
     
+	/**Update a hotel
+	 * @param id Id of the hotel
+	 * @param name Name of the hotel
+	 * @param location Location of the hotel
+	 * @param seasonStart Day where the hotel starts being available
+	 * @param seasonEnd Day where the hotel ends being available
+	 * @return true if its properly updated
+	 */
+	public boolean updateHotel(String id, String name, String location, String seasonStart, String seasonEnd) {
+		
+		try {
+    		log.info("Creating new hotel...");
+			HotelDTO hotelDTO = rsl.getHotelManager().updateHotel(id, name, location, seasonStart, seasonEnd);
+			if(hotelDTO!=null) {
+				log.info("Hotel created successfully!");
+				return true;
+			}else {
+				log.info("Hotel cannot be created.");
+			}
+		} catch (RemoteException e) {
+			log.fatal("Error creating a new hotel: " + e.getMessage());
+		}
+    	return false;
+	}
     /** Delete a hotel using the hotelID
      * @param id Id of the hotel
      * @return true if its properly deleted
@@ -196,10 +220,10 @@ public class HotelManagementController {
     /** Retrieve all the rooms from DB by a hotelId
      * @return An array list of RoomDTO objects
      */
-    public ArrayList<RoomDTO> retrieveRoomsById(String hotelId){
+    public ArrayList<RoomDTO> retrieveRoomsByHotelId(String hotelId){
        	log.info("Getting list of rooms.");
     	try {
-			ArrayList<RoomDTO> room = rsl.getHotelManager().retrieveRoomsById(hotelId);
+			ArrayList<RoomDTO> room = rsl.getHotelManager().retrieveRoomsByHotelId(hotelId);
 			
 			if(room != null && room.size() != 0) {
 				log.info("List of rooms retrieved succesfully.");

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.deusto.spq.server.data.jdo.Hotel;
+import es.deusto.spq.server.data.jdo.Room;
 
 /** DAO interface for Hotels
  * @author gonzalo
@@ -48,4 +49,6 @@ public interface IHotelDAO {
 	 * Clean all the DB
 	 */
 	public void cleanHotelsDB();
+	
+	public Hotel updateHotel(Hotel hotel);
 }

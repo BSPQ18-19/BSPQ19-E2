@@ -51,7 +51,7 @@ public class RoomDAOTest {
 		 */
 		@Test
 		public void aGetRooms() {
-			ArrayList<Room> listRooms = roomDAO.getRooms();
+			List<Room> listRooms = roomDAO.getRooms();
 			Assert.assertTrue(listRooms.contains(rooms.get(0)));
 		}
 		
@@ -60,7 +60,7 @@ public class RoomDAOTest {
 		 */
 		@Test
 		public void bGetRoomById() {
-			List<Room> listRooms = roomDAO.getRoom(hotelID);
+			List<Room> listRooms = roomDAO.getRoomByHotelId(hotelID);
 			Assert.assertTrue(listRooms.contains(rooms.get(0)));
 		}
 		

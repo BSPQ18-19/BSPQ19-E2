@@ -191,6 +191,27 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
+	public HotelDTO updateHotel(String id, String name, String location, String seasonStart,
+			String seasonEnd) throws RemoteException {
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
+		LocalDate localDateStart = LocalDate.parse(seasonStart.trim(), formatter);
+		LocalDate localDateEnding = LocalDate.parse(seasonEnd.trim(), formatter);
+		
+		Hotel hotel = new Hotel(id, name, location, 
+				Timestamp.valueOf(localDateStart.atStartOfDay()), Timestamp.valueOf(localDateEnding.atStartOfDay()));
+		for(Hotel hotelAux : hotels.values()) {
+			if(hotelAux.getHotelId().equals(hotel.getHotelId())) {
+				hotels.replace(hotelAux.getHotelId(), hotel);
+			}
+		}
+		hotelDao.updateHotel(hotel);
+
+		Assembler hotelAssembler = new Assembler();
+		return hotelAssembler.assembleHotel(hotel);
+	}
+	
+	@Override
 	public boolean deleteHotel(String id) throws RemoteException {
 		hotels.remove(id);
 		hotelDao.deleteHotel(id);
@@ -253,7 +274,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		ArrayList<RoomDTO> roomsDTO = new ArrayList<>();
 		Assembler roomAssembler = new Assembler();
 		
-		ArrayList<Room> listRooms = roomDao.getRooms();
+		List<Room> listRooms = roomDao.getRooms();
 		for(Room room : listRooms) {
 			roomsDTO.add(roomAssembler.assembleRoom(room));
 		}
@@ -306,11 +327,11 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
-	public ArrayList<RoomDTO> retrieveRoomsById(String hotelID) throws RemoteException {
+	public ArrayList<RoomDTO> retrieveRoomsByHotelId(String hotelID) throws RemoteException {
 		ArrayList<RoomDTO> roomsDTO = new ArrayList<>();
 		Assembler roomAssembler = new Assembler();
 		
-		List<Room> listRooms = roomDao.getRoom(hotelID);
+		List<Room> listRooms = roomDao.getRoomByHotelId(hotelID);
 		for(Room room : listRooms) {
 			roomsDTO.add(roomAssembler.assembleRoom(room));
 		}
@@ -322,4 +343,5 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	
 		return roomsDTO;
 	}
+
 }

@@ -60,12 +60,7 @@ public class RoomPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(roomsTable.getSelectedRow() != -1) {
-					clientWindowGuest.getController().deleteRoom((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 0));
-					clientWindowGuest.getController().updateRoom((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 0),
-							Float.valueOf((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 1)), 
-							Float.valueOf((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 3)), 
-							RoomType.valueOf((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 2)),
-							true);
+					clientWindowGuest.getController().retrieveRoomsByHotelId((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 0));
 				}else {
 					JOptionPane.showMessageDialog(null, "Select a room", "Error", JOptionPane.ERROR_MESSAGE);
 				}
@@ -110,7 +105,7 @@ public class RoomPanel extends JPanel{
 		
 		
 		clientWindowGuest.getController().setCurrentRooms();
-		ArrayList<RoomDTO> retrievedRooms = clientWindowGuest.getController().retrieveRoomsById(hotelId);
+		ArrayList<RoomDTO> retrievedRooms = clientWindowGuest.getController().retrieveRoomsByHotelId(hotelId);
 		if(retrievedRooms == null || retrievedRooms.size() == 0) {
 			JOptionPane.showMessageDialog(null, "There are no rooms available", "Error", JOptionPane.ERROR_MESSAGE);
 			if(tableModel.getRowCount() != 0) {

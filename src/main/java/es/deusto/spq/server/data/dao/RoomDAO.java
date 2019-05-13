@@ -49,11 +49,11 @@ public class RoomDAO implements IRoomDAO {
 	}
 
 	@Override
-	public ArrayList<Room> getRooms() {
+	public List<Room> getRooms() {
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
 		tx = pm.currentTransaction();
-	    ArrayList<Room> rooms = new ArrayList<>();
+	    List<Room> rooms = new ArrayList<>();
 	        
 	    try {
 	    	ServerLogger.getLogger().info("   * Retrieving all the rooms ");
@@ -113,7 +113,7 @@ public class RoomDAO implements IRoomDAO {
 	}
 
 	@Override
-	public List<Room> getRoom(String id) {
+	public List<Room> getRoomByHotelId(String hotelId) {
 		/* By default only 1 level is retrieved from the db
 		 * so if we wish to fetch more than one level, we must indicate it
 		 */
@@ -126,9 +126,38 @@ public class RoomDAO implements IRoomDAO {
 			
 			tx.begin();			
 			Query<Room> query = pm.newQuery(Room.class);
-			query.setFilter("hotel.hotelId == '" + id + "'");
+			query.setFilter("hotel.hotelId == '" + hotelId + "'");
 			@SuppressWarnings("unchecked")
 			List<Room> result = (List<Room>) query.execute();
+			tx.commit();
+			
+			return result;
+			
+		} catch (Exception ex) {
+			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
+	    } finally {
+	    	if (tx != null && tx.isActive()) {
+	    		tx.rollback();
+	    	}  		
+	    }
+	    				
+		return null;
+	}
+
+	@Override
+	public Room getRoomById(String roomId) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		tx = pm.currentTransaction();
+		
+		try {
+			ServerLogger.getLogger().info("   * Retrieving an Extent for Rooms.");
+			
+			tx.begin();			
+			Query<Room> query = pm.newQuery(Room.class);
+			query.setFilter("roomId == '" + roomId + "'");
+			
+			Room result = (Room) query.execute();
 			tx.commit();
 			
 			return result;

@@ -93,9 +93,8 @@ public class ViewHotel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				clientWindowAdmin.getController().cleanHotelsDB();
 				for(int i = 0; i < hotelsTable.getRowCount(); i++) {
-					clientWindowAdmin.getController().createHotel((String) hotelsTable.getValueAt(i, 0),
+					clientWindowAdmin.getController().updateHotel((String) hotelsTable.getValueAt(i, 0),
 							(String) hotelsTable.getValueAt(i, 1), 
 							(String) hotelsTable.getValueAt(i, 2),
 							(String) hotelsTable.getValueAt(i, 3), 
