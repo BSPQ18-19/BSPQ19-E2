@@ -22,13 +22,13 @@ public class HashProvider {
 	public static String sha1(Object object) {
 		if(object == null)
 			return null;
-        MessageDigest md = null;
+        MessageDigest messageDigest = null;
         byte [] before = null;
         byte [] hashInBytes = null;
 		try {
-			md = MessageDigest.getInstance("SHA-1");
+			messageDigest = MessageDigest.getInstance("SHA-1");
 			before = toByteArray(object);
-			hashInBytes = md.digest(before);
+			hashInBytes = messageDigest.digest(before);
 		} catch (NoSuchAlgorithmException e) {
 			ServerLogger.getLogger().warn("SHA-1: " + e.getMessage());
 		} catch (IOException e) {
@@ -44,13 +44,13 @@ public class HashProvider {
 	public static String sha256(Object object) {
 		if(object == null)
 			return null;
-        MessageDigest md = null;
+        MessageDigest messageDigest = null;
         byte [] before = null;
         byte [] hashInBytes = null;
 		try {
-			md = MessageDigest.getInstance("SHA-256");
+			messageDigest = MessageDigest.getInstance("SHA-256");
 			before = toByteArray(object);
-			hashInBytes = md.digest(before);
+			hashInBytes = messageDigest.digest(before);
 		} catch (NoSuchAlgorithmException e) {
 			ServerLogger.getLogger().warn("SHA-256: " + e.getMessage());
 		} catch (IOException e) {
@@ -66,13 +66,13 @@ public class HashProvider {
 	public static String sha384(Object object) {
 		if(object == null)
 			return null;
-		MessageDigest md = null;
+		MessageDigest messageDigest = null;
         byte [] before = null;
         byte [] hashInBytes = null;
 		try {
-			md = MessageDigest.getInstance("SHA-384");
+			messageDigest = MessageDigest.getInstance("SHA-384");
 			before = toByteArray(object);
-			hashInBytes = md.digest(before);
+			hashInBytes = messageDigest.digest(before);
 		} catch (NoSuchAlgorithmException e) {
 			ServerLogger.getLogger().warn("SHA-384: " + e.getMessage());
 		} catch (IOException e) {
@@ -88,13 +88,13 @@ public class HashProvider {
 	public static String sha512(Object object) {
 		if(object == null)
 			return null;
-		MessageDigest md = null;
+		MessageDigest messageDigest = null;
         byte [] before = null;
         byte [] hashInBytes = null;
 		try {
-			md = MessageDigest.getInstance("SHA-512");
+			messageDigest = MessageDigest.getInstance("SHA-512");
 			before = toByteArray(object);
-			hashInBytes = md.digest(before);
+			hashInBytes = messageDigest.digest(before);
 		} catch (NoSuchAlgorithmException e) {
 			ServerLogger.getLogger().warn("SHA-512: " + e.getMessage());
 		} catch (IOException e) {
@@ -110,20 +110,20 @@ public class HashProvider {
 	 */
     public static byte[] toByteArray(Object obj) throws IOException {
         byte[] bytes = null;
-        ByteArrayOutputStream bos = null;
-        ObjectOutputStream oos = null;
+        ByteArrayOutputStream byteArrayOutputStream = null;
+        ObjectOutputStream objectOutputStream = null;
         try {
-            bos = new ByteArrayOutputStream();
-            oos = new ObjectOutputStream(bos);
-            oos.writeObject(obj);
-            oos.flush();
-            bytes = bos.toByteArray();
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(obj);
+            objectOutputStream.flush();
+            bytes = byteArrayOutputStream.toByteArray();
         } finally {
-            if (oos != null) {
-                oos.close();
+            if (objectOutputStream != null) {
+                objectOutputStream.close();
             }
-            if (bos != null) {
-                bos.close();
+            if (byteArrayOutputStream != null) {
+                byteArrayOutputStream.close();
             }
         }
         return bytes;
@@ -136,11 +136,11 @@ public class HashProvider {
 	private static String bytesToHex(byte [] bytes) {
 		if(bytes == null)
 			return null;
-        StringBuilder sb = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         for (byte b : bytes) {
-            sb.append(String.format("%02x", b));
+            stringBuilder.append(String.format("%02x", b));
         }
-        return sb.toString();
+        return stringBuilder.toString();
 	}
 
 }
