@@ -84,7 +84,7 @@ public interface IHotelManager extends Remote {
 	 */
 	public RoomDTO updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) throws RemoteException;
 	
-	/** Delete a room form the DB according to an id
+	/** Delete a room from the DB according to an id
 	 * @param id Id of the room
 	 * @return True if the room has been deleted successfully
 	 * @throws RemoteException
@@ -97,6 +97,13 @@ public interface IHotelManager extends Remote {
 	 * @throws RemoteException
 	 */
 	public ArrayList<RoomDTO> retrieveRoomsByHotelId(String hotelID) throws RemoteException;
+	
+	/** Retrieve a room from the DB according to a roomId
+	 * @param roomID Id of the room
+	 * @return Room of type RoomDTO
+	 * @throws RemoteException
+	 */
+	public RoomDTO retrieveRoomById(String roomID) throws RemoteException;
 	
 	/**
 	 * Registers the user to the PayPal server.

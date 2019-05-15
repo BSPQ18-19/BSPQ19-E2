@@ -237,6 +237,26 @@ public class HotelManagementController {
 		return null;
     }
     
+    /** Retrieve a room from DB by a roomId
+     * @return A RoomDTO object
+     */
+    public RoomDTO retrieveRoomById(String roomId){
+       	log.info("Getting list of rooms.");
+    	try {
+			RoomDTO room = rsl.getHotelManager().retrieveRoomById(roomId);
+			
+			if(room != null){
+				log.info("Room retrieved succesfully.");
+				return room;
+			}else {
+				log.info("Could not retrieve a room");
+			}
+    	} catch (RemoteException e) {
+    		log.fatal("Error getting room: " + e.getMessage());
+		}
+		return null;
+    }
+    
     
     public boolean updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) {
     	try {

@@ -1,12 +1,9 @@
 package es.deusto.spq.server.data.dao;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 import es.deusto.spq.server.data.jdo.Hotel;
-import es.deusto.spq.server.data.jdo.Room;
-
 /** DAO interface for Hotels
  * @author gonzalo
  *

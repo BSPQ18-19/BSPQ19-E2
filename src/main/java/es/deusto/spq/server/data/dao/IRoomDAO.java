@@ -1,6 +1,5 @@
 package es.deusto.spq.server.data.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import es.deusto.spq.server.data.jdo.Room;
@@ -14,7 +13,7 @@ public interface IRoomDAO {
 	/** Insert/update a room
 	 * @param room Room object
 	 */
-	public void updateRoom(Room room);
+	public Room updateRoom(Room room);
 	/** Delete a room with the requested room id
 	 * @param roomID Id of the room
 	 * @return True if it has been deleted

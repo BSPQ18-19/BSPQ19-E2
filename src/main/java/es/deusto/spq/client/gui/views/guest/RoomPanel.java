@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -20,13 +19,8 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
-import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 import es.deusto.spq.client.logger.ClientLogger;
-import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
-import es.deusto.spq.server.data.jdo.Room;
-import es.deusto.spq.server.data.jdo.RoomType;
 
 public class RoomPanel extends JPanel{
 
@@ -39,18 +33,12 @@ public class RoomPanel extends JPanel{
 	private JScrollPane tableScrollPane;
 	private JButton	confirm, back;
 	private JPanel upperButtons;
-	private int screenWidth, screenHeight;
 	private Logger log;
-	private ClientWindowGuest clientWindowGuest;
 	
 	public RoomPanel(int screenWidth, int screenHeight, ClientWindowGuest clientWindowGuest, String hotelId) {
 		log = ClientLogger.getLogger();
-		
-		this.clientWindowGuest = clientWindowGuest;
-		
+			
 		this.setLayout(new BorderLayout());
-		this.screenWidth = screenWidth;
-		this.screenHeight = screenHeight;
 						
 		confirm = new JButton("Confirm");
 		confirm.setSize(100, 30);
@@ -60,7 +48,11 @@ public class RoomPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(roomsTable.getSelectedRow() != -1) {
-					clientWindowGuest.getController().retrieveRoomsByHotelId((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 0));
+					RoomDTO roomDTO = clientWindowGuest.getController().retrieveRoomById((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 0));
+					roomDTO.setOccupied(true);
+					clientWindowGuest.getController().updateRoom(roomDTO.getRoomID(), roomDTO.getSize(), roomDTO.getPrice(), roomDTO.getType(), roomDTO.isOccupied());
+					JOptionPane.showMessageDialog(null, "Room successfully reserved", "Done", JOptionPane.INFORMATION_MESSAGE);
+					clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
 				}else {
 					JOptionPane.showMessageDialog(null, "Select a room", "Error", JOptionPane.ERROR_MESSAGE);
 				}
@@ -122,12 +114,13 @@ public class RoomPanel extends JPanel{
 			}
 			
 			for (RoomDTO room: retrievedRooms) {
-				tableModel.addRow(new String[] {room.getRoomID(),
-						String.valueOf(room.getSize()),
-						String.valueOf(room.getType()),
-						String.valueOf(room.getPrice())
-				});
-
+				if(room.isOccupied() == false) {
+					tableModel.addRow(new String[] {room.getRoomID(),
+							String.valueOf(room.getSize()),
+							String.valueOf(room.getType()),
+							String.valueOf(room.getPrice())
+					});
+				}
 				clientWindowGuest.getController().setCurrentRooms(room);
 			}
 		}

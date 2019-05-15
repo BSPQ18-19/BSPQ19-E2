@@ -7,12 +7,7 @@ import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
-
-import org.apache.log4j.Logger;
-
-import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.MyPersistenceManager;
-import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -20,32 +15,9 @@ public class RoomDAO implements IRoomDAO {
 	
 	private PersistenceManager pm;
 	private Transaction tx;
-	private Logger log;
 
 	public RoomDAO(){
-		log = ClientLogger.getLogger();
 		pm = MyPersistenceManager.getPersistenceManager();
-	}	
-	
-	/** Store an object into the DB
-	 * @param object The object to be stored in the DB
-	 */
-	private void storeObject(Object object) {
-		tx = pm.currentTransaction();
-	   
-	    try {
-	       tx.begin();
-	       
-	       pm.makePersistent(object);
-	       tx.commit();
-
-	    } catch (Exception ex) {
-	    	ServerLogger.getLogger().fatal("   $ Error inserting/updating an object: " + ex.getMessage());
-	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		tx.rollback();
-	    	}
-	    }
 	}
 
 	@Override
@@ -69,20 +41,38 @@ public class RoomDAO implements IRoomDAO {
 	    } catch (Exception ex) {
 	    	ServerLogger.getLogger().fatal("   $ Error retreiving an extent: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		ServerLogger.getLogger().info("rollback");
-	    		tx.rollback();
-	    	}
+	    	close();
 	    }
 	    return rooms;
 	}
 
 	@Override
-	public void updateRoom(Room room) {
-		storeObject(room);
+	public Room updateRoom(Room room) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
 		
+		tx = pm.currentTransaction();
+		
+		try {
+			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
+			
+			tx.begin();			
+			Query<Room> query = pm.newQuery(Room.class);
+			query.setFilter("roomId == '" + room.getRoomId() + "'");
+			@SuppressWarnings("unchecked")
+			List<Room> result = (List<Room>) query.execute();
+			result.get(0).setOccupied(true);
+			tx.commit();
+			
+			return result.get(0);
+		} catch (Exception ex) {
+			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
+	    } finally {
+	    	close();
+	    }
+	    				
+		return null;
 	}
-
+	
 	@Override
 	public boolean deleteRoom(String roomID) {
 		tx = pm.currentTransaction();
@@ -104,10 +94,7 @@ public class RoomDAO implements IRoomDAO {
 		} catch (Exception ex) {
 			ServerLogger.getLogger().fatal("   $ Error deleting an hotel: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		ServerLogger.getLogger().debug("rollback");
-	    		tx.rollback();
-	    	}
+	    	close();
 	    }
 		return false;
 	}
@@ -136,9 +123,7 @@ public class RoomDAO implements IRoomDAO {
 		} catch (Exception ex) {
 			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		tx.rollback();
-	    	}  		
+	    	close(); 		
 	    }
 	    				
 		return null;
@@ -157,22 +142,27 @@ public class RoomDAO implements IRoomDAO {
 			Query<Room> query = pm.newQuery(Room.class);
 			query.setFilter("roomId == '" + roomId + "'");
 			
-			Room result = (Room) query.execute();
+			@SuppressWarnings("unchecked")
+			List<Room> result = (List<Room>) query.execute();
 			tx.commit();
 			
-			return result;
+			return result.get(0);
 			
 		} catch (Exception ex) {
 			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
 	    } finally {
-	    	if (tx != null && tx.isActive()) {
-	    		tx.rollback();
-	    	}  		
+	    	close();
 	    }
 	    				
 		return null;
 	}
 
-
+	/**
+	 * Closes the transaction if it hasn't been closed before, and makes rollback.
+	 */
+	private final void close() {
+		if (tx != null && tx.isActive())
+			tx.rollback();
+	}
 
 }

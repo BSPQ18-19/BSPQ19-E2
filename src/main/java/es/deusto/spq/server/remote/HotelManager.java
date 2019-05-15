@@ -289,15 +289,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 
 	@Override
 	public RoomDTO updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) throws RemoteException {
-		for(int i = 0; i < rooms1.size(); i++) {
-			if(rooms1.get(i).getRoomId().equals(roomId))
-				rooms1.get(i).setOccupied(isOccupied);
-		}
-		for(int i = 0; i < rooms2.size(); i++) {
-			if(rooms2.get(i).getRoomId().equals(roomId))
-				rooms2.get(i).setOccupied(isOccupied);
-		}
-		
+				
 		Room room = new Room(roomId, size, price, roomtype, isOccupied);
 		roomDao.updateRoom(room);
 		
@@ -342,6 +334,21 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		}
 	
 		return roomsDTO;
+	}
+
+	@Override
+	public RoomDTO retrieveRoomById(String roomID) throws RemoteException {
+		Assembler roomAssembler = new Assembler();
+		
+		Room room = roomDao.getRoomById(roomID);
+		RoomDTO roomDto = roomAssembler.assembleRoom(room);
+		
+		if(roomDto.equals(null)) {
+			log.fatal("New exception - There is no room for the requested information.");
+			throw new RemoteException("ROOMS - There is no room for the requested information.");
+		}
+		
+		return roomDto;
 	}
 
 }
