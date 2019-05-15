@@ -7,8 +7,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import org.apache.log4j.Logger;
-
 /**
  * Underlying class for app Views
  * @author Iñigo Apellániz

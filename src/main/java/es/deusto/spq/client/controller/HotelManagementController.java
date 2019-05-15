@@ -13,13 +13,23 @@ import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.RoomType;
 
+/** Controller of the client side
+ * @author gonzalo
+ *
+ */
 public class HotelManagementController {
 
 	private static HotelManagementController controller = new HotelManagementController();
 	private RMIServiceLocator rsl;
 	private UserDTO loggedUser = null;
 	private Logger log;
+	/**
+	 * The total current hotels of the database
+	 */
 	private ArrayList<HotelDTO> currentHotels;
+	/**
+	 * The total current rooms of the database
+	 */
 	private ArrayList<RoomDTO> currentRooms;
 	
 	private HotelManagementController() {
@@ -258,6 +268,14 @@ public class HotelManagementController {
     }
     
     
+    /** Update the room data to the database
+     * @param roomId Id of the room
+     * @param size Size of the room
+     * @param price price of the room
+     * @param roomtype type of the room
+     * @param isOccupied true if the room is occupied
+     * @return
+     */
     public boolean updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) {
     	try {
     		log.info("Updating a room...");

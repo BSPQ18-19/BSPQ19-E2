@@ -3,19 +3,11 @@ package es.deusto.spq.client.gui.views.guest;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.gui.views.admin.CreateHotel;
-import es.deusto.spq.client.gui.views.admin.HotelAdminView;
-import es.deusto.spq.client.gui.views.admin.ScreenTypeAdmin;
-import es.deusto.spq.client.gui.views.admin.ViewHotel;
-import es.deusto.spq.client.logger.ClientLogger;
-import es.deusto.spq.server.data.jdo.Room;
 
 /** Main frame of the guest user
  * @author gonzalo
@@ -24,17 +16,28 @@ import es.deusto.spq.server.data.jdo.Room;
 public class ClientWindowGuest extends JInternalFrame{
 
 	private static final long serialVersionUID = 1L;
-	private static ClientWindowGuest clientWindow;
-	private ScreenTypeGuest currentScreenType;
+	/**
+	 * screenWidth Width of the current screen
+	 * screenHeight Height of the current screen
+	 */
 	private int screenWidth, screenHeight;
+	/**
+	 * controller Instance of class HotelManagementController
+	 */
 	private HotelManagementController controller;
+	/**
+	 * mainPanel The main panel of the window
+	 */
 	private JPanel mainPanel;
-	private Logger log;
+	/**
+	 * guestView Instance of class HotelGuestView
+	 */
 	private HotelGuestView guestView;
 
-	// private constructor using lazy singleton
+	/** Private constructor using lazy singleton
+	 * @param guestView Reference to class HotelGuestView
+	 */
 	public ClientWindowGuest(HotelGuestView guestView) {
-		log = ClientLogger.getLogger();
 		
 		this.guestView = guestView;
 		this.controller = guestView.getViewManager().getClient().getController();;
@@ -57,7 +60,6 @@ public class ClientWindowGuest extends JInternalFrame{
 	 * @param nextScreenType Type of the next screen that is wanted to be displayed
 	 */
 	public void changeScreen(ScreenTypeGuest nextScreenType, String... hotelId) {
-		this.currentScreenType = nextScreenType;
 		
 		switch(nextScreenType) {
 	
@@ -74,10 +76,16 @@ public class ClientWindowGuest extends JInternalFrame{
 		this.revalidate();
 	}
 
+	/** Retrieve the guest view
+	 * @return HotelGuestView object
+	 */
 	public HotelGuestView getGuestView() {
 		return guestView;
 	}
 
+	/** Return the controller
+	 * @return HotelManagementController object
+	 */
 	public HotelManagementController getController() {
 		return controller;
 	}

@@ -28,13 +28,37 @@ public class RoomPanel extends JPanel{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Model of the table
+	 */
 	private DefaultTableModel tableModel;
+	/**
+	 * Table where the rooms will be displayed
+	 */
 	private JTable roomsTable;
+	/**
+	 * Scroll pane for the table
+	 */
 	private JScrollPane tableScrollPane;
+	/**
+	 * confirm Confirm button
+	 * back Return to the HotelGuestSearchingPanel
+	 */
 	private JButton	confirm, back;
+	/**
+	 * upperButtons Panel for the buttons at the top
+	 */
 	private JPanel upperButtons;
+	/**
+	 * Client logger
+	 */
 	private Logger log;
 	
+	/** Constructor of the class RoomPanel
+	 * @param screenWidth Width of the window
+	 * @param screenHeight Height of the window
+	 * @param clientWindowGuest Reference to ClientWindowGuest class
+	 */
 	public RoomPanel(int screenWidth, int screenHeight, ClientWindowGuest clientWindowGuest, String hotelId) {
 		log = ClientLogger.getLogger();
 			
