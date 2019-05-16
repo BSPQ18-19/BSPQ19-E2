@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -24,6 +25,7 @@ import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.RoomType;
@@ -42,6 +44,7 @@ public class RoomPanel extends JPanel{
 	private int screenWidth, screenHeight;
 	private Logger log;
 	private ClientWindowGuest clientWindowGuest;
+	private List<ReviewDTO> reviews;
 	
 	public RoomPanel(int screenWidth, int screenHeight, ClientWindowGuest clientWindowGuest, String hotelId) {
 		log = ClientLogger.getLogger();
@@ -145,6 +148,14 @@ public class RoomPanel extends JPanel{
 		this.add(upperButtons, BorderLayout.NORTH);
 		this.add(tableScrollPane, BorderLayout.CENTER);
 
+		reviews = clientWindowGuest.getController().retrieveReviews(hotelId);
+		if(reviews.isEmpty() || reviews == null) {
+			System.out.println("NADA");
+		}else if(reviews.size() == 1) {
+			System.out.println("UNA");
+		}else {
+			System.out.println("MUCHAS");
+		}
 	}
 	static class MyTableCellRenderer extends DefaultTableCellRenderer {
 

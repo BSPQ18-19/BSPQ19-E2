@@ -226,12 +226,10 @@ public class AssemblerTest {
                 "testreview",
                 "opinion here",
                 7,
-                timestamp,
-                assembler.assembleHotel(hotel),
-                assembler.assembleUser(guest)
+                timestamp
         );
 
-        Assert.assertEquals(reviewDTO, assembler.assembleReview(review));
+        Assert.assertTrue(reviewDTO.equals(assembler.assembleReview(review)));
 
     }
 
@@ -271,12 +269,10 @@ public class AssemblerTest {
                 "testreview",
                 "opinion here",
                 7,
-                timestamp,
-                assembler.assembleHotel(hotel),
-                assembler.assembleUser(guest)
+                timestamp
         );
 
-        Assert.assertEquals(review, assembler.disassembleReview(reviewDTO));
+        Assert.assertTrue(review.equals(assembler.disassembleReview(reviewDTO)));
 
     }
 

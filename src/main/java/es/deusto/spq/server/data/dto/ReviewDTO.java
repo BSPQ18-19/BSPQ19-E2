@@ -34,14 +34,6 @@ public class ReviewDTO implements Serializable {
 	 * The date the review was published.
 	 */
 	private Timestamp publishDate;
-	/**
-	 * The hotel DTO where the review is posted.
-	 */
-	private HotelDTO hotel;
-	/**
-	 * The user DTO that posts the review.
-	 */
-	private UserDTO user;
 
 	/**
 	 *
@@ -49,10 +41,8 @@ public class ReviewDTO implements Serializable {
 	 * @param opinion     the opinion of the user about a hotel.
 	 * @param score       the score(0-10) that a user gives a hotel..
 	 * @param publishDate the publishDate of the review.
-	 * @param hotel       the hotel DTO from the hotel that is the review abou.t
-	 * @param user        the user DTO of the user that has posted the review.
 	 */
-	public ReviewDTO(String reviewID, String opinion, int score, Timestamp publishDate, HotelDTO hotel, UserDTO user) {
+	public ReviewDTO(String reviewID, String opinion, int score, Timestamp publishDate) {
 		super();
 		this.reviewID = reviewID;
 		this.opinion = opinion;
@@ -63,8 +53,6 @@ public class ReviewDTO implements Serializable {
 		else
 			this.score = score;
 		this.publishDate = publishDate;
-		this.user = user;
-		this.hotel = hotel;
 	}
 	/**
 	 *
@@ -121,34 +109,6 @@ public class ReviewDTO implements Serializable {
 	 */
 	public void setPublishDate(Timestamp publishDate) {
 		this.publishDate = publishDate;
-	}
-	/**
-	 *
-	 * @return The hotelDTO which the review is from.
-	 */
-	public HotelDTO getHotel() {
-		return hotel;
-	}
-	/**
-	 *
-	 * @param hotel The hotelDTO new hotel you want to set.
-	 */
-	public void setHotel(HotelDTO hotel) {
-		this.hotel = hotel;
-	}
-	/**
-	 *
-	 * @return The user that has wrote the review.
-	 */
-	public UserDTO getUser() {
-		return user;
-	}
-	/**
-	 *
-	 * @param user The new user you want to set.
-	 */
-	public void setUser(UserDTO user) {
-		this.user = user;
 	}
 
 	@Override

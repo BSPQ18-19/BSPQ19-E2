@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.RoomType;
@@ -213,6 +214,17 @@ public class HotelManagementController {
 		return null;
     }
     
+    /** Retrieve all the rooms from DB by a hotelId
+     * @return An array list of RoomDTO objects
+     */
+    public List<ReviewDTO> retrieveReviews(String hotelId){
+    	try {
+			return rsl.getHotelManager().retrieveReviews(hotelId);
+    	} catch (RemoteException e) {
+    		log.fatal("Error getting list of rooms: " + e.getMessage());
+		}
+		return null;
+    }
     
     public boolean updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) {
     	try {

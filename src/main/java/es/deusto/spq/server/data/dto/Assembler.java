@@ -62,8 +62,7 @@ public class Assembler {
 	 * @return the ReviewDTO of the assembles Review
 	 */
 	public ReviewDTO assembleReview(Review review) {
-		return new ReviewDTO(review.getReviewID(), review.getOpinion(), review.getScore(), review.getPublishDate(),
-				assembleHotel(review.getHotel()), assembleUser(review.getUser()));
+		return new ReviewDTO(review.getReviewID(), review.getOpinion(), review.getScore(), review.getPublishDate());
 	}
 
 	/**
@@ -73,8 +72,7 @@ public class Assembler {
 	 * @return the Review from the disassembled ReviewDTO
 	 */
 	public Review disassembleReview(ReviewDTO review) {
-		return new Review(review.getReviewID(), review.getOpinion(), review.getScore(), review.getPublishDate(),
-				disassembleHotel(review.getHotel()), disassembleUser(review.getUser()));
+		return new Review(review.getReviewID(), review.getOpinion(), review.getScore(), review.getPublishDate());
 	}
 	
 	// Reservation

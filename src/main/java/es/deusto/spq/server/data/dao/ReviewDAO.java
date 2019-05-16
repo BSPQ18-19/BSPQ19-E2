@@ -117,6 +117,7 @@ public class ReviewDAO implements IReviewDAO {
 	@Override
 	public List<Review> getReviewsOfHotel(final String hotelID) {
 		try {
+			pm.getFetchPlan().setMaxFetchDepth(3);
 			tx = pm.currentTransaction();
 			tx.begin();
 
@@ -147,6 +148,7 @@ public class ReviewDAO implements IReviewDAO {
 	@Override
 	public List<Review> getReviewsByUser(final String userID) {
 		try {
+			pm.getFetchPlan().setMaxFetchDepth(3);
 			tx = pm.currentTransaction();
 			tx.begin();
 

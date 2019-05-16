@@ -18,15 +18,18 @@ import org.apache.log4j.Logger;
 import es.deusto.spq.server.data.dao.HotelDAO;
 import es.deusto.spq.server.data.dao.IHotelDAO;
 import es.deusto.spq.server.data.dao.IRoomDAO;
+import es.deusto.spq.server.data.dao.ReviewDAO;
 import es.deusto.spq.server.data.dao.RoomDAO;
 import es.deusto.spq.server.data.dao.UserDAO;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
+import es.deusto.spq.server.data.jdo.Review;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.RoomType;
 import es.deusto.spq.server.data.jdo.User;
@@ -46,12 +49,14 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	private ArrayList<Room> rooms1, rooms2;
 	private IHotelDAO hotelDao;
 	private IRoomDAO roomDao;
+	private ReviewDAO reviewDAO;
 	
 	public HotelManager() throws RemoteException {
 		super();
 		new Assembler();
 		this.userDAO = new UserDAO();
 		this.roomDao = new RoomDAO();
+		this.reviewDAO = new ReviewDAO();
 		loggedUsers = new HashSet<UserDTO>();
 		log = ServerLogger.getLogger();
 		r = new Random();
@@ -309,17 +314,32 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	public ArrayList<RoomDTO> retrieveRoomsById(String hotelID) throws RemoteException {
 		ArrayList<RoomDTO> roomsDTO = new ArrayList<>();
 		Assembler roomAssembler = new Assembler();
-		
+
 		List<Room> listRooms = roomDao.getRoom(hotelID);
 		for(Room room : listRooms) {
 			roomsDTO.add(roomAssembler.assembleRoom(room));
 		}
-		
+
 		if(roomsDTO.isEmpty()) {
 			log.fatal("New exception - There are no rooms for the requested information.");
 			throw new RemoteException("ROOMS - There are no rooms for the requested information.");
 		}
-	
+
 		return roomsDTO;
+	}
+
+	@Override
+	public List<ReviewDTO> retrieveReviews(String hotelId) throws RemoteException {
+		List<ReviewDTO> reviewsDTO = new ArrayList<>();
+		Assembler reviewAssembler = new Assembler();
+
+		List<Review> listReviews = reviewDAO.getReviewsOfHotel(hotelId);
+		if(listReviews.isEmpty() || listReviews == null) {
+			return null;
+		}
+		for(Review r : listReviews) {
+			reviewsDTO.add(reviewAssembler.assembleReview(r));
+		}
+		return reviewsDTO;
 	}
 }
