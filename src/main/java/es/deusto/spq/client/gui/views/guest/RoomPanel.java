@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -44,7 +46,6 @@ public class RoomPanel extends JPanel{
 	private int screenWidth, screenHeight;
 	private Logger log;
 	private ClientWindowGuest clientWindowGuest;
-	private List<ReviewDTO> reviews;
 	
 	public RoomPanel(int screenWidth, int screenHeight, ClientWindowGuest clientWindowGuest, String hotelId) {
 		log = ClientLogger.getLogger();
@@ -140,22 +141,12 @@ public class RoomPanel extends JPanel{
 			}
 		}
 		
-		
 		tableScrollPane = new JScrollPane(roomsTable);
 		tableScrollPane.setSize(roomsTable.getWidth() , 100);
 		tableScrollPane.setLocation((int) (screenWidth / 2.05 - tableScrollPane.getWidth() / 2), (int) (screenHeight / 3 - tableScrollPane.getHeight() / 2));
 		
 		this.add(upperButtons, BorderLayout.NORTH);
 		this.add(tableScrollPane, BorderLayout.CENTER);
-
-		reviews = clientWindowGuest.getController().retrieveReviews(hotelId);
-		if(reviews.isEmpty() || reviews == null) {
-			System.out.println("NADA");
-		}else if(reviews.size() == 1) {
-			System.out.println("UNA");
-		}else {
-			System.out.println("MUCHAS");
-		}
 	}
 	static class MyTableCellRenderer extends DefaultTableCellRenderer {
 
