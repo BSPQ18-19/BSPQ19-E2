@@ -1,5 +1,6 @@
 package es.deusto.spq.server.data.jdo;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.jdo.annotations.ForeignKey;
@@ -13,7 +14,7 @@ import javax.jdo.annotations.PrimaryKey;
  *
  */
 @PersistenceCapable(detachable = "true")
-public class Review {
+public class Review implements Serializable {
 
 	/**
 	 * The id of the review.
@@ -185,6 +186,11 @@ public class Review {
 			return object.getReviewID().equals(reviewID);
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return reviewID.hashCode();
 	}
 
 }
