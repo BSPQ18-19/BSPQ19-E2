@@ -10,7 +10,9 @@ import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.jdo.Guest;
+import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Reservation;
+import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.logger.ServerLogger;
 
 public class ReservationDAO implements IReservationDAO {
@@ -80,13 +82,16 @@ public class ReservationDAO implements IReservationDAO {
 	}
 
 	@Override
-	public synchronized Reservation createReservation(Reservation reservation) {
+	public synchronized Reservation createReservation(Reservation reservation, Guest guest, Room room) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
 			
 			pm.makePersistent(reservation);
+			reservation.setGuest(guest);
+			
 			Reservation detachedCopy = pm.detachCopy(reservation);
+			
 			tx.commit();
 			
 			log.info("Created reservation with ID: " + reservation.getReservationID());

@@ -1,11 +1,16 @@
 package es.deusto.spq.server.data.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReservationDTO {
+public class ReservationDTO implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/** The ID of the reservation. */
 	private String id;
 	/** The guest that has made the reservation. */

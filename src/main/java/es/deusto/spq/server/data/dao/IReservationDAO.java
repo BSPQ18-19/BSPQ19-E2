@@ -4,6 +4,7 @@ import java.util.List;
 
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Reservation;
+import es.deusto.spq.server.data.jdo.Room;
 
 public interface IReservationDAO {
 
@@ -23,7 +24,7 @@ public interface IReservationDAO {
 	 * @param reservation - the reservation to be created.
 	 * @return a detached copy of the reservation.
 	 */
-	public Reservation createReservation(Reservation reservation);
+	public Reservation createReservation(Reservation reservation, Guest guest, Room room);
 	
 	/**Removes the reservation with the given ID from the database.
 	 * @param ID - the ID of the reservation to be returned.

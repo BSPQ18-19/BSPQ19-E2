@@ -53,4 +53,6 @@ public interface IUserDAO {
 	 * @return a list of all the administrators in the data base.
 	 */
 	public List<Administrator> getAdministrators(UserDTO authorization);
+	
+	public Guest getGuestByEmail(String email);
 }

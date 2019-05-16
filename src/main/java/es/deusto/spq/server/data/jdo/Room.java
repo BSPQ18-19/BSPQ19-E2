@@ -1,9 +1,9 @@
 package es.deusto.spq.server.data.jdo;
 
-import java.util.List;
 import java.util.Objects;
 
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 /** Room class
@@ -21,6 +21,9 @@ public class Room {
 	private boolean isOccupied;
 	
 	private Hotel hotel;
+	
+	@Persistent(mappedBy="room")
+	private Reservation reservation;
 	
 	/** Constructor of Room class
 	 * @param roomId Id of the room

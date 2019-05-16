@@ -17,16 +17,20 @@ import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.dao.HotelDAO;
 import es.deusto.spq.server.data.dao.IHotelDAO;
+import es.deusto.spq.server.data.dao.IReservationDAO;
 import es.deusto.spq.server.data.dao.IRoomDAO;
+import es.deusto.spq.server.data.dao.ReservationDAO;
 import es.deusto.spq.server.data.dao.RoomDAO;
 import es.deusto.spq.server.data.dao.UserDAO;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.ReservationDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
+import es.deusto.spq.server.data.jdo.Reservation;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.RoomType;
 import es.deusto.spq.server.data.jdo.User;
@@ -46,12 +50,14 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	private ArrayList<Room> rooms1, rooms2;
 	private IHotelDAO hotelDao;
 	private IRoomDAO roomDao;
+	private IReservationDAO reservationDao;
 	
 	public HotelManager() throws RemoteException {
 		super();
 		new Assembler();
 		this.userDAO = new UserDAO();
 		this.roomDao = new RoomDAO();
+		this.reservationDao = new ReservationDAO();
 		loggedUsers = new HashSet<UserDTO>();
 		log = ServerLogger.getLogger();
 		r = new Random();
@@ -349,6 +355,19 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		}
 		
 		return roomDto;
+	}
+
+	@Override
+	public ReservationDTO createReservation(String reservationId, String userId, String roomId)
+			throws RemoteException {
+		Assembler reservationAssembler = new Assembler();
+		Room room = roomDao.getRoomById(roomId);
+		UserDTO userDTO =  userDAO.getUserbyID(null, userId);
+		Guest guest = (Guest) reservationAssembler.disassembleUser(userDTO);
+		
+		Reservation reservation = new Reservation(reservationId);
+		reservationDao.createReservation(reservation, guest, room);
+		return reservationAssembler.assembleReservation(reservation);
 	}
 
 }

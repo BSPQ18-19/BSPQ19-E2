@@ -5,8 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.annotations.ForeignKey;
-import javax.jdo.annotations.Join;
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -23,27 +22,33 @@ public class Reservation {
 	@PrimaryKey
 	private String reservationID;
 	/** The guest that has made the reservation. */
-	@Persistent(defaultFetchGroup="true")
-	@ForeignKey
+	@Column(name="userID")
 	private Guest guest;
 	/** The list of rooms related to the reservation. */
-	@Persistent(defaultFetchGroup="true")
-	@Join
-	private List<Room> rooms;
+	@Column(name="roomId")
+	private Room room;
 	/** The timestamp in which the reservation has been made. */
 	@Persistent(defaultFetchGroup="true")
 	private Timestamp date;
+	
+	public Reservation(String reservationID) {
+		super();
+		this.reservationID = reservationID;
+		this.guest = null;
+		this.room = null;
+		date = Timestamp.valueOf(LocalDateTime.now());
+	}
 	
 	/**Creates a new instance of the Reservation with the given data. The date is also being stored.
 	 * @param reservationID - the ID of the reservation.
 	 * @param guest - the guest that has made the reservation.
 	 * @param rooms - the rooms related to this reservation.
 	 */
-	public Reservation(String reservationID, Guest guest, List<Room> rooms) {
+	public Reservation(String reservationID, Guest guest, Room room) {
 		super();
 		this.reservationID = reservationID;
 		this.guest = guest;
-		this.rooms = rooms;
+		this.room = room;
 		date = Timestamp.valueOf(LocalDateTime.now());
 	}
 	
@@ -55,7 +60,7 @@ public class Reservation {
 		super();
 		this.reservationID = reservationID;
 		this.guest = guest;
-		this.rooms = new ArrayList<Room>();
+		this.room = null;
 		date = Timestamp.valueOf(LocalDateTime.now());
 	}
 	
@@ -63,11 +68,11 @@ public class Reservation {
 	 * @param reservationID - the ID of the reservation.
 	 * @param rooms - the rooms related to this reservation.
 	 */
-	public Reservation(String reservationID, List<Room> rooms) {
+	public Reservation(String reservationID, Room room) {
 		super();
 		this.reservationID = reservationID;
 		this.guest = null;
-		this.rooms = rooms;
+		this.room = room;
 		date = Timestamp.valueOf(LocalDateTime.now());
 	}
 	
@@ -91,12 +96,14 @@ public class Reservation {
 	public String getReservationID() {
 		return reservationID;
 	}
+	
 
-	/**Returns the rooms related to this reservation.
-	 * @return a list of rooms.
-	 */
-	public List<Room> getRooms() {
-		return rooms;
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
 	}
 
 	/**Returnst the timestamp in which this reservation has been processed.
@@ -117,7 +124,7 @@ public class Reservation {
 	
 	@Override
 	public String toString() {
-		return "Reservation [reservationID=" + reservationID + ", guest=" + guest + ", numberRooms=" + rooms.size() + ", date="
+		return "Reservation [reservationID=" + reservationID + ", guest=" + guest + ", room=" + room + ", date="
 				+ date + "]";
 	}
 

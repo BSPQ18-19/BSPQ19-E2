@@ -3,12 +3,16 @@ package es.deusto.spq.client.controller;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.ReservationDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.RoomType;
@@ -31,6 +35,7 @@ public class HotelManagementController {
 	 * The total current rooms of the database
 	 */
 	private ArrayList<RoomDTO> currentRooms;
+	private Map<Integer, String> reservationIds = new TreeMap<Integer, String>();
 	
 	private HotelManagementController() {
 		rsl = RMIServiceLocator.getServiceLocator();
@@ -311,6 +316,28 @@ public class HotelManagementController {
     	return false;
     }
 	
+    /** Create a new reservation
+     * @param reservationId Id of the reservation
+     * @param userId Id of the guest
+     * @param roomId Id of the room
+     * @return
+     */
+    public boolean createReservation(String reservationId, String userId, String roomId) {
+    	try {
+    		log.info("Creating new resevation...");
+			ReservationDTO reservationDTO = rsl.getHotelManager().createReservation(reservationId, userId, roomId);
+			if(reservationDTO!=null) {
+				log.info("Resevation created successfully!");
+				return true;
+			}else {
+				log.info("Resevation cannot be created.");
+			}
+		} catch (RemoteException e) {
+			log.fatal("Error creating a new resevation: " + e.getMessage());
+		}
+    	return false;
+    }
+    
 	/**
 	 * Clear the list of the current rooms
 	 */
@@ -349,5 +376,38 @@ public class HotelManagementController {
 	public UserDTO getLoggedUser() {
 		return loggedUser;
 	}
+	
+	/** Generates a random ID for the reservations
+	 * @return Random ID of the reservation
+	 */
+	public String randInt() {
+		Random random = new Random();
+		Integer randomNum = 0;
+		boolean end = true;
+		while(end) {
+			randomNum =  random.nextInt();
+			if(reservationIds.containsKey(randomNum)) {
+				reservationIds.put(randomNum, "RES" + randomNum);
+				end = false;
+			}
+		}
+		
+		return reservationIds.get(randomNum);
+	}
+
+	/** Get the reservations Id
+	 * @return Map of reservationsIds
+	 */
+	public Map<Integer, String> getReservationIds() {
+		return reservationIds;
+	}
+
+	/**
+	 * Clear the list of the current hotels
+	 */
+	public void setReservationIds() {
+		this.reservationIds.clear();
+	}
+	
 
 }

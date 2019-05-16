@@ -14,6 +14,7 @@ import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
+import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -27,7 +28,6 @@ public class UserDAO implements IDAO, IUserDAO {
 	public UserDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
 		assembler = new Assembler();
-		log = log;
 	}
 
 	@Override
@@ -248,6 +248,34 @@ public class UserDAO implements IDAO, IUserDAO {
 	private final void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
+	}
+
+	@Override
+	public Guest getGuestByEmail(String email) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		tx = pm.currentTransaction();
+		
+		try {
+			ServerLogger.getLogger().info("   * Retrieving an Extent for Rooms.");
+			
+			tx.begin();			
+			Query<Guest> query = pm.newQuery(Guest.class);
+			query.setFilter("email == '" + email + "'");
+			
+			@SuppressWarnings("unchecked")
+			List<Guest> result = (List<Guest>) query.execute();
+			tx.commit();
+			
+			return result.get(0);
+			
+		} catch (Exception ex) {
+			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
+	    } finally {
+	    	close();
+	    }
+	    				
+		return null;
 	}
 
 }

@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -54,6 +55,8 @@ public class RoomPanel extends JPanel{
 	 */
 	private Logger log;
 	
+	private Random r;
+	
 	/** Constructor of the class RoomPanel
 	 * @param screenWidth Width of the window
 	 * @param screenHeight Height of the window
@@ -64,6 +67,8 @@ public class RoomPanel extends JPanel{
 			
 		this.setLayout(new BorderLayout());
 						
+		r =  new Random();
+		
 		confirm = new JButton("Confirm");
 		confirm.setSize(100, 30);
 		confirm.setBackground(Color.GREEN);
@@ -75,6 +80,11 @@ public class RoomPanel extends JPanel{
 					RoomDTO roomDTO = clientWindowGuest.getController().retrieveRoomById((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 0));
 					roomDTO.setOccupied(true);
 					clientWindowGuest.getController().updateRoom(roomDTO.getRoomID(), roomDTO.getSize(), roomDTO.getPrice(), roomDTO.getType(), roomDTO.isOccupied());
+					System.out.println("numero: " + Integer.toString(r.nextInt(Integer.MAX_VALUE)) );
+					System.out.println("user: " + clientWindowGuest.getController().getLoggedUser().getUserID());
+					System.out.println("room: " + roomDTO.getRoomID() );
+					clientWindowGuest.getController().createReservation(Integer.toString(r.nextInt(Integer.MAX_VALUE)),
+							clientWindowGuest.getController().getLoggedUser().getUserID(), roomDTO.getRoomID());
 					JOptionPane.showMessageDialog(null, "Room successfully reserved", "Done", JOptionPane.INFORMATION_MESSAGE);
 					clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
 				}else {

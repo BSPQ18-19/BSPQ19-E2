@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.ReservationDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Hotel;
@@ -140,4 +141,13 @@ public interface IHotelManager extends Remote {
 	 * 		{@code false} if not.
 	 */
 	public boolean payMastercard(long cardNumber, int securityCode, float amount) throws RemoteException;
+	
+	/** Create a new reservation
+	 * @param reservationId Id of the reservation
+	 * @param email Email of the guest
+	 * @param roomId Id of the room
+	 * @return An object of type ReservationDTO
+	 * @throws RemoteException
+	 */
+	public ReservationDTO createReservation(String reservationId, String email, String roomId) throws RemoteException;
 }

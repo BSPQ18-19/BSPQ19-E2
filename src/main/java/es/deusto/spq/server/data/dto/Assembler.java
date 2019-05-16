@@ -79,10 +79,9 @@ public class Assembler {
 	
 	// Reservation
 	public ReservationDTO assembleReservation(Reservation reservation) {
-		List<Room> rooms = reservation.getRooms();
+		Room room = reservation.getRoom();
 		List<RoomDTO> assembledRooms = new ArrayList<RoomDTO>();
-		for(Room room : rooms)
-			assembledRooms.add(assembleRoom(room));
+		assembledRooms.add(assembleRoom(room));
 		return new ReservationDTO(reservation.getReservationID(), 
 				reservation.getGuest() == null ? null : reservation.getGuest().getUserID(),
 				assembledRooms);
@@ -93,6 +92,6 @@ public class Assembler {
 		List<Room> disassembledRooms = new ArrayList<Room>();
 		for(RoomDTO room : rooms)
 			disassembledRooms.add(disassembleRoom(room));
-		return new Reservation(reservation.getId(), disassembledRooms);
+		return new Reservation(reservation.getId(), disassembledRooms.get(0));
 	}
 }

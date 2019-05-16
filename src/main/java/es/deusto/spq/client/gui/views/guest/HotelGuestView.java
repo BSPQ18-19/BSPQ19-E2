@@ -8,7 +8,6 @@ import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewPermission;
 import es.deusto.spq.client.gui.base.ViewType;
-import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 
 public class HotelGuestView extends View{
 
