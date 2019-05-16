@@ -10,9 +10,7 @@ import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.jdo.Guest;
-import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Reservation;
-import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.logger.ServerLogger;
 
 public class ReservationDAO implements IReservationDAO {
@@ -64,7 +62,7 @@ public class ReservationDAO implements IReservationDAO {
 			tx.begin();
 			
 			Query<Reservation> query = pm.newQuery(Reservation.class);
-			query.setFilter("guest.userID == '" + guest.getUserID() + "'"); //TODO check if this is correct
+			query.setFilter("guestId == '" + guest.getUserID() + "'"); //TODO check if this is correct
 			@SuppressWarnings("unchecked")
 			List<Reservation> result = (List<Reservation>) query.execute();
 			tx.commit();
@@ -82,14 +80,12 @@ public class ReservationDAO implements IReservationDAO {
 	}
 
 	@Override
-	public synchronized Reservation createReservation(Reservation reservation, Guest guest, Room room) {
+	public synchronized Reservation createReservation(Reservation reservation) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
 			
 			pm.makePersistent(reservation);
-			reservation.setGuest(guest);
-			
 			Reservation detachedCopy = pm.detachCopy(reservation);
 			
 			tx.commit();

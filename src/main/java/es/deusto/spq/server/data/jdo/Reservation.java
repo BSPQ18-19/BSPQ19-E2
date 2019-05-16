@@ -22,74 +22,28 @@ public class Reservation {
 	@PrimaryKey
 	private String reservationID;
 	/** The guest that has made the reservation. */
-	@Column(name="userID")
-	private Guest guest;
+	@Persistent(defaultFetchGroup="true")
+	private String guestId;
 	/** The list of rooms related to the reservation. */
-	@Column(name="roomId")
-	private Room room;
+	@Persistent(defaultFetchGroup="true")
+	private String roomId;
 	/** The timestamp in which the reservation has been made. */
 	@Persistent(defaultFetchGroup="true")
 	private Timestamp date;
 	
-	public Reservation(String reservationID) {
-		super();
-		this.reservationID = reservationID;
-		this.guest = null;
-		this.room = null;
-		date = Timestamp.valueOf(LocalDateTime.now());
-	}
-	
 	/**Creates a new instance of the Reservation with the given data. The date is also being stored.
 	 * @param reservationID - the ID of the reservation.
-	 * @param guest - the guest that has made the reservation.
-	 * @param rooms - the rooms related to this reservation.
+	 * @param guestId - the guest that has made the reservation.
+	 * @param roomId - the rooms related to this reservation.
 	 */
-	public Reservation(String reservationID, Guest guest, Room room) {
+	public Reservation(String reservationID, String guestId, String roomId) {
 		super();
 		this.reservationID = reservationID;
-		this.guest = guest;
-		this.room = room;
+		this.guestId = guestId;
+		this.roomId = roomId;
 		date = Timestamp.valueOf(LocalDateTime.now());
 	}
 	
-	/**Creates a new instance of the Reservation with the given data. The date is also being stored.
-	 * @param reservationID - the ID of the reservation.
-	 * @param guest - the guest that has made the reservation.
-	 */
-	public Reservation(String reservationID, Guest guest) {
-		super();
-		this.reservationID = reservationID;
-		this.guest = guest;
-		this.room = null;
-		date = Timestamp.valueOf(LocalDateTime.now());
-	}
-	
-	/**Creates a new instance of the Reservation with the given data. The date is also being stored.
-	 * @param reservationID - the ID of the reservation.
-	 * @param rooms - the rooms related to this reservation.
-	 */
-	public Reservation(String reservationID, Room room) {
-		super();
-		this.reservationID = reservationID;
-		this.guest = null;
-		this.room = room;
-		date = Timestamp.valueOf(LocalDateTime.now());
-	}
-	
-	/**Returns the guest that has made the reservation.
-	 * @return the guest.
-	 */
-	public Guest getGuest() {
-		return guest;
-	}
-
-	/**Sets the guest that has made the reservation.
-	 * @param guest - the guest.
-	 */
-	public void setGuest(Guest guest) {
-		this.guest = guest;
-	}
-
 	/**Retrieves the reservation ID.
 	 * @return the ID (String).
 	 */
@@ -97,13 +51,29 @@ public class Reservation {
 		return reservationID;
 	}
 	
-
-	public Room getRoom() {
-		return room;
+	/**Returns the guest's ID that has made the reservation.
+	 * @return the guest's ID.
+	 */
+	public String getGuestId() {
+		return guestId;
 	}
-
-	public void setRoom(Room room) {
-		this.room = room;
+	/**Sets the reservation ID to this DTO object.
+	 * @param id - the new ID.
+	 */
+	public void setGuestId(String guestId) {
+		this.guestId = guestId;
+	}
+	/**Returns the room's ID that has made the reservation.
+	 * @return the room's ID.
+	 */
+	public String getRoomId() {
+		return roomId;
+	}
+	/**Sets the room ID that has make the reservation.
+	 * @param roomId - the new ID.
+	 */
+	public void setRoomId(String roomId) {
+		this.roomId = roomId;
 	}
 
 	/**Returnst the timestamp in which this reservation has been processed.
@@ -124,7 +94,7 @@ public class Reservation {
 	
 	@Override
 	public String toString() {
-		return "Reservation [reservationID=" + reservationID + ", guest=" + guest + ", room=" + room + ", date="
+		return "Reservation [reservationID=" + reservationID + ", guest=" + guestId + ", room=" + roomId + ", date="
 				+ date + "]";
 	}
 

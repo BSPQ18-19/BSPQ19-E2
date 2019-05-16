@@ -22,9 +22,6 @@ public class Room {
 	
 	private Hotel hotel;
 	
-	@Persistent(mappedBy="room")
-	private Reservation reservation;
-	
 	/** Constructor of Room class
 	 * @param roomId Id of the room
 	 * @param size Size in square meters

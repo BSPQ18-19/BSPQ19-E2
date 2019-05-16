@@ -24,7 +24,7 @@ public class ReservationDAOTest {
 	public static void initialize() {
 		id = "RIDTest";
 		guest = new Guest("GIDTest", "name");
-		reservation = new Reservation(id, guest);
+		reservation = new Reservation(id, guest.getUserID(), "R01");
 		dao = new ReservationDAO();
 		dao.createReservation(reservation);
 	}

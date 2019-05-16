@@ -282,16 +282,16 @@ public class AssemblerTest {
 
     @Test
     public void assembleReservationTest() {
-    	Reservation reservation = new Reservation("RID", new ArrayList<Room>());
-    	ReservationDTO expectedAssembling = new ReservationDTO("RID", null);
+    	Reservation reservation = new Reservation("RID", null, null);
+    	ReservationDTO expectedAssembling = new ReservationDTO("RID", null, null);
     	ReservationDTO assemblingResult = assembler.assembleReservation(reservation);
     	Assert.assertEquals(expectedAssembling, assemblingResult);
     }
     
     @Test
     public void disassembleReservationTest() {
-    	ReservationDTO reservation = new ReservationDTO("RID", null);
-    	Reservation expectedDisassembling = new Reservation("RID", new ArrayList<Room>());
+    	ReservationDTO reservation = new ReservationDTO("RID", null, null);
+    	Reservation expectedDisassembling = new Reservation("RID", null, null);
     	Reservation disassemblingResult = assembler.disassembleReservation(reservation);
     	Assert.assertEquals(expectedDisassembling, disassemblingResult);
     }

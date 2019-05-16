@@ -10,9 +10,6 @@ public class Guest extends User {
 	private String phone;
 	@Persistent(defaultFetchGroup = "true")
 	private String address;
-
-	@Persistent(mappedBy="guest")
-	private Reservation reservation;
 	
 	public Guest(String userID, String name, String email, String password, String phone, String address) {
 		super(userID, name, email, password, address);
