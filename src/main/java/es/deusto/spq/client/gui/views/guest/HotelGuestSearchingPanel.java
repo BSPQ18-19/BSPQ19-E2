@@ -154,7 +154,7 @@ public class HotelGuestSearchingPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(hotelsTable.getSelectedRow() != -1) {
-					clientWindowGuest.changeScreen(ScreenTypeGuest.ROOM_PANEL, (String)hotelsTable.getValueAt(hotelsTable.getSelectedRow(), 0));
+					clientWindowGuest.changeScreen(ScreenTypeGuest.ROOM_PANEL, (String)hotelsTable.getValueAt(hotelsTable.getSelectedRow(), 0), calendar.getSelectedDate().toString());
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "There are no rooms available for that hotel", "Error", JOptionPane.ERROR_MESSAGE);

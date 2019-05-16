@@ -79,10 +79,10 @@ public class Assembler {
 	
 	// Reservation
 	public ReservationDTO assembleReservation(Reservation reservation) {
-		return new ReservationDTO(reservation.getReservationID(), reservation.getGuestId(), reservation.getRoomId());
+		return new ReservationDTO(reservation.getReservationID(), reservation.getGuestId(), reservation.getRoomId(), reservation.getFirstDay(), reservation.getLastDay());
 	}
 	
 	public Reservation disassembleReservation(ReservationDTO reservation) {
-		return new Reservation(reservation.getId(), reservation.getGuestId(), reservation.getRoomId());
+		return new Reservation(reservation.getId(), reservation.getGuestId(), reservation.getRoomId(), reservation.getFirstDay(), reservation.getLastDay());
 	}
 }

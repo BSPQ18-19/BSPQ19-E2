@@ -2,6 +2,7 @@ package es.deusto.spq.server.remote;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,6 @@ import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.ReservationDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
-import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.RoomType;
 
 public interface IHotelManager extends Remote {
@@ -149,5 +149,5 @@ public interface IHotelManager extends Remote {
 	 * @return An object of type ReservationDTO
 	 * @throws RemoteException
 	 */
-	public ReservationDTO createReservation(String reservationId, String email, String roomId) throws RemoteException;
+	public ReservationDTO createReservation(String reservationId, String email, String roomId, LocalDate firstDay, LocalDate lastDay) throws RemoteException;
 }

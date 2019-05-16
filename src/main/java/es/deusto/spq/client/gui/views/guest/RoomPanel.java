@@ -7,14 +7,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -62,9 +67,10 @@ public class RoomPanel extends JPanel{
 	 * @param screenHeight Height of the window
 	 * @param clientWindowGuest Reference to ClientWindowGuest class
 	 */
-	public RoomPanel(int screenWidth, int screenHeight, ClientWindowGuest clientWindowGuest, String hotelId) {
+	public RoomPanel(int screenWidth, int screenHeight, ClientWindowGuest clientWindowGuest, String hotelId, String calendarDate) {
 		log = ClientLogger.getLogger();
 			
+		System.out.println(calendarDate);
 		this.setLayout(new BorderLayout());
 						
 		r =  new Random();
@@ -78,15 +84,19 @@ public class RoomPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				if(roomsTable.getSelectedRow() != -1) {
 					RoomDTO roomDTO = clientWindowGuest.getController().retrieveRoomById((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 0));
-					roomDTO.setOccupied(true);
-					clientWindowGuest.getController().updateRoom(roomDTO.getRoomID(), roomDTO.getSize(), roomDTO.getPrice(), roomDTO.getType(), roomDTO.isOccupied());
-					System.out.println("numero: " + Integer.toString(r.nextInt(Integer.MAX_VALUE)) );
-					System.out.println("user: " + clientWindowGuest.getController().getLoggedUser().getUserID());
-					System.out.println("room: " + roomDTO.getRoomID() );
-					clientWindowGuest.getController().createReservation(Integer.toString(r.nextInt(Integer.MAX_VALUE)),
-							clientWindowGuest.getController().getLoggedUser().getUserID(), roomDTO.getRoomID());
-					JOptionPane.showMessageDialog(null, "Room successfully reserved", "Done", JOptionPane.INFORMATION_MESSAGE);
-					clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
+					String daysForRoom = JOptionPane.showInputDialog(new JTextField("", 10), "How many nights?", JOptionPane.QUESTION_MESSAGE);
+					if(!(daysForRoom == "")) {
+						
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
+						LocalDate localDateStart = LocalDate.parse(calendarDate.trim(), formatter);
+						LocalDate localDateEnding = localDateStart.plusDays(Integer.valueOf(daysForRoom));
+						roomDTO.setOccupied(true);
+						clientWindowGuest.getController().updateRoom(roomDTO.getRoomID(), roomDTO.getSize(), roomDTO.getPrice(), roomDTO.getType(), roomDTO.isOccupied());
+						clientWindowGuest.getController().createReservation(Integer.toString(r.nextInt(Integer.MAX_VALUE)),
+								clientWindowGuest.getController().getLoggedUser().getUserID(), roomDTO.getRoomID(), localDateStart, localDateEnding);
+						JOptionPane.showMessageDialog(null, "Room successfully reserved", "Done", JOptionPane.INFORMATION_MESSAGE);
+						clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
+					}
 				}else {
 					JOptionPane.showMessageDialog(null, "Select a room", "Error", JOptionPane.ERROR_MESSAGE);
 				}

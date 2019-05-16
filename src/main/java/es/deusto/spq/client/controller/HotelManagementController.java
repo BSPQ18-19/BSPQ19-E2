@@ -1,6 +1,7 @@
 package es.deusto.spq.client.controller;
 
 import java.rmi.RemoteException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -322,10 +323,10 @@ public class HotelManagementController {
      * @param roomId Id of the room
      * @return
      */
-    public boolean createReservation(String reservationId, String userId, String roomId) {
+    public boolean createReservation(String reservationId, String userId, String roomId, LocalDate firstDay, LocalDate lastDay) {
     	try {
     		log.info("Creating new resevation...");
-			ReservationDTO reservationDTO = rsl.getHotelManager().createReservation(reservationId, userId, roomId);
+			ReservationDTO reservationDTO = rsl.getHotelManager().createReservation(reservationId, userId, roomId, firstDay, lastDay);
 			if(reservationDTO!=null) {
 				log.info("Resevation created successfully!");
 				return true;

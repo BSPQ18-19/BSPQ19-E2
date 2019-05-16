@@ -145,7 +145,6 @@ public class LoginView extends View {
                 else {
                     if(loggedUser.isGuest()) {
                     	getViewManager().openView(ViewFactory.buildView(ViewType.GUEST_HOTELS, getViewManager()));
-                    	getViewManager().openView(ViewFactory.buildView(ViewType.ADMIN_HOTELS, getViewManager()));
                     }
                     
                     else {

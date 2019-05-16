@@ -59,7 +59,7 @@ public class ClientWindowGuest extends JInternalFrame{
 	/** Change the UI of the Guest panel
 	 * @param nextScreenType Type of the next screen that is wanted to be displayed
 	 */
-	public void changeScreen(ScreenTypeGuest nextScreenType, String... hotelId) {
+	public void changeScreen(ScreenTypeGuest nextScreenType, String... strings) {
 		
 		switch(nextScreenType) {
 	
@@ -67,7 +67,7 @@ public class ClientWindowGuest extends JInternalFrame{
 			mainPanel = new HotelGuestSearchingPanel(screenWidth, screenHeight, this);
 			break;
 		case ROOM_PANEL:
-			mainPanel = new RoomPanel(screenWidth, screenHeight, this, hotelId[0]);
+			mainPanel = new RoomPanel(screenWidth, screenHeight, this, strings[0], strings[1]);
 			break;
 		default:
 			break;

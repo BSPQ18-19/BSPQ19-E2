@@ -23,12 +23,12 @@ public class ReservationDTOTest {
 	
 	@Before
 	public void setUp() {
-		reservation = new ReservationDTO(id, guestId, null);
+		reservation = new ReservationDTO(id, guestId, null, null, null);
 	}
 	
 	@Test
 	public void shortConstructorTest() {
-		reservation = new ReservationDTO(id, guestId, null);
+		reservation = new ReservationDTO(id, guestId, null, null, null);
 	}
 	
 	@Test

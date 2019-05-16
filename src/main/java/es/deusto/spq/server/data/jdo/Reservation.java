@@ -2,10 +2,7 @@ package es.deusto.spq.server.data.jdo;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.jdo.annotations.Column;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -30,17 +27,27 @@ public class Reservation {
 	/** The timestamp in which the reservation has been made. */
 	@Persistent(defaultFetchGroup="true")
 	private Timestamp date;
+	/** The timestamp of the first day in the hotel. */
+	@Persistent(defaultFetchGroup="true")
+	private Timestamp firstDay;
+	/** The timestamp of the last day in the hotel. */
+	@Persistent(defaultFetchGroup="true")
+	private Timestamp lastDay;
 	
 	/**Creates a new instance of the Reservation with the given data. The date is also being stored.
 	 * @param reservationID - the ID of the reservation.
 	 * @param guestId - the guest that has made the reservation.
 	 * @param roomId - the rooms related to this reservation.
+	 * @param firstDay the timestamp of the first day in the hotel
+	 * @param lastDay the timestamp of the last day in the hotel
 	 */
-	public Reservation(String reservationID, String guestId, String roomId) {
+	public Reservation(String reservationID, String guestId, String roomId, Timestamp firstDay, Timestamp lastDay ) {
 		super();
 		this.reservationID = reservationID;
 		this.guestId = guestId;
 		this.roomId = roomId;
+		this.firstDay = firstDay;
+		this.lastDay = lastDay;
 		date = Timestamp.valueOf(LocalDateTime.now());
 	}
 	
@@ -82,7 +89,31 @@ public class Reservation {
 	public Timestamp getDate() {
 		return date;
 	}
-	
+	/** Returns the timestamp of the first day in the hotel
+	 * @return firstDay the timestamp of the first day in the hotel
+	 */
+	public Timestamp getFirstDay() {
+		return firstDay;
+	}
+	/** Sets the timestamp of the first day in the hotel
+	 * @param firstDay
+	 */
+	public void setFirstDay(Timestamp firstDay) {
+		this.firstDay = firstDay;
+	}
+	/** Returns the timestamp of the last day in the hotel
+	 * @return lastDay the timestamp of the last day in the hotel 
+	 */
+	public Timestamp getLastDay() {
+		return lastDay;
+	}
+	/** Sets the timestamp of the last day in the hotel
+	 * @param lastDay the timestamp of the last day in the hotel
+	 */
+	public void setLastDay(Timestamp lastDay) {
+		this.lastDay = lastDay;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if(o instanceof Reservation) {

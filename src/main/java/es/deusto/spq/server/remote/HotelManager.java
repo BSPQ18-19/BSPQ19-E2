@@ -358,11 +358,12 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
-	public ReservationDTO createReservation(String reservationId, String userId, String roomId)
+	public ReservationDTO createReservation(String reservationId, String userId, String roomId, LocalDate firstDay, LocalDate lastDay)
 			throws RemoteException {
 		Assembler reservationAssembler = new Assembler();
 		
-		Reservation reservation = new Reservation(reservationId, userId, roomId);
+		Reservation reservation = new Reservation(reservationId, userId, roomId,
+				Timestamp.valueOf(firstDay.atStartOfDay()), Timestamp.valueOf(lastDay.atStartOfDay()));
 		reservationDao.createReservation(reservation);
 		return reservationAssembler.assembleReservation(reservation);
 	}

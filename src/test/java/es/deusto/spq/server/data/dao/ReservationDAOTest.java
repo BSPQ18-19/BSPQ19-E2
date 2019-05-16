@@ -2,6 +2,8 @@ package es.deusto.spq.server.data.dao;
 
 import static org.junit.Assert.fail;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -24,7 +26,7 @@ public class ReservationDAOTest {
 	public static void initialize() {
 		id = "RIDTest";
 		guest = new Guest("GIDTest", "name");
-		reservation = new Reservation(id, guest.getUserID(), "R01");
+		reservation = new Reservation(id, guest.getUserID(), "R01", Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
 		dao = new ReservationDAO();
 		dao.createReservation(reservation);
 	}
