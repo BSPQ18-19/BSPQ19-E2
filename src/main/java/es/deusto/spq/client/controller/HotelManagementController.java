@@ -4,9 +4,6 @@ import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -36,7 +33,6 @@ public class HotelManagementController {
 	 * The total current rooms of the database
 	 */
 	private ArrayList<RoomDTO> currentRooms;
-	private Map<Integer, String> reservationIds = new TreeMap<Integer, String>();
 	
 	private HotelManagementController() {
 		rsl = RMIServiceLocator.getServiceLocator();
@@ -377,38 +373,4 @@ public class HotelManagementController {
 	public UserDTO getLoggedUser() {
 		return loggedUser;
 	}
-	
-	/** Generates a random ID for the reservations
-	 * @return Random ID of the reservation
-	 */
-	public String randInt() {
-		Random random = new Random();
-		Integer randomNum = 0;
-		boolean end = true;
-		while(end) {
-			randomNum =  random.nextInt();
-			if(reservationIds.containsKey(randomNum)) {
-				reservationIds.put(randomNum, "RES" + randomNum);
-				end = false;
-			}
-		}
-		
-		return reservationIds.get(randomNum);
-	}
-
-	/** Get the reservations Id
-	 * @return Map of reservationsIds
-	 */
-	public Map<Integer, String> getReservationIds() {
-		return reservationIds;
-	}
-
-	/**
-	 * Clear the list of the current hotels
-	 */
-	public void setReservationIds() {
-		this.reservationIds.clear();
-	}
-	
-
 }

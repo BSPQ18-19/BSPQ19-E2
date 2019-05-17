@@ -1,8 +1,5 @@
 package es.deusto.spq.server.data.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
@@ -16,7 +13,10 @@ public class Assembler {
 
 	public Assembler() {}
 	
-	// Hotel
+	/** Converts from Hotel to HotelDTO
+	 * @param hotel the hotel we want to assemble
+	 * @return HotelDTO object
+	 */
 	public HotelDTO assembleHotel(Hotel hotel) {
 		if (hotel == null)
 			return null;
@@ -26,18 +26,29 @@ public class Assembler {
 		return hotelDTO;
 	}
 
+	/** Converts from HotelDTO to Hotel
+	 * @param hotel the hotel we want to disassemble
+	 * @return Hotel object
+	 */
 	public Hotel disassembleHotel(HotelDTO hotel) {
 		return new Hotel(hotel.getHotelId(), hotel.getName(), hotel.getLocation(), hotel.getSeasonStart(),
 				hotel.getSeasonEnding());
 	}
 
-	// Room
+	/** Converts from Room to RoomDTO
+	 * @param room the room we want to assemble
+	 * @return Room object
+	 */
 	public RoomDTO assembleRoom(Room room) {
 		if(room == null)
 			return null;
 		return new RoomDTO(room.getRoomId(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied());
 	}
 	
+	/** Converts from RoomDTO to Room
+	 * @param room the room we want to disassemble
+	 * @return RoomDTO object
+	 */
 	public Room disassembleRoom(RoomDTO room) {
 		return new Room(room.getRoomID(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied());
 	}

@@ -65,6 +65,15 @@ public interface IHotelManager extends Remote {
 	 */
 	public boolean cleanHotelsDB() throws RemoteException;
 	
+	/** Updates the hotel attributes in the database
+	 * @param id Id of the hotel
+	 * @param name Name of the hotel
+	 * @param location Location of the hotel
+	 * @param seasonStart Date when the hotel starts being available
+	 * @param seasonEnd Date when the hotel ends being available
+	 * @return An object of type HotelDTO
+	 * @throws RemoteException
+	 */
 	public HotelDTO updateHotel(String id, String name, String location, String seasonStart,
 			String seasonEnd) throws RemoteException;
 	

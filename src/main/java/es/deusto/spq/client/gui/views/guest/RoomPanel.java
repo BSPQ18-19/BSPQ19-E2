@@ -60,6 +60,9 @@ public class RoomPanel extends JPanel{
 	 */
 	private Logger log;
 	
+	/**
+	 * Random object
+	 */
 	private Random r;
 	
 	/** Constructor of the class RoomPanel

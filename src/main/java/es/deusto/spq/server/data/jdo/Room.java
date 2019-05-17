@@ -3,7 +3,6 @@ package es.deusto.spq.server.data.jdo;
 import java.util.Objects;
 
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 /** Room class
