@@ -103,7 +103,8 @@ public class RoomPanel extends JPanel{
 		upperButtons.setBackground(Color.LIGHT_GRAY);
 		upperButtons.add(confirm);
 		upperButtons.add(back);
-		
+		upperButtons.add(seeReviews);
+
 		
 		roomsTable = new JTable();
 		tableModel = (DefaultTableModel) roomsTable.getModel();
