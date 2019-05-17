@@ -14,7 +14,7 @@ public class CreditCard {
 	private long number;
 	/** The security code of the credit card. */
 	private int securityCode;
-	/** The total debt of this credit card, in absolute value (always >= 0). */
+	/** The total debt of this credit card, in absolute value (always more or equals to 0). */
 	private float totalDebt = 0;
 	
 	/**

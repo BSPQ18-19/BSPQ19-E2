@@ -36,7 +36,7 @@ public class ReservationDAO implements IReservationDAO {
 
 	@Override
 	public Reservation getReservationbyID(String ID) {
-		Reservation tmpReservation = new Reservation(ID, null, null);
+		Reservation tmpReservation = new Reservation(ID, null, null, null, null);
 		if(!filter.contains(tmpReservation))
 			return null;
 		
@@ -69,7 +69,7 @@ public class ReservationDAO implements IReservationDAO {
 			tx.begin();
 			
 			Query<Reservation> query = pm.newQuery(Reservation.class);
-			query.setFilter("guest.userID == '" + guest.getUserID() + "'"); //TODO check if this is correct
+			query.setFilter("guestId == '" + guest.getUserID() + "'"); //TODO check if this is correct
 			@SuppressWarnings("unchecked")
 			List<Reservation> result = (List<Reservation>) query.execute();
 			tx.commit();
@@ -111,7 +111,7 @@ public class ReservationDAO implements IReservationDAO {
 	
 	@Override
 	public synchronized boolean deleteReservationByID(String ID) {
-		Reservation tmpReservation = new Reservation(ID, null, null);
+		Reservation tmpReservation = new Reservation(ID, null, null, null, null);
 		if(!filter.contains(tmpReservation))
 			return false;
 

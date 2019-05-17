@@ -14,7 +14,7 @@ import javax.jdo.annotations.PrimaryKey;
  *
  */
 @PersistenceCapable(detachable = "true")
-public class Hotel implements Serializable {
+public class Hotel implements Serializable{
 
 	@PrimaryKey
 	private String hotelId;
