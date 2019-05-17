@@ -77,6 +77,12 @@ public class ShowHotelReviewView extends View {
 	        return frame;
 	    }
 
+	    @Override
+	    public void bringToFront() {
+	        ClientLogger.getLogger()
+	                .warn(getClass().getName() + " bringToFront method not implemented or calling super!");
+	    }
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -89,7 +95,7 @@ public class ShowHotelReviewView extends View {
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 87, 453, 163);
 		frame.getContentPane().add(scrollPane);
-		
+
 		editorPane = new JEditorPane();
 		scrollPane.setViewportView(editorPane);
 		
@@ -103,10 +109,12 @@ public class ShowHotelReviewView extends View {
 		frame.getContentPane().add(lblAverageScore);
 
 		reviewsList = new ArrayList<ReviewDTO>();
+
 		//TODO Add the actual hotelID
 		reviewsList = controller.retrieveReviews("");
 		averageScore = 0;
-		if(reviewsList.isEmpty() || reviewsList == null) {
+
+		if(reviewsList == null || reviewsList.isEmpty()) {
 			editorPane.setText("\n\n"+getViewManager().getClient().getLocaleManager().getMessage("showReviews.noReviews"));
 		}else if(reviewsList.size() == 1) {
 			editorPane.setText(reviewsList.get(0).getScore()+"-"+reviewsList.get(0).getOpinion());
@@ -126,6 +134,7 @@ public class ShowHotelReviewView extends View {
 			averageScore = averageScore/reviewsList.size();
 		}
 		lblAverageScore.setText(getViewManager().getClient().getLocaleManager().getMessage("showReviews.averageScore")+averageScore);
+		frame.setVisible(true);
 	}
 	
 	@Override
