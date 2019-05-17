@@ -64,7 +64,7 @@ public class ShowHotelReviewView extends View {
 
 	    @Override
 	    public ViewType getViewType() {
-	        return ViewType.LOGIN;
+	        return ViewType.SHOW_REVIEWS;
 	    }
 
 	    @Override

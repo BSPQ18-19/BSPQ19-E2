@@ -6,6 +6,7 @@ import es.deusto.spq.client.gui.views.auth.LoginView;
 import es.deusto.spq.client.gui.views.auth.RegisterAdminView;
 import es.deusto.spq.client.gui.views.auth.RegisterView;
 import es.deusto.spq.client.gui.views.guest.HotelGuestView;
+import es.deusto.spq.client.gui.views.reviews.ShowHotelReviewView;
 
 /**
  * Factory for View
@@ -47,6 +48,9 @@ public class ViewFactory {
             case REGISTER_ADMINISTRATOR:
             	view = new RegisterAdminView(viewManager);
             	break;
+
+            case SHOW_REVIEWS:
+            	view = new ShowHotelReviewView(viewManager);
         }
         return view;
 

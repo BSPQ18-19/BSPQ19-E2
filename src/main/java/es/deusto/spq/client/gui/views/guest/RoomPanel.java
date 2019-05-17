@@ -24,6 +24,8 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.gui.base.ViewFactory;
+import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.HotelDTO;
@@ -41,7 +43,7 @@ public class RoomPanel extends JPanel{
 	private DefaultTableModel tableModel;
 	private JTable roomsTable;
 	private JScrollPane tableScrollPane;
-	private JButton	confirm, back;
+	private JButton	confirm, back, seeReviews;
 	private JPanel upperButtons;
 	private int screenWidth, screenHeight;
 	private Logger log;
@@ -86,7 +88,17 @@ public class RoomPanel extends JPanel{
 				clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
 			}
 		});
-		
+
+		seeReviews = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("roomPanel.viewReviews"));
+		seeReviews.setSize(100,30);
+		seeReviews.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clientWindowGuest.getGuestView().getViewManager().openView(ViewFactory.buildView(ViewType.SHOW_REVIEWS, clientWindowGuest.getGuestView().getViewManager()));
+			}
+		});
+
 		upperButtons = new JPanel();
 		upperButtons.setBackground(Color.LIGHT_GRAY);
 		upperButtons.add(confirm);
