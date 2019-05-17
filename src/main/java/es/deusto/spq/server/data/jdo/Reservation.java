@@ -66,7 +66,7 @@ public class Reservation implements Serializable {
 		return guestId;
 	}
 	/**Sets the reservation ID to this DTO object.
-	 * @param id - the new ID.
+	 * @param guestId - the new ID.
 	 */
 	public void setGuestId(String guestId) {
 		this.guestId = guestId;
@@ -97,7 +97,7 @@ public class Reservation implements Serializable {
 		return firstDay;
 	}
 	/** Sets the timestamp of the first day in the hotel
-	 * @param firstDay
+	 * @param firstDay the timestamp of the first day in the hotel
 	 */
 	public void setFirstDay(Timestamp firstDay) {
 		this.firstDay = firstDay;

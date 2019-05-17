@@ -11,6 +11,7 @@ public interface IUserDAO {
 
 	/**
 	 * Retrieves all the users in the data base.
+	 * @param authorization UserDTO object
 	 * @return a list of all the users.
 	 */
 	public List<UserDTO> getUsers(UserDTO authorization);
@@ -24,7 +25,7 @@ public interface IUserDAO {
 	/**
 	 * Stores the new user into the database. Note that User is an abstract class, so the 
 	 * argument must an instance of it to store properly. If not, exceptions may arise.
-	 * @param either a Guest or an Administrator, to be stores in the database.
+	 * @param user either a Guest or an Administrator, to be stores in the database.
 	 * @return a detached copy of the new user, and null if an error has arisen.
 	 */
 	public UserDTO createUser(User user);

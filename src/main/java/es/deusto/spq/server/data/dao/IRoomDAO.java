@@ -12,6 +12,7 @@ public interface IRoomDAO {
 	public List<Room> getRooms(); 
 	/** Insert/update a room
 	 * @param room Room object
+	 * @return Room object
 	 */
 	public Room updateRoom(Room room);
 	/** Delete a room with the requested room id

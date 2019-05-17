@@ -106,7 +106,7 @@ public class LocaleManager {
     }
 
     /** Get the ResourceBundle for the specified Locale
-     * @param locale
+     * @param locale Locale object
      * @return the ResourceBundle associated to the specified locale
      */
     private ResourceBundle getResourceBundle(Locale locale) {

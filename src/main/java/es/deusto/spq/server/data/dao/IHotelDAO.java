@@ -12,14 +12,14 @@ public interface IHotelDAO {
 	/**
 	 * Stores a hotel in to the DB
 	 * @param hotel the hotel you want to store
-	 * @return
+	 * @return Hotel object
 	 */
 	public Hotel storeHotel(Hotel hotel);
 
 	/**
 	 * Gets Hotel by ID from the DB
 	 * @param hotelID the ID from the hotel we want to search
-	 * @return
+	 * @return Hotel object
 	 */
 	public Hotel getHotel(String hotelID);
 
@@ -37,7 +37,7 @@ public interface IHotelDAO {
 
 	/**
 	 * Deletes a hotel by ID
-	 * @param hotelID
+	 * @param hotelID id of the hotel
 	 * @return true if its been deleted, false if not
 	 */
 	public boolean deleteHotel(String hotelID);
@@ -47,5 +47,9 @@ public interface IHotelDAO {
 	 */
 	public void cleanHotelsDB();
 	
+	/** Updates a hotel
+	 * @param hotel Hotel object
+	 * @return Hotel object
+	 */
 	public Hotel updateHotel(Hotel hotel);
 }

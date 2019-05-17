@@ -24,6 +24,7 @@ public class ReservationDTO implements Serializable{
 	/**Creates a new instance of the ReservationDTO with the given data.
 	 * @param id - the ID of the reservation.
 	 * @param guestId - the ID of the guest that has made the reservation.
+	 * @param roomId id of the room
 	 * @param firstDay the timestamp of the first day in the hotel
 	 * @param lastDay  the timestamp of the last day in the hotel
 	 */
@@ -86,7 +87,7 @@ public class ReservationDTO implements Serializable{
 	}
 
 	/** Sets the timestamp of the first day in the hotel
-	 * @param firstDay
+	 * @param firstDay the timestamp of the first day in the hotel
 	 */
 	public void setFirstDay(Timestamp firstDay) {
 		this.firstDay = firstDay;
