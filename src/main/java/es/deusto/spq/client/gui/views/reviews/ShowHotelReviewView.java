@@ -27,6 +27,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,8 +85,16 @@ public class ShowHotelReviewView extends View {
 
 	    @Override
 	    public void bringToFront() {
-	        ClientLogger.getLogger()
-	                .warn(getClass().getName() + " bringToFront method not implemented or calling super!");
+	        getInternalFrame().toFront();
+	    }
+
+	    @Override
+		public void dispose() {
+	        try {
+	            getInternalFrame().dispose();
+	        } catch (NullPointerException e) {
+	            e.printStackTrace();
+	        }
 	    }
 
 	/**
@@ -94,9 +103,10 @@ public class ShowHotelReviewView extends View {
 	public void initialize() {
 		frame = new JInternalFrame();
 		frame.setBounds(100, 100, 492, 312);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setClosable(true);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 87, 453, 163);
 		frame.getContentPane().add(scrollPane);
@@ -109,10 +119,6 @@ public class ShowHotelReviewView extends View {
 		lblTittle.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblTittle.setBounds(191, 11, 85, 25);
 		frame.getContentPane().add(lblTittle);
-		
-		lblAverageScore = new JLabel();
-		lblAverageScore.setBounds(191, 47, 108, 14);
-		frame.getContentPane().add(lblAverageScore);
 
 		reviewsList = new ArrayList<ReviewDTO>();
 
@@ -135,6 +141,7 @@ public class ShowHotelReviewView extends View {
 
 			opinion = reviewsList.get(0).getScore() +"-"+reviewsList.get(0).getOpinion();
 			averageScore = reviewsList.get(0).getScore();
+
 			//Gets all the reviews and display them on the EditorPane
 			for(int n = 1; n < reviewsList.size(); n++) {
 				averageScore += reviewsList.get(n).getScore();
@@ -148,7 +155,7 @@ public class ShowHotelReviewView extends View {
 
 		//Displays the Average Score
 		lblAverageScore = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("showReviews.averageScore")+" "+averageScore, JLabel.TRAILING);
-		lblAverageScore.setBounds(191, 47, 108, 14);
+		lblAverageScore.setBounds(191, 47, 85, 25);
 		frame.getContentPane().add(lblAverageScore);
 		frame.setVisible(true);
 	}
