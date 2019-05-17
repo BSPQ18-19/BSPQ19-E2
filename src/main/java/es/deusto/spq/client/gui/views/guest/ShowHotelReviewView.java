@@ -3,14 +3,9 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JTextArea;
-import java.awt.BorderLayout;
-import javax.swing.JSpinner;
-import javax.swing.JList;
-import javax.swing.JScrollBar;
+
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
+
 
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -21,19 +16,19 @@ import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewPermission;
 import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.logger.ClientLogger;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import java.awt.Font;
-import java.awt.List;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -43,6 +38,8 @@ public class ShowHotelReviewView extends View {
 	private JInternalFrame frame;
     private Logger log;
     private HotelManagementController controller;
+    private List<ReviewDTO> reviewsList;
+    
 
 	/**
 	 * Create the application.
