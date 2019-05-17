@@ -62,7 +62,8 @@ public class EditUserView extends View {
 
 	@Override
 	public ViewPermission getViewPermission() {
-		return ViewPermission.LOGGED_IN_GUEST;
+		// TODO change for LOGGED_IN_GUEST when permisions working
+		return ViewPermission.NONE;
 	}
 
 	@Override
