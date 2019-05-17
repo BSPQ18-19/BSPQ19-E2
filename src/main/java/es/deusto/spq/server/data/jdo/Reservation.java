@@ -1,5 +1,6 @@
 package es.deusto.spq.server.data.jdo;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -12,7 +13,7 @@ import javax.jdo.annotations.PrimaryKey;
  *
  */
 @PersistenceCapable(detachable="true")
-public class Reservation {
+public class Reservation implements Serializable {
 
 	/** The ID of the reservation. */
 	@Persistent(defaultFetchGroup="true")
@@ -127,6 +128,11 @@ public class Reservation {
 	public String toString() {
 		return "Reservation [reservationID=" + reservationID + ", guest=" + guestId + ", room=" + roomId + ", date="
 				+ date + "]";
+	}
+	
+	@Override
+	public int hashCode() {
+		return reservationID.hashCode();
 	}
 
 }

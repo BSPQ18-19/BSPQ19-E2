@@ -99,7 +99,6 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 
 	private Random r;
 	private String generateRandomId() {
-		System.out.println(Integer.toString(r.nextInt(Integer.MAX_VALUE)));
 		return Integer.toString(r.nextInt(Integer.MAX_VALUE));
 	}
 	

@@ -73,7 +73,6 @@ public class RoomPanel extends JPanel{
 	public RoomPanel(int screenWidth, int screenHeight, ClientWindowGuest clientWindowGuest, String hotelId, String calendarDate) {
 		log = ClientLogger.getLogger();
 			
-		System.out.println(calendarDate);
 		this.setLayout(new BorderLayout());
 						
 		r =  new Random();

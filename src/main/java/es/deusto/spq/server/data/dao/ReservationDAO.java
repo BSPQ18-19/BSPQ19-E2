@@ -9,6 +9,7 @@ import javax.jdo.Transaction;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
+import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Reservation;
 import es.deusto.spq.server.logger.ServerLogger;
@@ -21,7 +22,8 @@ public class ReservationDAO implements IReservationDAO {
 	private Transaction tx;
 	/** The log to log to. */
 	private Logger log;
-	
+	/** The Bloom filter. */
+	private SimpleBloomFilter<Reservation> filter;
 	/**Creates a new instance of the ReservationDAO.
 	 * Initializes the persistence manager and the logger, retrieving from the 
 	 * managers in the server.
@@ -29,10 +31,15 @@ public class ReservationDAO implements IReservationDAO {
 	public ReservationDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
 		log = ServerLogger.getLogger();
+		filter = new SimpleBloomFilter<Reservation>();
 	}
 
 	@Override
 	public Reservation getReservationbyID(String ID) {
+		Reservation tmpReservation = new Reservation(ID, null, null, null, null);
+		if(!filter.contains(tmpReservation))
+			return null;
+		
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -87,7 +94,7 @@ public class ReservationDAO implements IReservationDAO {
 			
 			pm.makePersistent(reservation);
 			Reservation detachedCopy = pm.detachCopy(reservation);
-			
+			filter.add(detachedCopy);
 			tx.commit();
 			
 			log.info("Created reservation with ID: " + reservation.getReservationID());
@@ -104,6 +111,10 @@ public class ReservationDAO implements IReservationDAO {
 	
 	@Override
 	public synchronized boolean deleteReservationByID(String ID) {
+		Reservation tmpReservation = new Reservation(ID, null, null, null, null);
+		if(!filter.contains(tmpReservation))
+			return false;
+
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();

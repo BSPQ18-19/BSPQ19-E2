@@ -10,6 +10,7 @@ import javax.jdo.Transaction;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
+import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Administrator;
@@ -24,10 +25,13 @@ public class UserDAO implements IDAO, IUserDAO {
 	private Transaction tx;
 	private Assembler assembler;
 	private Logger log;
+	private SimpleBloomFilter<User> filter;
 	
 	public UserDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
 		assembler = new Assembler();
+		log = ServerLogger.getLogger();
+		filter = new SimpleBloomFilter<User>();
 	}
 
 	@Override
@@ -70,6 +74,12 @@ public class UserDAO implements IDAO, IUserDAO {
 	public UserDTO getUserbyID(UserDTO authorization, String ID) {
 		if (!checkAuthorizationIsAdmin(authorization))
 			return null;
+		
+		//Check if there's a user with such ID
+		User tmpUser = new Guest(ID, null);
+		if(!filter.contains(tmpUser))
+			return null;
+		
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -114,7 +124,9 @@ public class UserDAO implements IDAO, IUserDAO {
 				pm.makePersistent(administrator);
 				result = pm.detachCopy(administrator);
 			}
-
+			//Add the new user to the filter
+			filter.add(result);
+			
 			tx.commit();
 
 			return assembler.assembleUser(result);
@@ -134,6 +146,12 @@ public class UserDAO implements IDAO, IUserDAO {
 	public boolean deleteUserbyID(UserDTO authorization, String ID) {
 		if (!checkAuthorizationIsAdmin(authorization))
 			return false;
+		
+		//Check if there's a user with such ID
+		User user = new Guest(ID, null);
+		if(!filter.contains(user))
+			return false;
+
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();

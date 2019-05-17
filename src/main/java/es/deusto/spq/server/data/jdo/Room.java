@@ -1,5 +1,6 @@
 package es.deusto.spq.server.data.jdo;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -9,8 +10,8 @@ import javax.jdo.annotations.PrimaryKey;
  * @author gonzalo
  *
  */
-@PersistenceCapable
-public class Room {
+@PersistenceCapable(detachable = "true")
+public class Room implements Serializable {
 	
 	@PrimaryKey
 	private String roomId;

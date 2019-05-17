@@ -8,6 +8,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 import es.deusto.spq.server.data.MyPersistenceManager;
+import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -15,10 +16,12 @@ public class RoomDAO implements IRoomDAO {
 	
 	private PersistenceManager pm;
 	private Transaction tx;
+	private SimpleBloomFilter<Room> filter;
 
 	public RoomDAO(){
 		pm = MyPersistenceManager.getPersistenceManager();
-	}
+		filter = new SimpleBloomFilter<Room>();
+	}	
 
 	@Override
 	public List<Room> getRooms() {
@@ -61,6 +64,7 @@ public class RoomDAO implements IRoomDAO {
 			@SuppressWarnings("unchecked")
 			List<Room> result = (List<Room>) query.execute();
 			result.get(0).setOccupied(true);
+			filter.add(room);
 			tx.commit();
 			
 			return result.get(0);
@@ -75,6 +79,10 @@ public class RoomDAO implements IRoomDAO {
 	
 	@Override
 	public boolean deleteRoom(String roomID) {
+		Room tmpRoom = new Room(roomID, 0, 0, null, true);
+		if(!filter.contains(tmpRoom))
+			return false;
+		
 		tx = pm.currentTransaction();
 		try {
 			tx.begin();
