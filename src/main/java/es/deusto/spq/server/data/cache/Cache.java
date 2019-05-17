@@ -47,6 +47,8 @@ public class Cache<K, V> {
 	 * @param value The value to map to.
 	 */
 	public void set(K key, V value) {
+		if(key == null || value == null)
+			return;
 		if(map.containsKey(key)) {
 			map.get(key).setValue(value);
 		} else {
@@ -72,12 +74,48 @@ public class Cache<K, V> {
 	 * @return {@code null} if the key does not exist, and the value if it does.
 	 */
 	public V get(K key) {
-		if(map.containsKey(key)) {
+		if(key != null && map.containsKey(key)) {
 			Node<K, V> resultNode = map.get(key);
 			moveFront(resultNode);
 			return (V) resultNode.getValue();
 		}
 		return null;
+	}
+	
+	/**Returns whether the given key is currently in the cache.
+	 * @param key The key to be checked.
+	 * @return {@code true} if the key is in the cache.
+	 * 			{@code false} if not.
+	 */
+	public boolean contains(K key) {
+		if(key != null && map.containsKey(key))
+			return true;
+		return false;
+	}
+	
+	/**Removes the key from the cache.
+	 * @param key The key to be removed.
+	 */
+	public void remove(K key) {
+		if(key == null || !map.containsKey(key))
+			return;
+		Node<K, V> node = map.get(key);
+		if(node == tail)//Node at the tail
+			removeLastNode();
+		else if(node == head) {//Node at the head
+			head.next.previous = null;
+			head = node.next;
+			node.next = null;
+			map.remove(key);
+			currentNumberElements--;
+		} else {//Node somewhere else
+			node.previous.next = node.next;
+			node.next.previous = node.previous;
+			node.next = null;
+			node.previous = null;
+			map.remove(key);
+			currentNumberElements--;
+		}
 	}
 	
 	/**Moves the given node to the front of the list, setting it as the most recently used value.
