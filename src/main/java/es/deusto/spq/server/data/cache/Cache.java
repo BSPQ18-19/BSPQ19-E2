@@ -142,13 +142,13 @@ public class Cache<K, V> {
 	
 	/**Removes the last node (least frequently used value) from the list. */
 	private void removeLastNode() {
+		map.remove(tail.getKey());
+		currentNumberElements--;
 		if(tail.previous == null)
 			return;
-		map.remove(tail.getKey());
 		tail = tail.previous;
 		tail.next.previous = null;
 		tail.next = null;
-		currentNumberElements--;
 	}
 	
 	/**Returns the maximum number of elements allowed in the cache.
@@ -165,8 +165,7 @@ public class Cache<K, V> {
 		return currentNumberElements;
 	}
 	
-	/**Clears the cache.
-	 */
+	/**Clears the cache. */
 	public void clear() {
 		map.clear();
 		head = null;
