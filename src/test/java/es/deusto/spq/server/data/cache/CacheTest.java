@@ -37,8 +37,19 @@ public class CacheTest {
 	@Test
 	public void getSetTest() {
 		cache.set(key1, value1);
+		cache.set(key1, value1);
+		cache.set(null, null);
 		Assert.assertEquals(value1, cache.get(key1));
 		Assert.assertEquals(null, cache.get(key2));
+		cache.clear();
+		
+		//Get a middle node to force the cache move it to the front
+		//Need to add at least 3 slots in order to have one in the middle
+		cache = new Cache<Integer, Integer>(3);
+		cache.set(key1, value1);
+		cache.set(key2, value2);
+		cache.set(key3, value3);
+		Assert.assertEquals(value2, cache.get(key2));
 	}
 	
 	@Test
@@ -61,10 +72,30 @@ public class CacheTest {
 	}
 
 	@Test
-	public void removeTest() {
+	public void removeTailTest() {
+		cache.remove(null);
 		cache.set(key1, value1);
 		cache.remove(key1);
 		Assert.assertFalse(cache.contains(key1));
+	}
+	
+	@Test
+	public void removeHeadTest() {
+		cache.set(key1, value1);
+		cache.set(key2, value2);
+		cache.remove(key2);
+		Assert.assertFalse(cache.contains(key2));
+	}
+	
+	@Test
+	public void removeBetweenNodesTest() {
+		//Need to add at least 3 slots in order to have one in the middle
+		cache = new Cache<Integer, Integer>(3);
+		cache.set(key1, value1);
+		cache.set(key2, value2);
+		cache.set(key3, value3);
+		cache.remove(key2);
+		Assert.assertFalse(cache.contains(key2));
 	}
 	
 	@Test
@@ -81,5 +112,12 @@ public class CacheTest {
 		Assert.assertEquals(2, cache.getCurrentNumberOfElements());
 		cache.set(key3, value3);
 		Assert.assertEquals(2, cache.getCurrentNumberOfElements());
+	}
+	
+	@Test
+	public void toStringTest() {
+		cache.toString();
+		cache.set(key1, value1);
+		cache.toString();
 	}
 }
