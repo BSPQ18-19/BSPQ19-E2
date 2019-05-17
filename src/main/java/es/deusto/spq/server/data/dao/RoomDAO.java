@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.MyPersistenceManager;
+import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.logger.ServerLogger;
@@ -21,10 +22,12 @@ public class RoomDAO implements IRoomDAO {
 	private PersistenceManager pm;
 	private Transaction tx;
 	private Logger log;
+	private SimpleBloomFilter<Room> filter;
 
 	public RoomDAO(){
 		log = ClientLogger.getLogger();
 		pm = MyPersistenceManager.getPersistenceManager();
+		filter = new SimpleBloomFilter<Room>();
 	}	
 	
 	/** Store an object into the DB
@@ -37,6 +40,7 @@ public class RoomDAO implements IRoomDAO {
 	       tx.begin();
 	       
 	       pm.makePersistent(object);
+	       filter.add((Room) object);
 	       tx.commit();
 
 	    } catch (Exception ex) {
@@ -80,11 +84,14 @@ public class RoomDAO implements IRoomDAO {
 	@Override
 	public void updateRoom(Room room) {
 		storeObject(room);
-		
 	}
 
 	@Override
 	public boolean deleteRoom(String roomID) {
+		Room tmpRoom = new Room(roomID, 0, 0, null, true);
+		if(!filter.contains(tmpRoom))
+			return false;
+		
 		tx = pm.currentTransaction();
 		try {
 			tx.begin();
