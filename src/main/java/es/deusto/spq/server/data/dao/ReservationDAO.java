@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
+import es.deusto.spq.server.data.cache.Cache;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Reservation;
 import es.deusto.spq.server.logger.ServerLogger;
@@ -24,6 +25,9 @@ public class ReservationDAO implements IReservationDAO {
 	private Logger log;
 	/** The Bloom filter. */
 	private SimpleBloomFilter<Reservation> filter;
+	/** The cache of reservations. */
+	private Cache<String, Reservation> cache;
+	
 	/**Creates a new instance of the ReservationDAO.
 	 * Initializes the persistence manager and the logger, retrieving from the 
 	 * managers in the server.
@@ -32,6 +36,7 @@ public class ReservationDAO implements IReservationDAO {
 		pm = MyPersistenceManager.getPersistenceManager();
 		log = ServerLogger.getLogger();
 		filter = new SimpleBloomFilter<Reservation>();
+		cache = new Cache<String, Reservation>(10);
 	}
 
 	@Override
@@ -39,6 +44,8 @@ public class ReservationDAO implements IReservationDAO {
 		Reservation tmpReservation = new Reservation(ID, null, null);
 		if(!filter.contains(tmpReservation))
 			return null;
+		if(cache.contains(ID))
+			return cache.get(ID);
 		
 		try {
 			tx = pm.currentTransaction();
@@ -95,6 +102,7 @@ public class ReservationDAO implements IReservationDAO {
 			pm.makePersistent(reservation);
 			Reservation detachedCopy = pm.detachCopy(reservation);
 			filter.add(detachedCopy);
+			cache.set(reservation.getReservationID(), reservation);
 			tx.commit();
 			
 			log.info("Created reservation with ID: " + reservation.getReservationID());
@@ -114,6 +122,7 @@ public class ReservationDAO implements IReservationDAO {
 		Reservation tmpReservation = new Reservation(ID, null, null);
 		if(!filter.contains(tmpReservation))
 			return false;
+		cache.remove(ID);
 
 		try {
 			tx = pm.currentTransaction();

@@ -93,7 +93,7 @@ public class Cache<K, V> {
 		return false;
 	}
 	
-	/**Removes the key from the cache.
+	/**Removes the key and value related to the given key from the cache.
 	 * @param key The key to be removed.
 	 */
 	public void remove(K key) {

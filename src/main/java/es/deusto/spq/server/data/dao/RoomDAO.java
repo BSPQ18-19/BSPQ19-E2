@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
-import es.deusto.spq.server.data.jdo.Hotel;
+import es.deusto.spq.server.data.cache.Cache;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -23,11 +23,14 @@ public class RoomDAO implements IRoomDAO {
 	private Transaction tx;
 	private Logger log;
 	private SimpleBloomFilter<Room> filter;
+	/** The cache of the rooms. */
+	private Cache<String, Room> cache;
 
 	public RoomDAO(){
 		log = ClientLogger.getLogger();
 		pm = MyPersistenceManager.getPersistenceManager();
 		filter = new SimpleBloomFilter<Room>();
+		cache = new Cache<String, Room>(10);
 	}	
 	
 	/** Store an object into the DB
@@ -40,7 +43,9 @@ public class RoomDAO implements IRoomDAO {
 	       tx.begin();
 	       
 	       pm.makePersistent(object);
-	       filter.add((Room) object);
+	       Room room = (Room) object;
+	       filter.add(room);
+	       cache.set(room.getRoomId(), room);
 	       tx.commit();
 
 	    } catch (Exception ex) {
@@ -91,6 +96,7 @@ public class RoomDAO implements IRoomDAO {
 		Room tmpRoom = new Room(roomID, 0, 0, null, true);
 		if(!filter.contains(tmpRoom))
 			return false;
+		cache.remove(roomID);
 		
 		tx = pm.currentTransaction();
 		try {
@@ -103,7 +109,6 @@ public class RoomDAO implements IRoomDAO {
 			if(queryExecution.isEmpty() || queryExecution.size() > 1)
 				return false;
 			pm.deletePersistent(queryExecution.get(0));
-			
 			tx.commit();
 			
 			return true;
