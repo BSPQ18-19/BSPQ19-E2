@@ -69,6 +69,8 @@ public class RoomPanel extends JPanel{
 	 * @param screenWidth Width of the window
 	 * @param screenHeight Height of the window
 	 * @param clientWindowGuest Reference to ClientWindowGuest class
+	 * @param hotelId id of the hotel
+	 * @param calendarDate date selected in the calendar
 	 */
 	public RoomPanel(int screenWidth, int screenHeight, ClientWindowGuest clientWindowGuest, String hotelId, String calendarDate) {
 		log = ClientLogger.getLogger();

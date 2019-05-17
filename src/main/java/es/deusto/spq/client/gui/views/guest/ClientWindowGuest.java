@@ -58,6 +58,7 @@ public class ClientWindowGuest extends JInternalFrame{
 	
 	/** Change the UI of the Guest panel
 	 * @param nextScreenType Type of the next screen that is wanted to be displayed
+	 * @param strings Strings needed. Can be 0
 	 */
 	public void changeScreen(ScreenTypeGuest nextScreenType, String... strings) {
 		

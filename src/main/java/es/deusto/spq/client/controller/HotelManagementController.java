@@ -229,7 +229,8 @@ public class HotelManagementController {
 		return null;
     }
     
-    /** Retrieve all the rooms from DB by a hotelId
+    /**Retrieve all the rooms from DB by a hotelId
+     * @param hotelId Id of the hotel
      * @return An array list of RoomDTO objects
      */
     public ArrayList<RoomDTO> retrieveRoomsByHotelId(String hotelId){
@@ -250,6 +251,7 @@ public class HotelManagementController {
     }
     
     /** Retrieve a room from DB by a roomId
+     * @param roomId Id of the room
      * @return A RoomDTO object
      */
     public RoomDTO retrieveRoomById(String roomId){
@@ -276,7 +278,7 @@ public class HotelManagementController {
      * @param price price of the room
      * @param roomtype type of the room
      * @param isOccupied true if the room is occupied
-     * @return
+     * @return true if its correctly done
      */
     public boolean updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) {
     	try {
@@ -317,7 +319,9 @@ public class HotelManagementController {
      * @param reservationId Id of the reservation
      * @param userId Id of the guest
      * @param roomId Id of the room
-     * @return
+     * @param firstDay first day the user stays at the hotel
+     * @param lastDay last day the user stays at the hotel
+     * @return true if its correctly done
      */
     public boolean createReservation(String reservationId, String userId, String roomId, LocalDate firstDay, LocalDate lastDay) {
     	try {

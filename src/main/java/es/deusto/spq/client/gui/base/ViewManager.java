@@ -184,7 +184,7 @@ public class ViewManager {
 
     /**
      * Called from a View whenever it's self-disposed
-     * @param view
+     * @param view View object
      */
     public void notifyDisposal(View view) {
         views.remove(view);

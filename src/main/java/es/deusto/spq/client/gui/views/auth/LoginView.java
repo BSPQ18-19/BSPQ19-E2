@@ -32,7 +32,7 @@ public class LoginView extends View {
 
     /**
      *
-     * @param viewManager
+     * @param viewManager ViewManager object
      */
     public LoginView(ViewManager viewManager) {
         super(viewManager);
