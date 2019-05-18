@@ -8,19 +8,13 @@ import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import es.deusto.spq.client.logger.ClientLogger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
-
-import es.deusto.spq.client.Client;
-import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewType;
-import es.deusto.spq.client.gui.views.auth.RegisterAdminView;
 
 /** Panel for creating hotels as an admin
  * @author gonzalo
@@ -32,23 +26,56 @@ public class CreateHotel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * idLabel Label of the id of the hotel
+	 * nameLabel Label of the name of the hotel
+	 * locationLabel Label of the location of the hotel
+	 * seasonStartLabel Label of the date when the hotel opens
+	 * seasonEndingLabel Label of the date when the hotel closes
+	 */
 	private JLabel idLabel, nameLabel, locationLabel, seasonStartLabel, seasonEndingLabel;
+	/**
+	 * idTextField Field to introduce the id of the hotel
+	 * nameTextField Field to introduce the name of the hotel
+	 * locationTextField Field to introduce the location of the hotel
+	 */
 	private TextField idTextField, nameTextField, locationTextField;
+	/**
+	 * seasonStartTextField Field to introduce the date when the hotel opens
+	 * seasonEndingTextField Field to introduce the date when the hotel closes
+	 */
 	private TextField seasonStartTextField, seasonEndingTextField;
+	/**
+	 * confirm Confirm button
+	 */
 	private JButton	confirm;
+	/**
+	 * createHotel Button to open the panel for creating hotels
+	 * viewHotel Button to open the panel for viewing all the hotels
+	 * editHotel Button to edit the hotels
+	 * deleteHotel Button to delete a hotel
+	 */
 	private JButton	createHotel, viewHotel, editHotel, deleteHotel;
+	/**
+	 * registerAdmin Button to register an administrator
+	 */
 	private JButton registerAdmin;
+	/**
+	 * upperButtons Panel for the buttons at the top
+	 * centerPanel Center panel
+	 * bottomPanel Panel for the buttons at the bottom
+	 */
 	private JPanel upperButtons, centerPanel, bottomPanel;
-	private int screenWidth, screenHeight;
-	private Logger log;
-	private ClientWindowAdmin clientWindowAdmin;
 	
+	/** Constructor of the class CreateHotel
+	 * @param screenWidth Width of the window
+	 * @param screenHeight Height of the window
+	 * @param clientWindowAdmin Reference to ClientWindowAdmin class
+	 */
 	public CreateHotel(int screenWidth, int screenHeight, ClientWindowAdmin clientWindowAdmin) {
-		log = ClientLogger.getLogger();
 		
 		this.setLayout(new BorderLayout());
 		
-		this.clientWindowAdmin = clientWindowAdmin;
 		idLabel = new JLabel("ID");
 		idLabel.setFont(new Font(idLabel.getName(), Font.PLAIN, 25));
 		
@@ -80,8 +107,6 @@ public class CreateHotel extends JPanel {
 		seasonEndingTextField.setFont(new Font(seasonEndingTextField.getName(), Font.PLAIN, 25));
 		
 		this.setLayout(new BorderLayout());
-		this.screenWidth = screenWidth;
-		this.screenHeight = screenHeight;
 		
 		registerAdmin = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.button.register"));
 		registerAdmin.setSize(100, 30);

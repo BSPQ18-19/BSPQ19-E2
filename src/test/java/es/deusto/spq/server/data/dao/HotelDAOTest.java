@@ -2,10 +2,11 @@ package es.deusto.spq.server.data.dao;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.databene.contiperf.junit.ContiPerfRule;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -13,7 +14,6 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import es.deusto.spq.server.data.jdo.Hotel;
-import junit.framework.Assert;
 /**
  * The test-class for {@link es.deusto.spq.server.data.dao.HotelDAO}.
  *
@@ -25,7 +25,6 @@ import junit.framework.Assert;
  * @author egoes
  *
  */
-@SuppressWarnings("deprecation")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HotelDAOTest {
 
@@ -52,7 +51,7 @@ public class HotelDAOTest {
 	 * Checks if the copy that it returns is the same from the one we have.
 	 */
 	@Test
-	public void aStoreHotel() {
+	public void test1StoreHotel() {
 		Hotel detachedHotel = hotelDAO.storeHotel(hotel);
 		Assert.assertTrue(hotel.equals(detachedHotel));
 	}	
@@ -62,7 +61,7 @@ public class HotelDAOTest {
 	 * It checks if the hotel we get is the same from the one we have.
 	 */
 	@Test
-	public void bGetHotel() {
+	public void test2GetHotel() {
 		Hotel detachedHotel = hotelDAO.getHotel(hotelID);
 		Assert.assertTrue(hotel.equals(detachedHotel));
 	}
@@ -72,15 +71,35 @@ public class HotelDAOTest {
 	 * Checks if the one we have stored is on the list.
 	 */
 	@Test
-	public void bGetHotels() {
+	public void test3GetHotels() {
 		List<Hotel> hotels = hotelDAO.getHotels();
 		Assert.assertTrue(hotels.contains(hotel));
 	}
 
+	/**
+	 * Test the method for retrieving hotels according to an arrival date
+	 */
 	@Test
-	public void cGetHotelsByArrivalDate() {
+	public void test4GetHotelsByArrivalDate() {
 		Hotel hotel = hotelDAO.getHotels(Timestamp.valueOf(LocalDate.of(2020, 01, 01).atStartOfDay())).get(0);
 		Assert.assertEquals(Timestamp.valueOf(LocalDate.of(2019, 04, 01).atStartOfDay()), hotel.getSeasonStart());
+	}
+	
+	/**
+	 * Test the method for updating a hotel
+	 */
+	@Test
+	public void test5UpdateHotel() {
+		Hotel hotelToUpdate = new Hotel(hotelID, "SECONDTEST", "TEST", Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
+		Hotel hotelUpdated = hotelDAO.updateHotel(hotelToUpdate);
+		Assert.assertEquals(hotelToUpdate.getName(), hotelUpdated.getName());
+		Assert.assertEquals(hotelToUpdate.getSeasonStart(), hotelUpdated.getSeasonStart());
+		Assert.assertEquals(hotelToUpdate.getSeasonEnding(), hotelUpdated.getSeasonEnding());
+		
+		Assert.assertNotEquals(hotel.getName(), hotelUpdated.getName());
+		Assert.assertNotEquals(hotel.getSeasonStart(), hotelUpdated.getSeasonStart());
+		Assert.assertNotEquals(hotel.getSeasonEnding(), hotelUpdated.getSeasonEnding());
+	
 	}
 	
 	/**
@@ -88,7 +107,7 @@ public class HotelDAOTest {
 	 * Checks if return is true, if it is hotel was deleted.
 	 */
 	@Test
-	public void dDeleteHotel() {
+	public void test6DeleteHotel() {
 		Assert.assertTrue(hotelDAO.deleteHotel(hotelID));
 		hotelDAO.cleanHotelsDB();
 	}

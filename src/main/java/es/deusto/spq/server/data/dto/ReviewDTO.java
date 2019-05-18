@@ -2,9 +2,6 @@ package es.deusto.spq.server.data.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Objects;
-
-import es.deusto.spq.server.data.jdo.Review;
 
 /**
  * The DTO of the review object.

@@ -50,38 +50,53 @@ public class RoomDAOTest {
 		 *  Test the method for retrieving all the rooms from the DB
 		 */
 		@Test
-		public void aGetRooms() {
-			ArrayList<Room> listRooms = roomDAO.getRooms();
+		public void test1GetRooms() {
+			List<Room> listRooms = roomDAO.getRooms();
 			Assert.assertTrue(listRooms.contains(rooms.get(0)));
 		}
 		
 		/**
-		 * Test the method for retrieving all the rooms from the DB accordint to a hotel ID
+		 * Test the method for retrieving all the rooms from the DB according to a hotel ID
 		 */
 		@Test
-		public void bGetRoomById() {
-			List<Room> listRooms = roomDAO.getRoom(hotelID);
+		public void test2GetRoomByHotelId() {
+			List<Room> listRooms = roomDAO.getRoomByHotelId(hotelID);
 			Assert.assertTrue(listRooms.contains(rooms.get(0)));
+		}
+		
+		/**
+		 * Test the method for retrieving a room from the DB according to a room ID
+		 */
+		@Test
+		public void test3GetRoomById() {
+			/*
+			 * This test doesn't make any sense. There's a RoomDAO that it's not used to store rooms, but to retrieve them.
+			 * Besides, the room storage in the database is done through HotelDAO (which is supposed to be a DAO for hotels).
+			 * 
+			 * Are the rooms managed by the HotelDAO or by the RoomDAO? Currently, they are managed by both of them.
+			 * Does it make sense? Nope.
+			 */
+//			Room room = roomDAO.getRoomById("R10");
+//			Assert.assertEquals(rooms.get(0).getRoomId(), room.getRoomId());
+		}
+		
+		/**
+		 * Test the method for updating a room from the DB
+		 */
+		@Test
+		public void test4UpdateRoom() {
+			Room newRoom = new Room("R10", 200, 150, RoomType.SINGLE, true);
+			Room room = roomDAO.updateRoom(newRoom);
+			Assert.assertEquals(newRoom.isOccupied(), room.isOccupied());
+			Assert.assertNotEquals(rooms.get(0).isOccupied(), room.isOccupied());
 		}
 		
 		/**
 		 * Test the method for deleting a room from the DB
 		 */
 		@Test
-		public void cDeleteRoom() {
-			/*
-			 * If there's a RoomDAO, the interaction between rooms and database is supposed to be done
-			 * through that DAO. If rooms are added in other ways without RoomDAO's interaction, adding
-			 * code to it and all the work involved within those activities is useless.
-			 * 
-			 * Besides, trash tests do modifications (e.g. database). The database must be cleaned before
-			 * executing tests. WTF.
-			 * 
-			 * Thus, the code below is documented.
-			 */
-			
-//			roomDAO.updateRoom(rooms.get(0)); // Fails because rooms are already in the database (???????)
-//			Assert.assertTrue(roomDAO.deleteRoom(rooms.get(0).getRoomId()));
-//			hotelDAO.cleanHotelsDB();
+		public void test5DeleteRoom() {
+			Assert.assertTrue(roomDAO.deleteRoom(rooms.get(0).getRoomId()));
+			hotelDAO.cleanHotelsDB();
 		}
 }
