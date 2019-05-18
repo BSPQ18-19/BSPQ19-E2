@@ -6,12 +6,18 @@ import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.locale.AllowedLocale;
 import es.deusto.spq.client.gui.locale.LocaleMode;
+import es.deusto.spq.client.gui.views.reservations.ReservationListView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.client.gui.locale.LocaleManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
+import es.deusto.spq.server.data.dto.ReservationDTO;
+import es.deusto.spq.server.data.jdo.Reservation;
 import org.apache.log4j.Logger;
 
 public class Client {
@@ -65,7 +71,14 @@ public class Client {
 		viewManager.initialize();
 		viewManager.openView(ViewFactory.buildView(ViewType.LOGIN, viewManager));
 		localeManager.setMode(LocaleMode.DEBUG);
-		viewManager.openView(ViewFactory.buildView(ViewType.RESERVATION_LIST, viewManager)); // TODO remove debug when finished
+
+		// DEBUG !!!
+		ReservationListView  reservationListView = (ReservationListView) ViewFactory.buildView(ViewType.RESERVATION_LIST, viewManager);
+		List<ReservationDTO> reservations = new ArrayList<>();
+		reservations.add(new ReservationDTO("1", "TEST"));
+		reservationListView.setReservations(reservations);
+		viewManager.openView(reservationListView); // TODO remove debug when finished
+		// end DEBUG
 	}
 
 	public HotelManagementController getController() {

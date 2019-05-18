@@ -4,22 +4,34 @@ import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewPermission;
 import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.server.data.dto.ReservationDTO;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.List;
 
 public class ReservationListView extends View {
 
     private JLabel titleLabel;
     private JPanel resultsPanel;
+    private List<ReservationDTO> reservations;
 
     public ReservationListView(ViewManager viewManager) {
         super(viewManager);
     }
 
     private JInternalFrame internalFrame;
+
+    public List getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<ReservationDTO> reservations) {
+        this.reservations = reservations;
+        refresh();
+    }
 
     @Override
     public ViewType getViewType() {
@@ -77,12 +89,36 @@ public class ReservationListView extends View {
         internalFrame.setIconifiable(true);
         internalFrame.setVisible(true);
 
+        refresh();
         addDisposeEventHandler();
     }
 
     @Override
     public void refresh() {
-        internalFrame.setTitle(getViewManager().getClient().getLocaleManager().getMessage("reservations.title"));
-        titleLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("reservations.heading"));
+
+        // Only refresh after we've initialized the frame
+        if (getInternalFrame() == null) {
+            return;
+        }
+
+        internalFrame.setTitle(getViewManager().getClient().getLocaleManager()
+                .getMessage("reservations.title"));
+        titleLabel.setText(getViewManager().getClient().getLocaleManager()
+                .getMessage("reservations.heading", reservations.size()));
+
+        resultsPanel.removeAll();
+        for (ReservationDTO reservation : reservations) {
+            resultsPanel.add(new JLabel(reservation.toString()));
+        }
+        resultsPanel.validate();
+        resultsPanel.repaint();
+
+        try {
+            getInternalFrame().validate();
+            getInternalFrame().repaint();
+            getInternalFrame().pack();
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+        }
     }
 }
