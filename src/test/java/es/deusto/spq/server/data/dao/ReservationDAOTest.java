@@ -34,7 +34,7 @@ public class ReservationDAOTest {
 	@AfterClass
 	public static void tearDown() {
 		dao.deleteReservationByID(id);
-		new UserDAO().deleteUserbyID(null, guest.getUserID());
+		new UserDAO().deleteUserbyID(guest.getUserID());
 	}
 	
 	@Test

@@ -114,7 +114,7 @@ public class ReviewDBTest {
 	public void dDeletesReview() {
 		Assert.assertTrue(reviewDAO.deleteReview(reviewID));
 		// TODO When the authorization on userDAO is done this null should chanage
-		userDAO.deleteUserbyID(null, userID);
+		userDAO.deleteUserbyID(userID);
 		hotelDAO.deleteHotel(hotelID);
 	}
 }
