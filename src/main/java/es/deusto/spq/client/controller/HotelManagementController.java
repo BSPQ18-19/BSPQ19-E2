@@ -11,6 +11,7 @@ import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.ReservationDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.RoomType;
@@ -339,6 +340,9 @@ public class HotelManagementController {
     	return false;
     }
     
+    public ReviewDTO createReview(String opinion, int score, String hotelID, String userID){
+    	return rsl.getHotelManager().createReview(opinion, score, hotelID, userID);
+    }
 	/**
 	 * Clear the list of the current rooms
 	 */

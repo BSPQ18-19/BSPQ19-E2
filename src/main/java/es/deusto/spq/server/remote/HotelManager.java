@@ -18,19 +18,23 @@ import org.apache.log4j.Logger;
 import es.deusto.spq.server.data.dao.HotelDAO;
 import es.deusto.spq.server.data.dao.IHotelDAO;
 import es.deusto.spq.server.data.dao.IReservationDAO;
+import es.deusto.spq.server.data.dao.IReviewDAO;
 import es.deusto.spq.server.data.dao.IRoomDAO;
 import es.deusto.spq.server.data.dao.ReservationDAO;
+import es.deusto.spq.server.data.dao.ReviewDAO;
 import es.deusto.spq.server.data.dao.RoomDAO;
 import es.deusto.spq.server.data.dao.UserDAO;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.ReservationDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Reservation;
+import es.deusto.spq.server.data.jdo.Review;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.RoomType;
 import es.deusto.spq.server.data.jdo.User;
@@ -51,6 +55,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	private IHotelDAO hotelDao;
 	private IRoomDAO roomDao;
 	private IReservationDAO reservationDao;
+	private IReviewDAO reviewDAO;
 	
 	public HotelManager() throws RemoteException {
 		super();
@@ -58,6 +63,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		this.userDAO = new UserDAO();
 		this.roomDao = new RoomDAO();
 		this.reservationDao = new ReservationDAO();
+		this.reviewDAO = new ReviewDAO();
 		loggedUsers = new HashSet<UserDTO>();
 		log = ServerLogger.getLogger();
 		r = new Random();
@@ -365,6 +371,24 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 				Timestamp.valueOf(firstDay.atStartOfDay()), Timestamp.valueOf(lastDay.atStartOfDay()));
 		reservationDao.createReservation(reservation);
 		return reservationAssembler.assembleReservation(reservation);
+	}
+
+	@Override
+	public ReviewDTO createReview(String opinion, int score, String hotelID, String userID) {
+		String randomID = generateRandomId();
+		Assembler reviewAssembler = new Assembler();
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		Hotel h = hotelDao.getHotel(hotelID);
+		
+		UserDTO uDTO = userDAO.getUserbyID(null, userID);
+		User u = reviewAssembler.disassembleUser(uDTO);
+		
+		Review r = new Review(randomID, opinion, score, timestamp, h, u);
+		
+		Review detachedCopy = reviewDAO.storeReview(r, hotelID, userID);
+		
+		ReviewDTO reviewDTO = reviewAssembler.assembleReview(detachedCopy);
+		return reviewDTO;
 	}
 
 }

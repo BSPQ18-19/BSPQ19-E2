@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import es.deusto.spq.client.controller.HotelManagementController;
@@ -16,12 +17,15 @@ import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewPermission;
 import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class WriteReview extends View{
 	/**
@@ -35,6 +39,16 @@ public class WriteReview extends View{
 
 	private JInternalFrame frame;
     private HotelManagementController hotelManagementController;
+    
+    // Logger
+    private Logger log;
+    
+    //View Components
+    private JEditorPane editorPane;
+    private JButton btnSendReview ;
+    private JSpinner spinner;
+    private JLabel lblScore;
+    private JLabel lblWritteYourReview ;
 
     @Override
     public ViewType getViewType() {
@@ -68,31 +82,55 @@ public class WriteReview extends View{
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JEditorPane editorPane = new JEditorPane();
+		editorPane = new JEditorPane();
 		editorPane.setBounds(28, 74, 440, 147);
 		frame.getContentPane().add(editorPane);
 		
-		JButton btnSendReview = new JButton("Summit review");
+		btnSendReview = new JButton(getViewManager().getClient().getLocaleManager().getMessage("writeReview.summit"));
 		btnSendReview.setBounds(186, 246, 161, 23);
 		frame.getContentPane().add(btnSendReview);
 		btnSendReview.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO Call the method that handles new Reviews
-				frame.dispose();
+				if(editorPane.getText().equals("")) {
+					JOptionPane.showMessageDialog(frame,
+		                    getViewManager().getClient().getLocaleManager().getMessage("writeReview.noText"),
+		                    getViewManager().getClient().getLocaleManager().getMessage("writeReview.noText.tittle"),
+		                    JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				int score = (int) spinner.getValue();
+				try {
+					ReviewDTO review= hotelManagementController.createReview(editorPane.getText(), score, "", "");
+					if(review == null) {
+						JOptionPane.showMessageDialog(frame,
+			                    getViewManager().getClient().getLocaleManager().getMessage("writeReview.error"),
+			                    getViewManager().getClient().getLocaleManager().getMessage("writeReview.error.title"),
+			                    JOptionPane.ERROR_MESSAGE);
+						frame.dispose();
+					}else {
+						 JOptionPane.showMessageDialog(frame,
+					                getViewManager().getClient().getLocaleManager().getMessage("writeReview.success"),
+					                getViewManager().getClient().getLocaleManager().getMessage("writeReview.success.title"),
+					                JOptionPane.INFORMATION_MESSAGE);
+					        frame.dispose();
+					}
+				}catch (Exception ex) {
+					log.fatal("Error creating a new resevation: " + ex.getMessage());
+				}
 			}
 		});
 		
-		JSpinner spinner = new JSpinner(new SpinnerNumberModel(0,0,10,1));
+		spinner = new JSpinner(new SpinnerNumberModel(0,0,10,1));
 		spinner.setBounds(73, 32, 43, 31);
 		frame.getContentPane().add(spinner);
 		
-		JLabel lblNewLabel = new JLabel("Score");
-		lblNewLabel.setBounds(73, 11, 46, 14);
-		frame.getContentPane().add(lblNewLabel);
+		lblScore = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("writeReview.score"), JLabel.TRAILING);
+		lblScore.setBounds(73, 11, 46, 14);
+		frame.getContentPane().add(lblScore);
 		
-		JLabel lblWritteYourReview = new JLabel("Writte your review");
+		lblWritteYourReview = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("writeReview.descrition"), JLabel.TRAILING);
 		lblWritteYourReview.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblWritteYourReview.setBounds(202, 40, 123, 23);
 		frame.getContentPane().add(lblWritteYourReview);
@@ -109,6 +147,8 @@ public class WriteReview extends View{
 	    }
 
 	    private void onLocaleChange() {
-	       
+	       btnSendReview.setText(getViewManager().getClient().getLocaleManager().getMessage("writeReview.summit"));
+	       lblScore.setText(getViewManager().getClient().getLocaleManager().getMessage("writeReview.score"));
+	       lblWritteYourReview.setText(getViewManager().getClient().getLocaleManager().getMessage("writeReview.descrition"));
 	    }
 }
