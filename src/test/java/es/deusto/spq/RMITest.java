@@ -79,8 +79,6 @@ public class RMITest {
 		}
 
 		public String retrieveMessage(String text) throws RemoteException {
-			System.out.println("New message received and retrieved:");
-			System.out.println(text);
 			return text;
 		}
 		

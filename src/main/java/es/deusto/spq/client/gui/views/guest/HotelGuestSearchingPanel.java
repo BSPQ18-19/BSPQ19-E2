@@ -7,8 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -22,8 +21,6 @@ import org.apache.log4j.Logger;
 
 import com.github.lgooddatepicker.components.CalendarPanel;
 
-import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.HotelDTO;
 
@@ -33,30 +30,58 @@ import es.deusto.spq.server.data.dto.HotelDTO;
  */
 public class HotelGuestSearchingPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * Model of the table
+	 */
 	private DefaultTableModel tableModel;
+	/**
+	 * Table where the hotels will be displayed
+	 */
 	private JTable hotelsTable;
+	/**
+	 * Scroll pane for the table
+	 */
 	private JScrollPane tableScrollPane;
+	/**
+	 * confirm Confirm button
+	 */
 	private JButton confirm;
+	/**
+	 * viewHotel Button to open the panel for viewing all the hotels
+	 */
 	private JButton	viewHotel;
-	private JPanel upperButtons, southPanel;
-	private int screenWidth, screenHeight;
+	/**
+	 * upperButtons Panel for the buttons at the top
+	 */
+	private JPanel upperButtons;
+	/**
+	 * Client logger
+	 */
 	private Logger log;
+	/**
+	 * Calendar to choose the date to arrive to the hotel
+	 */
 	private CalendarPanel calendar;
-	private ClientWindowGuest clientWindowGuest;
 	
+	/** Constructor of the class HotelGuestSearchingPanel
+	 * @param screenWidth Width of the window
+	 * @param screenHeight Height of the window
+	 * @param clientWindowGuest Reference to ClientWindowGuest class
+	 */
 	public HotelGuestSearchingPanel(int screenWidth, int screenHeight, ClientWindowGuest clientWindowGuest) {
 		log = ClientLogger.getLogger();
 		
-		this.clientWindowGuest = clientWindowGuest;
-		
 		this.setLayout(new BorderLayout());
-		this.screenWidth = screenWidth;
-		this.screenHeight = screenHeight;
 		
 		viewHotel = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.button.view"));
 		viewHotel.setSize(100, 30);
 		viewHotel.addActionListener(new ActionListener() {
 			
+			@SuppressWarnings("deprecation")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(calendar.getSelectedDate() == null) {
@@ -64,7 +89,7 @@ public class HotelGuestSearchingPanel extends JPanel {
 				}
 				else {
 					clientWindowGuest.getController().setCurrentHotels();
-					ArrayList<HotelDTO> retrievedHotels = clientWindowGuest.getController().retrieveHotels(calendar.getSelectedDate().toString());
+					List<HotelDTO> retrievedHotels = clientWindowGuest.getController().retrieveHotels(calendar.getSelectedDate().toString());
 					if(retrievedHotels == null || retrievedHotels.size() == 0) {
 						JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);
 						if(tableModel.getRowCount() != 0) {
@@ -129,7 +154,7 @@ public class HotelGuestSearchingPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(hotelsTable.getSelectedRow() != -1) {
-					clientWindowGuest.changeScreen(ScreenTypeGuest.ROOM_PANEL, (String)hotelsTable.getValueAt(hotelsTable.getSelectedRow(), 0));
+					clientWindowGuest.changeScreen(ScreenTypeGuest.ROOM_PANEL, (String)hotelsTable.getValueAt(hotelsTable.getSelectedRow(), 0), calendar.getSelectedDate().toString());
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "There are no rooms available for that hotel", "Error", JOptionPane.ERROR_MESSAGE);

@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.List;
 
 import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewType;
@@ -34,25 +34,53 @@ public class ViewHotel extends JPanel{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Model of the table
+	 */
 	private DefaultTableModel tableModel;
+	/**
+	 * Table where the hotels will be displayed
+	 */
 	private JTable hotelsTable;
+	/**
+	 * Scroll pane for the table
+	 */
 	private JScrollPane tableScrollPane;
+	/**
+	 * confirm Confirm button
+	 */
 	private JButton	confirm;
+	/**
+	 * createHotel Button to open the panel for creating hotels
+	 * viewHotel Button to open the panel for viewing all the hotels
+	 * editHotel Button to edit the hotels
+	 * deleteHotel Button to delete a hotel
+	 */
 	private JButton	createHotel, viewHotel, editHotel, deleteHotel;
+	/**
+	 * registerAdmin Button to register an administrator
+	 */
 	private JButton registerAdmin;
-	private JPanel upperButtons, centerPanel, bottomPanel;
-	private int screenWidth, screenHeight;
+	/**
+	 * upperButtons Panel for the buttons at the top
+	 * bottomPanel Panel for the buttons at the bottom
+	 */
+	private JPanel upperButtons, bottomPanel;
+	/**
+	 * Client logger
+	 */
 	private Logger log;
-	private ClientWindowAdmin clientWindowAdmin;
 
+	/** Constructor of the class ViewHotel
+	 * @param screenWidth Width of the window
+	 * @param screenHeight Height of the window
+	 * @param clientWindowAdmin Reference to ClientWindowAdmin class
+	 */
+	@SuppressWarnings("deprecation")
 	public ViewHotel(int screenWidth, int screenHeight, ClientWindowAdmin clientWindowAdmin) {
 		log = ClientLogger.getLogger();
 		
-		this.clientWindowAdmin = clientWindowAdmin;
-		
 		this.setLayout(new BorderLayout());
-		this.screenWidth = screenWidth;
-		this.screenHeight = screenHeight;
 		
 		registerAdmin = new JButton(clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.button.register"));
 		registerAdmin.setSize(100, 30);
@@ -92,9 +120,8 @@ public class ViewHotel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				clientWindowAdmin.getController().cleanHotelsDB();
 				for(int i = 0; i < hotelsTable.getRowCount(); i++) {
-					clientWindowAdmin.getController().createHotel((String) hotelsTable.getValueAt(i, 0),
+					clientWindowAdmin.getController().updateHotel((String) hotelsTable.getValueAt(i, 0),
 							(String) hotelsTable.getValueAt(i, 1), 
 							(String) hotelsTable.getValueAt(i, 2),
 							(String) hotelsTable.getValueAt(i, 3), 
@@ -168,7 +195,7 @@ public class ViewHotel extends JPanel{
 		
 		clientWindowAdmin.getController().setCurrentHotels();
 		clientWindowAdmin.getController().getCurrentHotels();
-		ArrayList<HotelDTO> retrievedHotels = clientWindowAdmin.getController().retrieveHotels();
+		List<HotelDTO> retrievedHotels = clientWindowAdmin.getController().retrieveHotels();
 		if(retrievedHotels == null || retrievedHotels.size() == 0) {
 			JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);
 		}else {

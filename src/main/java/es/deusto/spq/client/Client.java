@@ -4,7 +4,6 @@ import es.deusto.spq.client.controller.*;
 import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewType;
-import es.deusto.spq.client.gui.locale.AllowedLocale;
 import es.deusto.spq.client.gui.locale.LocaleMode;
 import es.deusto.spq.client.gui.views.reservations.ReservationListView;
 import es.deusto.spq.client.logger.ClientLogger;
@@ -75,7 +74,7 @@ public class Client {
 		// DEBUG !!!
 		ReservationListView  reservationListView = (ReservationListView) ViewFactory.buildView(ViewType.RESERVATION_LIST, viewManager);
 		List<ReservationDTO> reservations = new ArrayList<>();
-		reservations.add(new ReservationDTO("1", "TEST"));
+		//reservations.add(new ReservationDTO("1", "TEST")); TODO get actual ReservationDTOs
 		reservationListView.setReservations(reservations);
 		viewManager.openView(reservationListView); // TODO remove debug when finished
 		// end DEBUG
