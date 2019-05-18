@@ -12,10 +12,10 @@ public class AllowedLocale {
      * Constant corresponding to the English AllowedLocale
      */
     public final static AllowedLocale ENGLISH = new AllowedLocale(
-            new Locale("en", "US"),
-            "en_US",
-            "English/US",
-            "English/US"
+            new Locale("en"),
+            "en",
+            "English",
+            "English"
     );
 
     /**
