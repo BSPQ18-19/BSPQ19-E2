@@ -91,9 +91,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		
 		//The default admin because only one admin can register another
 		User defaultAdmin = new  Administrator("DEFAULT", "admin", "admin", "admin", "admin");
-		Assembler assembler = new Assembler();
-		UserDTO authorization = assembler.assembleUser(defaultAdmin);
-		userDAO.deleteUserbyID(authorization, defaultAdmin.getUserID());
+		userDAO.deleteUserbyID(defaultAdmin.getUserID());
 		userDAO.createUser(defaultAdmin);
 	}
 
