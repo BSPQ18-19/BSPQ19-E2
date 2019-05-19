@@ -49,8 +49,17 @@ public class WriteReview extends View{
     private JSpinner spinner;
     private JLabel lblScore;
     private JLabel lblWritteYourReview ;
+    private String hotelID, userID;
 
-    @Override
+	public void setHotelID(String hotelID) {
+		this.hotelID = hotelID;
+	}
+
+	public void setUserID(String userID) {
+		this.userID = userID;
+	}
+
+	@Override
     public ViewType getViewType() {
         return ViewType.WRITE_REVIEW;
     }
