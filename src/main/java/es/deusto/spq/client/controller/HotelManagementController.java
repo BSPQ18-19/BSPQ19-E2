@@ -339,7 +339,15 @@ public class HotelManagementController {
 		}
     	return false;
     }
-    
+
+	/**
+	 * Stores a new review in the DB.
+	 * @param opinion the text written by the user.
+	 * @param score the score that user gives to the hotel.
+	 * @param hotelID the hotelID of the hotel the review is form.
+	 * @param userID the id of the user that writes the review.
+	 * @return A ReviewDTO.
+	 */
     public ReviewDTO createReview(String opinion, int score, String hotelID, String userID){
     	try {
 			return rsl.getHotelManager().createReview(opinion, score, hotelID, userID);

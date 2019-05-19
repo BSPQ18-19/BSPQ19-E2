@@ -168,13 +168,13 @@ public interface IHotelManager extends Remote {
 	public ReservationDTO createReservation(String reservationId, String email, String roomId, LocalDate firstDay, LocalDate lastDay) throws RemoteException;
 	
 	/**
-	 * Create a new Review
-	 * @param opinion
-	 * @param score
-	 * @param hotelID
-	 * @param userID
-	 * @return A ReviewDTO
-	 * @throws RemoteException exception
+	 * Stores a new review in the DB.
+	 * @param opinion the text written by the user.
+	 * @param score the score that user gives to the hotel.
+	 * @param hotelID the hotelID of the hotel the review is form.
+	 * @param userID the id of the user that writes the review.
+	 * @return A ReviewDTO.
+	 * @throws RemoteException exception.
 	 */
 	public ReviewDTO createReview(String opinion, int score, String hotelID, String userID) throws RemoteException;;
 }
