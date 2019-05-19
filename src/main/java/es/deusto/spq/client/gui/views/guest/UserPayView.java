@@ -2,9 +2,12 @@ package es.deusto.spq.client.gui.views.guest;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -13,10 +16,15 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.text.JTextComponent;
 
+import org.jetbrains.annotations.Nullable;
+
 import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewManager;
+import es.deusto.spq.client.gui.base.ViewPermission;
+import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.logger.ClientLogger;
+import es.deusto.spq.server.data.dto.RoomDTO;
 /**
  * The view where guest make the payment
  * @author egoes
@@ -24,7 +32,7 @@ import es.deusto.spq.client.logger.ClientLogger;
  */
 public class UserPayView extends View{
 
-	private JFrame frame;
+	private JInternalFrame frame;
 
 	private JRadioButton rdbtnMasterCard, rdbtnPaypal;
 	private JButton btnMakePayment, btnCancelPayment;
@@ -32,7 +40,44 @@ public class UserPayView extends View{
 	private JLabel lblUsername, lblPassword, lblCreditCardNumber, lblSecurityCode;
 	private JPanel form, topPanel, bottomPanel;
 	private HotelManagementController controller;
+	private Random r;
+
 	private float prize;
+	private RoomDTO roomDTO;
+	private LocalDate localDateStart;
+	private LocalDate localDateEnding;
+
+	public float getPrize() {
+		return prize;
+	}
+
+	public void setPrize(float prize) {
+		this.prize = prize;
+	}
+
+	public RoomDTO getRoomDTO() {
+		return roomDTO;
+	}
+
+	public void setRoomDTO(RoomDTO roomDTO) {
+		this.roomDTO = roomDTO;
+	}
+
+	public LocalDate getLocalDateStart() {
+		return localDateStart;
+	}
+
+	public void setLocalDateStart(LocalDate localDateStart) {
+		this.localDateStart = localDateStart;
+	}
+
+	public LocalDate getLocalDateEnding() {
+		return localDateEnding;
+	}
+
+	public void setLocalDateEnding(LocalDate localDateEnding) {
+		this.localDateEnding = localDateEnding;
+	}
 
 	/**
 	 * Class constructor
@@ -43,13 +88,41 @@ public class UserPayView extends View{
 		controller = viewManager.getClient().getController();
 	}
 
+	@Override
+    public ViewType getViewType() {
+        return ViewType.REGISTRATION;
+    }
+
+    @Override
+    public ViewPermission getViewPermission() {
+    	//TODO Change
+        return ViewPermission.NONE;
+    }
+
+    @Override
+    public boolean isUnique() {
+        return true;
+    }
+
+    @Override
+    public @Nullable JInternalFrame getInternalFrame() {
+        return frame;
+    }
+
+    @Override
+    public void bringToFront() {
+        getInternalFrame().toFront();
+    }
+
 	/**
 	 * Initialize the contents of the frame.
+	 * @wbp.parser.entryPoint
 	 */
 	@Override
 	public void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 307, 201);
+		r = new Random();
+		frame = new JInternalFrame();
+		frame.setBounds(100, 100, 400, 200);
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
@@ -98,49 +171,52 @@ public class UserPayView extends View{
 
 		//MasterCard fields
 		lblCreditCardNumber = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("pay.label.cardNumber"), JLabel.TRAILING);
-		lblCreditCardNumber.setBounds(12, 28, 111, 16);
+		lblCreditCardNumber.setBounds(12, 28, 185, 16);
 		lblCreditCardNumber.setVisible(false);
 		form.add(lblCreditCardNumber);
 
 		tFCreditCardNumber = new JTextField();
-		tFCreditCardNumber.setBounds(141, 26, 121, 20);
+		tFCreditCardNumber.setBounds(207, 26, 121, 20);
 		tFCreditCardNumber.setVisible(false);
 		form.add(tFCreditCardNumber);
 		tFCreditCardNumber.setColumns(10);
 
 		lblSecurityCode = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("pay.label.securityCode"), JLabel.TRAILING);
-		lblSecurityCode.setBounds(44, 53, 79, 16);
+		lblSecurityCode.setBounds(12, 53, 185, 16);
 		lblSecurityCode.setVisible(false);
 		form.add(lblSecurityCode);
 
 		tFSecurityCode = new JTextField();
-		tFSecurityCode.setBounds(141, 51, 121, 20);
+		tFSecurityCode.setBounds(207, 51, 121, 20);
 		form.add(tFSecurityCode);
 		tFSecurityCode.setVisible(false);
 		tFSecurityCode.setColumns(10);
 
 		// Paypal fields
 		lblUsername = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("pay.label.username"), JLabel.TRAILING);
-		lblUsername.setBounds(64, 28, 59, 16);
+		lblUsername.setBounds(12, 28, 185, 16);
 		lblUsername.setVisible(false);
 		form.add(lblUsername);
 
 		tFUsername = new JTextField();
 		form.add(tFUsername);
-		tFUsername.setBounds(141, 26, 121, 20);
+		tFUsername.setBounds(207, 26, 121, 20);
 		tFUsername.setVisible(false);
 		tFUsername.setColumns(10);
 
 		lblPassword = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("pay.label.password"), JLabel.TRAILING);
-		lblPassword.setBounds(64, 53, 59, 16);
+		lblPassword.setBounds(12, 53, 185, 16);
 		lblPassword.setVisible(false);
 		form.add(lblPassword);
 
 		tFPassword = new JTextField();
-		tFPassword.setBounds(141, 51, 121, 20);
+		tFPassword.setBounds(207, 51, 121, 20);
 		tFPassword.setColumns(10);
 		tFPassword.setVisible(false);
 		form.add(tFPassword);
+
+		frame.toFront();
+		frame.setVisible(true);
 	}
 
 	/**
@@ -160,7 +236,7 @@ public class UserPayView extends View{
 			lblCreditCardNumber.setVisible(false);
 			tFCreditCardNumber.setVisible(false);
 			lblSecurityCode.setVisible(false);
-			tFCreditCardNumber.setVisible(false);
+			tFSecurityCode.setVisible(false);
 
 		} else {
 			//To hide
@@ -226,12 +302,12 @@ public class UserPayView extends View{
 		//Disable Fields
 		toggleFields(false);
 
-		final JTextComponent[] componentsPaypal = {
+		JTextComponent[] componentsPaypal = {
                 tFUsername,
                 tFPassword,
         };
 
-		final JTextComponent[] componentsMasterCard = {
+		JTextComponent[] componentsMasterCard = {
 				tFCreditCardNumber,
 				tFSecurityCode,
         };
@@ -295,19 +371,15 @@ public class UserPayView extends View{
 		}
 
 		// Success!
+		controller.updateRoom(roomDTO.getRoomID(), roomDTO.getSize(), roomDTO.getPrice(), roomDTO.getType(), roomDTO.isOccupied());
+		controller.createReservation(Integer.toString(r.nextInt(Integer.MAX_VALUE)),
+		controller.getLoggedUser().getUserID(), roomDTO.getRoomID(), localDateStart, localDateEnding);
+
         JOptionPane.showMessageDialog(frame,
                 getViewManager().getClient().getLocaleManager().getMessage("pay.success.body"),
                 getViewManager().getClient().getLocaleManager().getMessage("pay.success.title"),
                 JOptionPane.INFORMATION_MESSAGE);
         frame.dispose();
-	}
-
-	public float getPrize() {
-		return prize;
-	}
-
-	public void setPrize(float prize) {
-		this.prize = prize;
 	}
 
 	/**
