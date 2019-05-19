@@ -30,7 +30,7 @@ public class UserPayView extends View{
 	private JButton btnMakePayment, btnCancelPayment;
 	private JTextField tFUsername, tFPassword, tFCreditCardNumber, tFSecurityCode;
 	private JLabel lblUsername, lblPassword, lblCreditCardNumber, lblSecurityCode;
-	private JPanel form, formMasterCard, topPanel, bottomPanel;
+	private JPanel form, topPanel, bottomPanel;
 	private HotelManagementController controller;
 	private float prize;
 
