@@ -374,7 +374,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
-	public ReviewDTO createReview(String opinion, int score, String hotelID, String userID) {
+	public ReviewDTO createReview(String opinion, int score, String hotelID, String userID) throws RemoteException {
 		String randomID = generateRandomId();
 		Assembler reviewAssembler = new Assembler();
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());

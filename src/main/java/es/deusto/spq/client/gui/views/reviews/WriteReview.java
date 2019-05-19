@@ -143,6 +143,7 @@ public class WriteReview extends View{
 		lblWritteYourReview.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblWritteYourReview.setBounds(202, 40, 123, 23);
 		frame.getContentPane().add(lblWritteYourReview);
+		frame.setVisible(true);
 	}
 
 	 @Override

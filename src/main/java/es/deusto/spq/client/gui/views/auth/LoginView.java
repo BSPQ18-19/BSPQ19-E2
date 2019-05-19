@@ -166,7 +166,8 @@ public class LoginView extends View {
         btnRegister.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
-                getViewManager().openView(ViewFactory.buildView(ViewType.REGISTRATION, getViewManager()));
+                //getViewManager().openView(ViewFactory.buildView(ViewType.REGISTRATION, getViewManager()));
+                getViewManager().openView(ViewFactory.buildView(ViewType.WRITE_REVIEW, getViewManager()));
             }
         });
         panel_3.add(btnRegister);

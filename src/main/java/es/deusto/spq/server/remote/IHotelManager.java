@@ -174,6 +174,7 @@ public interface IHotelManager extends Remote {
 	 * @param hotelID
 	 * @param userID
 	 * @return A ReviewDTO
+	 * @throws RemoteException exception
 	 */
-	public ReviewDTO createReview(String opinion, int score, String hotelID, String userID);
+	public ReviewDTO createReview(String opinion, int score, String hotelID, String userID) throws RemoteException;;
 }
