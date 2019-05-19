@@ -16,10 +16,10 @@ public class AllowedLocaleTest {
      */
     @Test
     public void englishConstant_Correct() {
-        Assert.assertEquals(new Locale("en", "US"), AllowedLocale.ENGLISH.getLocale());
-        Assert.assertEquals("en_US", AllowedLocale.ENGLISH.getCode());
-        Assert.assertEquals("English/US", AllowedLocale.ENGLISH.getEnglishName());
-        Assert.assertEquals("English/US", AllowedLocale.ENGLISH.getLocalizedName());
+        Assert.assertEquals(new Locale("en"), AllowedLocale.ENGLISH.getLocale());
+        Assert.assertEquals("en", AllowedLocale.ENGLISH.getCode());
+        Assert.assertEquals("English", AllowedLocale.ENGLISH.getEnglishName());
+        Assert.assertEquals("English", AllowedLocale.ENGLISH.getLocalizedName());
     }
 
     /**
@@ -71,7 +71,7 @@ public class AllowedLocaleTest {
     @Test
     public void toString_Correct() {
         Assert.assertEquals(
-                "AllowedLocale{locale=en_US, code='en_US', englishName='English/US', localizedName='English/US'}",
+                "AllowedLocale{locale=en, code='en', englishName='English', localizedName='English'}",
                 AllowedLocale.ENGLISH.toString()
         );
         Assert.assertEquals(

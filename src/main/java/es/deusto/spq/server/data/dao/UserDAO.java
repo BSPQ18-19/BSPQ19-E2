@@ -20,7 +20,7 @@ import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
-public class UserDAO implements IDAO, IUserDAO {
+public class UserDAO implements IUserDAO {
 
 	private PersistenceManager pm;
 	private Transaction tx;
@@ -39,16 +39,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public boolean checkAuthorizationIsAdmin(UserDTO authorization) {
-		// TODO
-		return true;
-	}
-
-	@Override
-	public List<UserDTO> getUsers(UserDTO authorization) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return null;
-		
+	public List<UserDTO> getUsers() {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -75,10 +66,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public UserDTO getUserbyID(UserDTO authorization, String ID) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return null;
-		
+	public UserDTO getUserbyID(String ID) {
 		//Check if there's a user with such ID
 		User tmpUser = new Guest(ID, null);
 		if(!filter.contains(tmpUser))
@@ -154,10 +142,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public boolean deleteUserbyID(UserDTO authorization, String ID) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return false;
-		
+	public boolean deleteUserbyID(String ID) {
 		//Check if there's a user with such ID
 		User user = new Guest(ID, null);
 		if(!filter.contains(user))
@@ -232,7 +217,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 	
 	@Override
-	public List<Guest> getGuests(UserDTO authorization) {
+	public List<Guest> getGuests() {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -254,7 +239,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 	
 	@Override
-	public List<Administrator> getAdministrators(UserDTO authorization) {
+	public List<Administrator> getAdministrators() {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
