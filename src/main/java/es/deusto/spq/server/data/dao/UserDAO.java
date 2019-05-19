@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
+import es.deusto.spq.server.data.cache.Cache;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Administrator;
@@ -26,12 +27,15 @@ public class UserDAO implements IUserDAO {
 	private Assembler assembler;
 	private Logger log;
 	private SimpleBloomFilter<User> filter;
+	/** The cache of users. */
+	private Cache<String, User> cache;//id:String -> user:User
 	
 	public UserDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
 		assembler = new Assembler();
 		log = ServerLogger.getLogger();
 		filter = new SimpleBloomFilter<User>();
+		cache = new Cache<String, User>(10);
 	}
 
 	@Override
@@ -67,6 +71,11 @@ public class UserDAO implements IUserDAO {
 		User tmpUser = new Guest(ID, null);
 		if(!filter.contains(tmpUser))
 			return null;
+		
+		//Check if the user is in the cache
+		User userCache = cache.get(ID);
+		if(userCache != null)
+			return assembler.assembleUser(userCache);
 		
 		try {
 			tx = pm.currentTransaction();
@@ -114,6 +123,8 @@ public class UserDAO implements IUserDAO {
 			}
 			//Add the new user to the filter
 			filter.add(result);
+			//Add the user to the cache
+			cache.set(result.getUserID(), result);
 			
 			tx.commit();
 
@@ -136,6 +147,8 @@ public class UserDAO implements IUserDAO {
 		User user = new Guest(ID, null);
 		if(!filter.contains(user))
 			return false;
+		
+		cache.remove(ID);
 
 		try {
 			tx = pm.currentTransaction();
@@ -186,10 +199,12 @@ public class UserDAO implements IUserDAO {
 
 				if(resultAdmin == null || resultAdmin.isEmpty())
 					log.debug("Neither Guests nor Administrators with such email");
+				cache.get(resultAdmin.get(0).getUserID());
 				return assembler.assembleUser(resultAdmin.get(0));
 			} else {
 				//At least an guest was found
 				tx.commit();
+				cache.get(resultGuest.get(0).getUserID());
 				return assembler.assembleUser(resultGuest.get(0));
 			}
 
