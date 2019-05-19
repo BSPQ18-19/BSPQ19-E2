@@ -26,22 +26,36 @@ import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.RoomDTO;
 /**
- * The view where guest make the payment
+ * The view where guest make the payment.
+ * This called when a user wants to make a reservation.
  * @author egoes
  *
  */
 public class UserPayView extends View{
 
+	/**
+	 * The frame of the GUI.
+	 */
 	private JInternalFrame frame;
 
+	//The components of the GUI
 	private JRadioButton rdbtnMasterCard, rdbtnPaypal;
 	private JButton btnMakePayment, btnCancelPayment;
 	private JTextField tFUsername, tFPassword, tFCreditCardNumber, tFSecurityCode;
 	private JLabel lblUsername, lblPassword, lblCreditCardNumber, lblSecurityCode;
 	private JPanel form, topPanel, bottomPanel;
+
+	/**
+	 * The controller.
+	 */
 	private HotelManagementController controller;
+
+	/**
+	 * Random for generating the ID of the Reservations.
+	 */
 	private Random r;
 
+	//Different parameters needed for making the reservation and payment
 	private float prize;
 	private RoomDTO roomDTO;
 	private LocalDate localDateStart;
