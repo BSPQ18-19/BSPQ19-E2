@@ -49,7 +49,7 @@ public class EditUserView extends View {
 	// All the form fields and buttons
 	private JTextField nameTextField, emailTextField, phoneTextField, addressTextField;
 	private JPasswordField passwordField, passwordConfirmationField;
-	private JButton saveChanges, dontSave;
+	private JButton saveChanges;
 	 private JLabel nameLabel, emailLabel, passwordLabel, passwordConfirmationLabel, phoneLabel, addressLabel;
 
 	// Logger
@@ -159,14 +159,6 @@ public class EditUserView extends View {
 		// Register the click function
 		saveChanges.addActionListener((final ActionEvent e) -> {
 			handleFormSubmission();
-		});
-
-		dontSave = new JButton(getViewManager().getClient().getLocaleManager().getMessage("editUser.dontSave"));
-		bottomButtons.add(dontSave, BorderLayout.PAGE_END); // add it to the bottom
-
-		// Register the click function
-		dontSave.addActionListener((final ActionEvent e) -> {
-			closeWindow();
 		});
 
 		container.add(bottomButtons, BorderLayout.PAGE_END);
@@ -311,7 +303,6 @@ public class EditUserView extends View {
 		phoneTextField.setEnabled(enable);
 		addressTextField.setEnabled(enable);
 		saveChanges.setEnabled(enable);
-		dontSave.setEnabled(enable);
 	}
 
 
@@ -337,6 +328,5 @@ public class EditUserView extends View {
         phoneLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.phone"));
         addressLabel.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.label.address"));
         saveChanges.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.saveChanges"));
-        dontSave.setText(getViewManager().getClient().getLocaleManager().getMessage("editUser.dontSave"));
     }
 }
