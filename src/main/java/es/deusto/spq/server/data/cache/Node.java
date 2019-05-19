@@ -1,6 +1,7 @@
 package es.deusto.spq.server.data.cache;
 
-/**This Node class is to be used as a doubly LinkedList.
+/**
+ * This Node class is to be used as a doubly LinkedList.
  * @author Iker
  *
  * @param <K> The key's class.
@@ -17,7 +18,8 @@ public class Node<K, V> {
 	/** The next node. */
 	public Node<K, V> next;
 	
-	/**Creates a new node with the given key and value.
+	/**
+	 * Creates a new node with the given key and value.
 	 * @param key The key to map from.
 	 * @param value The value to map to.
 	 */
@@ -26,28 +28,32 @@ public class Node<K, V> {
 		this.value = value;
 	}
 	
-	/**Returns the key in this node.
+	/**
+	 * Returns the key in this node.
 	 * @return The key.
 	 */
 	public K getKey() {
 		return key;
 	}
 
-	/**Updates the key in this node.
+	/**
+	 * Updates the key in this node.
 	 * @param key The key to be updated.
 	 */
 	public void setKey(K key) {
 		this.key = key;
 	}
 
-	/**Returns the value in this node.
+	/**
+	 * Returns the value in this node.
 	 * @return The value.
 	 */
 	public V getValue() {
 		return value;
 	}
 
-	/**Updates the value in this node.
+	/**
+	 * Updates the value in this node.
 	 * @param value The value to be updated.
 	 */
 	public void setValue(V value) {

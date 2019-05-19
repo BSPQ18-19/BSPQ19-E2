@@ -3,7 +3,8 @@ package es.deusto.spq.server.data.cache;
 import java.util.HashMap;
 import java.util.Map;
 
-/**A simple LFU (Least Frequently Used) cache to be used in the server.
+/**
+ * A simple LFU (Least Frequently Used) cache to be used in the server.
  * <p>
  * Keeps track of the most most and least used data, and all the operations (get, set, 
  * clear) work in O(1) time. Uses O(n) space, where n is the number of mapping values.
@@ -26,7 +27,8 @@ public class Cache<K, V> {
 	/** The current number of elements in the cache. */
 	private int currentNumberElements = 0;
 	
-	/**Creates a new instance of a Cache with the given number of elements.
+	/**
+	 * Creates a new instance of a Cache with the given number of elements.
 	 * Note that since no maximum number of elements has been set, the default value is 
 	 * used (1000).
 	 */
@@ -34,7 +36,8 @@ public class Cache<K, V> {
 		this.map = new HashMap<K, Node<K, V>>(maximumNumberElements);
 	}
 	
-	/**Creates a new instance of a Cache with the given number of elements.
+	/**
+	 * Creates a new instance of a Cache with the given number of elements.
 	 * @param maximumNumberOfElements
 	 */
 	public Cache(int maximumNumberOfElements) {
@@ -42,7 +45,8 @@ public class Cache<K, V> {
 		this.map = new HashMap<K, Node<K, V>>(maximumNumberElements);
 	}
 	
-	/**Sets the mapping between the given key and given value.
+	/**
+	 * Sets the mapping between the given key and given value.
 	 * @param key The key to map from.
 	 * @param value The value to map to.
 	 */
@@ -68,7 +72,8 @@ public class Cache<K, V> {
 		}
 	}
 	
-	/**Returns the value mapping from the given key. If the key does not exist in the cache, 
+	/**
+	 * Returns the value mapping from the given key. If the key does not exist in the cache, 
 	 * a null is return.
 	 * @param key The key mapping from to the value.
 	 * @return {@code null} if the key does not exist, and the value if it does.
@@ -82,7 +87,8 @@ public class Cache<K, V> {
 		return null;
 	}
 	
-	/**Returns whether the given key is currently in the cache.
+	/**
+	 * Returns whether the given key is currently in the cache.
 	 * @param key The key to be checked.
 	 * @return {@code true} if the key is in the cache.
 	 * 			{@code false} if not.
@@ -93,7 +99,8 @@ public class Cache<K, V> {
 		return false;
 	}
 	
-	/**Removes the key and value related to the given key from the cache.
+	/**
+	 * Removes the key and value related to the given key from the cache.
 	 * @param key The key to be removed.
 	 */
 	public void remove(K key) {
@@ -118,7 +125,8 @@ public class Cache<K, V> {
 		}
 	}
 	
-	/**Moves the given node to the front of the list, setting it as the most recently used value.
+	/**
+	 * Moves the given node to the front of the list, setting it as the most recently used value.
 	 * @param node The node to be updated.
 	 */
 	private void moveFront(Node<K, V> node) {
@@ -151,14 +159,16 @@ public class Cache<K, V> {
 		tail.next = null;
 	}
 	
-	/**Returns the maximum number of elements allowed in the cache.
+	/**
+	 * Returns the maximum number of elements allowed in the cache.
 	 * @return The maximum number of elements.
 	 */
 	public int getMaximumNumberOfElements() {
 		return maximumNumberElements;
 	}
 	
-	/**Returns the current number of elements in the cache.
+	/**
+	 * Returns the current number of elements in the cache.
 	 * @return The current number of elements.
 	 */
 	public int getCurrentNumberOfElements() {
