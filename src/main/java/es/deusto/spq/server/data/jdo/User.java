@@ -1,6 +1,8 @@
 
 package es.deusto.spq.server.data.jdo;
 
+import java.io.Serializable;
+
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -10,7 +12,7 @@ import javax.jdo.annotations.Unique;
 
 @PersistenceCapable(detachable="true")
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
-public abstract class User {
+public abstract class User implements Serializable {
 
 	@PrimaryKey
 	private String userID;
@@ -76,6 +78,11 @@ public abstract class User {
 			return object.getUserID().equals(userID);
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return userID.hashCode();
 	}
 
 }

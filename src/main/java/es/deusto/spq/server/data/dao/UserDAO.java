@@ -10,37 +10,32 @@ import javax.jdo.Transaction;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
+import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
+import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
-public class UserDAO implements IDAO, IUserDAO {
+public class UserDAO implements IUserDAO {
 
 	private PersistenceManager pm;
 	private Transaction tx;
 	private Assembler assembler;
 	private Logger log;
+	private SimpleBloomFilter<User> filter;
 	
 	public UserDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
 		assembler = new Assembler();
-		log = log;
+		log = ServerLogger.getLogger();
+		filter = new SimpleBloomFilter<User>();
 	}
 
 	@Override
-	public boolean checkAuthorizationIsAdmin(UserDTO authorization) {
-		// TODO
-		return true;
-	}
-
-	@Override
-	public List<UserDTO> getUsers(UserDTO authorization) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return null;
-		
+	public List<UserDTO> getUsers() {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -67,9 +62,12 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public UserDTO getUserbyID(UserDTO authorization, String ID) {
-		if (!checkAuthorizationIsAdmin(authorization))
+	public UserDTO getUserbyID(String ID) {
+		//Check if there's a user with such ID
+		User tmpUser = new Guest(ID, null);
+		if(!filter.contains(tmpUser))
 			return null;
+		
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -114,7 +112,9 @@ public class UserDAO implements IDAO, IUserDAO {
 				pm.makePersistent(administrator);
 				result = pm.detachCopy(administrator);
 			}
-
+			//Add the new user to the filter
+			filter.add(result);
+			
 			tx.commit();
 
 			return assembler.assembleUser(result);
@@ -131,9 +131,12 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public boolean deleteUserbyID(UserDTO authorization, String ID) {
-		if (!checkAuthorizationIsAdmin(authorization))
+	public boolean deleteUserbyID(String ID) {
+		//Check if there's a user with such ID
+		User user = new Guest(ID, null);
+		if(!filter.contains(user))
 			return false;
+
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -199,7 +202,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 	
 	@Override
-	public List<Guest> getGuests(UserDTO authorization) {
+	public List<Guest> getGuests() {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -221,7 +224,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 	
 	@Override
-	public List<Administrator> getAdministrators(UserDTO authorization) {
+	public List<Administrator> getAdministrators() {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -248,6 +251,34 @@ public class UserDAO implements IDAO, IUserDAO {
 	private final void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
+	}
+
+	@Override
+	public Guest getGuestByEmail(String email) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		tx = pm.currentTransaction();
+		
+		try {
+			ServerLogger.getLogger().info("   * Retrieving an Extent for Rooms.");
+			
+			tx.begin();			
+			Query<Guest> query = pm.newQuery(Guest.class);
+			query.setFilter("email == '" + email + "'");
+			
+			@SuppressWarnings("unchecked")
+			List<Guest> result = (List<Guest>) query.execute();
+			tx.commit();
+			
+			return result.get(0);
+			
+		} catch (Exception ex) {
+			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
+	    } finally {
+	    	close();
+	    }
+	    				
+		return null;
 	}
 
 }

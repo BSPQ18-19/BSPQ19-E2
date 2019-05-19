@@ -4,13 +4,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.jdo.Extent;
-import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
+import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -18,9 +17,11 @@ public class HotelDAO implements IHotelDAO {
 	
 	private PersistenceManager pm;
 	private Transaction tx;
+	private SimpleBloomFilter<Hotel> filter;
 
 	public HotelDAO(){
 		pm = MyPersistenceManager.getPersistenceManager();
+		filter = new SimpleBloomFilter<Hotel>();
 	}
 	
 	public Hotel storeHotel(Hotel hotel) {
@@ -31,6 +32,7 @@ public class HotelDAO implements IHotelDAO {
 	       ServerLogger.getLogger().info("   * Storing an object: " + hotel);
 	       pm.makePersistent(hotel);
 	       Hotel h = pm.detachCopy(hotel);
+	       filter.add(h);
 	       tx.commit();
 	       
 	       return h;
@@ -43,6 +45,10 @@ public class HotelDAO implements IHotelDAO {
 	}
 	
 	public Hotel getHotel(String hotelID) {
+		Hotel tmpHotel = new Hotel(hotelID, null, null, null, null);
+		if(!filter.contains(tmpHotel))
+			return null;
+		
 		/* By default only 1 level is retrieved from the db
 		 * so if we wish to fetch more than one level, we must indicate it
 		 */
@@ -124,7 +130,11 @@ public class HotelDAO implements IHotelDAO {
 	}
 
 	@Override
-	public boolean deleteHotel(String hotelID) {		
+	public boolean deleteHotel(String hotelID) {
+		Hotel tmpHotel = new Hotel(hotelID, null, null, null, null);
+		if(!filter.contains(tmpHotel))
+			return false;
+
 		tx = pm.currentTransaction();
 		try {
 			tx.begin();
@@ -179,5 +189,35 @@ public class HotelDAO implements IHotelDAO {
 	private final void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
+	}
+
+	@Override
+	public Hotel updateHotel(Hotel hotel) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		tx = pm.currentTransaction();
+		
+		try {
+			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
+			
+			tx.begin();			
+			Query<Hotel> query = pm.newQuery(Hotel.class);
+			query.setFilter("hotelId == '" + hotel.getHotelId() + "'");
+			@SuppressWarnings("unchecked")
+			List<Hotel> result = (List<Hotel>) query.execute();
+			result.get(0).setName(hotel.getName());
+			result.get(0).setLocation(hotel.getLocation());
+			result.get(0).setSeasonStart(hotel.getSeasonStart());
+			result.get(0).setSeasonEnding(hotel.getSeasonEnding());
+			tx.commit();
+			
+			return result.get(0);
+		} catch (Exception ex) {
+			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
+	    } finally {
+	    	close();
+	    }
+	    				
+		return null;
 	}
 }
