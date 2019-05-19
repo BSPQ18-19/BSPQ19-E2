@@ -50,6 +50,8 @@ public class ShowHotelReviewView extends View {
     private JLabel lblTittle;
     private JLabel lblAverageScore;
     private double averageScore;
+
+    //The hotelID of the hotel the reviews are from
     private String hotelID;
     
 
@@ -77,11 +79,6 @@ public class ShowHotelReviewView extends View {
 	@Override
 	public ViewType getViewType() {
 		return ViewType.SHOW_REVIEWS;
-	}
-
-	@Override
-	public boolean isUnique() {
-		return true;
 	}
 
 	@Override
@@ -146,20 +143,20 @@ public class ShowHotelReviewView extends View {
 		averageScore = 0;
 
 		if(reviewsList == null || reviewsList.isEmpty()) {
-			//There are no reviews
-			
-			//TODO THIS MAKES AN ERROR
+			//There are no reviews, displays a message
 			editorPane.setText("\n\n"+getViewManager().getClient().getLocaleManager().getMessage("showReviews.noReviews"));
 			return;
 		}else {
-			//There are reviews
+			//There are reviews, gets reviews from list and add them to the editorPane
 			for(ReviewDTO r : reviewsList) {
 				averageScore += r.getScore();
 				opinions = opinions + r.getScore() +"-"+ r.getOpinion() +"\n\n";
 			}
-			
-			//TODO THIS MAKES AN ERROR
+
+			//Display reviews on panel
 			editorPane.setText(opinions);
+
+			//Calculates the average score and displace it
 			averageScore = averageScore/reviewsList.size();
 			lblAverageScore.setText(getViewManager().getClient().getLocaleManager().getMessage("showReviews.averageScore")+averageScore);
 			
@@ -176,7 +173,7 @@ public class ShowHotelReviewView extends View {
      */
     private void onLocaleChange() {
     	lblTittle.setText(getViewManager().getClient().getLocaleManager().getMessage("showReviews.tittle"));
-    	lblAverageScore.setText(getViewManager().getClient().getLocaleManager().getMessage("showReviews.averageScore"));
+    	lblAverageScore.setText(getViewManager().getClient().getLocaleManager().getMessage("showReviews.averageScore") + averageScore);
     	if(reviewsList.isEmpty() || reviewsList == null) {
     		editorPane.setText("\n\n"+getViewManager().getClient().getLocaleManager().getMessage("showReviews.noReviews"));
     	}
