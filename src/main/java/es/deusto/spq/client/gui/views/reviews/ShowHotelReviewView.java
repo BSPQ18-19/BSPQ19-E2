@@ -49,7 +49,8 @@ public class ShowHotelReviewView extends View {
     private JEditorPane editorPane;
     private JLabel lblTittle;
     private JLabel lblAverageScore;
-    private int averageScore;
+    private double averageScore;
+    private String hotelID;
     
 
 	/**
@@ -63,39 +64,44 @@ public class ShowHotelReviewView extends View {
 	}
 
 	 @Override
-	    public ViewPermission getViewPermission() {
+	public ViewPermission getViewPermission() {
 		 //TODO Change it
 	        return ViewPermission.NONE;
 	    }
 
-	    @Override
-	    public ViewType getViewType() {
-	        return ViewType.SHOW_REVIEWS;
-	    }
+	public void setHotelID(String hotelID) {
+		this.hotelID = hotelID;
+		displayReviews();
+	}
 
-	    @Override
-	    public boolean isUnique() {
-	        return true;
-	    }
+	@Override
+	public ViewType getViewType() {
+		return ViewType.SHOW_REVIEWS;
+	}
 
-	    @Override
-	    public @Nullable JInternalFrame getInternalFrame() {
-	        return frame;
-	    }
+	@Override
+	public boolean isUnique() {
+		return true;
+	}
 
-	    @Override
-	    public void bringToFront() {
-	        getInternalFrame().toFront();
-	    }
+	@Override
+	public @Nullable JInternalFrame getInternalFrame() {
+		return frame;
+	}
 
-	    @Override
-		public void dispose() {
-	        try {
-	            getInternalFrame().dispose();
-	        } catch (NullPointerException e) {
-	            e.printStackTrace();
-	        }
-	    }
+	@Override
+	public void bringToFront() {
+		getInternalFrame().toFront();
+	}
+
+	@Override
+	public void dispose() {
+		try {
+			getInternalFrame().dispose();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -113,53 +119,53 @@ public class ShowHotelReviewView extends View {
 
 		editorPane = new JEditorPane();
 		editorPane.setEditable(false);
+		editorPane.setText("\n\n"+getViewManager().getClient().getLocaleManager().getMessage("showReviews.noReviews"));
 		scrollPane.setViewportView(editorPane);
 		
 		lblTittle = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("showReviews.tittle"), JLabel.TRAILING);
 		lblTittle.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblTittle.setBounds(191, 11, 85, 25);
 		frame.getContentPane().add(lblTittle);
-
-		reviewsList = new ArrayList<ReviewDTO>();
-
-		//TODO Add the actual hotelID
-		reviewsList = controller.retrieveReviews("");
-		averageScore = 0;
-
-		//Handle the reviews depending on the number of reviews the hotel has
-		if(reviewsList == null || reviewsList.isEmpty()) {
-			//There are no reviews so it writes a message
-			editorPane.setText("\n\n"+getViewManager().getClient().getLocaleManager().getMessage("showReviews.noReviews"));
-		}else if(reviewsList.size() == 1) {
-			//1 review only, displays the review 
-			editorPane.setText(reviewsList.get(0).getScore()+"-"+reviewsList.get(0).getOpinion());
-			averageScore = reviewsList.get(0).getScore();
-		}else {
-			//More than 1 review
-			String opinion;
-			String previousText;
-
-			opinion = reviewsList.get(0).getScore() +"-"+reviewsList.get(0).getOpinion();
-			averageScore = reviewsList.get(0).getScore();
-
-			//Gets all the reviews and display them on the EditorPane
-			for(int n = 1; n < reviewsList.size(); n++) {
-				averageScore += reviewsList.get(n).getScore();
-				previousText = editorPane.getText();
-				opinion = reviewsList.get(n).getScore() +"-"+ reviewsList.get(n).getOpinion();
-				editorPane.setText(previousText+"\n\n"+opinion);
-			}
-			//Calculate the average score of the hotel
-			averageScore = averageScore/reviewsList.size();
-		}
-
+		
 		//Displays the Average Score
+		averageScore = 0;
 		lblAverageScore = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("showReviews.averageScore")+" "+averageScore, JLabel.TRAILING);
 		lblAverageScore.setBounds(191, 47, 85, 25);
 		frame.getContentPane().add(lblAverageScore);
+		
 		frame.setVisible(true);
 	}
-	
+
+	private void displayReviews() {
+
+		reviewsList = new ArrayList<ReviewDTO>();
+		String opinions = "";
+
+		//Gets the review list
+		reviewsList = controller.retrieveReviews(hotelID);
+		averageScore = 0;
+
+		if(reviewsList == null || reviewsList.isEmpty()) {
+			//There are no reviews
+			
+			//TODO THIS MAKES AN ERROR
+			editorPane.setText("\n\n"+getViewManager().getClient().getLocaleManager().getMessage("showReviews.noReviews"));
+			return;
+		}else {
+			//There are reviews
+			for(ReviewDTO r : reviewsList) {
+				averageScore += r.getScore();
+				opinions = opinions + r.getScore() +"-"+ r.getOpinion() +"\n\n";
+			}
+			
+			//TODO THIS MAKES AN ERROR
+			editorPane.setText(opinions);
+			averageScore = averageScore/reviewsList.size();
+			lblAverageScore.setText(getViewManager().getClient().getLocaleManager().getMessage("showReviews.averageScore")+averageScore);
+			
+		}
+	}
+
 	@Override
     public void refresh() {
         onLocaleChange();

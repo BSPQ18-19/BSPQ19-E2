@@ -24,9 +24,11 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
+import es.deusto.spq.client.gui.views.reviews.ShowHotelReviewView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.ReviewDTO;
@@ -95,7 +97,9 @@ public class RoomPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				clientWindowGuest.getGuestView().getViewManager().openView(ViewFactory.buildView(ViewType.SHOW_REVIEWS, clientWindowGuest.getGuestView().getViewManager()));
+				ShowHotelReviewView view;
+				clientWindowGuest.getGuestView().getViewManager().openView(view = (ShowHotelReviewView) ViewFactory.buildView(ViewType.SHOW_REVIEWS, clientWindowGuest.getGuestView().getViewManager()));
+				view.setHotelID(hotelId);
 			}
 		});
 
