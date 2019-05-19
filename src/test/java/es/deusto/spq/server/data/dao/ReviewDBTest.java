@@ -79,7 +79,7 @@ public class ReviewDBTest {
 	public void aStoreReview() {
 		r.setHotel(h);
 		r.setUser(u);
-		final Review detachedReview = reviewDAO.storeReview(r, hotelID, userID);
+		Review detachedReview = reviewDAO.storeReview(r, hotelID, userID);
 		Assert.assertTrue(r.equals(detachedReview));
 	}
 
@@ -90,7 +90,7 @@ public class ReviewDBTest {
 	 */
 	@Test
 	public void bRetriveReviewsOfHotel() {
-		final List<Review> reviews = reviewDAO.getReviewsOfHotel(hotelID);
+		List<Review> reviews = reviewDAO.getReviewsOfHotel(hotelID);
 		Assert.assertEquals(reviews.size(), 1);
 		Assert.assertTrue(reviews.contains(r));
 	}
@@ -101,7 +101,7 @@ public class ReviewDBTest {
 	 */
 	@Test
 	public void cRetrieveReviewsPostedByUser() {
-		final List<Review> reviews = reviewDAO.getReviewsByUser(userID);
+		List<Review> reviews = reviewDAO.getReviewsByUser(userID);
 		Assert.assertEquals(reviews.size(), 1);
 		Assert.assertTrue(reviews.contains(r));
 	}

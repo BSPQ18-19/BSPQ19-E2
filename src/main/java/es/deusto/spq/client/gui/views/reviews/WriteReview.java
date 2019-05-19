@@ -75,6 +75,8 @@ public class WriteReview extends View{
         return true;
     }
 
+    
+
     @Override
     public @Nullable JInternalFrame getInternalFrame() {
         return frame;
@@ -110,9 +112,10 @@ public class WriteReview extends View{
 					return;
 				}
 				int score = (int) spinner.getValue();
+				String opinion = editorPane.getText();
+				ReviewDTO r = hotelManagementController.createReview(opinion, score, hotelID, userID);
 				try {
-					ReviewDTO review= hotelManagementController.createReview(editorPane.getText(), score, "", "");
-					if(review == null) {
+					if(r == null) {
 						JOptionPane.showMessageDialog(frame,
 			                    getViewManager().getClient().getLocaleManager().getMessage("writeReview.error"),
 			                    getViewManager().getClient().getLocaleManager().getMessage("writeReview.error.title"),
@@ -136,13 +139,14 @@ public class WriteReview extends View{
 		frame.getContentPane().add(spinner);
 		
 		lblScore = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("writeReview.score"), JLabel.TRAILING);
-		lblScore.setBounds(73, 11, 46, 14);
+		lblScore.setBounds(50, 11, 76, 25);
 		frame.getContentPane().add(lblScore);
 		
 		lblWritteYourReview = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("writeReview.descrition"), JLabel.TRAILING);
 		lblWritteYourReview.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblWritteYourReview.setBounds(202, 40, 123, 23);
 		frame.getContentPane().add(lblWritteYourReview);
+		frame.toFront();
 		frame.setVisible(true);
 	}
 

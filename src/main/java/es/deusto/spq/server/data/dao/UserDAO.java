@@ -105,6 +105,38 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
+	public User getUser(String ID) {
+		
+		//Check if there's a user with such ID
+		User tmpUser = new Guest(ID, null);
+		if(!filter.contains(tmpUser))
+			return null;
+		
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			Query<User> query = pm.newQuery(User.class);
+			query.setFilter("userID == '" + ID + "'");
+			@SuppressWarnings("unchecked")
+			List<User> result = (List<User>) query.execute();
+			tx.commit();
+
+			return result == null || result.isEmpty() || result.size() > 1 ? 
+					null : 
+					result.get(0);
+		} catch (Exception e) {
+			log.fatal("Error in UserDAO:getUserbyID()");
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+
+		return null;
+	}
+
+	@Override
 	public UserDTO createUser(User user) {
 		try {
 			User result;

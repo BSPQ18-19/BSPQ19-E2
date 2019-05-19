@@ -380,15 +380,19 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		Hotel h = hotelDao.getHotel(hotelID);
 		
-		UserDTO uDTO = userDAO.getUserbyID(null, userID);
-		User u = reviewAssembler.disassembleUser(uDTO);
+		User u = userDAO.getUser(userID);
 		
-		Review r = new Review(randomID, opinion, score, timestamp, h, u);
+		Review r = new Review(randomID, opinion, score, timestamp);
+		r.setHotel(h);
+		r.setUser(u);
 		
 		Review detachedCopy = reviewDAO.storeReview(r, hotelID, userID);
-		
-		ReviewDTO reviewDTO = reviewAssembler.assembleReview(detachedCopy);
-		return reviewDTO;
+		if(detachedCopy == null) {
+			return null;
+		}
+
+		ReviewDTO rDTO = reviewAssembler.assembleReview(detachedCopy);
+		return rDTO;
 	}
 
 }

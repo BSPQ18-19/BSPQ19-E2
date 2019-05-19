@@ -56,4 +56,10 @@ public interface IUserDAO {
 	public List<Administrator> getAdministrators(UserDTO authorization);
 	
 	public Guest getGuestByEmail(String email);
+	/**
+	 * The same as getUserByID but this return the user and not the UserDTO
+	 * @param ID
+	 * @return User object
+	 */
+	public User getUser(String ID);
 }

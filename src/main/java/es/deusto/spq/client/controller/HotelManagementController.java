@@ -341,7 +341,13 @@ public class HotelManagementController {
     }
     
     public ReviewDTO createReview(String opinion, int score, String hotelID, String userID){
-    	return rsl.getHotelManager().createReview(opinion, score, hotelID, userID);
+    	try {
+			return rsl.getHotelManager().createReview(opinion, score, hotelID, userID);
+		
+		} catch (RemoteException e) {
+			log.fatal("Error creating a new Review: " + e.getMessage());
+		}
+    	return null;
     }
 	/**
 	 * Clear the list of the current rooms
