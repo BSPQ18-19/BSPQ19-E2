@@ -1,6 +1,7 @@
 package es.deusto.spq.client.controller;
 
 import java.rmi.RemoteException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,21 +10,36 @@ import org.apache.log4j.Logger;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.ReservationDTO;
+import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.RoomType;
 
+/** Controller of the client side
+ * @author gonzalo
+ *
+ */
 public class HotelManagementController {
 
 	private static HotelManagementController controller = new HotelManagementController();
 	private RMIServiceLocator rsl;
 	private UserDTO loggedUser = null;
 	private Logger log;
+	/**
+	 * The total current hotels of the database
+	 */
 	private ArrayList<HotelDTO> currentHotels;
+	/**
+	 * The total current rooms of the database
+	 */
+	private ArrayList<RoomDTO> currentRooms;
 	
 	private HotelManagementController() {
 		rsl = RMIServiceLocator.getServiceLocator();
 		log = ClientLogger.getLogger();
 		log.info("HotelManagementController initialized");
 		this.currentHotels = new ArrayList<>();
+		this.currentRooms = new ArrayList<>();
 	}
 	
 	public static HotelManagementController getController() {
@@ -33,6 +49,15 @@ public class HotelManagementController {
 	public UserDTO signInGuest(String name, String email, String password, String phone, String address) throws RemoteException {
 		log.info("signInGuest called");
 		UserDTO result = rsl.getHotelManager().signInGuest(name, email, password, phone, address);
+		if(result != null)
+			log.info("Signed in user with email: " + email);
+		else
+			log.info("Did not signed in user with email: " + email);
+		return result;
+	}
+	
+	public UserDTO signInAdmin(String name, String email, String password, String address) throws RemoteException {
+		UserDTO result = rsl.getHotelManager().signInAdmin(name, email, password, address);
 		if(result != null)
 			log.info("Signed in user with email: " + email);
 		else
@@ -62,7 +87,15 @@ public class HotelManagementController {
 		return true;
 	}
 	
-public boolean createHotel(String id, String name, String location, String seasonStart, String seasonEnd) {
+	/** Create a new hotel
+	 * @param id Id of the hotel
+	 * @param name Name of the hotel
+	 * @param location Location of the hotel
+	 * @param seasonStart Day where the hotel starts being available
+	 * @param seasonEnd Day where the hotel ends being available
+	 * @return true if its properly created
+	 */
+	public boolean createHotel(String id, String name, String location, String seasonStart, String seasonEnd) {
     	
     	try {
     		log.info("Creating new hotel...");
@@ -79,6 +112,34 @@ public boolean createHotel(String id, String name, String location, String seaso
     	return false;
     }
     
+	/**Update a hotel
+	 * @param id Id of the hotel
+	 * @param name Name of the hotel
+	 * @param location Location of the hotel
+	 * @param seasonStart Day where the hotel starts being available
+	 * @param seasonEnd Day where the hotel ends being available
+	 * @return true if its properly updated
+	 */
+	public boolean updateHotel(String id, String name, String location, String seasonStart, String seasonEnd) {
+		
+		try {
+    		log.info("Creating new hotel...");
+			HotelDTO hotelDTO = rsl.getHotelManager().updateHotel(id, name, location, seasonStart, seasonEnd);
+			if(hotelDTO!=null) {
+				log.info("Hotel created successfully!");
+				return true;
+			}else {
+				log.info("Hotel cannot be created.");
+			}
+		} catch (RemoteException e) {
+			log.fatal("Error creating a new hotel: " + e.getMessage());
+		}
+    	return false;
+	}
+    /** Delete a hotel using the hotelID
+     * @param id Id of the hotel
+     * @return true if its properly deleted
+     */
     public boolean deleteHotel(String id) {
     	try {
     		log.info("Deleting hotel with ID: " + id);
@@ -94,15 +155,13 @@ public boolean createHotel(String id, String name, String location, String seaso
     	return false;
     }
     
-    public ArrayList<HotelDTO> retrieveHotels() {
+    /** Retrieve all the hotels from DB
+     * @return An array list of HotelDTO objects
+     */
+    public List<HotelDTO> retrieveHotels() {
     	log.info("Getting list of hotels.");
     	try {
-			ArrayList<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();
-//			for(HotelDTO hotelDTO: hotel) {
-//				System.out.println(hotelDTO.getLocation());
-//			}
-//			HotelDTO[] hotels = hotel.toArray(new HotelDTO[hotel.size()]);
-			
+			List<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels();			
 			
 			if(hotel != null && hotel.size() != 0) {
 				log.info("List of hotels retrieved succesfully.");
@@ -116,9 +175,33 @@ public boolean createHotel(String id, String name, String location, String seaso
 		return null;
     }
     
-    public boolean cleanDB() {
+    /** Retrieve available hotels with the requested arrival date
+     * @param arrivalDate Date when a guest wants to arrive at the hotel
+     * @return An array list of HotelDTO objects
+     */
+    public List<HotelDTO> retrieveHotels(String arrivalDate) {
+    	log.info("Getting list of hotels.");
     	try {
-    		rsl.getHotelManager().cleanDB();
+			List<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels(arrivalDate);			
+			
+			if(hotel != null && hotel.size() != 0) {
+				log.info("List of hotels retrieved succesfully.");
+				return hotel;
+			}else {
+				log.info("Could not retrieve list of hotels");
+			}
+    	} catch (RemoteException e) {
+    		log.fatal("Error getting list of hotels: " + e.getMessage());
+		}
+		return null;
+    }    
+    
+    /** Clean all the hotels from the DB
+     * @return true if its properly cleaned
+     */
+    public boolean cleanHotelsDB() {
+    	try {
+    		rsl.getHotelManager().cleanHotelsDB();
 			return true;
 		} catch (RemoteException e) {
 			log.fatal("Error cleaning db: " + e.getMessage());
@@ -126,12 +209,167 @@ public boolean createHotel(String id, String name, String location, String seaso
     	return false;
     }
     
+    /** Retrieve all the rooms from DB
+     * @return An array list of RoomDTO objects
+     */
+    public ArrayList<RoomDTO> retrieveRooms(){
+       	log.info("Getting list of rooms.");
+    	try {
+			ArrayList<RoomDTO> room = rsl.getHotelManager().retrieveRooms();
+			
+			if(room != null && room.size() != 0) {
+				log.info("List of rooms retrieved succesfully.");
+				return room;
+			}else {
+				log.info("Could not retrieve list of rooms");
+			}
+    	} catch (RemoteException e) {
+    		log.fatal("Error getting list of rooms: " + e.getMessage());
+		}
+		return null;
+    }
+    
+    /**Retrieve all the rooms from DB by a hotelId
+     * @param hotelId Id of the hotel
+     * @return An array list of RoomDTO objects
+     */
+    public ArrayList<RoomDTO> retrieveRoomsByHotelId(String hotelId){
+       	log.info("Getting list of rooms.");
+    	try {
+			ArrayList<RoomDTO> room = rsl.getHotelManager().retrieveRoomsByHotelId(hotelId);
+			
+			if(room != null && room.size() != 0) {
+				log.info("List of rooms retrieved succesfully.");
+				return room;
+			}else {
+				log.info("Could not retrieve list of rooms");
+			}
+    	} catch (RemoteException e) {
+    		log.fatal("Error getting list of rooms: " + e.getMessage());
+		}
+		return null;
+    }
+    
+    /** Retrieve a room from DB by a roomId
+     * @param roomId Id of the room
+     * @return A RoomDTO object
+     */
+    public RoomDTO retrieveRoomById(String roomId){
+       	log.info("Getting list of rooms.");
+    	try {
+			RoomDTO room = rsl.getHotelManager().retrieveRoomById(roomId);
+			
+			if(room != null){
+				log.info("Room retrieved succesfully.");
+				return room;
+			}else {
+				log.info("Could not retrieve a room");
+			}
+    	} catch (RemoteException e) {
+    		log.fatal("Error getting room: " + e.getMessage());
+		}
+		return null;
+    }
+    
+    
+    /** Update the room data to the database
+     * @param roomId Id of the room
+     * @param size Size of the room
+     * @param price price of the room
+     * @param roomtype type of the room
+     * @param isOccupied true if the room is occupied
+     * @return true if its correctly done
+     */
+    public boolean updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) {
+    	try {
+    		log.info("Updating a room...");
+			RoomDTO roomDTO = rsl.getHotelManager().updateRoom(roomId, size, price, roomtype, isOccupied);
+			if(roomDTO!=null) {
+				log.info("room updated successfully!");
+				return true;
+			}else {
+				log.info("room cannot be updated.");
+			}
+		} catch (RemoteException e) {
+			log.fatal("Error updating a room: " + e.getMessage());
+		}
+    	return false;
+    }
+    
+    /** Delete a room using the roomID
+     * @param id Id of the room
+     * @return true if its properly deleted
+     */
+    public boolean deleteRoom(String id) {
+    	try {
+    		log.info("Deleting Room with ID: " + id);
+			if(rsl.getHotelManager().deleteRoom(id)) {
+				log.info("Room deleted successfully!");
+				return true;
+			}else {
+				log.info("Room cannot be deleted");
+			}
+		} catch (RemoteException e) {
+			log.fatal("Error deleting a Room...");
+		}
+    	return false;
+    }
+	
+    /** Create a new reservation
+     * @param reservationId Id of the reservation
+     * @param userId Id of the guest
+     * @param roomId Id of the room
+     * @param firstDay first day the user stays at the hotel
+     * @param lastDay last day the user stays at the hotel
+     * @return true if its correctly done
+     */
+    public boolean createReservation(String reservationId, String userId, String roomId, LocalDate firstDay, LocalDate lastDay) {
+    	try {
+    		log.info("Creating new resevation...");
+			ReservationDTO reservationDTO = rsl.getHotelManager().createReservation(reservationId, userId, roomId, firstDay, lastDay);
+			if(reservationDTO!=null) {
+				log.info("Resevation created successfully!");
+				return true;
+			}else {
+				log.info("Resevation cannot be created.");
+			}
+		} catch (RemoteException e) {
+			log.fatal("Error creating a new resevation: " + e.getMessage());
+		}
+    	return false;
+    }
+    
+	/**
+	 * Clear the list of the current rooms
+	 */
+	public void setCurrentRooms() {
+		this.currentRooms.clear();
+	}
+	
+	/** Set the current rooms available
+	 * @param roomDTO RoomDTO object
+	 */
+	public void setCurrentRooms(RoomDTO roomDTO) {
+		this.currentRooms.add(roomDTO);
+	}
+    
+    
+	/**
+	 * @return An array list of HotelDTO objects
+	 */
 	public ArrayList<HotelDTO> getCurrentHotels() {
 		return currentHotels;
 	}
+	
+	/** Set the current hotels available
+	 * @param hotelDTO HotelDTO object
+	 */
 	public void setCurrentHotels(HotelDTO hotelDTO) {
 		this.currentHotels.add(hotelDTO);
 	}
+	/**
+	 * Clear the list of the current hotels
+	 */
 	public void setCurrentHotels() {
 		this.currentHotels.clear();
 	}
@@ -162,5 +400,4 @@ public boolean createHotel(String id, String name, String location, String seaso
 		}
 		return false;
 	}
-
 }

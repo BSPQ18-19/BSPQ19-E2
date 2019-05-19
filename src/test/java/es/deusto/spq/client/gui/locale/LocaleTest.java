@@ -1,7 +1,9 @@
 package es.deusto.spq.client.gui.locale;
 
 import es.deusto.spq.client.Client;
+import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -13,6 +15,9 @@ import java.util.Locale;
  */
 public class LocaleTest {
 
+    @Rule
+    public ContiPerfRule rule = new ContiPerfRule();
+
     /**
      * The default locale should always be English (en_EN)
      */
@@ -22,7 +27,7 @@ public class LocaleTest {
         Client client = Mockito.mock(Client.class);
         LocaleManager localeManager = new LocaleManager(client);
 
-        Locale englishLocale = new Locale("en", "US");
+        Locale englishLocale = new Locale("en");
 
         // Check expected default value
         Assert.assertEquals(englishLocale, LocaleManager.DEFAULT_LOCALE);
@@ -44,7 +49,7 @@ public class LocaleTest {
         Assert.assertEquals(spanishLocale, localeManager.getLocale());
 
         // Test again, in English
-        Locale englishLocale = new Locale("en", "US");
+        Locale englishLocale = new Locale("en");
         localeManager.setLocale(englishLocale);
         Assert.assertEquals(englishLocale, localeManager.getLocale());
 

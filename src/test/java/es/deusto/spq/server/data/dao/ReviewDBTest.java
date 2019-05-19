@@ -3,8 +3,10 @@ package es.deusto.spq.server.data.dao;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -25,8 +27,12 @@ import junit.framework.Assert;
  * @author egoes
  *
  */
+@SuppressWarnings("deprecation")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ReviewDBTest {
+
+	@Rule
+	public ContiPerfRule rule = new ContiPerfRule();
 
 	// The review used for testing
 	private static String reviewID;
@@ -69,7 +75,6 @@ public class ReviewDBTest {
 	 * Stores a review and the DAO return the stored review to see if the review was
 	 * correctly stored If the review is the same the test success
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void aStoreReview() {
 		r.setHotel(h);
@@ -83,7 +88,6 @@ public class ReviewDBTest {
 	 * the one we created If the list contains the review we stored the test is a
 	 * success
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void bRetriveReviewsOfHotel() {
 		final List<Review> reviews = reviewDAO.getReviewsOfHotel(hotelID);
@@ -95,7 +99,6 @@ public class ReviewDBTest {
 	 * Retrieves the reviews posted by a user from the DB If the list contains the
 	 * review we stored the test is a success
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void cRetrieveReviewsPostedByUser() {
 		final List<Review> reviews = reviewDAO.getReviewsByUser(userID);
@@ -107,12 +110,11 @@ public class ReviewDBTest {
 	 * Deletes the review from the DB If the method return true the test is a
 	 * success Here the hotel and the user are also deleted
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void dDeletesReview() {
 		Assert.assertTrue(reviewDAO.deleteReview(reviewID));
 		// TODO When the authorization on userDAO is done this null should chanage
-		userDAO.deleteUserbyID(null, userID);
+		userDAO.deleteUserbyID(userID);
 		hotelDAO.deleteHotel(hotelID);
 	}
 }

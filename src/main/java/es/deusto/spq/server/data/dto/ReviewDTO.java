@@ -3,8 +3,6 @@ package es.deusto.spq.server.data.dto;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import es.deusto.spq.server.data.jdo.Review;
-
 /**
  * The DTO of the review object.
  *
@@ -157,13 +155,10 @@ public class ReviewDTO implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		// Two Review are equal objects if and only if they have the same reviewID.
-		if (obj instanceof Review) {
-			final Review object = (Review) obj;
-			return object.getReviewID().equals(reviewID);
-		}
-		return false;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ReviewDTO reviewDTO = (ReviewDTO) o;
+		return getReviewID().equals(reviewDTO.getReviewID());
 	}
-
 }
