@@ -371,6 +371,7 @@ public class UserPayView extends View{
 		}
 
 		// Success!
+		roomDTO.setOccupied(true);
 		controller.updateRoom(roomDTO.getRoomID(), roomDTO.getSize(), roomDTO.getPrice(), roomDTO.getType(), roomDTO.isOccupied());
 		controller.createReservation(Integer.toString(r.nextInt(Integer.MAX_VALUE)),
 		controller.getLoggedUser().getUserID(), roomDTO.getRoomID(), localDateStart, localDateEnding);

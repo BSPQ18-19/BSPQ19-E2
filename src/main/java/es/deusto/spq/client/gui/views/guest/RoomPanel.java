@@ -95,7 +95,6 @@ public class RoomPanel extends JPanel{
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
 						LocalDate localDateStart = LocalDate.parse(calendarDate.trim(), formatter);
 						LocalDate localDateEnding = localDateStart.plusDays(Integer.valueOf(daysForRoom));
-						roomDTO.setOccupied(true);
 						float finalPrize = Integer.parseInt(daysForRoom) * roomDTO.getPrice();
 						
 						UserPayView view;
