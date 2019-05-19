@@ -30,8 +30,9 @@ public class UserPayView extends View{
 	private JButton btnMakePayment, btnCancelPayment;
 	private JTextField tFUsername, tFPassword, tFCreditCardNumber, tFSecurityCode;
 	private JLabel lblUsername, lblPassword, lblCreditCardNumber, lblSecurityCode;
-	private JPanel form, formMasterCard;
-	private final HotelManagementController controller;
+	private JPanel form, formMasterCard, topPanel, bottomPanel;
+	private HotelManagementController controller;
+	private float prize;
 
 	/**
 	 * Class constructor
@@ -52,9 +53,9 @@ public class UserPayView extends View{
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 
-		final JPanel topPanel = new JPanel();
+		topPanel = new JPanel();
 		topPanel.setBackground(Color.LIGHT_GRAY);
-		final JPanel bottomPanel = new JPanel();
+		bottomPanel = new JPanel();
 		bottomPanel.setBackground(Color.LIGHT_GRAY);
 
 		form = new JPanel();
@@ -236,7 +237,7 @@ public class UserPayView extends View{
         };
 		//Check that all the required field are filled,if not fails
 		if(rdbtnMasterCard.isSelected()) {
-			for(final JTextComponent component : componentsMasterCard)
+			for(JTextComponent component : componentsMasterCard)
 				if(component.getText().trim().isEmpty()) {
 					notifyValidationFail(ValidationFailReason.REQUIRED_FIELD_EMPTY);
 					toggleFields(true);
@@ -251,7 +252,7 @@ public class UserPayView extends View{
 				return;
 			}
 		}else if(rdbtnPaypal.isSelected()){
-			for(final JTextComponent component : componentsPaypal)
+			for(JTextComponent component : componentsPaypal)
 				if(component.getText().trim().isEmpty()) {
 					notifyValidationFail(ValidationFailReason.REQUIRED_FIELD_EMPTY);
 					toggleFields(true);
@@ -267,7 +268,7 @@ public class UserPayView extends View{
 		if(rdbtnMasterCard.isSelected()) {
 			String cardNumber = tFCreditCardNumber.getText();
 			String securityCode = tFSecurityCode.getText();
-			if(!controller.payReservation(cardNumber, securityCode, 0, false)) {
+			if(!controller.payReservation(cardNumber, securityCode, prize, false)) {
 				ClientLogger.getLogger().fatal("Payment cant be done...");
 	            JOptionPane.showMessageDialog(frame,
 	                    getViewManager().getClient().getLocaleManager().getMessage("pay.validation.errors.unknown"),
@@ -299,6 +300,14 @@ public class UserPayView extends View{
                 getViewManager().getClient().getLocaleManager().getMessage("pay.success.title"),
                 JOptionPane.INFORMATION_MESSAGE);
         frame.dispose();
+	}
+
+	public float getPrize() {
+		return prize;
+	}
+
+	public void setPrize(float prize) {
+		this.prize = prize;
 	}
 
 	/**
