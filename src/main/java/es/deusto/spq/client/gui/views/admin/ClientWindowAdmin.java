@@ -2,11 +2,7 @@ package es.deusto.spq.client.gui.views.admin;
 import java.awt.*;
 import javax.swing.*;
 
-import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.gui.locale.LocaleManager;
-
-import org.apache.log4j.Logger;
 
 /** Main frame of the admin user
  * @author gonzalo
@@ -15,18 +11,29 @@ import org.apache.log4j.Logger;
 public class ClientWindowAdmin extends JInternalFrame {
 	
 	private static final long serialVersionUID = 1L;
-	private static ClientWindowAdmin clientWindow;
-	private ScreenTypeAdmin currentScreenType;
+	/**
+	 * screenWidth Width of the current screen
+	 * screenHeight Height of the current screen
+	 */
 	private int screenWidth, screenHeight;
+	/**
+	 * controller Instance of class HotelManagementController
+	 */
 	private HotelManagementController controller;
+	/**
+	 * mainPanel The main panel of the window
+	 */
 	private JPanel mainPanel;
-	private Logger log;
+	/**
+	 * adminView Instance of class HotelAdminView
+	 */
 	private HotelAdminView adminView;
 
 	
-	// private constructor using lazy singleton
+	/** Private constructor using lazy singleton
+	 * @param adminView Reference to class HotelAdminView
+	 */
 	public ClientWindowAdmin(HotelAdminView adminView) {
-		log = ClientLogger.getLogger();
 		
 		this.adminView = adminView;
 		this.controller = adminView.getViewManager().getClient().getController();
@@ -49,7 +56,6 @@ public class ClientWindowAdmin extends JInternalFrame {
 	 * @param nextScreenType Type of the next screen that is wanted to be displayed
 	 */
 	public void changeScreen(ScreenTypeAdmin nextScreenType) {
-		this.currentScreenType = nextScreenType;
 		
 		switch(nextScreenType) {
 		case VIEW_HOTEL_ADMIN:
@@ -65,11 +71,17 @@ public class ClientWindowAdmin extends JInternalFrame {
 		this.revalidate();
 	}
 	
+	/** Retrieve the admin view
+	 * @return HotelAdminView object
+	 */
 	public HotelAdminView getAdminView() {
 		return adminView;
 	}
 
 
+	/** Return the controller
+	 * @return HotelManagementController object
+	 */
 	public HotelManagementController getController() {
 		return controller;
 	}

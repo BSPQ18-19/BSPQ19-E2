@@ -27,7 +27,7 @@ public class LocaleTest {
         Client client = Mockito.mock(Client.class);
         LocaleManager localeManager = new LocaleManager(client);
 
-        Locale englishLocale = new Locale("en", "US");
+        Locale englishLocale = new Locale("en");
 
         // Check expected default value
         Assert.assertEquals(englishLocale, LocaleManager.DEFAULT_LOCALE);
@@ -49,7 +49,7 @@ public class LocaleTest {
         Assert.assertEquals(spanishLocale, localeManager.getLocale());
 
         // Test again, in English
-        Locale englishLocale = new Locale("en", "US");
+        Locale englishLocale = new Locale("en");
         localeManager.setLocale(englishLocale);
         Assert.assertEquals(englishLocale, localeManager.getLocale());
 

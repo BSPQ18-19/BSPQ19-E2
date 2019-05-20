@@ -13,7 +13,8 @@ import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.RoomType;
 
-/** Test for the class RoomDAO
+/**
+ * Test for the class RoomDAO
  * @author gonzalo
  *
  */
@@ -27,7 +28,8 @@ public class RoomDAOTest {
 		private static Hotel hotel;
 		private static ArrayList<Room> rooms;
 		
-		/** Executes initial variables for testing RoomDAO
+		/**
+		 * Executes initial variables for testing RoomDAO
 		 * @throws Exception
 		 */
 		@BeforeClass
@@ -50,25 +52,36 @@ public class RoomDAOTest {
 		 *  Test the method for retrieving all the rooms from the DB
 		 */
 		@Test
-		public void aGetRooms() {
-			ArrayList<Room> listRooms = roomDAO.getRooms();
+		public void test1GetRooms() {
+			List<Room> listRooms = roomDAO.getRooms();
 			Assert.assertTrue(listRooms.contains(rooms.get(0)));
 		}
 		
 		/**
-		 * Test the method for retrieving all the rooms from the DB accordint to a hotel ID
+		 * Test the method for retrieving all the rooms from the DB according to a hotel ID
 		 */
 		@Test
-		public void bGetRoomById() {
-			List<Room> listRooms = roomDAO.getRoom(hotelID);
+		public void test2GetRoomByHotelId() {
+			List<Room> listRooms = roomDAO.getRoomByHotelId(hotelID);
 			Assert.assertTrue(listRooms.contains(rooms.get(0)));
+		}
+		
+		/**
+		 * Test the method for updating a room from the DB
+		 */
+		@Test
+		public void test4UpdateRoom() {
+			Room newRoom = new Room("R10", 200, 150, RoomType.SINGLE, true);
+			Room room = roomDAO.updateRoom(newRoom);
+			Assert.assertEquals(newRoom.isOccupied(), room.isOccupied());
+			Assert.assertNotEquals(rooms.get(0).isOccupied(), room.isOccupied());
 		}
 		
 		/**
 		 * Test the method for deleting a room from the DB
 		 */
 		@Test
-		public void cDeleteRoom() {
+		public void test5DeleteRoom() {
 			Assert.assertTrue(roomDAO.deleteRoom(rooms.get(0).getRoomId()));
 			hotelDAO.cleanHotelsDB();
 		}
