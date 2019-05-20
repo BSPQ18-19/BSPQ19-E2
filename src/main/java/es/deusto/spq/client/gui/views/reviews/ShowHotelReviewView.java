@@ -91,6 +91,11 @@ public class ShowHotelReviewView extends View {
 		getInternalFrame().toFront();
 	}
 
+    @Override
+    public boolean isUnique() {
+        return true;
+    }
+
 	@Override
 	public void dispose() {
 		try {
@@ -129,7 +134,9 @@ public class ShowHotelReviewView extends View {
 		lblAverageScore = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("showReviews.averageScore")+" "+averageScore, JLabel.TRAILING);
 		lblAverageScore.setBounds(191, 47, 85, 25);
 		frame.getContentPane().add(lblAverageScore);
-		
+
+		addDisposeEventHandler();
+		frame.toFront();
 		frame.setVisible(true);
 	}
 
@@ -161,6 +168,7 @@ public class ShowHotelReviewView extends View {
 			lblAverageScore.setText(getViewManager().getClient().getLocaleManager().getMessage("showReviews.averageScore")+averageScore);
 			
 		}
+		frame.repaint();
 	}
 
 	@Override

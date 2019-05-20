@@ -229,7 +229,7 @@ public class AssemblerTest {
                 timestamp
         );
 
-        Assert.assertTrue(reviewDTO.equals(assembler.assembleReview(review)));
+        Assert.assertEquals(reviewDTO, assembler.assembleReview(review));
 
     }
 
