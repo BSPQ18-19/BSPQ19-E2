@@ -3,6 +3,7 @@ var classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager =
     [ "HotelManager", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a2f9c0f49906a2af2c008868ca7d6117c", null ],
     [ "cleanHotelsDB", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a9af8cc9d82834cb1de9361bcb967d055", null ],
     [ "createHotel", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#ab5ba7a23d84b8f6b7f7c6992435929f9", null ],
+    [ "createReservation", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a321bce590ed0c036a3f72e1e8c93b030", null ],
     [ "deleteHotel", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a9b7917f53ce756a3598ac0be01d29e59", null ],
     [ "deleteRoom", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a827387dc40528d12a22e2563c9a9ad13", null ],
     [ "logIn", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a5bfdd5052961eb984a5b1c6268cff558", null ],
@@ -13,9 +14,11 @@ var classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager =
     [ "registerPayPal", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a6b5b18a21c802cf328565f171f165271", null ],
     [ "retrieveHotels", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a651d97626122d44fda067184e6cdd5fb", null ],
     [ "retrieveHotels", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a3471e20cd839c25a4e7ecab75008c85e", null ],
+    [ "retrieveRoomById", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a782164c9c7a9ca839515fbb6023f5e0e", null ],
     [ "retrieveRooms", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#aa03d96d6d7dd5811bcc73e6414a557c1", null ],
-    [ "retrieveRoomsById", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a77b36ec2c7472f063523997f3f985bc9", null ],
+    [ "retrieveRoomsByHotelId", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#af2cf8f03ef3b2cb19e092eacf2df8d4b", null ],
     [ "signInAdmin", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a1bf072648e2ad9a1fe409ab79d63ab75", null ],
     [ "signInGuest", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#aa0924adb61f68be868ad296cd2466e57", null ],
+    [ "updateHotel", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a12e6a7d9a419278510561cf5427adf6b", null ],
     [ "updateRoom", "classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#a46c1142dbfc160d8deedba4d792182da", null ]
 ];

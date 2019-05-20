@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['idao',['IDAO',['../interfacees_1_1deusto_1_1spq_1_1server_1_1data_1_1dao_1_1_i_d_a_o.html',1,'es::deusto::spq::server::data::dao']]],
   ['ihoteldao',['IHotelDAO',['../interfacees_1_1deusto_1_1spq_1_1server_1_1data_1_1dao_1_1_i_hotel_d_a_o.html',1,'es::deusto::spq::server::data::dao']]],
   ['ihotelmanager',['IHotelManager',['../interfacees_1_1deusto_1_1spq_1_1server_1_1remote_1_1_i_hotel_manager.html',1,'es::deusto::spq::server::remote']]],
   ['imastercardgateway',['IMastercardGateway',['../interfacees_1_1deusto_1_1spq_1_1server_1_1gateway_1_1_i_mastercard_gateway.html',1,'es::deusto::spq::server::gateway']]],

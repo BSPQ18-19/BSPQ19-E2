@@ -13,5 +13,6 @@ var searchData=
   ['paypallogger',['PayPalLogger',['../classes_1_1deusto_1_1spq_1_1payment_1_1_pay_pal_1_1logger_1_1_pay_pal_logger.html',1,'es::deusto::spq::payment::PayPal::logger']]],
   ['paypallogger_2ejava',['PayPalLogger.java',['../_pay_pal_logger_8java.html',1,'']]],
   ['paypaypal',['payPayPal',['../classes_1_1deusto_1_1spq_1_1server_1_1remote_1_1_hotel_manager.html#ac6ff790817863bf7632a9c66fb2a2c92',1,'es.deusto.spq.server.remote.HotelManager.payPayPal()'],['../interfacees_1_1deusto_1_1spq_1_1server_1_1remote_1_1_i_hotel_manager.html#ab80162ea58eeabb4495430c5c38ae6c8',1,'es.deusto.spq.server.remote.IHotelManager.payPayPal()']]],
+  ['previous',['previous',['../classes_1_1deusto_1_1spq_1_1server_1_1data_1_1cache_1_1_node.html#a301cd3558048748203f52e6041166978',1,'es::deusto::spq::server::data::cache::Node']]],
   ['printsizes',['printSizes',['../classes_1_1deusto_1_1spq_1_1client_1_1gui_1_1util_1_1_spring_utilities.html#a287b0051322b7ed52f1c3ab839f34d20',1,'es::deusto::spq::client::gui::util::SpringUtilities']]]
 ];

@@ -10,6 +10,7 @@ var searchData=
   ['mastercardgateway_2ejava',['MastercardGateway.java',['../_mastercard_gateway_8java.html',1,'']]],
   ['mastercardlogger',['MastercardLogger',['../classes_1_1deusto_1_1spq_1_1payment_1_1mastercard_1_1logger_1_1_mastercard_logger.html',1,'es::deusto::spq::payment::mastercard::logger']]],
   ['mastercardlogger_2ejava',['MastercardLogger.java',['../_mastercard_logger_8java.html',1,'']]],
+  ['merge',['merge',['../classes_1_1deusto_1_1spq_1_1server_1_1data_1_1bloomfilter_1_1_simple_bloom_filter.html#a59e28d4a2bca9a8deb123f566a70fa5c',1,'es::deusto::spq::server::data::bloomfilter::SimpleBloomFilter']]],
   ['minimize',['minimize',['../classes_1_1deusto_1_1spq_1_1client_1_1gui_1_1base_1_1_view.html#a0d8e5e576f61a7a3d923c231f39d2f51',1,'es::deusto::spq::client::gui::base::View']]],
   ['mypersistencemanager',['MyPersistenceManager',['../classes_1_1deusto_1_1spq_1_1server_1_1data_1_1_my_persistence_manager.html',1,'es::deusto::spq::server::data']]],
   ['mypersistencemanager_2ejava',['MyPersistenceManager.java',['../_my_persistence_manager_8java.html',1,'']]]

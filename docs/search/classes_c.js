@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['view',['View',['../classes_1_1deusto_1_1spq_1_1client_1_1gui_1_1base_1_1_view.html',1,'es::deusto::spq::client::gui::base']]],
-  ['viewfactory',['ViewFactory',['../classes_1_1deusto_1_1spq_1_1client_1_1gui_1_1base_1_1_view_factory.html',1,'es::deusto::spq::client::gui::base']]],
-  ['viewhotel',['ViewHotel',['../classes_1_1deusto_1_1spq_1_1client_1_1gui_1_1views_1_1admin_1_1_view_hotel.html',1,'es::deusto::spq::client::gui::views::admin']]],
-  ['viewmanager',['ViewManager',['../classes_1_1deusto_1_1spq_1_1client_1_1gui_1_1base_1_1_view_manager.html',1,'es::deusto::spq::client::gui::base']]],
-  ['viewpermission',['ViewPermission',['../enumes_1_1deusto_1_1spq_1_1client_1_1gui_1_1base_1_1_view_permission.html',1,'es::deusto::spq::client::gui::base']]],
-  ['viewtype',['ViewType',['../enumes_1_1deusto_1_1spq_1_1client_1_1gui_1_1base_1_1_view_type.html',1,'es::deusto::spq::client::gui::base']]]
+  ['user',['User',['../classes_1_1deusto_1_1spq_1_1payment_1_1_pay_pal_1_1data_1_1_user.html',1,'es.deusto.spq.payment.PayPal.data.User'],['../classes_1_1deusto_1_1spq_1_1server_1_1data_1_1jdo_1_1_user.html',1,'es.deusto.spq.server.data.jdo.User']]],
+  ['userdao',['UserDAO',['../classes_1_1deusto_1_1spq_1_1server_1_1data_1_1dao_1_1_user_d_a_o.html',1,'es::deusto::spq::server::data::dao']]],
+  ['userdto',['UserDTO',['../classes_1_1deusto_1_1spq_1_1server_1_1data_1_1dto_1_1_user_d_t_o.html',1,'es::deusto::spq::server::data::dto']]]
 ];

@@ -3,9 +3,6 @@ var dir_41c28f928c64a229a7e807645ea50de3 =
     [ "HotelDAO.java", "_hotel_d_a_o_8java.html", [
       [ "HotelDAO", "classes_1_1deusto_1_1spq_1_1server_1_1data_1_1dao_1_1_hotel_d_a_o.html", "classes_1_1deusto_1_1spq_1_1server_1_1data_1_1dao_1_1_hotel_d_a_o" ]
     ] ],
-    [ "IDAO.java", "_i_d_a_o_8java.html", [
-      [ "IDAO", "interfacees_1_1deusto_1_1spq_1_1server_1_1data_1_1dao_1_1_i_d_a_o.html", "interfacees_1_1deusto_1_1spq_1_1server_1_1data_1_1dao_1_1_i_d_a_o" ]
-    ] ],
     [ "IHotelDAO.java", "_i_hotel_d_a_o_8java.html", [
       [ "IHotelDAO", "interfacees_1_1deusto_1_1spq_1_1server_1_1data_1_1dao_1_1_i_hotel_d_a_o.html", "interfacees_1_1deusto_1_1spq_1_1server_1_1data_1_1dao_1_1_i_hotel_d_a_o" ]
     ] ],

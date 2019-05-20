@@ -9,6 +9,7 @@ var classes_1_1deusto_1_1spq_1_1server_1_1data_1_1jdo_1_1_review =
     [ "getReviewID", "classes_1_1deusto_1_1spq_1_1server_1_1data_1_1jdo_1_1_review.html#a0f5a58fa3529421d5a5d34eeaae1837d", null ],
     [ "getScore", "classes_1_1deusto_1_1spq_1_1server_1_1data_1_1jdo_1_1_review.html#a4e9446f6cee630cdfa11b872c9204d35", null ],
     [ "getUser", "classes_1_1deusto_1_1spq_1_1server_1_1data_1_1jdo_1_1_review.html#abbd1c9da1839348192cca3fa82f93443", null ],
+    [ "hashCode", "classes_1_1deusto_1_1spq_1_1server_1_1data_1_1jdo_1_1_review.html#a9bf972f1026d61b5957677d8645be45c", null ],
     [ "setHotel", "classes_1_1deusto_1_1spq_1_1server_1_1data_1_1jdo_1_1_review.html#acbac37011cabfd1e7774514cfa860253", null ],
     [ "setOpinion", "classes_1_1deusto_1_1spq_1_1server_1_1data_1_1jdo_1_1_review.html#acf64c9eeab3bcb22eab0adad6e233765", null ],
     [ "setPublishDate", "classes_1_1deusto_1_1spq_1_1server_1_1data_1_1jdo_1_1_review.html#ac7d8424f2055ace30b80c46c807781f4", null ],
