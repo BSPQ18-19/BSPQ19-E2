@@ -46,9 +46,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_administrator_8java.html",
-"classes_1_1deusto_1_1spq_1_1client_1_1gui_1_1views_1_1auth_1_1_login_view.html#a418e5d9ef12bbf6c7770dac62fa5a538",
-"classes_1_1deusto_1_1spq_1_1server_1_1data_1_1dto_1_1_room_d_t_o.html#a4c97dd11cdb2f68bbce687c2b3b68889",
-"interfacees_1_1deusto_1_1spq_1_1server_1_1data_1_1dao_1_1_i_hotel_d_a_o.html"
+"classes_1_1deusto_1_1spq_1_1client_1_1gui_1_1views_1_1auth_1_1_register_admin_view.html#a3adeaea07408df397472eacdbacd15fd",
+"classes_1_1deusto_1_1spq_1_1server_1_1data_1_1jdo_1_1_hotel.html#ab614da3530316cc529ace75f7515b593",
+"interfacees_1_1deusto_1_1spq_1_1server_1_1remote_1_1_i_hotel_manager.html#ab80162ea58eeabb4495430c5c38ae6c8"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

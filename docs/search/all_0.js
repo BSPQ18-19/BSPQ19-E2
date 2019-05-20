@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['add',['add',['../classes_1_1deusto_1_1spq_1_1server_1_1data_1_1bloomfilter_1_1_simple_bloom_filter.html#a9074ea4e791a968b5a953571616b66fa',1,'es::deusto::spq::server::data::bloomfilter::SimpleBloomFilter']]],
   ['addcards',['addCards',['../classes_1_1deusto_1_1spq_1_1payment_1_1mastercard_1_1data_1_1_data_base.html#ab7b758655276d08b445dead540a7e66a',1,'es::deusto::spq::payment::mastercard::data::DataBase']]],
   ['addcreatedhotel',['addCreatedHotel',['../classes_1_1deusto_1_1spq_1_1server_1_1data_1_1jdo_1_1_administrator.html#aa019253806224a4b9e97490a300ab1ed',1,'es::deusto::spq::server::data::jdo::Administrator']]],
   ['addcreditcard',['addCreditCard',['../classes_1_1deusto_1_1spq_1_1payment_1_1mastercard_1_1data_1_1_data_base.html#a629737d81df37bb7792bac1e02ccbfe4',1,'es::deusto::spq::payment::mastercard::data::DataBase']]],
