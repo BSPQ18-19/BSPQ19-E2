@@ -9,6 +9,7 @@ import javax.jdo.Query;
 import javax.jdo.Transaction;
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
+import es.deusto.spq.server.data.cache.Cache;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -17,10 +18,13 @@ public class RoomDAO implements IRoomDAO {
 	private PersistenceManager pm;
 	private Transaction tx;
 	private SimpleBloomFilter<Room> filter;
+	/** The cache of the rooms. */
+	private Cache<String, Room> cache;
 
 	public RoomDAO(){
 		pm = MyPersistenceManager.getPersistenceManager();
 		filter = new SimpleBloomFilter<Room>();
+		cache = new Cache<String, Room>(10);
 	}	
 
 	@Override
@@ -65,6 +69,7 @@ public class RoomDAO implements IRoomDAO {
 			List<Room> result = (List<Room>) query.execute();
 			result.get(0).setOccupied(true);
 			filter.add(room);
+			cache.set(room.getRoomId(), room);
 			tx.commit();
 			
 			return result.get(0);
@@ -82,6 +87,7 @@ public class RoomDAO implements IRoomDAO {
 		Room tmpRoom = new Room(roomID, 0, 0, null, true);
 		if(!filter.contains(tmpRoom))
 			return false;
+		cache.remove(roomID);
 		
 		tx = pm.currentTransaction();
 		try {
@@ -94,7 +100,6 @@ public class RoomDAO implements IRoomDAO {
 			if(queryExecution.isEmpty() || queryExecution.size() > 1)
 				return false;
 			pm.deletePersistent(queryExecution.get(0));
-			
 			tx.commit();
 			
 			return true;
@@ -139,6 +144,12 @@ public class RoomDAO implements IRoomDAO {
 
 	@Override
 	public Room getRoomById(String roomId) {
+		Room tmpRoom = new Room(roomId, 0, 0, null, true);
+		if(!filter.contains(tmpRoom))
+			return null;
+		if(cache.contains(roomId))
+			return cache.get(roomId);
+
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
 		tx = pm.currentTransaction();
