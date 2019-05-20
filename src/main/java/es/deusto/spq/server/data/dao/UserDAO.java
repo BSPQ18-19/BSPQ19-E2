@@ -239,6 +239,48 @@ public class UserDAO implements IUserDAO {
 	}
 	
 	@Override
+	public UserDTO updateGuest(String userId, String name, String email, String password, String phone, String address) {
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			final Query<Guest> query = pm.newQuery(Guest.class);
+			query.setFilter("userID == '" + userId + "'");
+			@SuppressWarnings("unchecked")
+			final
+			List<Guest> result = (List<Guest>) query.execute();
+
+			if(result == null || result.isEmpty() || result.size() > 1)
+				return null;
+			Guest guest = result.get(0);
+			
+			pm.makePersistent(guest);
+			if(name != null && !name.isEmpty())
+				guest.setName(name);
+			if(email != null && !name.isEmpty())
+				guest.setEmail(email);
+			if(password != null && !password.isEmpty())
+				guest.setPassword(password);
+			if(phone != null && !phone.isEmpty())
+				guest.setPhone(phone);
+			if(address != null && !address.isEmpty())
+				guest.setAddress(address);
+			
+			tx.commit();
+			UserDTO editedUser = assembler.assembleUser(pm.detachCopy(guest));
+			return editedUser;
+			
+		} catch (final Exception e) {
+			ServerLogger.getLogger().fatal("Did not update data of guest with ID: " + userId);
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+		return null;
+	}
+	
+	@Override
 	public List<Administrator> getAdministrators() {
 		try {
 			tx = pm.currentTransaction();

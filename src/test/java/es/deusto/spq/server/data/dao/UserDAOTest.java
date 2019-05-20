@@ -140,11 +140,34 @@ public class UserDAOTest {
 	}
 
 	/**
+	 * Test for updating the Guest Data
+	 */
+	@Test
+	public void gUpdateGuest() {
+		String newName = "TEST2";
+		String newEmail = "EMAIL2";
+		String newPassword = "TEST2";
+		String newPhone = "TEST2";
+		String newAddress = "TEST3";
+
+		guest.setName(newName);
+		guest.setEmail(newEmail);
+		guest.setPassword(newPassword);
+		((Guest) guest).setPhone(newPhone);
+		((Guest) guest).setAddress(newAddress);
+		UserDTO newGuestDTO = assembler.assembleUser(guest);
+
+		UserDTO updatedUser = userDAO.updateGuest(guestID, newName, newEmail, newPassword, newPhone, newAddress);
+		Assert.assertTrue(updatedUser.equals(newGuestDTO));
+		
+	}
+
+	/**
 	 * Test the delete user method.
 	 * If deleting returns true it means it has been successfully deleted.
 	 */
 	@Test
-	public void gDeleteUser() {
+	public void hDeleteUser() {
 		Assert.assertTrue(userDAO.deleteUserbyID(guestID));
 		Assert.assertTrue(userDAO.deleteUserbyID(adminID));
 	}

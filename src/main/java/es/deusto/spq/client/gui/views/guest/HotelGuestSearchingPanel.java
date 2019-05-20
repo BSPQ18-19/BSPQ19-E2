@@ -21,6 +21,9 @@ import org.apache.log4j.Logger;
 
 import com.github.lgooddatepicker.components.CalendarPanel;
 
+import es.deusto.spq.client.gui.base.ViewFactory;
+import es.deusto.spq.client.gui.base.ViewType;
+
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.HotelDTO;
 
@@ -54,6 +57,10 @@ public class HotelGuestSearchingPanel extends JPanel {
 	 * viewHotel Button to open the panel for viewing all the hotels
 	 */
 	private JButton	viewHotel;
+	/**
+	 * The button to access the update user view
+	 */
+	private JButton updateUser;
 	/**
 	 * upperButtons Panel for the buttons at the top
 	 */
@@ -161,11 +168,22 @@ public class HotelGuestSearchingPanel extends JPanel {
 				}
 			}
 		});
-		
+
+		updateUser = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.button.updateUser"));
+		updateUser.setSize(100, 30);
+		updateUser.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clientWindowGuest.getGuestView().getViewManager().openView(ViewFactory.buildView(ViewType.EDIT_USER, clientWindowGuest.getGuestView().getViewManager()));
+			}
+		});
+
 		upperButtons = new JPanel();
 		upperButtons.setBackground(Color.LIGHT_GRAY);
 		upperButtons.add(viewHotel);
 		upperButtons.add(confirm);
+		upperButtons.add(updateUser);
 		
 		calendar = new CalendarPanel();
 		calendar.setSize(600, 200);
