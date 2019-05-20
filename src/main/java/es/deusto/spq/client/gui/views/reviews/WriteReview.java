@@ -174,6 +174,8 @@ public class WriteReview extends View{
 		lblWritteYourReview.setBounds(202, 40, 123, 23);
 		frame.getContentPane().add(lblWritteYourReview);
 
+		addDisposeEventHandler();
+
 		//Sets correctly the frame.
 		frame.toFront();
 		frame.setVisible(true);
