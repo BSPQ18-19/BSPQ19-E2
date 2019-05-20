@@ -82,6 +82,10 @@ public class RoomPanel extends JPanel{
 	 */
 	private Random r;
 	
+	/**
+	 * The view where review are shown.
+	 */
+	private ShowHotelReviewView view;
 	/** Constructor of the class RoomPanel
 	 * @param screenWidth Width of the window
 	 * @param screenHeight Height of the window
@@ -116,6 +120,7 @@ public class RoomPanel extends JPanel{
 						clientWindowGuest.getController().createReservation(Integer.toString(r.nextInt(Integer.MAX_VALUE)),
 								clientWindowGuest.getController().getLoggedUser().getUserID(), roomDTO.getRoomID(), localDateStart, localDateEnding);
 						JOptionPane.showMessageDialog(null, "Room successfully reserved", "Done", JOptionPane.INFORMATION_MESSAGE);
+						if(view != null) view.dispose();
 						clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
 					}
 				}else {
@@ -131,6 +136,7 @@ public class RoomPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(view != null) view.dispose();
 				clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
 			}
 		});
@@ -141,9 +147,8 @@ public class RoomPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ShowHotelReviewView view;
-				clientWindowGuest.getGuestView().getViewManager().openView(view = (ShowHotelReviewView) ViewFactory.buildView(ViewType.SHOW_REVIEWS, clientWindowGuest.getGuestView().getViewManager()));
-				view.setHotelID(hotelId);
+					clientWindowGuest.getGuestView().getViewManager().openView(view = (ShowHotelReviewView) ViewFactory.buildView(ViewType.SHOW_REVIEWS, clientWindowGuest.getGuestView().getViewManager()));
+					view.setHotelID(hotelId);
 			}
 		});
 

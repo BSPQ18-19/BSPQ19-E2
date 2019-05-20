@@ -142,6 +142,11 @@ public class ShowHotelReviewView extends View {
 
 	private void displayReviews() {
 
+		 // only if frame is initialized
+        if (getInternalFrame() == null) {
+            return;
+        }
+
 		reviewsList = new ArrayList<ReviewDTO>();
 		String opinions = "";
 
