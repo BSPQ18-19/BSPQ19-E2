@@ -168,7 +168,6 @@ public class ShowHotelReviewView extends View {
 			lblAverageScore.setText(getViewManager().getClient().getLocaleManager().getMessage("showReviews.averageScore")+averageScore);
 			
 		}
-		frame.repaint();
 	}
 
 	@Override
