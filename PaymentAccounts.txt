@@ -8,6 +8,6 @@ dusekvojtech	   deusto2019
 
 MasterCard accounts:
 CardNumeber 	SecretCode
-123456789L 	123
-465789123L 	456
-789123456L 	789
+123456789	123
+465789123 	456
+789123456 	789
