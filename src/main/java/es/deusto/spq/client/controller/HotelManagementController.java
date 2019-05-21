@@ -392,8 +392,10 @@ public class HotelManagementController {
 		try {
 			if(type) {
 				//Call the method to pay with PayPal
+				System.out.println("Pago con PayPal con mis datos: " + arg1 +""+ arg2);
 				return rsl.getHotelManager().payPayPal(arg1, arg2, amount);
 			}else {
+				System.out.println("Pago con MasterCard con mis datos: " + arg1 +""+ arg2);
 				long cardNumber = Long.parseLong(arg1);
 				int securityCode = Integer.parseInt(arg2);
 				//Call the method to pay with MasterCard

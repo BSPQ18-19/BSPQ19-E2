@@ -229,12 +229,13 @@ public class UserPayView extends View{
 		tFPassword.setVisible(false);
 		form.add(tFPassword);
 
+		addDisposeEventHandler();
 		frame.toFront();
 		frame.setVisible(true);
 	}
 
 	/**
-	 * When paying with paypal shows the fields
+	 * When paying with paypal shows the fields.
 	 */
 	private void payWithPaypal() {
 		if (rdbtnPaypal.isSelected()) {
@@ -304,7 +305,8 @@ public class UserPayView extends View{
 		SELECT_PAYMENT_METHOD,
 
 		/**
-		 * 
+		 * The fields of master card are not valid because they are numbers.
+		 * This can only be called when you select masterCard as a method of payment.
 		 */
 		MASTERCARD_FIELDS_NOT_NUMBERS
 	}
@@ -371,8 +373,7 @@ public class UserPayView extends View{
 		}else if(rdbtnPaypal.isSelected()) {
 			String username = tFUsername.getText();
 			String password = tFPassword.getText();
-			//TODO AMOUNT
-			if(!controller.payReservation(username, password, 0, true)) {
+			if(!controller.payReservation(username, password, prize, true)) {
 				ClientLogger.getLogger().fatal("Payment cant be done...");
 	            JOptionPane.showMessageDialog(frame,
 	                    getViewManager().getClient().getLocaleManager().getMessage("pay.validation.errors.unknown"),

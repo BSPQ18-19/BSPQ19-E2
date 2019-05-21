@@ -93,6 +93,12 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		User defaultAdmin = new  Administrator("DEFAULT", "admin", "admin", "admin", "admin");
 		userDAO.deleteUserbyID(defaultAdmin.getUserID());
 		userDAO.createUser(defaultAdmin);
+
+		//Accounts for Payment
+		//PayPal
+		System.out.println("Cuenta creada "+registerPayPal("paypal","paypal", 10000));
+		//MasterCard
+		
 	}
 
 	private Random r;
