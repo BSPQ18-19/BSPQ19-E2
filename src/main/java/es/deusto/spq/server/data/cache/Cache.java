@@ -3,6 +3,8 @@ package es.deusto.spq.server.data.cache;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.deusto.spq.server.logger.ServerLogger;
+
 /**
  * A simple LFU (Least Frequently Used) cache to be used in the server.
  * <p>
@@ -53,6 +55,7 @@ public class Cache<K, V> {
 	public void set(K key, V value) {
 		if(key == null || value == null)
 			return;
+		ServerLogger.getLogger().debug(value.getClass().getName() + " object added to the cache");
 		if(map.containsKey(key)) {
 			map.get(key).setValue(value);
 		} else {

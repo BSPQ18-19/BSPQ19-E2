@@ -103,6 +103,12 @@ public class UserDAO implements IUserDAO {
 
 	@Override
 	public UserDTO createUser(User user) {
+		//Don't create a user if it already exists
+		UserDTO existingUser = getUserbyID(user.getUserID());
+		log.debug("existing user: " + existingUser != null);
+		if(existingUser != null)
+			return existingUser;
+		
 		try {
 			User result;
 			Guest guest;
