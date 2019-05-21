@@ -94,11 +94,12 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		userDAO.deleteUserbyID(defaultAdmin.getUserID());
 		userDAO.createUser(defaultAdmin);
 
-		//Accounts for Payment
-		//PayPal
-		System.out.println("Cuenta creada "+registerPayPal("paypal","paypal", 10000));
-		//MasterCard
-		
+		//PayPal account for the payment
+		registerPayPal("iker-barriocanal","123", 10000);
+		registerPayPal("iapellaniz","deusto", 15000);
+		registerPayPal("Egoes98","7954", 9560);
+		registerPayPal("Arribas12","7954", 20000);
+		registerPayPal("dusekvojtech","deusto2019", 10100);
 	}
 
 	private Random r;
