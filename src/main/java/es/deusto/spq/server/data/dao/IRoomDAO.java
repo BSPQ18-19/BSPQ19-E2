@@ -31,4 +31,6 @@ public interface IRoomDAO {
 	 * @return Room object
 	 */
 	public Room getRoomById(String roomId);
+	
+	public Room createRoom(Room room);
 }

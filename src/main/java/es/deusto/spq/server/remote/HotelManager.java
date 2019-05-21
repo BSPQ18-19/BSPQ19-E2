@@ -64,6 +64,13 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		payPalGateway = new PayPalGateway();
 		mastercardGateway = new MastercardGateway();
 		
+		
+		
+		
+		userDAO.createUser(new Guest("u1", "a", "a", "a", "a", "a"));
+		
+		
+		
 		this.rooms1 = new ArrayList<>();
 		this.rooms2 = new ArrayList<>();
 		
@@ -71,13 +78,13 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		rooms1.add(new Room("R02", 450, 400, RoomType.SUITE, false));
 		rooms1.add(new Room("R03", 350, 400, RoomType.TRIPLE, false));
 		for(Room r : rooms1)
-			roomDao.updateRoom(r);
+			roomDao.createRoom(r);
 		rooms2.add(new Room("R05", 250, 150, RoomType.DOUBLE, false));
 		rooms2.add(new Room("R06", 250, 150, RoomType.DOUBLE, false));
 		rooms2.add(new Room("R07", 250, 150, RoomType.DOUBLE, false));
 		rooms2.add(new Room("R08", 200, 100, RoomType.SINGLE, false));
 		for(Room r : rooms2)
-			roomDao.updateRoom(r);
+			roomDao.createRoom(r);
 		
 		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", Timestamp.valueOf(LocalDate.of(2019, 04, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 12, 31).atStartOfDay())));
 		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", Timestamp.valueOf(LocalDate.of(2019, 06, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 9, 30).atStartOfDay())));
@@ -370,6 +377,9 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		Assembler roomAssembler = new Assembler();
 		
 		Room room = roomDao.getRoomById(roomID);
+		
+		log.debug("Retrieving room with ID: " + roomID + " - " + room == null ? null : room.getRoomId());
+		
 		RoomDTO roomDto = roomAssembler.assembleRoom(room);
 		
 		if(roomDto == null) {

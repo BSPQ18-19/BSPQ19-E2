@@ -276,7 +276,7 @@ public class HotelManagementController {
      * @return A RoomDTO object
      */
     public RoomDTO retrieveRoomById(String roomId){
-       	log.info("Getting list of rooms.");
+       	log.info("Retrieving room with ID: " + roomId);
     	try {
 			RoomDTO room = rsl.getHotelManager().retrieveRoomById(roomId);
 			
