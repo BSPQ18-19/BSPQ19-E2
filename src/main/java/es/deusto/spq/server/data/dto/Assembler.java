@@ -12,6 +12,7 @@ import es.deusto.spq.server.logger.ServerLogger;
 public class Assembler {
 
 	public Assembler() {}
+
 	
 	/** Converts from Hotel to HotelDTO
 	 * @param hotel the hotel we want to assemble
@@ -44,7 +45,7 @@ public class Assembler {
 			return null;
 		return new RoomDTO(room.getRoomId(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied());
 	}
-	
+
 	/** Converts from RoomDTO to Room
 	 * @param room the room we want to disassemble
 	 * @return RoomDTO object
@@ -52,12 +53,12 @@ public class Assembler {
 	public Room disassembleRoom(RoomDTO room) {
 		return new Room(room.getRoomID(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied());
 	}
-	
+
 	// User
 	public UserDTO assembleUser(User user) {
-		return new UserDTO(user.getUserID(), user.getName(), user instanceof Guest);
+		return new UserDTO(user.getUserID(), user.getName(),user instanceof Guest);
 	}
-	
+
 	public User disassembleUser(UserDTO user) {
 		if(user.isGuest())
 			return new Guest(user.getUserID(), user.getName());
