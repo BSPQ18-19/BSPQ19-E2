@@ -98,7 +98,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		registerPayPal("iker-barriocanal","123", 10000);
 		registerPayPal("iapellaniz","deusto", 15000);
 		registerPayPal("Egoes98","7954", 9560);
-		registerPayPal("Arribas12","7954", 20000);
+		registerPayPal("Arribas12","arribas12", 20000);
 		registerPayPal("dusekvojtech","deusto2019", 10100);
 	}
 
