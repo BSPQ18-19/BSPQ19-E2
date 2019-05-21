@@ -312,7 +312,9 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 
 	@Override
 	public RoomDTO updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) throws RemoteException {
-				
+		
+		log.debug("HotelManager is going to update a room");
+		
 		Room room = new Room(roomId, size, price, roomtype, isOccupied);
 		roomDao.updateRoom(room);
 		

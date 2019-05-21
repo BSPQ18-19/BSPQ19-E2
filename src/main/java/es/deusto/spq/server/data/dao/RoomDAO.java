@@ -60,7 +60,7 @@ public class RoomDAO implements IRoomDAO {
 
 	@Override
 	public Room updateRoom(Room room) {
-		log.debug("A room wants to be updated - " + room.getRoomId());
+		log.debug("A room wants to be updated in RoomDAO - " + room.getRoomId());
 		
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
