@@ -372,7 +372,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		Room room = roomDao.getRoomById(roomID);
 		RoomDTO roomDto = roomAssembler.assembleRoom(room);
 		
-		if(roomDto.equals(null)) {
+		if(roomDto == null) {
 			log.fatal("New exception - There is no room for the requested information.");
 			throw new RemoteException("ROOMS - There is no room for the requested information.");
 		}
