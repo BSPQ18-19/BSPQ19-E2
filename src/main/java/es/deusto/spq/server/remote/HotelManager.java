@@ -374,7 +374,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	@Override
 	public ReviewDTO createReview(String opinion, int score, String hotelID, String userID) throws RemoteException {
 		//Generate the ID for reviews.
-		String randomID = generateRandomId();
+		String reviewID = userID+"-"+hotelID;
 		Assembler reviewAssembler = new Assembler();
 
 		//The date for review, the actual date.
@@ -385,12 +385,12 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		User u = userDAO.getUser(userID);
 
 		//Created the review to be stored.
-		Review r = new Review(randomID, opinion, score, timestamp);
+		Review r = new Review(reviewID, opinion, score, timestamp);
 		r.setHotel(h);
 		r.setUser(u);
 
 		//Stores the review.
-		Review detachedCopy = reviewDAO.storeReview(r, hotelID, userID);
+		Review detachedCopy = reviewDAO.storeReview(r);
 		if(detachedCopy == null) {
 			return null;
 		}
