@@ -7,6 +7,9 @@ import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
+
+import org.apache.log4j.Logger;
+
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
 import es.deusto.spq.server.data.cache.Cache;
@@ -52,9 +55,13 @@ public class RoomDAO implements IRoomDAO {
 	    }
 	    return rooms;
 	}
+	
+	private Logger log = ServerLogger.getLogger();
 
 	@Override
 	public Room updateRoom(Room room) {
+		log.debug("A room wants to be updated - " + room.getRoomId());
+		
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
 		tx = pm.currentTransaction();
