@@ -62,6 +62,7 @@ public class ViewFactory {
 
             case RESERVATION_DETAIL:
                 view = new ReservationDetailView(viewManager);
+                break;
 
             case MAKE_PAYMENT:
             	view = new UserPayView(viewManager);
