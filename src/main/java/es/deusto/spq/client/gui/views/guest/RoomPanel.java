@@ -81,7 +81,7 @@ public class RoomPanel extends JPanel{
 						
 		r =  new Random();
 		
-		confirm = new JButton("Confirm");
+		confirm = new JButton("room.button.confirm");
 		confirm.setSize(100, 30);
 		confirm.setBackground(Color.GREEN);
 		confirm.addActionListener(new ActionListener() {
@@ -90,7 +90,7 @@ public class RoomPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				if(roomsTable.getSelectedRow() != -1) {
 					RoomDTO roomDTO = clientWindowGuest.getController().retrieveRoomById((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 0));
-					String daysForRoom = JOptionPane.showInputDialog(new JTextField("", 10), "How many nights?", JOptionPane.QUESTION_MESSAGE);
+					String daysForRoom = JOptionPane.showInputDialog(new JTextField("", 10), "room.inputDialog.nights", JOptionPane.QUESTION_MESSAGE);
 					if(!(daysForRoom == "")) {
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
 						LocalDate localDateStart = LocalDate.parse(calendarDate.trim(), formatter);
@@ -107,13 +107,13 @@ public class RoomPanel extends JPanel{
 						clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
 					}
 				}else {
-					JOptionPane.showMessageDialog(null, "Select a room", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "room.messageDialog.errorRoomSelection", "room.error", JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}
 		});
 				
-		back = new JButton("Back");
+		back = new JButton("room.button.back");
 		back.setSize(100, 30);
 		back.addActionListener(new ActionListener() {
 			
@@ -135,9 +135,9 @@ public class RoomPanel extends JPanel{
 		roomsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
 		tableModel.addColumn("Id");
-		tableModel.addColumn("Size");
-		tableModel.addColumn("Type");
-		tableModel.addColumn("Price");
+		tableModel.addColumn("room.column.size");
+		tableModel.addColumn("room.column.type");
+		tableModel.addColumn("room.column.price");
 		
 		roomsTable.addMouseListener(new MouseAdapter() {
 			
@@ -152,7 +152,7 @@ public class RoomPanel extends JPanel{
 		clientWindowGuest.getController().setCurrentRooms();
 		ArrayList<RoomDTO> retrievedRooms = clientWindowGuest.getController().retrieveRoomsByHotelId(hotelId);
 		if(retrievedRooms == null || retrievedRooms.size() == 0) {
-			JOptionPane.showMessageDialog(null, "There are no rooms available", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "room.messageDialog.noRooms", "room.error", JOptionPane.ERROR_MESSAGE);
 			if(tableModel.getRowCount() != 0) {
 				for(int i = tableModel.getRowCount()-1; i >= 0; i--) {
 					tableModel.removeRow(i);
