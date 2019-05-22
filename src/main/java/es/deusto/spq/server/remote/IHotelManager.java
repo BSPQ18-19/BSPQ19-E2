@@ -35,6 +35,20 @@ public interface IHotelManager extends Remote {
 	 */
 	public List<HotelDTO> retrieveHotels() throws RemoteException;
 	
+	/**
+	 * 
+	 * @param userId
+	 * @param name
+	 * @param email
+	 * @param password
+	 * @param phone
+	 * @param address
+	 * @return The UserDTO to replace on the session system
+	 * @throws RemoteException
+	 */
+	public UserDTO updateGuestProfileData(String userId, String name, String email, 
+			String password, String phone, String address) throws RemoteException;
+	
 	/** Retrieve a list of hotels from the DB according to an arrival date
 	 * @param arrivalDate Date to arrive to the hotel
 	 * @return A list of HotelDTO of type List

@@ -43,7 +43,20 @@ public interface IUserDAO {
 	 * @return true if the user existed before and has been deleted, false if it didn't exist
 	 * 			and thus hasn't been deleted.
 	 */
+
 	public boolean deleteUserbyID(String ID);
+	/**
+	 * Updates the data of the guest with the given ID.
+	 * @param userId - the ID of the guest to edit data.
+	 * @param name - the new name of the guest.
+	 * @param email - the new email of the guest.
+	 * @param password - the new password of the guest.
+	 * @param phone - the new phone of the guest.
+	 * @param address - the new address of the guest.
+	 * @return UserDTO of the edited user to replace it on the logging system.
+	 */
+	public UserDTO updateGuest(String userId, String name, String email, String password, String phone, String address);
+
 	public UserDTO logIn(String email, String password);
 	
 	/**

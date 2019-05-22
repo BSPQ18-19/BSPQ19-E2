@@ -9,6 +9,7 @@ import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
+import es.deusto.spq.server.data.cache.Cache;
 import es.deusto.spq.server.data.jdo.Review;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -28,6 +29,8 @@ public class ReviewDAO implements IReviewDAO {
 	private Transaction tx;
 	/** The bloom filter. */
 	private SimpleBloomFilter<Review> filter;
+	/** The cache of reviews. */
+	private Cache<String, Review> cache;
 
 	/**
 	 * The constructor sets the persistence manager to use it later on the methods.
@@ -35,6 +38,7 @@ public class ReviewDAO implements IReviewDAO {
 	public ReviewDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
 		filter = new SimpleBloomFilter<Review>();
+		cache = new Cache<String, Review>(10);
 	}
 
 	@Override
@@ -49,6 +53,7 @@ public class ReviewDAO implements IReviewDAO {
 			// Stores the review on the DB
 			pm.makePersistent(r);
 			filter.add(r);
+			cache.set(r.getReviewID(), r);
 			tx.commit();
 
 			// Returns a detachedCopy of the stored review
@@ -67,6 +72,7 @@ public class ReviewDAO implements IReviewDAO {
 		Review tmpReview = new Review(reviewID, null, 0, null);
 		if(!filter.contains(tmpReview))
 			return false;
+		cache.remove(reviewID);
 		
 		try {
 			tx = pm.currentTransaction();

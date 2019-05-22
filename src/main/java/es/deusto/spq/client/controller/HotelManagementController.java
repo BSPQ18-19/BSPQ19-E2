@@ -88,6 +88,27 @@ public class HotelManagementController {
 		return true;
 	}
 	
+	/**
+	 * The updateUser method that asks the server for the new DTO of the updated User.
+	 * @param name
+	 * @param email
+	 * @param password
+	 * @param phone
+	 * @param address
+	 * @return return the new UserDTO.
+	 */
+	public UserDTO updateUser(String name, String email, String password, String phone, String address) {
+		UserDTO updatedUser;
+		try {
+			updatedUser = rsl.getHotelManager().updateGuestProfileData(loggedUser.getUserID(), name, email, password, phone, address);
+			if(updatedUser == null) return null;
+			loggedUser = updatedUser;
+			return loggedUser;
+		} catch (RemoteException e) {
+			return null;
+		}
+	}
+	
 	/** Create a new hotel
 	 * @param id Id of the hotel
 	 * @param name Name of the hotel
@@ -183,7 +204,7 @@ public class HotelManagementController {
     public List<HotelDTO> retrieveHotels(String arrivalDate) {
     	log.info("Getting list of hotels.");
     	try {
-			List<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels(arrivalDate);			
+			List<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels(arrivalDate);
 			
 			if(hotel != null && hotel.size() != 0) {
 				log.info("List of hotels retrieved succesfully.");
@@ -256,7 +277,7 @@ public class HotelManagementController {
      * @return A RoomDTO object
      */
     public RoomDTO retrieveRoomById(String roomId){
-       	log.info("Getting list of rooms.");
+       	log.info("Retrieving room with ID: " + roomId);
     	try {
 			RoomDTO room = rsl.getHotelManager().retrieveRoomById(roomId);
 			
@@ -395,4 +416,5 @@ public class HotelManagementController {
 	public UserDTO getLoggedUser() {
 		return loggedUser;
 	}
+
 }

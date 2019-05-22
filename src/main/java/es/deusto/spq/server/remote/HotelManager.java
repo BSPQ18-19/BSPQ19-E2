@@ -70,16 +70,27 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		payPalGateway = new PayPalGateway();
 		mastercardGateway = new MastercardGateway();
 		
+		
+		
+		
+		userDAO.createUser(new Guest("u1", "a", "a", "a", "a", "a"));
+		
+		
+		
 		this.rooms1 = new ArrayList<>();
 		this.rooms2 = new ArrayList<>();
 		
 		rooms1.add(new Room("R01", 250, 150, RoomType.DOUBLE, false));
 		rooms1.add(new Room("R02", 450, 400, RoomType.SUITE, false));
 		rooms1.add(new Room("R03", 350, 400, RoomType.TRIPLE, false));
+		for(Room r : rooms1)
+			roomDao.createRoom(r);
 		rooms2.add(new Room("R05", 250, 150, RoomType.DOUBLE, false));
 		rooms2.add(new Room("R06", 250, 150, RoomType.DOUBLE, false));
 		rooms2.add(new Room("R07", 250, 150, RoomType.DOUBLE, false));
 		rooms2.add(new Room("R08", 200, 100, RoomType.SINGLE, false));
+		for(Room r : rooms2)
+			roomDao.createRoom(r);
 		
 		hotels.put("H01", new Hotel("H01", "Hotel1", "Bilbao", Timestamp.valueOf(LocalDate.of(2019, 04, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 12, 31).atStartOfDay())));
 		hotels.put("H02", new Hotel("H02", "Hotel2", "Barcelona", Timestamp.valueOf(LocalDate.of(2019, 06, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 9, 30).atStartOfDay())));
@@ -138,6 +149,26 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	@Override
 	public boolean logOut(UserDTO user) throws RemoteException{
 		return loggedUsers.remove(user);
+	}
+
+	@Override
+	public UserDTO updateGuestProfileData(String userId, String name, String email, String password, String phone,
+			String address) throws RemoteException {
+		if(userId == null) return null;
+		//Return the updatedUser
+		UserDTO updatedUser = userDAO.updateGuest(userId, name, email, password, phone, address);
+		//Searches on the loggedUsers list the actual user(Without the update)
+		UserDTO actualUser = null;
+		for(UserDTO userDTO : loggedUsers) {
+			if(userDTO.getUserID().equals(userId)) {
+				actualUser = userDTO;
+				break;
+			}
+		}
+		//Deletes the User from logged users and replace it with the one updated
+		loggedUsers.remove(actualUser);
+		loggedUsers.add(updatedUser);
+		return updatedUser;
 	}
 
 	@Override
@@ -298,7 +329,9 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 
 	@Override
 	public RoomDTO updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) throws RemoteException {
-				
+		
+		log.debug("HotelManager is going to update a room");
+		
 		Room room = new Room(roomId, size, price, roomtype, isOccupied);
 		roomDao.updateRoom(room);
 		
@@ -350,9 +383,12 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		Assembler roomAssembler = new Assembler();
 		
 		Room room = roomDao.getRoomById(roomID);
+		
+		log.debug("Retrieving room with ID: " + roomID + " - " + room == null ? null : room.getRoomId());
+		
 		RoomDTO roomDto = roomAssembler.assembleRoom(room);
 		
-		if(roomDto.equals(null)) {
+		if(roomDto == null) {
 			log.fatal("New exception - There is no room for the requested information.");
 			throw new RemoteException("ROOMS - There is no room for the requested information.");
 		}

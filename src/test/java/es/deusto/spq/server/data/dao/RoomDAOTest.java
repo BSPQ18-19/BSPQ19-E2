@@ -13,7 +13,8 @@ import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.RoomType;
 
-/** Test for the class RoomDAO
+/**
+ * Test for the class RoomDAO
  * @author gonzalo
  *
  */
@@ -27,7 +28,8 @@ public class RoomDAOTest {
 		private static Hotel hotel;
 		private static ArrayList<Room> rooms;
 		
-		/** Executes initial variables for testing RoomDAO
+		/**
+		 * Executes initial variables for testing RoomDAO
 		 * @throws Exception
 		 */
 		@BeforeClass
@@ -62,15 +64,6 @@ public class RoomDAOTest {
 		public void test2GetRoomByHotelId() {
 			List<Room> listRooms = roomDAO.getRoomByHotelId(hotelID);
 			Assert.assertTrue(listRooms.contains(rooms.get(0)));
-		}
-		
-		/**
-		 * Test the method for retrieving a room from the DB according to a room ID
-		 */
-		@Test
-		public void test3GetRoomById() {
-			Room room = roomDAO.getRoomById("R10");
-			Assert.assertEquals(rooms.get(0).getRoomId(), room.getRoomId());
 		}
 		
 		/**
