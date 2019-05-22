@@ -25,6 +25,8 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
+import es.deusto.spq.client.gui.base.ViewFactory;
+import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.RoomDTO;
 
@@ -90,15 +92,18 @@ public class RoomPanel extends JPanel{
 					RoomDTO roomDTO = clientWindowGuest.getController().retrieveRoomById((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 0));
 					String daysForRoom = JOptionPane.showInputDialog(new JTextField("", 10), "How many nights?", JOptionPane.QUESTION_MESSAGE);
 					if(!(daysForRoom == "")) {
-						
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
 						LocalDate localDateStart = LocalDate.parse(calendarDate.trim(), formatter);
 						LocalDate localDateEnding = localDateStart.plusDays(Integer.valueOf(daysForRoom));
-						roomDTO.setOccupied(true);
-						clientWindowGuest.getController().updateRoom(roomDTO.getRoomID(), roomDTO.getSize(), roomDTO.getPrice(), roomDTO.getType(), roomDTO.isOccupied());
-						clientWindowGuest.getController().createReservation(Integer.toString(r.nextInt(Integer.MAX_VALUE)),
-								clientWindowGuest.getController().getLoggedUser().getUserID(), roomDTO.getRoomID(), localDateStart, localDateEnding);
-						JOptionPane.showMessageDialog(null, "Room successfully reserved", "Done", JOptionPane.INFORMATION_MESSAGE);
+						float finalPrize = Integer.parseInt(daysForRoom) * roomDTO.getPrice();
+						
+						UserPayView view;
+						clientWindowGuest.getGuestView().getViewManager().openView(view = (UserPayView) ViewFactory.buildView(ViewType.MAKE_PAYMENT, clientWindowGuest.getGuestView().getViewManager()));
+						view.setLocalDateEnding(localDateEnding);
+						view.setLocalDateStart(localDateStart);
+						view.setPrize(finalPrize);
+						view.setRoomDTO(roomDTO);
+						
 						clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
 					}
 				}else {

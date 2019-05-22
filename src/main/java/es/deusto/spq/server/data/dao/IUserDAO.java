@@ -14,12 +14,21 @@ public interface IUserDAO {
 	 * @return a list of all the users.
 	 */
 	public List<UserDTO> getUsers();
+
 	/**
 	 * Retrieves the user that matches the ID.
 	 * @param ID the ID of the user to retrieve.
 	 * @return the user matching the ID if exists, and null if not.
 	 */
 	public UserDTO getUserbyID(String ID);
+
+	/**
+	 * Retrieves the user that matches the ID.
+	 * @param ID of the user to be retrieved.
+	 * @return User object.
+	 */
+	public User getUser(String ID);
+
 	/**
 	 * Stores the new user into the database. Note that User is an abstract class, so the 
 	 * argument must an instance of it to store properly. If not, exceptions may arise.

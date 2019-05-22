@@ -11,6 +11,7 @@ import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.ReservationDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.RoomType;
@@ -359,7 +360,24 @@ public class HotelManagementController {
 		}
     	return false;
     }
-    
+
+	/**
+	 * Stores a new review in the DB.
+	 * @param opinion the text written by the user.
+	 * @param score the score that user gives to the hotel.
+	 * @param hotelID the hotelID of the hotel the review is form.
+	 * @param userID the id of the user that writes the review.
+	 * @return A ReviewDTO.
+	 */
+    public ReviewDTO createReview(String opinion, int score, String hotelID, String userID){
+    	try {
+			return rsl.getHotelManager().createReview(opinion, score, hotelID, userID);
+		
+		} catch (RemoteException e) {
+			log.fatal("Error creating a new Review: " + e.getMessage());
+		}
+    	return null;
+    }
 	/**
 	 * Clear the list of the current rooms
 	 */
@@ -398,5 +416,31 @@ public class HotelManagementController {
 	public UserDTO getLoggedUser() {
 		return loggedUser;
 	}
-
+	
+	/**
+	 * A method that handles the payment of the reservation depending on the 
+	 * 		payment method user selected earlier.
+	 * @param arg1 In case of Paypal username, MasterCard cardNumber.
+	 * @param arg2 In case of Paypal password, MasterCard cardNumber.
+	 * @param amount The amount it cost.
+	 * @param type The type of paymentMethods true paypal, false masterCard.
+	 * @return {@code true} if the payment has been done successfully, and 
+	 * 		{@code false} if not.
+	 */
+	public boolean payReservation(String arg1, String arg2, float amount, boolean type) {
+		try {
+			if(type) {
+				//Call the method to pay with PayPal
+				return rsl.getHotelManager().payPayPal(arg1, arg2, amount);
+			}else {
+				long cardNumber = Long.parseLong(arg1);
+				int securityCode = Integer.parseInt(arg2);
+				//Call the method to pay with MasterCard
+				return rsl.getHotelManager().payMastercard(cardNumber, securityCode, amount);
+			}
+		}catch (Exception e) {
+			log.fatal("Error making payment: " + e);
+		}
+		return false;
+	}
 }
