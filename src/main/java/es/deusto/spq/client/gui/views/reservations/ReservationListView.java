@@ -1,9 +1,6 @@
 package es.deusto.spq.client.gui.views.reservations;
 
-import es.deusto.spq.client.gui.base.View;
-import es.deusto.spq.client.gui.base.ViewManager;
-import es.deusto.spq.client.gui.base.ViewPermission;
-import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.client.gui.base.*;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.ReservationDTO;
 import org.jetbrains.annotations.Nullable;
@@ -121,7 +118,9 @@ public class ReservationListView extends View {
             label.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    ClientLogger.getLogger().debug("Clicked on " + reservation.toString()); // TODO open reservation view
+                    ReservationDetailView reservationDetailView = (ReservationDetailView) ViewFactory.buildView(ViewType.RESERVATION_DETAIL, getViewManager());
+                    reservationDetailView.setReservationDTO(reservation);
+                    getViewManager().openView(reservationDetailView);
                 }
                 @Override
                 public void mousePressed(MouseEvent e) {}

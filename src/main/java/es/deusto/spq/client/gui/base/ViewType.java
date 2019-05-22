@@ -52,4 +52,9 @@ public enum ViewType
      * View that show a given list of Reservations
      */
     RESERVATION_LIST,
+
+    /**
+     * View to show detail about a specific Reservation
+     */
+    RESERVATION_DETAIL,
 }
