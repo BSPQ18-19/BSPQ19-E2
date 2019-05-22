@@ -7,6 +7,9 @@ import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
+
+import org.apache.log4j.Logger;
+
 import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
 import es.deusto.spq.server.data.cache.Cache;
@@ -52,9 +55,13 @@ public class RoomDAO implements IRoomDAO {
 	    }
 	    return rooms;
 	}
+	
+	private Logger log = ServerLogger.getLogger();
 
 	@Override
 	public Room updateRoom(Room room) {
+		log.debug("A room wants to be updated in RoomDAO - " + room.getRoomId());
+		
 		pm.getFetchPlan().setMaxFetchDepth(3);
 		
 		tx = pm.currentTransaction();
@@ -165,7 +172,9 @@ public class RoomDAO implements IRoomDAO {
 			List<Room> result = (List<Room>) query.execute();
 			tx.commit();
 			
-			return result.get(0);
+			return result == null || result.size() == 0 || result.size() > 1 ?
+					null :
+					result.get(0);
 			
 		} catch (Exception ex) {
 			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
@@ -182,6 +191,30 @@ public class RoomDAO implements IRoomDAO {
 	private final void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
+	}
+
+	@Override
+	public Room createRoom(Room room) {
+		//Don't create the room if it's already created
+		Room existingRoom = getRoomById(room.getRoomId());
+		if(existingRoom != null)
+			return existingRoom;
+		
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+			pm.makePersistent(room);
+			Room result = pm.detachCopy(room);
+			filter.add(result);
+			cache.set(result.getRoomId(), result);
+			tx.commit();
+			return result;
+		} catch(Exception e) {
+			log.warn(e.getMessage());
+		} finally {
+			close();
+		}
+		return null;
 	}
 
 }
