@@ -98,7 +98,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		hotels.put("H04", new Hotel("H04", "Hotel4", "Sevilla", Timestamp.valueOf(LocalDate.of(2019, 05, 01).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 10, 01).atStartOfDay())));
 		hotels.put("H05", new Hotel("H05", "Hotel5", "Zaragoza", Timestamp.valueOf(LocalDate.of(2019, 05, 14).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 11, 30).atStartOfDay())));
 		hotels.put("H06", new Hotel("H06", "Hotel6", "Gijon", Timestamp.valueOf(LocalDate.of(2019, 04, 20).atStartOfDay()), Timestamp.valueOf(LocalDate.of(2019, 11, 30).atStartOfDay())));
-	
+		
 		this.hotelDao = new HotelDAO();
 		hotels.get("H01").setListRooms(rooms1);
 		hotels.get("H02").setListRooms(rooms2);
@@ -110,6 +110,13 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		User defaultAdmin = new  Administrator("DEFAULT", "admin", "admin", "admin", "admin");
 		userDAO.deleteUserbyID(defaultAdmin.getUserID());
 		userDAO.createUser(defaultAdmin);
+
+		//PayPal account for the payment
+		registerPayPal("iker-barriocanal","123", 10000);
+		registerPayPal("iapellaniz","deusto", 15000);
+		registerPayPal("Egoes98","7954", 9560);
+		registerPayPal("Arribas12","arribas12", 20000);
+		registerPayPal("dusekvojtech","deusto2019", 10100);
 	}
 
 	private Random r;
