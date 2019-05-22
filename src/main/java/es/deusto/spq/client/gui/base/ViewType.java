@@ -48,13 +48,23 @@ public enum ViewType
      */
      GUEST_HOTELS,
 
-     /**
-      * View that handles payments
-      */
-     MAKE_PAYMENT,
+    /**
+     * View that show a given list of Reservations
+     */
+    RESERVATION_LIST,
+
+    /**
+     * View to show detail about a specific Reservation
+     */
+    RESERVATION_DETAIL,
+
+    /**
+     * View that handles payments
+     */
+    MAKE_PAYMENT,
      
-     /**
-      * Window for writing a review
-      */
-     WRITE_REVIEW
+    /**
+     * Window for writing a review
+     */
+    WRITE_REVIEW,
 }
