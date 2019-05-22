@@ -366,13 +366,13 @@ public class HotelManagementController {
 	 * Stores a new review in the DB.
 	 * @param opinion the text written by the user.
 	 * @param score the score that user gives to the hotel.
-	 * @param hotelID the hotelID of the hotel the review is form.
+	 * @param roomID the roomID of the room to get the hotel from.
 	 * @param userID the id of the user that writes the review.
 	 * @return A ReviewDTO.
 	 */
-    public ReviewDTO createReview(String opinion, int score, String hotelID, String userID){
+    public ReviewDTO createReview(String opinion, int score, String roomID, String userID){
     	try {
-			return rsl.getHotelManager().createReview(opinion, score, hotelID, userID);
+			return rsl.getHotelManager().createReview(opinion, score, roomID, userID);
 		
 		} catch (RemoteException e) {
 			log.fatal("Error creating a new Review: " + e.getMessage());

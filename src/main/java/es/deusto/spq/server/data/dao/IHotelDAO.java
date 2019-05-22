@@ -52,4 +52,11 @@ public interface IHotelDAO {
 	 * @return Hotel object
 	 */
 	public Hotel updateHotel(Hotel hotel);
+
+	/**
+	 * This methods gives us the id of a hotel when sending a room related to that hotel.
+	 * @param roomID The id of the room related to the hotelID we want to get.
+	 * @return the HotelID.
+	 */
+	public String getHotelIDWithRoomID(String roomID);
 }

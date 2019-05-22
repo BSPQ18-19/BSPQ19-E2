@@ -12,6 +12,7 @@ import es.deusto.spq.server.data.MyPersistenceManager;
 import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
 import es.deusto.spq.server.data.cache.Cache;
 import es.deusto.spq.server.data.jdo.Hotel;
+import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.logger.ServerLogger;
 
 public class HotelDAO implements IHotelDAO {
@@ -234,5 +235,41 @@ public class HotelDAO implements IHotelDAO {
 	    }
 	    				
 		return null;
+	}
+	
+	public String getHotelIDWithRoomID(String roomID) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		tx = pm.currentTransaction();
+	    ArrayList<Hotel> hotels = new ArrayList<>();
+	    List<Room> rooms = new ArrayList<>();
+	        
+	    try {
+	    	ServerLogger.getLogger().info("   * Retrieving all the hotels ");
+	    	
+	    	tx.begin();	    	
+			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
+
+			for (Hotel hotel : extent) {
+					hotels.add(hotel);
+			}
+			
+	        tx.commit();
+	        
+	        for(Hotel h : hotels) {
+	        	rooms = h.getListRooms();
+	        	for(Room r : rooms) {
+	        		System.out.println(h.getHotelId());
+	        		if(r.getRoomId().equals(roomID)) {
+	        			return h.getHotelId();
+	        		}
+	        	}
+	        }
+	    } catch (Exception ex) {
+	    	ServerLogger.getLogger().fatal("   $ Error retreiving an extent: " + ex.getMessage());
+	    } finally {
+	    	close();
+	    }
+	    return "";
 	}
 }

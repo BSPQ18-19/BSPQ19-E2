@@ -190,7 +190,7 @@ public interface IHotelManager extends Remote {
 	 * Stores a new review in the DB.
 	 * @param opinion the text written by the user.
 	 * @param score the score that user gives to the hotel.
-	 * @param hotelID the hotelID of the hotel the review is form.
+	 * @param roomID the roomID of the hotel we want to get Id from.
 	 * @param userID the id of the user that writes the review.
 	 * @return A ReviewDTO.
 	 * @throws RemoteException exception.
