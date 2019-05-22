@@ -46,6 +46,10 @@ public enum ViewType
     /**
      * Guest window to manage requested hotels, searching them and booking rooms
      */
-     GUEST_HOTELS
-
+     GUEST_HOTELS,
+     
+     /**
+      * Window for writing a review
+      */
+     WRITE_REVIEW
 }
