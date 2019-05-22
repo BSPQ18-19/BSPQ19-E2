@@ -44,7 +44,7 @@ public class ReservationDAOTest {
 	
 	@Test
 	public void reservationsOfGuestTest() {
-		List<Reservation> reservations = dao.getReservationsOfGuest(guest);
+		List<Reservation> reservations = dao.getReservationsOfGuest(guest.getUserID());
 		if(reservations == null || reservations.isEmpty())
 			fail("No reservations found");
 		if(reservations.size() > 1)

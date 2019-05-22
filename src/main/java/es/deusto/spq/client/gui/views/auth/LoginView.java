@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import es.deusto.spq.client.gui.views.reservations.ReservationListView;
+import es.deusto.spq.server.data.dto.ReservationDTO;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
@@ -156,6 +160,7 @@ public class LoginView extends View {
                             getViewManager().getClient().getLocaleManager().getMessage("login.failed.title"),
                             JOptionPane.ERROR_MESSAGE);
                 else {
+                    getViewManager().repaintAll();
                     if(loggedUser.isGuest()) {
                     	getViewManager().openView(ViewFactory.buildView(ViewType.GUEST_HOTELS, getViewManager()));
                     }
@@ -167,8 +172,8 @@ public class LoginView extends View {
                     
                     dispose();
                     JOptionPane.showMessageDialog(frame,
-                            "Succesfull login",
-                            "Succesfull login",
+                            "Successful login", // TODO localize
+                            "Successful login", // TODO localize
                             JOptionPane.INFORMATION_MESSAGE);
                 }
             }
