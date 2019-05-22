@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.client.gui.views.reviews.WriteReview;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.RoomDTO;
 
@@ -54,6 +55,10 @@ public class RoomPanel extends JPanel{
 	 */
 	private JButton	confirm, back;
 	/**
+	 * Displays the write review view.
+	 */
+	private JButton writeReview;
+	/**
 	 * upperButtons Panel for the buttons at the top
 	 */
 	private JPanel upperButtons;
@@ -80,6 +85,19 @@ public class RoomPanel extends JPanel{
 		this.setLayout(new BorderLayout());
 						
 		r =  new Random();
+		
+		writeReview = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("roomPanel.button.writeReview"));
+		writeReview.setSize(100, 30);
+		writeReview.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				WriteReview view = null;
+				clientWindowGuest.getGuestView().getViewManager().openView(view = (WriteReview) ViewFactory.buildView(ViewType.WRITE_REVIEW, clientWindowGuest.getGuestView().getViewManager()));
+				view.setHotelID(hotelId);
+				view.setUserID(clientWindowGuest.getGuestView().getViewManager().getClient().getController().getLoggedUser().getUserID());
+			}
+		});
 		
 		confirm = new JButton("Confirm");
 		confirm.setSize(100, 30);
@@ -127,6 +145,7 @@ public class RoomPanel extends JPanel{
 		upperButtons.setBackground(Color.LIGHT_GRAY);
 		upperButtons.add(confirm);
 		upperButtons.add(back);
+		upperButtons.add(writeReview);
 		
 		
 		roomsTable = new JTable();
