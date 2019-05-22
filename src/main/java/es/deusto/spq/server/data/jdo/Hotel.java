@@ -23,7 +23,7 @@ public class Hotel implements Serializable{
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
 	
-	@Persistent(mappedBy="hotel")
+	@Persistent(mappedBy="hotel", dependentElement = "true")
 	private List<Room> listRooms;
 	
 	/** Constructor of Hotel

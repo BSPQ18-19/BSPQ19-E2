@@ -67,12 +67,17 @@ public class HotelDAO implements IHotelDAO {
 			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
 			
 			tx.begin();			
-			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
+			
+			Query<Hotel> query = pm.newQuery(Hotel.class);
+			query.setFilter("hotelId == '" + hotelID + "'");
+			@SuppressWarnings("unchecked")
+			List<Hotel> result = (List<Hotel>) query.execute();
 			tx.commit();
-			for (Hotel hotel : extent) {
-				if (hotel.getHotelId().equals(hotelID)) {
-				    return hotel;
-                }
+			
+			if(result == null || result.isEmpty() || result.size() > 1) {
+				ServerLogger.getLogger().debug("devuelve los hoteles mal");
+			} else {
+				result.get(0);
 			}
 			
 		} catch (Exception ex) {
