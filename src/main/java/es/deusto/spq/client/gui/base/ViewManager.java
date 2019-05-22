@@ -1,8 +1,10 @@
 package es.deusto.spq.client.gui.base;
 
 import es.deusto.spq.client.Client;
+import es.deusto.spq.client.gui.views.reservations.ReservationListView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.gui.locale.LocaleManager;
+import es.deusto.spq.server.data.dto.ReservationDTO;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -169,6 +171,40 @@ public class ViewManager {
         menuMainItem.add(salirMenuItem);
 
         menuBar.add(menuMainItem);
+
+        // Reservations menu. Only for logged in Users.
+        if (getClient().getController().getLoggedUser() != null) {
+            JMenu reservations = new JMenu(getClient().getLocaleManager().getMessage("menu.reservations"));
+            reservations.setFont(new Font("sans-serif", Font.PLAIN, 14));
+            if (getClient().getController().getLoggedUser().isGuest()) {
+                JMenuItem showMyReservations = new JMenuItem(getClient().getLocaleManager().getMessage("menu.reservations.mine"));
+                showMyReservations.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Guest: open their Reservations
+                        ReservationListView reservationListView = (ReservationListView) ViewFactory.buildView(ViewType.RESERVATION_LIST, getViewManager());
+                        reservationListView.setReservations(getViewManager().getClient().getController().getReservationsForCurrentUser());
+                        getViewManager().openView(reservationListView);
+                    }
+                });
+                reservations.add(showMyReservations);
+            } else {
+               // Show all Reservations for Administrators
+                JMenuItem showMyReservations = new JMenuItem(getClient().getLocaleManager().getMessage("menu.reservations.admin"));
+                showMyReservations.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Guest: open their Reservations
+                        ReservationListView reservationListView = (ReservationListView) ViewFactory.buildView(ViewType.RESERVATION_LIST, getViewManager());
+                        reservationListView.setReservations(getViewManager().getClient().getController().getAllReservations());
+                        getViewManager().openView(reservationListView);
+                    }
+                });
+                reservations.add(showMyReservations);
+            }
+            menuBar.add(reservations);
+        }
+
         frame.setJMenuBar(menuBar);
     }
 
@@ -241,7 +277,6 @@ public class ViewManager {
 
         // Check if we have permission to open the window
         if (!ViewPermission.hasPermission(getPermission(), view.getViewPermission())) {
-            // TODO log not enough permissions
             return;
         }
 
