@@ -13,11 +13,10 @@ public interface IReservationDAO {
 	 */
 	public Reservation getReservationbyID(String ID);
 	
-	/**Retrieves all the reservations the guest has made.
-	 * @param guest - the guest who has made the reservations.
-	 * @return a list of reservations.
+	/**
+	 * Retrieves all the reservations the guest has made.
 	 */
-	public List<Reservation> getReservationsOfGuest(Guest guest);
+	public List<Reservation> getReservationsOfGuest(String guestID);
 
 	/**Creates the given reservation and stores it in the database.
 	 * @param reservation - the reservation to be created.

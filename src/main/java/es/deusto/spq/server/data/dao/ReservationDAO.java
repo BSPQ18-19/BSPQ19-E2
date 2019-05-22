@@ -1,11 +1,15 @@
 package es.deusto.spq.server.data.dao;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
+import es.deusto.spq.server.data.jdo.Hotel;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
@@ -70,27 +74,30 @@ public class ReservationDAO implements IReservationDAO {
 	}
 
 	@Override
-	public List<Reservation> getReservationsOfGuest(Guest guest) {
+	public List<Reservation> getReservationsOfGuest(String guestID) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+
+		tx = pm.currentTransaction();
+		ArrayList<Reservation> reservations = new ArrayList<>();
+
 		try {
-			tx = pm.currentTransaction();
+			ServerLogger.getLogger().info("   * Retrieving all the hotels ");
+
 			tx.begin();
-			
-			Query<Reservation> query = pm.newQuery(Reservation.class);
-			query.setFilter("guestId == '" + guest.getUserID() + "'"); //TODO check if this is correct
-			@SuppressWarnings("unchecked")
-			List<Reservation> result = (List<Reservation>) query.execute();
+			Extent<Reservation> extent = pm.getExtent(Reservation.class, true);
+
+			for (Reservation reservation : extent) {
+				if(reservation.getGuestId().equals(guestID))
+					reservations.add(reservation);
+			}
+
 			tx.commit();
-			
-			return result == null || result.isEmpty() ?
-					null :
-					result;
-		} catch (Exception e) {
-			log.warn(e.getMessage());
+		} catch (Exception ex) {
+			ServerLogger.getLogger().fatal("   $ Error retreiving an extent: " + ex.getMessage());
 		} finally {
 			close();
 		}
-		
-		return null;
+		return reservations;
 	}
 
 	@Override

@@ -179,4 +179,6 @@ public interface IHotelManager extends Remote {
 	 * @throws RemoteException exception
 	 */
 	public ReservationDTO createReservation(String reservationId, String email, String roomId, LocalDate firstDay, LocalDate lastDay) throws RemoteException;
+
+	public List<ReservationDTO> getReservationsForGuest(UserDTO userDTO) throws RemoteException;
 }

@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import es.deusto.spq.client.gui.views.reservations.ReservationListView;
+import es.deusto.spq.server.data.dto.ReservationDTO;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
@@ -159,6 +163,15 @@ public class LoginView extends View {
                 else {
                     if(loggedUser.isGuest()) {
                     	getViewManager().openView(ViewFactory.buildView(ViewType.GUEST_HOTELS, getViewManager()));
+
+                        // DEBUG !!!
+                        ReservationListView reservationListView = (ReservationListView) ViewFactory.buildView(ViewType.RESERVATION_LIST, getViewManager());
+                        List<ReservationDTO> reservations = new ArrayList<>();
+                        //reservations.add(new ReservationDTO("1", "TEST")); TODO get actual ReservationDTOs
+                        reservationListView.setReservations(getViewManager().getClient().getController().getReservationsForCurrentUser());
+                        getViewManager().openView(reservationListView); // TODO remove debug when finished
+                        // end DEBUG
+
                     }
                     
                     else {

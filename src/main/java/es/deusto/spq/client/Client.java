@@ -70,14 +70,6 @@ public class Client {
 		viewManager.initialize();
 		viewManager.openView(ViewFactory.buildView(ViewType.LOGIN, viewManager));
 		localeManager.setMode(LocaleMode.DEBUG);
-
-		// DEBUG !!!
-		ReservationListView  reservationListView = (ReservationListView) ViewFactory.buildView(ViewType.RESERVATION_LIST, viewManager);
-		List<ReservationDTO> reservations = new ArrayList<>();
-		//reservations.add(new ReservationDTO("1", "TEST")); TODO get actual ReservationDTOs
-		reservationListView.setReservations(reservations);
-		viewManager.openView(reservationListView); // TODO remove debug when finished
-		// end DEBUG
 	}
 
 	public HotelManagementController getController() {

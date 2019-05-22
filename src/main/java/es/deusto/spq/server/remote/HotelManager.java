@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
+import es.deusto.spq.client.logger.ClientLogger;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.dao.HotelDAO;
@@ -378,7 +379,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		
 		Room room = roomDao.getRoomById(roomID);
 		
-		log.debug("Retrieving room with ID: " + roomID + " - " + room == null ? null : room.getRoomId());
+		//log.debug("Retrieving room with ID: " + roomID + " - " + room == null ? null : room.getRoomId());
 		
 		RoomDTO roomDto = roomAssembler.assembleRoom(room);
 		
@@ -399,6 +400,23 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 				Timestamp.valueOf(firstDay.atStartOfDay()), Timestamp.valueOf(lastDay.atStartOfDay()));
 		reservationDao.createReservation(reservation);
 		return reservationAssembler.assembleReservation(reservation);
+	}
+
+	@Override
+	public List<ReservationDTO> getReservationsForGuest(UserDTO userDTO) {
+
+		Assembler reservationAssembler = new Assembler();
+		List<ReservationDTO> result = new ArrayList<>();
+
+		List<Reservation> reservations = new ArrayList<>();
+
+		reservations = reservationDao.getReservationsOfGuest(userDTO.getUserID());
+
+		for (Reservation reservation : reservations) {
+			result.add(reservationAssembler.assembleReservation(reservation));
+		}
+
+		return result;
 	}
 
 }
