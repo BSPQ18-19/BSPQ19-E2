@@ -18,6 +18,12 @@ public interface IReservationDAO {
 	 */
 	public List<Reservation> getReservationsOfGuest(String guestID);
 
+	/**
+	 * Retrieves all the Reservations in the database
+	 * @return a list with all the Reservations
+	 */
+	public List<Reservation> getAllReservations();
+
 	/**Creates the given reservation and stores it in the database.
 	 * @param reservation - the reservation to be created.
 	 * @return a detached copy of the reservation.

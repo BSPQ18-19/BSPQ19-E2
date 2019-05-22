@@ -408,12 +408,24 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		Assembler reservationAssembler = new Assembler();
 		List<ReservationDTO> result = new ArrayList<>();
 
-		List<Reservation> reservations = new ArrayList<>();
-
-		reservations = reservationDao.getReservationsOfGuest(userDTO.getUserID());
+		List<Reservation> reservations = reservationDao.getReservationsOfGuest(userDTO.getUserID());
 
 		for (Reservation reservation : reservations) {
 			result.add(reservationAssembler.assembleReservation(reservation));
+		}
+
+		return result;
+	}
+
+	@Override
+	public List<ReservationDTO> getAllReservations() {
+		Assembler assembler = new Assembler();
+		List<ReservationDTO> result = new ArrayList<>();
+
+		List<Reservation> reservationsDTOs = reservationDao.getAllReservations();
+
+		for (Reservation reservation : reservationsDTOs) {
+			result.add(assembler.assembleReservation(reservation));
 		}
 
 		return result;

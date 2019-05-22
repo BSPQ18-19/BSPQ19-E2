@@ -23,7 +23,6 @@ public class ViewFactory {
      * @return View of the corresponding ViewType
      */
     public static View buildView(ViewType type, ViewManager viewManager) {
-        // TODO allow passing of extra parameters to the Factory
         View view = null;
         switch (type) {
 

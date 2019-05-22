@@ -101,6 +101,32 @@ public class ReservationDAO implements IReservationDAO {
 	}
 
 	@Override
+	public List<Reservation> getAllReservations() {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+
+		tx = pm.currentTransaction();
+		ArrayList<Reservation> reservations = new ArrayList<>();
+
+		try {
+			ServerLogger.getLogger().info("   * Retrieving all the Reservations ");
+
+			tx.begin();
+			Extent<Reservation> extent = pm.getExtent(Reservation.class, true);
+
+			for (Reservation reservation : extent) {
+				reservations.add(reservation);
+			}
+
+			tx.commit();
+		} catch (Exception ex) {
+			ServerLogger.getLogger().fatal("   $ Error retreiving an extent: " + ex.getMessage());
+		} finally {
+			close();
+		}
+		return reservations;
+	}
+
+	@Override
 	public synchronized Reservation createReservation(Reservation reservation) {
 		try {
 			tx = pm.currentTransaction();

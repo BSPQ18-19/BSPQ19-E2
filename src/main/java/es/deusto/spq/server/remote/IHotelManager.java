@@ -10,6 +10,7 @@ import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.ReservationDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.Reservation;
 import es.deusto.spq.server.data.jdo.RoomType;
 
 public interface IHotelManager extends Remote {
@@ -181,4 +182,6 @@ public interface IHotelManager extends Remote {
 	public ReservationDTO createReservation(String reservationId, String email, String roomId, LocalDate firstDay, LocalDate lastDay) throws RemoteException;
 
 	public List<ReservationDTO> getReservationsForGuest(UserDTO userDTO) throws RemoteException;
+
+	public List<ReservationDTO> getAllReservations() throws RemoteException;
 }

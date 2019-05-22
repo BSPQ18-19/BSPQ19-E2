@@ -400,15 +400,32 @@ public class HotelManagementController {
 		return loggedUser;
 	}
 
-	// TODO document
+	/**
+	 * Get a list of ReservationDTOs corresponding to the currently logged-in User
+	 * @return a list of all the ReservationDTOs associated
+	 */
 	public List<ReservationDTO> getReservationsForCurrentUser() {
 		List<ReservationDTO> reservations = new ArrayList<>();
 		try {
 			reservations = rsl.getHotelManager().getReservationsForGuest(getLoggedUser());
 		} catch (RemoteException e) {
-
+            e.printStackTrace();
 		}
 		return reservations;
 	}
+
+    /**
+     * Get all the Reservations in the database
+     * @return a List with all the Reservations
+     */
+	public List<ReservationDTO> getAllReservations() {
+        List<ReservationDTO> reservations = new ArrayList<>();
+        try {
+            reservations = rsl.getHotelManager().getAllReservations();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return reservations;
+    }
 
 }

@@ -189,7 +189,18 @@ public class ViewManager {
                 });
                 reservations.add(showMyReservations);
             } else {
-               // TODO show all Reservations for Administrators
+               // Show all Reservations for Administrators
+                JMenuItem showMyReservations = new JMenuItem(getClient().getLocaleManager().getMessage("menu.reservations.admin"));
+                showMyReservations.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Guest: open their Reservations
+                        ReservationListView reservationListView = (ReservationListView) ViewFactory.buildView(ViewType.RESERVATION_LIST, getViewManager());
+                        reservationListView.setReservations(getViewManager().getClient().getController().getAllReservations());
+                        getViewManager().openView(reservationListView);
+                    }
+                });
+                reservations.add(showMyReservations);
             }
             menuBar.add(reservations);
         }
@@ -266,7 +277,6 @@ public class ViewManager {
 
         // Check if we have permission to open the window
         if (!ViewPermission.hasPermission(getPermission(), view.getViewPermission())) {
-            // TODO log not enough permissions
             return;
         }
 
