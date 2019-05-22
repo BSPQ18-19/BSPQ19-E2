@@ -415,6 +415,16 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
+	public boolean deleteReservation(String reservationId) throws RemoteException {
+		boolean state = reservationDao.deleteReservationByID(reservationId);
+		if(state == true) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	@Override
 	public ReviewDTO createReview(String opinion, int score, String hotelID, String userID) throws RemoteException {
 		//Generate the ID for reviews.
 		String reviewID = userID+"-"+hotelID;
@@ -442,11 +452,4 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		ReviewDTO rDTO = reviewAssembler.assembleReview(detachedCopy);
 		return rDTO;
 	}
-
-	@Override
-	public boolean deleteReservation(String reservationId) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
