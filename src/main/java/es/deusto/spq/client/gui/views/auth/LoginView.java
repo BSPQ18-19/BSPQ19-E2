@@ -161,17 +161,9 @@ public class LoginView extends View {
                             getViewManager().getClient().getLocaleManager().getMessage("login.failed.title"),
                             JOptionPane.ERROR_MESSAGE);
                 else {
+                    getViewManager().repaintAll();
                     if(loggedUser.isGuest()) {
                     	getViewManager().openView(ViewFactory.buildView(ViewType.GUEST_HOTELS, getViewManager()));
-
-                        // DEBUG !!!
-                        ReservationListView reservationListView = (ReservationListView) ViewFactory.buildView(ViewType.RESERVATION_LIST, getViewManager());
-                        List<ReservationDTO> reservations = new ArrayList<>();
-                        //reservations.add(new ReservationDTO("1", "TEST")); TODO get actual ReservationDTOs
-                        reservationListView.setReservations(getViewManager().getClient().getController().getReservationsForCurrentUser());
-                        getViewManager().openView(reservationListView); // TODO remove debug when finished
-                        // end DEBUG
-
                     }
                     
                     else {
@@ -181,8 +173,8 @@ public class LoginView extends View {
                     
                     dispose();
                     JOptionPane.showMessageDialog(frame,
-                            "Succesfull login",
-                            "Succesfull login",
+                            "Successful login", // TODO localize
+                            "Successful login", // TODO localize
                             JOptionPane.INFORMATION_MESSAGE);
                 }
             }

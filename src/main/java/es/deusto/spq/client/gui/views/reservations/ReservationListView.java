@@ -112,14 +112,12 @@ public class ReservationListView extends View {
 
         resultsPanel.removeAll();
         for (ReservationDTO reservation : reservations) {
-            JLabel label = new JLabel(
-                    "<html><b>Reservation #"
-                    + reservation.getId()
-                    + "</b><br>" + reservation.getFirstDay()
-                    + " to "
-                    + reservation.getLastDay()
-                    + "<hr></html>"
-            );
+            String content = getViewManager().getClient().getLocaleManager()
+                    .getMessage("reservations.listing",
+                            reservation.getId(),
+                            reservation.getFirstDay(),
+                            reservation.getLastDay());
+            JLabel label = new JLabel(content);
             label.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
