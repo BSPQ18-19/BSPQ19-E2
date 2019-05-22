@@ -4,12 +4,15 @@ import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewPermission;
 import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.ReservationDTO;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 public class ReservationListView extends View {
@@ -76,6 +79,7 @@ public class ReservationListView extends View {
 
         // Center part
         resultsPanel = new JPanel();
+        resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.Y_AXIS));
         JLabel label =  new JLabel(getViewManager().getClient().getLocaleManager().getMessage("reservations.no-data"));
         resultsPanel.add(label);
 
@@ -108,7 +112,30 @@ public class ReservationListView extends View {
 
         resultsPanel.removeAll();
         for (ReservationDTO reservation : reservations) {
-            resultsPanel.add(new JLabel(reservation.toString()));
+            JLabel label = new JLabel(
+                    "<html><b>Reservation #"
+                    + reservation.getId()
+                    + "</b><br>" + reservation.getFirstDay()
+                    + " to "
+                    + reservation.getLastDay()
+                    + "<hr></html>"
+            );
+            label.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    ClientLogger.getLogger().debug("Clicked on " + reservation.toString()); // TODO open reservation view
+                }
+                @Override
+                public void mousePressed(MouseEvent e) {}
+                @Override
+                public void mouseReleased(MouseEvent e) {}
+                @Override
+                public void mouseEntered(MouseEvent e) {}
+                @Override
+                public void mouseExited(MouseEvent e) {}
+            });
+            label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            resultsPanel.add(label); // TODO localize
         }
         resultsPanel.validate();
         resultsPanel.repaint();
