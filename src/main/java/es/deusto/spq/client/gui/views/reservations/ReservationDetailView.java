@@ -1,21 +1,14 @@
 package es.deusto.spq.client.gui.views.reservations;
 
-import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.gui.base.View;
-import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewType;
-import es.deusto.spq.client.gui.views.admin.ScreenTypeAdmin;
-import es.deusto.spq.client.gui.views.reviews.WriteReview;
 import es.deusto.spq.server.data.dto.ReservationDTO;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Timestamp;
 
 public class ReservationDetailView extends View {
 
@@ -25,13 +18,9 @@ public class ReservationDetailView extends View {
     // Fields
     JLabel detail;
     JButton cancelButton;
-    JButton writeReview;
-
-    private HotelManagementController controller;
 
     public ReservationDetailView(ViewManager viewManager) {
         super(viewManager);
-        controller = viewManager.getClient().getController();
     }
 
     public ReservationDTO getReservationDTO() {
@@ -76,9 +65,6 @@ public class ReservationDetailView extends View {
         cancelButton = new JButton(getViewManager().getClient().getLocaleManager().getMessage("reservation.detail.button.cancel"));
         buttonsPanel.add(cancelButton);
 
-        writeReview = new JButton(getViewManager().getClient().getLocaleManager().getMessage("reservation.details.button.writteReview"));
-        buttonsPanel.add(writeReview);
-
         panel.add(buttonsPanel, BorderLayout.SOUTH);
 
         refresh();
@@ -99,22 +85,6 @@ public class ReservationDetailView extends View {
         if (getInternalFrame() == null) {
             return;
         }
-
-        writeReview.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-				if(reservationDTO.getLastDay().before(timestamp)) {
-					WriteReview view = null;
-					getViewManager().openView(view = (WriteReview) ViewFactory.buildView(ViewType.WRITE_REVIEW, getViewManager()));
-					view.setHotelID(reservationDTO.getRoomId());
-					view.setUserID(reservationDTO.getGuestId());
-				}else {
-					JOptionPane.showMessageDialog(null, "NO PUEDES", "Write Now", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
 
         // Cancel button always gets updated (locale)
         cancelButton.setText(getViewManager().getClient().getLocaleManager().getMessage("reservation.detail.button.cancel"));

@@ -67,10 +67,10 @@ public class WriteReview extends View{
     /**
      * Parameters used to handle operations.
      */
-    private String roomID, userID;
+    private String hotelID, userID;
 
 	public void setHotelID(String hotelID) {
-		this.roomID = hotelID;
+		this.hotelID = hotelID;
 	}
 
 	public void setUserID(String userID) {
@@ -136,7 +136,7 @@ public class WriteReview extends View{
 				//Get parameters and call the method to create the review.
 				int score = (int) spinner.getValue();
 				String opinion = editorPane.getText();
-				ReviewDTO r = hotelManagementController.createReview(opinion, score, roomID, userID);
+				ReviewDTO r = hotelManagementController.createReview(opinion, score, hotelID, userID);
 				try {
 					//If is null gives an error and disposes the frame.
 					if(r == null) {

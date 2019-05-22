@@ -444,14 +444,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	}
 
 	@Override
-	public ReviewDTO createReview(String opinion, int score, String roomID, String userID) throws RemoteException {
-
-		//Retrieve Hotels id with the hotelID
-		String hotelID = "";
-		hotelID = hotelDao.getHotelIDWithRoomID(roomID);
-		System.out.println("hotelID");
-		System.out.println("userID");
-
+	public ReviewDTO createReview(String opinion, int score, String hotelID, String userID) throws RemoteException {
 		//Generate the ID for reviews.
 		String reviewID = userID+"-"+hotelID;
 		Assembler reviewAssembler = new Assembler();
