@@ -181,6 +181,12 @@ public interface IHotelManager extends Remote {
 	 */
 	public ReservationDTO createReservation(String reservationId, String email, String roomId, LocalDate firstDay, LocalDate lastDay) throws RemoteException;
 	
+	/** Removes a reservation from the database
+	 * @param reservationId Id of the reservation
+	 * @return true if the operation has been done successfully
+	 * @throws RemoteException exception
+	 */
+	public boolean deleteReservation(String reservationId) throws RemoteException;
 	/**
 	 * Stores a new review in the DB.
 	 * @param opinion the text written by the user.

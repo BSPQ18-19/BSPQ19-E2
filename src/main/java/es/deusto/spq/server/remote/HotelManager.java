@@ -443,4 +443,10 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 		return rDTO;
 	}
 
+	@Override
+	public boolean deleteReservation(String reservationId) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
