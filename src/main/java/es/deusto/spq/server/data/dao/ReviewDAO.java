@@ -22,7 +22,7 @@ public class ReviewDAO implements IReviewDAO {
 	/**
 	 * The persistance manager variable
 	 */
-	private PersistenceManager pm;
+	private final PersistenceManager pm;
 	/**
 	 * The transaction variable needed to make operations on the DB.
 	 */
@@ -42,8 +42,8 @@ public class ReviewDAO implements IReviewDAO {
 	}
 
 	@Override
-	public Review storeReview(Review r, String hotelID, String userID) {
-		if (!checkUserReview(hotelID, userID))
+	public Review storeReview(Review r) {
+		if (!checkUserReview(r.getReviewID()))
 			return null;
 		tx = pm.currentTransaction();
 		try {
@@ -102,23 +102,23 @@ public class ReviewDAO implements IReviewDAO {
 	}
 
 	@Override
-	public boolean checkUserReview(String hotelID, String userID) {
+	public boolean checkUserReview(String reviewID) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
 
 			// Searches for all the reviews on the DB
 			Query<Review> query = pm.newQuery(Review.class);
+			query.setFilter("reviewID == '"+reviewID+"'");
 			@SuppressWarnings("unchecked")
-			final List<Review> queryExecution = (List<Review>) query.execute();
-
+			List<Review> queryExecution = (List<Review>) query.execute();
+			
 			tx.commit();
-			// Looks if there exist a review of the specified hotel by the specified user
-			for (Review r : queryExecution)
-				if (r.getHotel().getHotelId().equals(hotelID) && r.getUser().getUserID().equals(userID))
-					return false;
 
-			return true;
+			if(queryExecution == null || queryExecution.isEmpty()) {
+				return true;
+			}
+			return false;
 		} catch (Exception e) {
 			ServerLogger.getLogger().fatal("Error in ReviewDAO:checkUserReview()");
 			e.printStackTrace();
@@ -131,7 +131,6 @@ public class ReviewDAO implements IReviewDAO {
 	@Override
 	public List<Review> getReviewsOfHotel(String hotelID) {
 		try {
-			pm.getFetchPlan().setMaxFetchDepth(10);
 			tx = pm.currentTransaction();
 			tx.begin();
 
@@ -162,7 +161,6 @@ public class ReviewDAO implements IReviewDAO {
 	@Override
 	public List<Review> getReviewsByUser(String userID) {
 		try {
-			pm.getFetchPlan().setMaxFetchDepth(3);
 			tx = pm.currentTransaction();
 			tx.begin();
 

@@ -16,11 +16,9 @@ public interface IReviewDAO {
 	 * Stores a review in the database.
 	 *
 	 * @param r       the review we want to store.
-	 * @param hotelID the id of the hotel the Review is about.
-	 * @param userID  the id of the user that post the review.
 	 * @return a detached copy of the new review or null if there's an error.
 	 */
-	Review storeReview(Review r, String hotelID, String userID);
+	Review storeReview(Review r);
 
 	/**
 	 * Deletes a review from the DB.
@@ -35,11 +33,10 @@ public interface IReviewDAO {
 	 * Checks if user is able to store a review because each user can only store one
 	 * review for each hotel.
 	 *
-	 * @param hotelID The id of the hotel user want to store the review.
-	 * @param userID  The id of the user that wants to store the review.
+	 * @param reviewID The id of the review to see if there already exist.
 	 * @return return true if the user is able to post a review.
 	 */
-	boolean checkUserReview(String hotelID, String userID);
+	boolean checkUserReview(String reviewID);
 
 	/**
 	 * Retrieves the reviews of a hotel.
