@@ -11,6 +11,7 @@ import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.ReservationDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.RoomType;
@@ -359,7 +360,24 @@ public class HotelManagementController {
 		}
     	return false;
     }
-    
+
+	/**
+	 * Stores a new review in the DB.
+	 * @param opinion the text written by the user.
+	 * @param score the score that user gives to the hotel.
+	 * @param hotelID the hotelID of the hotel the review is form.
+	 * @param userID the id of the user that writes the review.
+	 * @return A ReviewDTO.
+	 */
+    public ReviewDTO createReview(String opinion, int score, String hotelID, String userID){
+    	try {
+			return rsl.getHotelManager().createReview(opinion, score, hotelID, userID);
+		
+		} catch (RemoteException e) {
+			log.fatal("Error creating a new Review: " + e.getMessage());
+		}
+    	return null;
+    }
 	/**
 	 * Clear the list of the current rooms
 	 */

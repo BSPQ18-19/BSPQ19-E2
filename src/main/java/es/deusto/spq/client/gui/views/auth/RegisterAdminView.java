@@ -84,9 +84,9 @@ public class RegisterAdminView extends View {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // The container is using BorderLayout so that
-        final JPanel container = new JPanel(new BorderLayout());
+        JPanel container = new JPanel(new BorderLayout());
 
-        final JPanel form = new JPanel(new SpringLayout());
+        JPanel form = new JPanel(new SpringLayout());
 
         // Name field
         nameLabel = new JLabel(getViewManager().getClient().getLocaleManager().getMessage("register.admin.label.name"), JLabel.TRAILING);
