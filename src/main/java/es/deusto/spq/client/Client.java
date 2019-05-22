@@ -5,10 +5,18 @@ import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewManager;
 import es.deusto.spq.client.gui.base.ViewType;
 import es.deusto.spq.client.gui.locale.LocaleMode;
+import es.deusto.spq.client.gui.views.reservations.ReservationListView;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.client.gui.locale.LocaleManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
+import es.deusto.spq.server.data.dto.ReservationDTO;
+import es.deusto.spq.server.data.jdo.Reservation;
 import org.apache.log4j.Logger;
 
 public class Client {

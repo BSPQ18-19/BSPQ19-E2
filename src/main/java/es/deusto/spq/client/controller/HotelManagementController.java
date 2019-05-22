@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.deusto.spq.server.data.jdo.Reservation;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
@@ -416,6 +417,35 @@ public class HotelManagementController {
 	public UserDTO getLoggedUser() {
 		return loggedUser;
 	}
+
+	/**
+	 * Get a list of ReservationDTOs corresponding to the currently logged-in User
+	 * @return a list of all the ReservationDTOs associated
+	 */
+	public List<ReservationDTO> getReservationsForCurrentUser() {
+		List<ReservationDTO> reservations = new ArrayList<>();
+		try {
+			reservations = rsl.getHotelManager().getReservationsForGuest(getLoggedUser());
+		} catch (RemoteException e) {
+            e.printStackTrace();
+		}
+		return reservations;
+	}
+
+    /**
+     * Get all the Reservations in the database
+     * @return a List with all the Reservations
+     */
+	public List<ReservationDTO> getAllReservations() {
+        List<ReservationDTO> reservations = new ArrayList<>();
+        try {
+            reservations = rsl.getHotelManager().getAllReservations();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return reservations;
+    }
+
 	
 	/**
 	 * A method that handles the payment of the reservation depending on the 
