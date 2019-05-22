@@ -9,6 +9,8 @@ import es.deusto.spq.client.gui.views.auth.RegisterView;
 import es.deusto.spq.client.gui.views.guest.HotelGuestView;
 import es.deusto.spq.client.gui.views.reservations.ReservationDetailView;
 import es.deusto.spq.client.gui.views.reservations.ReservationListView;
+import es.deusto.spq.client.gui.views.guest.UserPayView;
+import es.deusto.spq.client.gui.views.reviews.WriteReview;
 
 /**
  * Factory for View
@@ -60,6 +62,13 @@ public class ViewFactory {
 
             case RESERVATION_DETAIL:
                 view = new ReservationDetailView(viewManager);
+
+            case MAKE_PAYMENT:
+            	view = new UserPayView(viewManager);
+              break;
+            
+            case WRITE_REVIEW:
+            	view = new WriteReview(viewManager);
         }
         return view;
 

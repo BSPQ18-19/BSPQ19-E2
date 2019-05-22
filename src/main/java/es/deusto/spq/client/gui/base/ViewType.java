@@ -57,4 +57,14 @@ public enum ViewType
      * View to show detail about a specific Reservation
      */
     RESERVATION_DETAIL,
+
+    /**
+     * View that handles payments
+     */
+    MAKE_PAYMENT,
+     
+    /**
+     * Window for writing a review
+     */
+    WRITE_REVIEW,
 }

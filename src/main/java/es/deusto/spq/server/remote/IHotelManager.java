@@ -8,6 +8,7 @@ import java.util.List;
 
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.ReservationDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Reservation;
@@ -184,4 +185,15 @@ public interface IHotelManager extends Remote {
 	public List<ReservationDTO> getReservationsForGuest(UserDTO userDTO) throws RemoteException;
 
 	public List<ReservationDTO> getAllReservations() throws RemoteException;
+	
+	/**
+	 * Stores a new review in the DB.
+	 * @param opinion the text written by the user.
+	 * @param score the score that user gives to the hotel.
+	 * @param hotelID the hotelID of the hotel the review is form.
+	 * @param userID the id of the user that writes the review.
+	 * @return A ReviewDTO.
+	 * @throws RemoteException exception.
+	 */
+	public ReviewDTO createReview(String opinion, int score, String hotelID, String userID) throws RemoteException;;
 }
