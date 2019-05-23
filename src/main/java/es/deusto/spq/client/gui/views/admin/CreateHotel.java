@@ -160,11 +160,11 @@ public class CreateHotel extends JPanel {
 						|| locationTextField.getText().equals("")
 						|| seasonStartTextField.getText().equals("")
 						|| seasonEndingTextField.getText().equals("")){
-					JOptionPane.showMessageDialog(null, "create.messageDialog.fill", "create.messageDialog.error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.messageDialog.fill"), clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.messageDialog.error"), JOptionPane.ERROR_MESSAGE);
 				}else {
 					clientWindowAdmin.getController().createHotel(idTextField.getText(), nameTextField.getText(), locationTextField.getText(),
 							seasonStartTextField.getText(), seasonEndingTextField.getText());
-					JOptionPane.showMessageDialog(null, "create.messageDialog.hotelCreated", "create.messageDialog.success", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.messageDialog.hotelCreated"), clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("create.messageDialog.success"), JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});

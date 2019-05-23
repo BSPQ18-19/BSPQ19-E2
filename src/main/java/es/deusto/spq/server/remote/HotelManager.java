@@ -417,11 +417,7 @@ public class HotelManager extends UnicastRemoteObject implements IHotelManager {
 	@Override
 	public boolean deleteReservation(String reservationId) throws RemoteException {
 		boolean state = reservationDao.deleteReservationByID(reservationId);
-		if(state == true) {
-			return true;
-		}else {
-			return false;
-		}
+		return state;
 	}
 	public List<ReservationDTO> getReservationsForGuest(UserDTO userDTO) {
 

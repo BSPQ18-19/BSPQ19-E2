@@ -51,6 +51,7 @@ public class ReservationDetailView extends View {
     }
 
     public void initialize() {
+    	
         internalFrame = new JInternalFrame();
         internalFrame.setTitle(getViewManager().getClient().getLocaleManager().getMessage("reservation.detail.loading"));
         JPanel panel = new JPanel();
@@ -96,7 +97,7 @@ public class ReservationDetailView extends View {
         	@Override
         	public void actionPerformed(ActionEvent e) {
         		getViewManager().getClient().getController().deleteReservation(reservationDTO.getId());
-
+        		internalFrame.dispose();
         	}
         });
         // If there isn't a Reservation loaded yet, disable and wait for setter.
