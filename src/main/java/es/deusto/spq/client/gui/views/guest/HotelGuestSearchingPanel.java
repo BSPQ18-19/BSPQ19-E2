@@ -92,13 +92,13 @@ public class HotelGuestSearchingPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(calendar.getSelectedDate() == null) {
-					JOptionPane.showMessageDialog(null, "search.messageDialog.selectDate", "search.messageDialog.error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.messageDialog.selectDate"), clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.messageDialog.error"), JOptionPane.ERROR_MESSAGE);
 				}
 				else {
 					clientWindowGuest.getController().setCurrentHotels();
 					List<HotelDTO> retrievedHotels = clientWindowGuest.getController().retrieveHotels(calendar.getSelectedDate().toString());
 					if(retrievedHotels == null || retrievedHotels.size() == 0) {
-						JOptionPane.showMessageDialog(null, "search.messageDialog.noHotels", "search.messageDialog.error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.messageDialog.noHotels"), clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.messageDialog.error"), JOptionPane.ERROR_MESSAGE);
 						if(tableModel.getRowCount() != 0) {
 							for(int i = tableModel.getRowCount()-1; i >= 0; i--) {
 								tableModel.removeRow(i);
@@ -164,7 +164,7 @@ public class HotelGuestSearchingPanel extends JPanel {
 					clientWindowGuest.changeScreen(ScreenTypeGuest.ROOM_PANEL, (String)hotelsTable.getValueAt(hotelsTable.getSelectedRow(), 0), calendar.getSelectedDate().toString());
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "search.messageDialog.noRooms", "search.messageDialog.error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.messageDialog.noRooms"), clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("search.messageDialog.error"), JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

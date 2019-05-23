@@ -51,7 +51,6 @@ public class ReservationDetailView extends View {
     }
 
     public void initialize() {
-    	
         internalFrame = new JInternalFrame();
         internalFrame.setTitle(getViewManager().getClient().getLocaleManager().getMessage("reservation.detail.loading"));
         JPanel panel = new JPanel();
