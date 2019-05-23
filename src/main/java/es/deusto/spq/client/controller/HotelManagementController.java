@@ -348,7 +348,7 @@ public class HotelManagementController {
      */
     public boolean createReservation(String reservationId, String userId, String roomId, LocalDate firstDay, LocalDate lastDay) {
     	try {
-    		log.info("Creating new resevation...");
+    		log.info("Creating new reservation...");
 			ReservationDTO reservationDTO = rsl.getHotelManager().createReservation(reservationId, userId, roomId, firstDay, lastDay);
 			if(reservationDTO!=null) {
 				log.info("Resevation created successfully!");
@@ -362,6 +362,21 @@ public class HotelManagementController {
     	return false;
     }
 
+    
+    public boolean deleteReservation(String reservationId) {
+    	try {
+    		log.info("Deleting a reservation...");
+			if(rsl.getHotelManager().deleteReservation(reservationId)) {
+				log.info("Resevation deleted successfully!");
+				return true;
+			}else {
+				log.info("Resevation cannot be deleted.");
+			}
+		} catch (RemoteException e) {
+			log.fatal("Error Deleting a resevation: " + e.getMessage());
+		}
+    	return false;
+    }
 	/**
 	 * Stores a new review in the DB.
 	 * @param opinion the text written by the user.
