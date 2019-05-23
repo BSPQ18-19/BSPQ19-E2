@@ -21,7 +21,17 @@ public class ReservationDetailView extends View {
     JLabel detail;
     JButton cancelButton;
 
-    public ReservationDetailView(ViewManager viewManager) {
+    private ReservationListView rL;
+
+    public ReservationListView getrL() {
+		return rL;
+	}
+
+	public void setrL(ReservationListView rL) {
+		this.rL = rL;
+	}
+
+	public ReservationDetailView(ViewManager viewManager) {
         super(viewManager);
     }
 
@@ -97,6 +107,7 @@ public class ReservationDetailView extends View {
         	public void actionPerformed(ActionEvent e) {
         		getViewManager().getClient().getController().deleteReservation(reservationDTO.getId());
         		internalFrame.dispose();
+        		rL.dispose();
         	}
         });
         // If there isn't a Reservation loaded yet, disable and wait for setter.

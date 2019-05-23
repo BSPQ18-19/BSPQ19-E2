@@ -17,6 +17,7 @@ public class ReservationListView extends View {
     private JLabel titleLabel;
     private JPanel resultsPanel;
     private List<ReservationDTO> reservations;
+    private ReservationListView view;
 
     public ReservationListView(ViewManager viewManager) {
         super(viewManager);
@@ -30,6 +31,7 @@ public class ReservationListView extends View {
 
     public void setReservations(List<ReservationDTO> reservations) {
         this.reservations = reservations;
+        view = this;
         refresh();
     }
 
@@ -120,6 +122,7 @@ public class ReservationListView extends View {
                 public void mouseClicked(MouseEvent e) {
                     ReservationDetailView reservationDetailView = (ReservationDetailView) ViewFactory.buildView(ViewType.RESERVATION_DETAIL, getViewManager());
                     reservationDetailView.setReservationDTO(reservation);
+                    reservationDetailView.setrL(view);
                     getViewManager().openView(reservationDetailView);
                 }
                 @Override
