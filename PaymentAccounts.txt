@@ -1,0 +1,13 @@
+Paypal accounts:
+Username	   Password
+iker-barriocanal   123
+iapellaniz	   deusto
+Egoes98		   7954
+Arribas12	   arribas12
+dusekvojtech	   deusto2019
+
+MasterCard accounts:
+CardNumeber 	SecretCode
+123456789	123
+465789123 	456
+789123456 	789

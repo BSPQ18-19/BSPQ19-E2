@@ -1,8 +1,5 @@
 package es.deusto.spq.server.data.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
 import es.deusto.spq.server.data.jdo.Hotel;
@@ -15,8 +12,12 @@ import es.deusto.spq.server.logger.ServerLogger;
 public class Assembler {
 
 	public Assembler() {}
+
 	
-	// Hotel
+	/** Converts from Hotel to HotelDTO
+	 * @param hotel the hotel we want to assemble
+	 * @return HotelDTO object
+	 */
 	public HotelDTO assembleHotel(Hotel hotel) {
 		if (hotel == null)
 			return null;
@@ -26,27 +27,38 @@ public class Assembler {
 		return hotelDTO;
 	}
 
+	/** Converts from HotelDTO to Hotel
+	 * @param hotel the hotel we want to disassemble
+	 * @return Hotel object
+	 */
 	public Hotel disassembleHotel(HotelDTO hotel) {
 		return new Hotel(hotel.getHotelId(), hotel.getName(), hotel.getLocation(), hotel.getSeasonStart(),
 				hotel.getSeasonEnding());
 	}
 
-	// Room
+	/** Converts from Room to RoomDTO
+	 * @param room the room we want to assemble
+	 * @return Room object
+	 */
 	public RoomDTO assembleRoom(Room room) {
 		if(room == null)
 			return null;
 		return new RoomDTO(room.getRoomId(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied());
 	}
-	
+
+	/** Converts from RoomDTO to Room
+	 * @param room the room we want to disassemble
+	 * @return RoomDTO object
+	 */
 	public Room disassembleRoom(RoomDTO room) {
 		return new Room(room.getRoomID(), room.getSize(), room.getPrice(), room.getType(), room.isOccupied());
 	}
-	
+
 	// User
 	public UserDTO assembleUser(User user) {
-		return new UserDTO(user.getUserID(), user.getName(), user instanceof Guest);
+		return new UserDTO(user.getUserID(), user.getName(),user instanceof Guest);
 	}
-	
+
 	public User disassembleUser(UserDTO user) {
 		if(user.isGuest())
 			return new Guest(user.getUserID(), user.getName());
@@ -62,8 +74,7 @@ public class Assembler {
 	 * @return the ReviewDTO of the assembles Review
 	 */
 	public ReviewDTO assembleReview(Review review) {
-		return new ReviewDTO(review.getReviewID(), review.getOpinion(), review.getScore(), review.getPublishDate(),
-				assembleHotel(review.getHotel()), assembleUser(review.getUser()));
+		return new ReviewDTO(review.getReviewID(), review.getOpinion(), review.getScore(), review.getPublishDate());
 	}
 
 	/**
@@ -73,26 +84,15 @@ public class Assembler {
 	 * @return the Review from the disassembled ReviewDTO
 	 */
 	public Review disassembleReview(ReviewDTO review) {
-		return new Review(review.getReviewID(), review.getOpinion(), review.getScore(), review.getPublishDate(),
-				disassembleHotel(review.getHotel()), disassembleUser(review.getUser()));
+		return new Review(review.getReviewID(), review.getOpinion(), review.getScore(), review.getPublishDate());
 	}
 	
 	// Reservation
 	public ReservationDTO assembleReservation(Reservation reservation) {
-		List<Room> rooms = reservation.getRooms();
-		List<RoomDTO> assembledRooms = new ArrayList<RoomDTO>();
-		for(Room room : rooms)
-			assembledRooms.add(assembleRoom(room));
-		return new ReservationDTO(reservation.getReservationID(), 
-				reservation.getGuest() == null ? null : reservation.getGuest().getUserID(),
-				assembledRooms);
+		return new ReservationDTO(reservation.getReservationID(), reservation.getGuestId(), reservation.getRoomId(), reservation.getFirstDay(), reservation.getLastDay());
 	}
 	
 	public Reservation disassembleReservation(ReservationDTO reservation) {
-		List<RoomDTO> rooms = reservation.getRooms();
-		List<Room> disassembledRooms = new ArrayList<Room>();
-		for(RoomDTO room : rooms)
-			disassembledRooms.add(disassembleRoom(room));
-		return new Reservation(reservation.getId(), disassembledRooms);
+		return new Reservation(reservation.getId(), reservation.getGuestId(), reservation.getRoomId(), reservation.getFirstDay(), reservation.getLastDay());
 	}
 }

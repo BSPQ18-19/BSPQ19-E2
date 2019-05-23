@@ -10,37 +10,36 @@ import javax.jdo.Transaction;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
+import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
+import es.deusto.spq.server.data.cache.Cache;
 import es.deusto.spq.server.data.dto.Assembler;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.Administrator;
 import es.deusto.spq.server.data.jdo.Guest;
+import es.deusto.spq.server.data.jdo.Room;
 import es.deusto.spq.server.data.jdo.User;
 import es.deusto.spq.server.logger.ServerLogger;
 
-public class UserDAO implements IDAO, IUserDAO {
+public class UserDAO implements IUserDAO {
 
 	private PersistenceManager pm;
 	private Transaction tx;
 	private Assembler assembler;
 	private Logger log;
+	private SimpleBloomFilter<User> filter;
+	/** The cache of users. */
+	private Cache<String, User> cache;//id:String -> user:User
 	
 	public UserDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
 		assembler = new Assembler();
-		log = log;
+		log = ServerLogger.getLogger();
+		filter = new SimpleBloomFilter<User>();
+		cache = new Cache<String, User>(10);
 	}
 
 	@Override
-	public boolean checkAuthorizationIsAdmin(UserDTO authorization) {
-		// TODO
-		return true;
-	}
-
-	@Override
-	public List<UserDTO> getUsers(UserDTO authorization) {
-		if (!checkAuthorizationIsAdmin(authorization))
-			return null;
-		
+	public List<UserDTO> getUsers() {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -67,9 +66,17 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public UserDTO getUserbyID(UserDTO authorization, String ID) {
-		if (!checkAuthorizationIsAdmin(authorization))
+	public UserDTO getUserbyID(String ID) {
+		//Check if there's a user with such ID
+		User tmpUser = new Guest(ID, null);
+		if(!filter.contains(tmpUser))
 			return null;
+		
+		//Check if the user is in the cache
+		User userCache = cache.get(ID);
+		if(userCache != null)
+			return assembler.assembleUser(userCache);
+		
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -95,7 +102,45 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
+	public User getUser(String ID) {
+		
+		//Check if there's a user with such ID
+		User tmpUser = new Guest(ID, null);
+		if(!filter.contains(tmpUser))
+			return null;
+		
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			Query<User> query = pm.newQuery(User.class);
+			query.setFilter("userID == '" + ID + "'");
+			@SuppressWarnings("unchecked")
+			List<User> result = (List<User>) query.execute();
+			tx.commit();
+
+			return result == null || result.isEmpty() || result.size() > 1 ? 
+					null : 
+					result.get(0);
+		} catch (Exception e) {
+			log.fatal("Error in UserDAO:getUserbyID()");
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+
+		return null;
+	}
+
+	@Override
 	public UserDTO createUser(User user) {
+		//Don't create a user if it already exists
+		UserDTO existingUser = getUserbyID(user.getUserID());
+		log.debug("existing user: " + existingUser != null);
+		if(existingUser != null)
+			return existingUser;
+		
 		try {
 			User result;
 			Guest guest;
@@ -114,7 +159,11 @@ public class UserDAO implements IDAO, IUserDAO {
 				pm.makePersistent(administrator);
 				result = pm.detachCopy(administrator);
 			}
-
+			//Add the new user to the filter
+			filter.add(result);
+			//Add the user to the cache
+			cache.set(result.getUserID(), result);
+			
 			tx.commit();
 
 			return assembler.assembleUser(result);
@@ -131,9 +180,14 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 
 	@Override
-	public boolean deleteUserbyID(UserDTO authorization, String ID) {
-		if (!checkAuthorizationIsAdmin(authorization))
+	public boolean deleteUserbyID(String ID) {
+		//Check if there's a user with such ID
+		User user = new Guest(ID, null);
+		if(!filter.contains(user))
 			return false;
+		
+		cache.remove(ID);
+
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -183,10 +237,12 @@ public class UserDAO implements IDAO, IUserDAO {
 
 				if(resultAdmin == null || resultAdmin.isEmpty())
 					log.debug("Neither Guests nor Administrators with such email");
+				cache.get(resultAdmin.get(0).getUserID());
 				return assembler.assembleUser(resultAdmin.get(0));
 			} else {
 				//At least an guest was found
 				tx.commit();
+				cache.get(resultGuest.get(0).getUserID());
 				return assembler.assembleUser(resultGuest.get(0));
 			}
 
@@ -199,7 +255,7 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 	
 	@Override
-	public List<Guest> getGuests(UserDTO authorization) {
+	public List<Guest> getGuests() {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -221,7 +277,49 @@ public class UserDAO implements IDAO, IUserDAO {
 	}
 	
 	@Override
-	public List<Administrator> getAdministrators(UserDTO authorization) {
+	public UserDTO updateGuest(String userId, String name, String email, String password, String phone, String address) {
+		try {
+			tx = pm.currentTransaction();
+			tx.begin();
+
+			final Query<Guest> query = pm.newQuery(Guest.class);
+			query.setFilter("userID == '" + userId + "'");
+			@SuppressWarnings("unchecked")
+			final
+			List<Guest> result = (List<Guest>) query.execute();
+
+			if(result == null || result.isEmpty() || result.size() > 1)
+				return null;
+			Guest guest = result.get(0);
+			
+			pm.makePersistent(guest);
+			if(name != null && !name.isEmpty())
+				guest.setName(name);
+			if(email != null && !name.isEmpty())
+				guest.setEmail(email);
+			if(password != null && !password.isEmpty())
+				guest.setPassword(password);
+			if(phone != null && !phone.isEmpty())
+				guest.setPhone(phone);
+			if(address != null && !address.isEmpty())
+				guest.setAddress(address);
+			
+			tx.commit();
+			UserDTO editedUser = assembler.assembleUser(pm.detachCopy(guest));
+			return editedUser;
+			
+		} catch (final Exception e) {
+			ServerLogger.getLogger().fatal("Did not update data of guest with ID: " + userId);
+			e.printStackTrace();
+
+		} finally {
+			close();
+		}
+		return null;
+	}
+	
+	@Override
+	public List<Administrator> getAdministrators() {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
@@ -248,6 +346,34 @@ public class UserDAO implements IDAO, IUserDAO {
 	private final void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
+	}
+
+	@Override
+	public Guest getGuestByEmail(String email) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		tx = pm.currentTransaction();
+		
+		try {
+			ServerLogger.getLogger().info("   * Retrieving an Extent for Rooms.");
+			
+			tx.begin();			
+			Query<Guest> query = pm.newQuery(Guest.class);
+			query.setFilter("email == '" + email + "'");
+			
+			@SuppressWarnings("unchecked")
+			List<Guest> result = (List<Guest>) query.execute();
+			tx.commit();
+			
+			return result.get(0);
+			
+		} catch (Exception ex) {
+			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
+	    } finally {
+	    	close();
+	    }
+	    				
+		return null;
 	}
 
 }

@@ -67,7 +67,7 @@ public class ReviewDBTest {
 		u = new Guest(userID, "TEST", "TEST", "TEST", "TEST", "TEST");
 		userDAO.createUser(u);
 
-		reviewID = "TESTR";
+		reviewID = userID+"-"+hotelID;
 		r = new Review(reviewID, "Test", 6, Timestamp.valueOf("2019-03-02 00:00:00"));
 	}
 
@@ -79,7 +79,7 @@ public class ReviewDBTest {
 	public void aStoreReview() {
 		r.setHotel(h);
 		r.setUser(u);
-		final Review detachedReview = reviewDAO.storeReview(r, hotelID, userID);
+		final Review detachedReview = reviewDAO.storeReview(r);
 		Assert.assertTrue(r.equals(detachedReview));
 	}
 
@@ -107,14 +107,25 @@ public class ReviewDBTest {
 	}
 
 	/**
+	 * 
+	 */
+	@Test
+	public void dStoreReviewSameUserAndHotel() {
+		Review r2 = new Review(userID+"-"+hotelID, "Opinion", 9, null);
+		r.setHotel(h);
+		r.setUser(u);
+		Review detachedReview = reviewDAO.storeReview(r2);
+		Assert.assertTrue(detachedReview == null);
+	}
+	
+	/**
 	 * Deletes the review from the DB If the method return true the test is a
 	 * success Here the hotel and the user are also deleted
 	 */
 	@Test
-	public void dDeletesReview() {
+	public void eDeletesReview() {
 		Assert.assertTrue(reviewDAO.deleteReview(reviewID));
-		// TODO When the authorization on userDAO is done this null should chanage
-		userDAO.deleteUserbyID(null, userID);
+		userDAO.deleteUserbyID(userID);
 		hotelDAO.deleteHotel(hotelID);
 	}
 }

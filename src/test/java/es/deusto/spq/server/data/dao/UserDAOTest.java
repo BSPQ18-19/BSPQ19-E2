@@ -46,7 +46,6 @@ public class UserDAOTest {
 	private static User admin;
 	
 	//Assembler class and DTO for the authentification method
-	private static UserDTO authorization;
 	private static UserDTO guestDTO;
 	private static UserDTO adminDTO;
 	private static Assembler assembler;
@@ -64,7 +63,6 @@ public class UserDAOTest {
 		admin = new Administrator(adminID, "TEST", "TEST", "TEST", "TEST");
 		adminDTO = assembler.assembleUser(admin);
 
-		authorization = adminDTO;
 	}
 	/**
 	 * Test for storing a user, Guest and Admin.
@@ -86,7 +84,7 @@ public class UserDAOTest {
 	 */
 	@Test
 	public void bGetUsers() {
-		List<UserDTO> users = userDAO.getUsers(authorization);
+		List<UserDTO> users = userDAO.getUsers();
 		Assert.assertTrue(users.contains(guestDTO));
 		Assert.assertTrue(users.contains(adminDTO));
 	}
@@ -97,10 +95,10 @@ public class UserDAOTest {
 	 */
 	@Test
 	public void cGetUserByID() {
-		UserDTO detachedGuest = userDAO.getUserbyID(authorization, guestID);
+		UserDTO detachedGuest = userDAO.getUserbyID(guestID);
 		Assert.assertTrue(guestDTO.equals(detachedGuest));
 
-		UserDTO detachedAdmin = userDAO.getUserbyID(authorization, adminID);
+		UserDTO detachedAdmin = userDAO.getUserbyID(adminID);
 		Assert.assertTrue(adminDTO.equals(detachedAdmin));
 	}
 
@@ -124,7 +122,7 @@ public class UserDAOTest {
 	 */
 	@Test
 	public void eGetGuests() {
-		List<Guest> guests = userDAO.getGuests(authorization);
+		List<Guest> guests = userDAO.getGuests();
 		Assert.assertTrue(guests.contains(guest));
 		Assert.assertFalse(guests.contains(admin));
 	}
@@ -136,9 +134,32 @@ public class UserDAOTest {
 	 */
 	@Test
 	public void fGetAdministrators() {
-		List<Administrator> administrators = userDAO.getAdministrators(authorization);
+		List<Administrator> administrators = userDAO.getAdministrators();
 		Assert.assertTrue(administrators.contains(admin));
 		Assert.assertFalse(administrators.contains(guest));
+	}
+
+	/**
+	 * Test for updating the Guest Data
+	 */
+	@Test
+	public void gUpdateGuest() {
+		String newName = "TEST2";
+		String newEmail = "EMAIL2";
+		String newPassword = "TEST2";
+		String newPhone = "TEST2";
+		String newAddress = "TEST3";
+
+		guest.setName(newName);
+		guest.setEmail(newEmail);
+		guest.setPassword(newPassword);
+		((Guest) guest).setPhone(newPhone);
+		((Guest) guest).setAddress(newAddress);
+		UserDTO newGuestDTO = assembler.assembleUser(guest);
+
+		UserDTO updatedUser = userDAO.updateGuest(guestID, newName, newEmail, newPassword, newPhone, newAddress);
+		Assert.assertTrue(updatedUser.equals(newGuestDTO));
+		
 	}
 
 	/**
@@ -146,8 +167,8 @@ public class UserDAOTest {
 	 * If deleting returns true it means it has been successfully deleted.
 	 */
 	@Test
-	public void gDeleteUser() {
-		Assert.assertTrue(userDAO.deleteUserbyID(authorization, guestID));
-		Assert.assertTrue(userDAO.deleteUserbyID(authorization, adminID));
+	public void hDeleteUser() {
+		Assert.assertTrue(userDAO.deleteUserbyID(guestID));
+		Assert.assertTrue(userDAO.deleteUserbyID(adminID));
 	}
 }

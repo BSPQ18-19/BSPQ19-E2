@@ -1,20 +1,38 @@
 package es.deusto.spq.client.gui.views.auth;
 
-import es.deusto.spq.client.controller.HotelManagementController;
-import es.deusto.spq.client.gui.base.*;
-import es.deusto.spq.client.logger.ClientLogger;
-import es.deusto.spq.server.data.dto.UserDTO;
-import es.deusto.spq.client.gui.locale.LocaleManager;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+import es.deusto.spq.client.gui.views.reservations.ReservationListView;
+import es.deusto.spq.server.data.dto.ReservationDTO;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
+
+import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.gui.base.View;
+import es.deusto.spq.client.gui.base.ViewFactory;
+import es.deusto.spq.client.gui.base.ViewManager;
+import es.deusto.spq.client.gui.base.ViewPermission;
+import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.client.logger.ClientLogger;
+import es.deusto.spq.server.data.dto.UserDTO;
 
 public class LoginView extends View {
 
@@ -26,13 +44,13 @@ public class LoginView extends View {
     private JLabel lblPassword;
     private JButton btnLogin;
     private JButton btnRegister;
-    private final JPanel panel_3 = new JPanel();
+    private JPanel panel_3 = new JPanel();
     private Logger log;
     private HotelManagementController controller;
 
     /**
      *
-     * @param viewManager
+     * @param viewManager ViewManager object
      */
     public LoginView(ViewManager viewManager) {
         super(viewManager);
@@ -121,10 +139,10 @@ public class LoginView extends View {
         gbc_panel_3.gridy = 4;
         frame.getContentPane().add(panel_3, gbc_panel_3);
 
-
         btnLogin = new JButton(getViewManager().getClient().getLocaleManager().getMessage("login.submit"));
         btnLogin.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
+            @Override
+			public void actionPerformed(ActionEvent arg0) {
                 //This trigers when login in
                 String email = tFEmail.getText();
                 String password = tFPassword.getText();
@@ -143,9 +161,9 @@ public class LoginView extends View {
                             getViewManager().getClient().getLocaleManager().getMessage("login.failed.title"),
                             JOptionPane.ERROR_MESSAGE);
                 else {
+                    getViewManager().repaintAll();
                     if(loggedUser.isGuest()) {
                     	getViewManager().openView(ViewFactory.buildView(ViewType.GUEST_HOTELS, getViewManager()));
-                    	getViewManager().openView(ViewFactory.buildView(ViewType.ADMIN_HOTELS, getViewManager()));
                     }
                     
                     else {
@@ -155,8 +173,8 @@ public class LoginView extends View {
                     
                     dispose();
                     JOptionPane.showMessageDialog(frame,
-                            "Succesfull login",
-                            "Succesfull login",
+                            "Successful login", // TODO localize
+                            "Successful login", // TODO localize
                             JOptionPane.INFORMATION_MESSAGE);
                 }
             }

@@ -226,9 +226,7 @@ public class AssemblerTest {
                 "testreview",
                 "opinion here",
                 7,
-                timestamp,
-                assembler.assembleHotel(hotel),
-                assembler.assembleUser(guest)
+                timestamp
         );
 
         Assert.assertEquals(reviewDTO, assembler.assembleReview(review));
@@ -271,9 +269,7 @@ public class AssemblerTest {
                 "testreview",
                 "opinion here",
                 7,
-                timestamp,
-                assembler.assembleHotel(hotel),
-                assembler.assembleUser(guest)
+                timestamp
         );
 
         Assert.assertEquals(review, assembler.disassembleReview(reviewDTO));
@@ -282,16 +278,16 @@ public class AssemblerTest {
 
     @Test
     public void assembleReservationTest() {
-    	Reservation reservation = new Reservation("RID", new ArrayList<Room>());
-    	ReservationDTO expectedAssembling = new ReservationDTO("RID", null);
+    	Reservation reservation = new Reservation("RID", null, null, null, null);
+    	ReservationDTO expectedAssembling = new ReservationDTO("RID", null, null, null, null);
     	ReservationDTO assemblingResult = assembler.assembleReservation(reservation);
     	Assert.assertEquals(expectedAssembling, assemblingResult);
     }
     
     @Test
     public void disassembleReservationTest() {
-    	ReservationDTO reservation = new ReservationDTO("RID", null);
-    	Reservation expectedDisassembling = new Reservation("RID", new ArrayList<Room>());
+    	ReservationDTO reservation = new ReservationDTO("RID", null, null, null, null);
+    	Reservation expectedDisassembling = new Reservation("RID", null, null, null, null);
     	Reservation disassemblingResult = assembler.disassembleReservation(reservation);
     	Assert.assertEquals(expectedDisassembling, disassemblingResult);
     }

@@ -4,13 +4,13 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.jdo.Extent;
-import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
+import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
+import es.deusto.spq.server.data.cache.Cache;
 import es.deusto.spq.server.data.jdo.Hotel;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -18,9 +18,14 @@ public class HotelDAO implements IHotelDAO {
 	
 	private PersistenceManager pm;
 	private Transaction tx;
+	private SimpleBloomFilter<Hotel> filter;
+	/** The cache of hotels. */
+	private Cache<String, Hotel> cache;
 
 	public HotelDAO(){
 		pm = MyPersistenceManager.getPersistenceManager();
+		filter = new SimpleBloomFilter<Hotel>();
+		cache = new Cache<String, Hotel>(10);
 	}
 	
 	public Hotel storeHotel(Hotel hotel) {
@@ -31,6 +36,8 @@ public class HotelDAO implements IHotelDAO {
 	       ServerLogger.getLogger().info("   * Storing an object: " + hotel);
 	       pm.makePersistent(hotel);
 	       Hotel h = pm.detachCopy(hotel);
+	       filter.add(h);
+	       cache.set(hotel.getHotelId(), hotel);
 	       tx.commit();
 	       
 	       return h;
@@ -43,6 +50,12 @@ public class HotelDAO implements IHotelDAO {
 	}
 	
 	public Hotel getHotel(String hotelID) {
+		Hotel tmpHotel = new Hotel(hotelID, null, null, null, null);
+		if(!filter.contains(tmpHotel))
+			return null;
+		if(cache.contains(hotelID))
+			return cache.get(hotelID);
+		
 		/* By default only 1 level is retrieved from the db
 		 * so if we wish to fetch more than one level, we must indicate it
 		 */
@@ -54,12 +67,17 @@ public class HotelDAO implements IHotelDAO {
 			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
 			
 			tx.begin();			
-			Extent<Hotel> extent = pm.getExtent(Hotel.class, true);
+			
+			Query<Hotel> query = pm.newQuery(Hotel.class);
+			query.setFilter("hotelId == '" + hotelID + "'");
+			@SuppressWarnings("unchecked")
+			List<Hotel> result = (List<Hotel>) query.execute();
 			tx.commit();
-			for (Hotel hotel : extent) {
-				if (hotel.getHotelId().equals(hotelID)) {
-				    return hotel;
-                }
+			
+			if(result == null || result.isEmpty() || result.size() > 1) {
+				ServerLogger.getLogger().debug("devuelve los hoteles mal");
+			} else {
+				result.get(0);
 			}
 			
 		} catch (Exception ex) {
@@ -124,7 +142,12 @@ public class HotelDAO implements IHotelDAO {
 	}
 
 	@Override
-	public boolean deleteHotel(String hotelID) {		
+	public boolean deleteHotel(String hotelID) {
+		Hotel tmpHotel = new Hotel(hotelID, null, null, null, null);
+		if(!filter.contains(tmpHotel))
+			return false;
+		cache.remove(hotelID);
+		
 		tx = pm.currentTransaction();
 		try {
 			tx.begin();
@@ -150,6 +173,8 @@ public class HotelDAO implements IHotelDAO {
 	}
 	
 	public void cleanHotelsDB() {
+		cache.clear();
+		
 		ServerLogger.getLogger().info("- Cleaning the DB...");			
 		pm.getFetchPlan().setMaxFetchDepth(3);
 
@@ -179,5 +204,35 @@ public class HotelDAO implements IHotelDAO {
 	private final void close() {
 		if (tx != null && tx.isActive())
 			tx.rollback();
+	}
+
+	@Override
+	public Hotel updateHotel(Hotel hotel) {
+		pm.getFetchPlan().setMaxFetchDepth(3);
+		
+		tx = pm.currentTransaction();
+		
+		try {
+			ServerLogger.getLogger().info("   * Retrieving an Extent for Hotels.");
+			
+			tx.begin();			
+			Query<Hotel> query = pm.newQuery(Hotel.class);
+			query.setFilter("hotelId == '" + hotel.getHotelId() + "'");
+			@SuppressWarnings("unchecked")
+			List<Hotel> result = (List<Hotel>) query.execute();
+			result.get(0).setName(hotel.getName());
+			result.get(0).setLocation(hotel.getLocation());
+			result.get(0).setSeasonStart(hotel.getSeasonStart());
+			result.get(0).setSeasonEnding(hotel.getSeasonEnding());
+			tx.commit();
+			
+			return result.get(0);
+		} catch (Exception ex) {
+			ServerLogger.getLogger().fatal("   $ Error retrieving an extent: " + ex.getMessage());
+	    } finally {
+	    	close();
+	    }
+	    				
+		return null;
 	}
 }

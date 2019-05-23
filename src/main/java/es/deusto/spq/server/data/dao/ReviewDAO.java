@@ -8,6 +8,8 @@ import javax.jdo.Query;
 import javax.jdo.Transaction;
 
 import es.deusto.spq.server.data.MyPersistenceManager;
+import es.deusto.spq.server.data.bloomfilter.SimpleBloomFilter;
+import es.deusto.spq.server.data.cache.Cache;
 import es.deusto.spq.server.data.jdo.Review;
 import es.deusto.spq.server.logger.ServerLogger;
 
@@ -25,17 +27,23 @@ public class ReviewDAO implements IReviewDAO {
 	 * The transaction variable needed to make operations on the DB.
 	 */
 	private Transaction tx;
+	/** The bloom filter. */
+	private SimpleBloomFilter<Review> filter;
+	/** The cache of reviews. */
+	private Cache<String, Review> cache;
 
 	/**
 	 * The constructor sets the persistence manager to use it later on the methods.
 	 */
 	public ReviewDAO() {
 		pm = MyPersistenceManager.getPersistenceManager();
+		filter = new SimpleBloomFilter<Review>();
+		cache = new Cache<String, Review>(10);
 	}
 
 	@Override
-	public Review storeReview(final Review r, final String hotelID, final String userID) {
-		if (!checkUserReview(hotelID, userID))
+	public Review storeReview(Review r) {
+		if (!checkUserReview(r.getReviewID()))
 			return null;
 		tx = pm.currentTransaction();
 		try {
@@ -44,13 +52,14 @@ public class ReviewDAO implements IReviewDAO {
 
 			// Stores the review on the DB
 			pm.makePersistent(r);
-
+			filter.add(r);
+			cache.set(r.getReviewID(), r);
 			tx.commit();
 
 			// Returns a detachedCopy of the stored review
-			final Review re = pm.detachCopy(r);
+			Review re = pm.detachCopy(r);
 			return re;
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			ServerLogger.getLogger().fatal("   $ Error Storing a review: " + e.getMessage());
 		} finally {
 			close();
@@ -59,16 +68,21 @@ public class ReviewDAO implements IReviewDAO {
 	}
 
 	@Override
-	public boolean deleteReview(final String reviewID) {
+	public boolean deleteReview(String reviewID) {
+		Review tmpReview = new Review(reviewID, null, 0, null);
+		if(!filter.contains(tmpReview))
+			return false;
+		cache.remove(reviewID);
+		
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
 
 			// Searches for a certain review on the DB
-			final Query<Review> query = pm.newQuery(Review.class);
+			Query<Review> query = pm.newQuery(Review.class);
 			query.setFilter("reviewID == '" + reviewID + "'");
 			@SuppressWarnings("unchecked")
-			final List<Review> queryExecution = (List<Review>) query.execute();
+			List<Review> queryExecution = (List<Review>) query.execute();
 			// Checks if the list is null
 			if (queryExecution.isEmpty() || queryExecution.size() > 1)
 				return false;
@@ -78,7 +92,7 @@ public class ReviewDAO implements IReviewDAO {
 
 			return true;
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			ServerLogger.getLogger().fatal("Error in ReviewDAO:deleteReview()");
 			e.printStackTrace();
 		} finally {
@@ -88,24 +102,24 @@ public class ReviewDAO implements IReviewDAO {
 	}
 
 	@Override
-	public boolean checkUserReview(final String hotelID, final String userID) {
+	public boolean checkUserReview(String reviewID) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
 
-			// Searches for all the reveiws on the DB
-			final Query<Review> query = pm.newQuery(Review.class);
+			// Searches for all the reviews on the DB
+			Query<Review> query = pm.newQuery(Review.class);
+			query.setFilter("reviewID == '"+reviewID+"'");
 			@SuppressWarnings("unchecked")
-			final List<Review> queryExecution = (List<Review>) query.execute();
-
+			List<Review> queryExecution = (List<Review>) query.execute();
+			
 			tx.commit();
-			// Looks if there exist a review of the specified hotel by the specified user
-			for (final Review r : queryExecution)
-				if (r.getHotel().getHotelId().equals(hotelID) && r.getUser().getUserID().equals(userID))
-					return false;
 
-			return true;
-		} catch (final Exception e) {
+			if(queryExecution == null || queryExecution.isEmpty()) {
+				return true;
+			}
+			return false;
+		} catch (Exception e) {
 			ServerLogger.getLogger().fatal("Error in ReviewDAO:checkUserReview()");
 			e.printStackTrace();
 		} finally {
@@ -115,18 +129,18 @@ public class ReviewDAO implements IReviewDAO {
 	}
 
 	@Override
-	public List<Review> getReviewsOfHotel(final String hotelID) {
+	public List<Review> getReviewsOfHotel(String hotelID) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
 
 			// Searches for all the reviews in the DB
-			final Query<Review> query = pm.newQuery(Review.class);
+			Query<Review> query = pm.newQuery(Review.class);
 			@SuppressWarnings("unchecked")
-			final List<Review> queryExecution = (List<Review>) query.execute();
-			final List<Review> result = new ArrayList<>();
+			List<Review> queryExecution = (List<Review>) query.execute();
+			List<Review> result = new ArrayList<>();
 			// Adds to the result list the reviews from the specified hotel
-			for (final Review r : queryExecution)
+			for (Review r : queryExecution)
 				if (r.getHotel().getHotelId().equals(hotelID))
 					result.add(r);
 
@@ -134,7 +148,7 @@ public class ReviewDAO implements IReviewDAO {
 
 			return result;
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			ServerLogger.getLogger().fatal("Error in UserDAO:getUsers()");
 			e.printStackTrace();
 
@@ -145,18 +159,18 @@ public class ReviewDAO implements IReviewDAO {
 	}
 
 	@Override
-	public List<Review> getReviewsByUser(final String userID) {
+	public List<Review> getReviewsByUser(String userID) {
 		try {
 			tx = pm.currentTransaction();
 			tx.begin();
 
 			// Searches for all the reviews
-			final Query<Review> query = pm.newQuery(Review.class);
+			Query<Review> query = pm.newQuery(Review.class);
 			@SuppressWarnings("unchecked")
-			final List<Review> queryExecution = (List<Review>) query.execute();
-			final List<Review> result = new ArrayList<>();
+			List<Review> queryExecution = (List<Review>) query.execute();
+			List<Review> result = new ArrayList<>();
 			// Adds to the result list the reviews from the specified user
-			for (final Review r : queryExecution)
+			for (Review r : queryExecution)
 				if (r.getUser().getUserID().equals(userID))
 					result.add(r);
 
@@ -164,7 +178,7 @@ public class ReviewDAO implements IReviewDAO {
 
 			return result;
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			ServerLogger.getLogger().fatal("Error in UserDAO:getUsers()");
 			e.printStackTrace();
 

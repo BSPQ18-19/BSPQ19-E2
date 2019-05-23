@@ -27,7 +27,12 @@ public enum ViewType
      * Admin window to manage existing hotels, delete them and create new.
      */
     ADMIN_HOTELS,
-    
+
+    /**
+     * User view where you can edit the your actual user
+     */
+    EDIT_USER,
+
     /**
      * View to change the current locale.
      */
@@ -41,5 +46,25 @@ public enum ViewType
     /**
      * Guest window to manage requested hotels, searching them and booking rooms
      */
-     GUEST_HOTELS
+     GUEST_HOTELS,
+
+    /**
+     * View that show a given list of Reservations
+     */
+    RESERVATION_LIST,
+
+    /**
+     * View to show detail about a specific Reservation
+     */
+    RESERVATION_DETAIL,
+
+    /**
+     * View that handles payments
+     */
+    MAKE_PAYMENT,
+     
+    /**
+     * Window for writing a review
+     */
+    WRITE_REVIEW,
 }

@@ -1,5 +1,6 @@
 package es.deusto.spq.server.data.jdo;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import javax.jdo.annotations.PrimaryKey;
  *
  */
 @PersistenceCapable(detachable = "true")
-public class Hotel {
+public class Hotel implements Serializable{
 
 	@PrimaryKey
 	private String hotelId;
@@ -22,7 +23,7 @@ public class Hotel {
 	private Timestamp seasonStart;
 	private Timestamp seasonEnding;
 	
-	@Persistent(mappedBy="hotel")
+	@Persistent(mappedBy="hotel", dependentElement = "true")
 	private List<Room> listRooms;
 	
 	/** Constructor of Hotel

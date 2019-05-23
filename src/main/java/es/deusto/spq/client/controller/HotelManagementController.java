@@ -1,25 +1,39 @@
 package es.deusto.spq.client.controller;
 
 import java.rmi.RemoteException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.deusto.spq.server.data.jdo.Reservation;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.ReservationDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.RoomType;
 
+/** Controller of the client side
+ * @author gonzalo
+ *
+ */
 public class HotelManagementController {
 
 	private static HotelManagementController controller = new HotelManagementController();
 	private RMIServiceLocator rsl;
 	private UserDTO loggedUser = null;
 	private Logger log;
+	/**
+	 * The total current hotels of the database
+	 */
 	private ArrayList<HotelDTO> currentHotels;
+	/**
+	 * The total current rooms of the database
+	 */
 	private ArrayList<RoomDTO> currentRooms;
 	
 	private HotelManagementController() {
@@ -75,6 +89,27 @@ public class HotelManagementController {
 		return true;
 	}
 	
+	/**
+	 * The updateUser method that asks the server for the new DTO of the updated User.
+	 * @param name
+	 * @param email
+	 * @param password
+	 * @param phone
+	 * @param address
+	 * @return return the new UserDTO.
+	 */
+	public UserDTO updateUser(String name, String email, String password, String phone, String address) {
+		UserDTO updatedUser;
+		try {
+			updatedUser = rsl.getHotelManager().updateGuestProfileData(loggedUser.getUserID(), name, email, password, phone, address);
+			if(updatedUser == null) return null;
+			loggedUser = updatedUser;
+			return loggedUser;
+		} catch (RemoteException e) {
+			return null;
+		}
+	}
+	
 	/** Create a new hotel
 	 * @param id Id of the hotel
 	 * @param name Name of the hotel
@@ -100,6 +135,30 @@ public class HotelManagementController {
     	return false;
     }
     
+	/**Update a hotel
+	 * @param id Id of the hotel
+	 * @param name Name of the hotel
+	 * @param location Location of the hotel
+	 * @param seasonStart Day where the hotel starts being available
+	 * @param seasonEnd Day where the hotel ends being available
+	 * @return true if its properly updated
+	 */
+	public boolean updateHotel(String id, String name, String location, String seasonStart, String seasonEnd) {
+		
+		try {
+    		log.info("Creating new hotel...");
+			HotelDTO hotelDTO = rsl.getHotelManager().updateHotel(id, name, location, seasonStart, seasonEnd);
+			if(hotelDTO!=null) {
+				log.info("Hotel created successfully!");
+				return true;
+			}else {
+				log.info("Hotel cannot be created.");
+			}
+		} catch (RemoteException e) {
+			log.fatal("Error creating a new hotel: " + e.getMessage());
+		}
+    	return false;
+	}
     /** Delete a hotel using the hotelID
      * @param id Id of the hotel
      * @return true if its properly deleted
@@ -146,7 +205,7 @@ public class HotelManagementController {
     public List<HotelDTO> retrieveHotels(String arrivalDate) {
     	log.info("Getting list of hotels.");
     	try {
-			List<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels(arrivalDate);			
+			List<HotelDTO> hotel = rsl.getHotelManager().retrieveHotels(arrivalDate);
 			
 			if(hotel != null && hotel.size() != 0) {
 				log.info("List of hotels retrieved succesfully.");
@@ -193,13 +252,14 @@ public class HotelManagementController {
 		return null;
     }
     
-    /** Retrieve all the rooms from DB by a hotelId
+    /**Retrieve all the rooms from DB by a hotelId
+     * @param hotelId Id of the hotel
      * @return An array list of RoomDTO objects
      */
-    public ArrayList<RoomDTO> retrieveRoomsById(String hotelId){
+    public ArrayList<RoomDTO> retrieveRoomsByHotelId(String hotelId){
        	log.info("Getting list of rooms.");
     	try {
-			ArrayList<RoomDTO> room = rsl.getHotelManager().retrieveRoomsById(hotelId);
+			ArrayList<RoomDTO> room = rsl.getHotelManager().retrieveRoomsByHotelId(hotelId);
 			
 			if(room != null && room.size() != 0) {
 				log.info("List of rooms retrieved succesfully.");
@@ -213,7 +273,36 @@ public class HotelManagementController {
 		return null;
     }
     
+    /** Retrieve a room from DB by a roomId
+     * @param roomId Id of the room
+     * @return A RoomDTO object
+     */
+    public RoomDTO retrieveRoomById(String roomId){
+       	log.info("Retrieving room with ID: " + roomId);
+    	try {
+			RoomDTO room = rsl.getHotelManager().retrieveRoomById(roomId);
+			
+			if(room != null){
+				log.info("Room retrieved succesfully.");
+				return room;
+			}else {
+				log.info("Could not retrieve a room");
+			}
+    	} catch (RemoteException e) {
+    		log.fatal("Error getting room: " + e.getMessage());
+		}
+		return null;
+    }
     
+    
+    /** Update the room data to the database
+     * @param roomId Id of the room
+     * @param size Size of the room
+     * @param price price of the room
+     * @param roomtype type of the room
+     * @param isOccupied true if the room is occupied
+     * @return true if its correctly done
+     */
     public boolean updateRoom(String roomId, float size, float price, RoomType roomtype, boolean isOccupied) {
     	try {
     		log.info("Updating a room...");
@@ -249,6 +338,47 @@ public class HotelManagementController {
     	return false;
     }
 	
+    /** Create a new reservation
+     * @param reservationId Id of the reservation
+     * @param userId Id of the guest
+     * @param roomId Id of the room
+     * @param firstDay first day the user stays at the hotel
+     * @param lastDay last day the user stays at the hotel
+     * @return true if its correctly done
+     */
+    public boolean createReservation(String reservationId, String userId, String roomId, LocalDate firstDay, LocalDate lastDay) {
+    	try {
+    		log.info("Creating new resevation...");
+			ReservationDTO reservationDTO = rsl.getHotelManager().createReservation(reservationId, userId, roomId, firstDay, lastDay);
+			if(reservationDTO!=null) {
+				log.info("Resevation created successfully!");
+				return true;
+			}else {
+				log.info("Resevation cannot be created.");
+			}
+		} catch (RemoteException e) {
+			log.fatal("Error creating a new resevation: " + e.getMessage());
+		}
+    	return false;
+    }
+
+	/**
+	 * Stores a new review in the DB.
+	 * @param opinion the text written by the user.
+	 * @param score the score that user gives to the hotel.
+	 * @param hotelID the hotelID of the hotel the review is form.
+	 * @param userID the id of the user that writes the review.
+	 * @return A ReviewDTO.
+	 */
+    public ReviewDTO createReview(String opinion, int score, String hotelID, String userID){
+    	try {
+			return rsl.getHotelManager().createReview(opinion, score, hotelID, userID);
+		
+		} catch (RemoteException e) {
+			log.fatal("Error creating a new Review: " + e.getMessage());
+		}
+    	return null;
+    }
 	/**
 	 * Clear the list of the current rooms
 	 */
@@ -288,4 +418,59 @@ public class HotelManagementController {
 		return loggedUser;
 	}
 
+	/**
+	 * Get a list of ReservationDTOs corresponding to the currently logged-in User
+	 * @return a list of all the ReservationDTOs associated
+	 */
+	public List<ReservationDTO> getReservationsForCurrentUser() {
+		List<ReservationDTO> reservations = new ArrayList<>();
+		try {
+			reservations = rsl.getHotelManager().getReservationsForGuest(getLoggedUser());
+		} catch (RemoteException e) {
+            e.printStackTrace();
+		}
+		return reservations;
+	}
+
+    /**
+     * Get all the Reservations in the database
+     * @return a List with all the Reservations
+     */
+	public List<ReservationDTO> getAllReservations() {
+        List<ReservationDTO> reservations = new ArrayList<>();
+        try {
+            reservations = rsl.getHotelManager().getAllReservations();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return reservations;
+    }
+
+	
+	/**
+	 * A method that handles the payment of the reservation depending on the 
+	 * 		payment method user selected earlier.
+	 * @param arg1 In case of Paypal username, MasterCard cardNumber.
+	 * @param arg2 In case of Paypal password, MasterCard cardNumber.
+	 * @param amount The amount it cost.
+	 * @param type The type of paymentMethods true paypal, false masterCard.
+	 * @return {@code true} if the payment has been done successfully, and 
+	 * 		{@code false} if not.
+	 */
+	public boolean payReservation(String arg1, String arg2, float amount, boolean type) {
+		try {
+			if(type) {
+				//Call the method to pay with PayPal
+				return rsl.getHotelManager().payPayPal(arg1, arg2, amount);
+			}else {
+				long cardNumber = Long.parseLong(arg1);
+				int securityCode = Integer.parseInt(arg2);
+				//Call the method to pay with MasterCard
+				return rsl.getHotelManager().payMastercard(cardNumber, securityCode, amount);
+			}
+		}catch (Exception e) {
+			log.fatal("Error making payment: " + e);
+		}
+		return false;
+	}
 }
