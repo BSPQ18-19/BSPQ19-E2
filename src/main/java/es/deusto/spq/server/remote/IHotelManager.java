@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.ReservationDTO;
 import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
@@ -56,6 +57,14 @@ public interface IHotelManager extends Remote {
 	 * @throws RemoteException exception
 	 */
 	public List<HotelDTO> retrieveHotels(String arrivalDate) throws RemoteException;
+	
+	/**
+	 * Retrieve list of Retrieves regarding a Hotel
+	 * @param hotelId
+	 * @return List of Reviews
+	 * @throws RemoteException
+	 */
+	public List<ReviewDTO> retrieveReviews(String hotelId) throws RemoteException;
 	
 	/** Create a new Hotel of type HotelDTO
 	 * @param id Id of the hotel

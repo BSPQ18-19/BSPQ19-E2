@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.data.dto.HotelDTO;
+
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.ReservationDTO;
 import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
@@ -273,6 +275,19 @@ public class HotelManagementController {
 		return null;
     }
     
+
+    /** Retrieve all the rooms from DB by a hotelId
+     * @return An array list of RoomDTO objects
+     */
+    public List<ReviewDTO> retrieveReviews(String hotelId){
+    	try {
+			return rsl.getHotelManager().retrieveReviews(hotelId);
+    	} catch (RemoteException e) {
+    		log.fatal("Error getting list of rooms: " + e.getMessage());
+		}
+		return null;
+    }
+
     /** Retrieve a room from DB by a roomId
      * @param roomId Id of the room
      * @return A RoomDTO object
@@ -294,6 +309,7 @@ public class HotelManagementController {
 		return null;
     }
     
+
     
     /** Update the room data to the database
      * @param roomId Id of the room
