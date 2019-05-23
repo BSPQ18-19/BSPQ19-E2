@@ -34,9 +34,8 @@ import es.deusto.spq.client.controller.HotelManagementController;
 import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewType;
-import es.deusto.spq.client.gui.views.admin.ClientWindowAdmin;
 import es.deusto.spq.client.gui.views.reviews.ShowHotelReviewView;
-
+import es.deusto.spq.client.gui.views.reviews.WriteReview;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.ReviewDTO;
@@ -69,6 +68,10 @@ public class RoomPanel extends JPanel{
 	private JButton	confirm, back, seeReviews;
 
 	/**
+	 * Displays the write review view.
+	 */
+	private JButton writeReview;
+	/**
 	 * upperButtons Panel for the buttons at the top
 	 */
 	private JPanel upperButtons;
@@ -100,7 +103,20 @@ public class RoomPanel extends JPanel{
 						
 		r =  new Random();
 		
-		confirm = new JButton("Confirm");
+		writeReview = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("roomPanel.button.writeReview"));
+		writeReview.setSize(100, 30);
+		writeReview.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				WriteReview view = null;
+				clientWindowGuest.getGuestView().getViewManager().openView(view = (WriteReview) ViewFactory.buildView(ViewType.WRITE_REVIEW, clientWindowGuest.getGuestView().getViewManager()));
+				view.setHotelID(hotelId);
+				view.setUserID(clientWindowGuest.getGuestView().getViewManager().getClient().getController().getLoggedUser().getUserID());
+			}
+		});
+		
+    confirm = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.button.confirm"));
 		confirm.setSize(100, 30);
 		confirm.setBackground(Color.GREEN);
 		confirm.addActionListener(new ActionListener() {
@@ -109,7 +125,7 @@ public class RoomPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				if(roomsTable.getSelectedRow() != -1) {
 					RoomDTO roomDTO = clientWindowGuest.getController().retrieveRoomById((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 0));
-					String daysForRoom = JOptionPane.showInputDialog(new JTextField("", 10), "How many nights?", JOptionPane.QUESTION_MESSAGE);
+					String daysForRoom = JOptionPane.showInputDialog(new JTextField("", 10), clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.inputDialog.nights"), JOptionPane.QUESTION_MESSAGE);
 					if(!(daysForRoom == "")) {
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
 						LocalDate localDateStart = LocalDate.parse(calendarDate.trim(), formatter);
@@ -126,13 +142,14 @@ public class RoomPanel extends JPanel{
 						clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
 					}
 				}else {
-					JOptionPane.showMessageDialog(null, "Select a room", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.messageDialog.errorRoomSelection"),
+							clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.messageDialog.noRooms"), JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}
 		});
 				
-		back = new JButton("Back");
+		back = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.button.back"));
 		back.setSize(100, 30);
 		back.addActionListener(new ActionListener() {
 			
@@ -159,7 +176,7 @@ public class RoomPanel extends JPanel{
 		upperButtons.add(confirm);
 		upperButtons.add(back);
 		upperButtons.add(seeReviews);
-
+		upperButtons.add(writeReview);
 		
 		roomsTable = new JTable();
 		tableModel = (DefaultTableModel) roomsTable.getModel();
@@ -167,9 +184,9 @@ public class RoomPanel extends JPanel{
 		roomsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
 		tableModel.addColumn("Id");
-		tableModel.addColumn("Size");
-		tableModel.addColumn("Type");
-		tableModel.addColumn("Price");
+		tableModel.addColumn(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.column.size"));
+		tableModel.addColumn(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.column.type"));
+		tableModel.addColumn(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.column.price"));
 		
 		roomsTable.addMouseListener(new MouseAdapter() {
 			
@@ -184,7 +201,7 @@ public class RoomPanel extends JPanel{
 		clientWindowGuest.getController().setCurrentRooms();
 		ArrayList<RoomDTO> retrievedRooms = clientWindowGuest.getController().retrieveRoomsByHotelId(hotelId);
 		if(retrievedRooms == null || retrievedRooms.size() == 0) {
-			JOptionPane.showMessageDialog(null, "There are no rooms available", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.messageDialog.noRooms"), clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.error"), JOptionPane.ERROR_MESSAGE);
 			if(tableModel.getRowCount() != 0) {
 				for(int i = tableModel.getRowCount()-1; i >= 0; i--) {
 					tableModel.removeRow(i);

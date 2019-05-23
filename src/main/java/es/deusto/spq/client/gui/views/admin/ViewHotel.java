@@ -139,10 +139,10 @@ public class ViewHotel extends JPanel{
 				if(hotelsTable.getSelectedRow() != -1) {
 					String id = (String) (hotelsTable.getValueAt(hotelsTable.getSelectedRow(), 0));
 					if(clientWindowAdmin.getController().deleteHotel(id)) {
-						JOptionPane.showMessageDialog(null, "Hotel deleted", "Done", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.messageDialog.hotelDeleted"), clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.messageDialog.success"), JOptionPane.INFORMATION_MESSAGE);
 					}
 				}else {
-					JOptionPane.showMessageDialog(null, "Select an hotel", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.messageDialog.selectHotel"), clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.messageDialog.error"), JOptionPane.ERROR_MESSAGE);
 				}
 
 				
@@ -197,7 +197,7 @@ public class ViewHotel extends JPanel{
 		clientWindowAdmin.getController().getCurrentHotels();
 		List<HotelDTO> retrievedHotels = clientWindowAdmin.getController().retrieveHotels();
 		if(retrievedHotels == null || retrievedHotels.size() == 0) {
-			JOptionPane.showMessageDialog(null, "There are no hotels available", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.messageDialog.noHotels"), clientWindowAdmin.getAdminView().getViewManager().getClient().getLocaleManager().getMessage("view.messageDialog.error"), JOptionPane.ERROR_MESSAGE);
 		}else {
 			clientWindowAdmin.getController().setCurrentHotels();
 			if(tableModel.getRowCount() != 0) {
