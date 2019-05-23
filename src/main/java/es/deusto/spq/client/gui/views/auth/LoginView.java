@@ -57,7 +57,6 @@ public class LoginView extends View {
 
         log = ClientLogger.getLogger();
         this.controller = viewManager.getClient().getController();
-
     }
 
     @Override

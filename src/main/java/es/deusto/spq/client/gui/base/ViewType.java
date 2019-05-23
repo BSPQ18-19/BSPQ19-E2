@@ -47,6 +47,21 @@ public enum ViewType
      * Guest window to manage requested hotels, searching them and booking rooms
      */
      GUEST_HOTELS,
+     
+     /**
+      * View that shows reviews
+      */
+     SHOW_REVIEWS,
+
+     /**
+      * View that handles payments
+      */
+     MAKE_PAYMENT,
+     
+     /**
+      * Window for writing a review
+      */
+     WRITE_REVIEW,
 
     /**
      * View that show a given list of Reservations
@@ -56,15 +71,5 @@ public enum ViewType
     /**
      * View to show detail about a specific Reservation
      */
-    RESERVATION_DETAIL,
-
-    /**
-     * View that handles payments
-     */
-    MAKE_PAYMENT,
-     
-    /**
-     * Window for writing a review
-     */
-    WRITE_REVIEW,
+    RESERVATION_DETAIL
 }

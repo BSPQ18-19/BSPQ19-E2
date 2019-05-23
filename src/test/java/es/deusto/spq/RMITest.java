@@ -53,7 +53,7 @@ public class RMITest {
 		
 	@SuppressWarnings("deprecation")
 	@PerfTest(invocations = 20)
-	@Required(max = 200)
+	@Required(max = 300)
 	@Test
 	public void clientServerRMITest() throws RemoteException, MalformedURLException, NotBoundException {
 		// Server side

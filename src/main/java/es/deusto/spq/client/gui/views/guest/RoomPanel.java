@@ -10,6 +10,11 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -25,10 +30,15 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
+import es.deusto.spq.client.controller.HotelManagementController;
+import es.deusto.spq.client.gui.base.View;
 import es.deusto.spq.client.gui.base.ViewFactory;
 import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.client.gui.views.reviews.ShowHotelReviewView;
 import es.deusto.spq.client.gui.views.reviews.WriteReview;
 import es.deusto.spq.client.logger.ClientLogger;
+import es.deusto.spq.server.data.dto.HotelDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 
 public class RoomPanel extends JPanel{
@@ -49,11 +59,14 @@ public class RoomPanel extends JPanel{
 	 * Scroll pane for the table
 	 */
 	private JScrollPane tableScrollPane;
+	
 	/**
 	 * confirm Confirm button
 	 * back Return to the HotelGuestSearchingPanel
+	 * seeReviews button to display reviews
 	 */
-	private JButton	confirm, back;
+	private JButton	confirm, back, seeReviews;
+
 	/**
 	 * Displays the write review view.
 	 */
@@ -72,6 +85,10 @@ public class RoomPanel extends JPanel{
 	 */
 	private Random r;
 	
+	/**
+	 * The view where review are shown.
+	 */
+	private ShowHotelReviewView view;
 	/** Constructor of the class RoomPanel
 	 * @param screenWidth Width of the window
 	 * @param screenHeight Height of the window
@@ -138,16 +155,28 @@ public class RoomPanel extends JPanel{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(view != null) view.dispose();
 				clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
 			}
 		});
-		
+
+		seeReviews = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("roomPanel.viewReviews"));
+		seeReviews.setSize(100,30);
+		seeReviews.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					clientWindowGuest.getGuestView().getViewManager().openView(view = (ShowHotelReviewView) ViewFactory.buildView(ViewType.SHOW_REVIEWS, clientWindowGuest.getGuestView().getViewManager()));
+					view.setHotelID(hotelId);
+			}
+		});
+
 		upperButtons = new JPanel();
 		upperButtons.setBackground(Color.LIGHT_GRAY);
 		upperButtons.add(confirm);
 		upperButtons.add(back);
+		upperButtons.add(seeReviews);
 		upperButtons.add(writeReview);
-		
 		
 		roomsTable = new JTable();
 		tableModel = (DefaultTableModel) roomsTable.getModel();
@@ -198,14 +227,12 @@ public class RoomPanel extends JPanel{
 			}
 		}
 		
-		
 		tableScrollPane = new JScrollPane(roomsTable);
 		tableScrollPane.setSize(roomsTable.getWidth() , 100);
 		tableScrollPane.setLocation((int) (screenWidth / 2.05 - tableScrollPane.getWidth() / 2), (int) (screenHeight / 3 - tableScrollPane.getHeight() / 2));
 		
 		this.add(upperButtons, BorderLayout.NORTH);
 		this.add(tableScrollPane, BorderLayout.CENTER);
-
 	}
 	static class MyTableCellRenderer extends DefaultTableCellRenderer {
 
