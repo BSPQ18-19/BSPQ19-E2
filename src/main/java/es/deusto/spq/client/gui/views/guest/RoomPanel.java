@@ -25,6 +25,9 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.log4j.Logger;
 
+import es.deusto.spq.client.gui.base.ViewFactory;
+import es.deusto.spq.client.gui.base.ViewType;
+import es.deusto.spq.client.gui.views.reviews.WriteReview;
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.server.data.dto.RoomDTO;
 
@@ -51,6 +54,10 @@ public class RoomPanel extends JPanel{
 	 * back Return to the HotelGuestSearchingPanel
 	 */
 	private JButton	confirm, back;
+	/**
+	 * Displays the write review view.
+	 */
+	private JButton writeReview;
 	/**
 	 * upperButtons Panel for the buttons at the top
 	 */
@@ -79,7 +86,20 @@ public class RoomPanel extends JPanel{
 						
 		r =  new Random();
 		
-		confirm = new JButton("Confirm");
+		writeReview = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("roomPanel.button.writeReview"));
+		writeReview.setSize(100, 30);
+		writeReview.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				WriteReview view = null;
+				clientWindowGuest.getGuestView().getViewManager().openView(view = (WriteReview) ViewFactory.buildView(ViewType.WRITE_REVIEW, clientWindowGuest.getGuestView().getViewManager()));
+				view.setHotelID(hotelId);
+				view.setUserID(clientWindowGuest.getGuestView().getViewManager().getClient().getController().getLoggedUser().getUserID());
+			}
+		});
+		
+    confirm = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.button.confirm"));
 		confirm.setSize(100, 30);
 		confirm.setBackground(Color.GREEN);
 		confirm.addActionListener(new ActionListener() {
@@ -88,27 +108,31 @@ public class RoomPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				if(roomsTable.getSelectedRow() != -1) {
 					RoomDTO roomDTO = clientWindowGuest.getController().retrieveRoomById((String)roomsTable.getValueAt(roomsTable.getSelectedRow(), 0));
-					String daysForRoom = JOptionPane.showInputDialog(new JTextField("", 10), "How many nights?", JOptionPane.QUESTION_MESSAGE);
+					String daysForRoom = JOptionPane.showInputDialog(new JTextField("", 10), clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.inputDialog.nights"), JOptionPane.QUESTION_MESSAGE);
 					if(!(daysForRoom == "")) {
-						
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
 						LocalDate localDateStart = LocalDate.parse(calendarDate.trim(), formatter);
 						LocalDate localDateEnding = localDateStart.plusDays(Integer.valueOf(daysForRoom));
-						roomDTO.setOccupied(true);
-						clientWindowGuest.getController().updateRoom(roomDTO.getRoomID(), roomDTO.getSize(), roomDTO.getPrice(), roomDTO.getType(), roomDTO.isOccupied());
-						clientWindowGuest.getController().createReservation(Integer.toString(r.nextInt(Integer.MAX_VALUE)),
-								clientWindowGuest.getController().getLoggedUser().getUserID(), roomDTO.getRoomID(), localDateStart, localDateEnding);
-						JOptionPane.showMessageDialog(null, "Room successfully reserved", "Done", JOptionPane.INFORMATION_MESSAGE);
+						float finalPrize = Integer.parseInt(daysForRoom) * roomDTO.getPrice();
+						
+						UserPayView view;
+						clientWindowGuest.getGuestView().getViewManager().openView(view = (UserPayView) ViewFactory.buildView(ViewType.MAKE_PAYMENT, clientWindowGuest.getGuestView().getViewManager()));
+						view.setLocalDateEnding(localDateEnding);
+						view.setLocalDateStart(localDateStart);
+						view.setPrize(finalPrize);
+						view.setRoomDTO(roomDTO);
+						
 						clientWindowGuest.changeScreen(ScreenTypeGuest.GUEST_SEARCH);
 					}
 				}else {
-					JOptionPane.showMessageDialog(null, "Select a room", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.messageDialog.errorRoomSelection"),
+							clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.messageDialog.noRooms"), JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}
 		});
 				
-		back = new JButton("Back");
+		back = new JButton(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.button.back"));
 		back.setSize(100, 30);
 		back.addActionListener(new ActionListener() {
 			
@@ -122,6 +146,7 @@ public class RoomPanel extends JPanel{
 		upperButtons.setBackground(Color.LIGHT_GRAY);
 		upperButtons.add(confirm);
 		upperButtons.add(back);
+		upperButtons.add(writeReview);
 		
 		
 		roomsTable = new JTable();
@@ -130,9 +155,9 @@ public class RoomPanel extends JPanel{
 		roomsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
 		tableModel.addColumn("Id");
-		tableModel.addColumn("Size");
-		tableModel.addColumn("Type");
-		tableModel.addColumn("Price");
+		tableModel.addColumn(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.column.size"));
+		tableModel.addColumn(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.column.type"));
+		tableModel.addColumn(clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.column.price"));
 		
 		roomsTable.addMouseListener(new MouseAdapter() {
 			
@@ -147,7 +172,7 @@ public class RoomPanel extends JPanel{
 		clientWindowGuest.getController().setCurrentRooms();
 		ArrayList<RoomDTO> retrievedRooms = clientWindowGuest.getController().retrieveRoomsByHotelId(hotelId);
 		if(retrievedRooms == null || retrievedRooms.size() == 0) {
-			JOptionPane.showMessageDialog(null, "There are no rooms available", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.messageDialog.noRooms"), clientWindowGuest.getGuestView().getViewManager().getClient().getLocaleManager().getMessage("room.error"), JOptionPane.ERROR_MESSAGE);
 			if(tableModel.getRowCount() != 0) {
 				for(int i = tableModel.getRowCount()-1; i >= 0; i--) {
 					tableModel.removeRow(i);

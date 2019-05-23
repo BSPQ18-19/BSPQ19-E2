@@ -5,12 +5,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.deusto.spq.server.data.jdo.Reservation;
 import org.apache.log4j.Logger;
 
 import es.deusto.spq.client.logger.ClientLogger;
 import es.deusto.spq.client.remote.RMIServiceLocator;
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.ReservationDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
 import es.deusto.spq.server.data.jdo.RoomType;
@@ -346,7 +348,7 @@ public class HotelManagementController {
      */
     public boolean createReservation(String reservationId, String userId, String roomId, LocalDate firstDay, LocalDate lastDay) {
     	try {
-    		log.info("Creating new resevation...");
+    		log.info("Creating new reservation...");
 			ReservationDTO reservationDTO = rsl.getHotelManager().createReservation(reservationId, userId, roomId, firstDay, lastDay);
 			if(reservationDTO!=null) {
 				log.info("Resevation created successfully!");
@@ -359,7 +361,39 @@ public class HotelManagementController {
 		}
     	return false;
     }
+
     
+    public boolean deleteReservation(String reservationId) {
+    	try {
+    		log.info("Deleting a reservation...");
+			if(rsl.getHotelManager().deleteReservation(reservationId)) {
+				log.info("Resevation deleted successfully!");
+				return true;
+			}else {
+				log.info("Resevation cannot be deleted.");
+			}
+		} catch (RemoteException e) {
+			log.fatal("Error Deleting a resevation: " + e.getMessage());
+		}
+    	return false;
+    }
+	/**
+	 * Stores a new review in the DB.
+	 * @param opinion the text written by the user.
+	 * @param score the score that user gives to the hotel.
+	 * @param hotelID the hotelID of the hotel the review is form.
+	 * @param userID the id of the user that writes the review.
+	 * @return A ReviewDTO.
+	 */
+    public ReviewDTO createReview(String opinion, int score, String hotelID, String userID){
+    	try {
+			return rsl.getHotelManager().createReview(opinion, score, hotelID, userID);
+		
+		} catch (RemoteException e) {
+			log.fatal("Error creating a new Review: " + e.getMessage());
+		}
+    	return null;
+    }
 	/**
 	 * Clear the list of the current rooms
 	 */
@@ -399,4 +433,59 @@ public class HotelManagementController {
 		return loggedUser;
 	}
 
+	/**
+	 * Get a list of ReservationDTOs corresponding to the currently logged-in User
+	 * @return a list of all the ReservationDTOs associated
+	 */
+	public List<ReservationDTO> getReservationsForCurrentUser() {
+		List<ReservationDTO> reservations = new ArrayList<>();
+		try {
+			reservations = rsl.getHotelManager().getReservationsForGuest(getLoggedUser());
+		} catch (RemoteException e) {
+            e.printStackTrace();
+		}
+		return reservations;
+	}
+
+    /**
+     * Get all the Reservations in the database
+     * @return a List with all the Reservations
+     */
+	public List<ReservationDTO> getAllReservations() {
+        List<ReservationDTO> reservations = new ArrayList<>();
+        try {
+            reservations = rsl.getHotelManager().getAllReservations();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return reservations;
+    }
+
+	
+	/**
+	 * A method that handles the payment of the reservation depending on the 
+	 * 		payment method user selected earlier.
+	 * @param arg1 In case of Paypal username, MasterCard cardNumber.
+	 * @param arg2 In case of Paypal password, MasterCard cardNumber.
+	 * @param amount The amount it cost.
+	 * @param type The type of paymentMethods true paypal, false masterCard.
+	 * @return {@code true} if the payment has been done successfully, and 
+	 * 		{@code false} if not.
+	 */
+	public boolean payReservation(String arg1, String arg2, float amount, boolean type) {
+		try {
+			if(type) {
+				//Call the method to pay with PayPal
+				return rsl.getHotelManager().payPayPal(arg1, arg2, amount);
+			}else {
+				long cardNumber = Long.parseLong(arg1);
+				int securityCode = Integer.parseInt(arg2);
+				//Call the method to pay with MasterCard
+				return rsl.getHotelManager().payMastercard(cardNumber, securityCode, amount);
+			}
+		}catch (Exception e) {
+			log.fatal("Error making payment: " + e);
+		}
+		return false;
+	}
 }

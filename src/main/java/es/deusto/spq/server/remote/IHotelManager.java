@@ -8,8 +8,10 @@ import java.util.List;
 
 import es.deusto.spq.server.data.dto.HotelDTO;
 import es.deusto.spq.server.data.dto.ReservationDTO;
+import es.deusto.spq.server.data.dto.ReviewDTO;
 import es.deusto.spq.server.data.dto.RoomDTO;
 import es.deusto.spq.server.data.dto.UserDTO;
+import es.deusto.spq.server.data.jdo.Reservation;
 import es.deusto.spq.server.data.jdo.RoomType;
 
 public interface IHotelManager extends Remote {
@@ -179,4 +181,25 @@ public interface IHotelManager extends Remote {
 	 * @throws RemoteException exception
 	 */
 	public ReservationDTO createReservation(String reservationId, String email, String roomId, LocalDate firstDay, LocalDate lastDay) throws RemoteException;
+
+	public List<ReservationDTO> getReservationsForGuest(UserDTO userDTO) throws RemoteException;
+
+	public List<ReservationDTO> getAllReservations() throws RemoteException;
+	
+	/** Removes a reservation from the database
+	 * @param reservationId Id of the reservation
+	 * @return true if the operation has been done successfully
+	 * @throws RemoteException exception
+	 */
+	public boolean deleteReservation(String reservationId) throws RemoteException;
+	/**
+	 * Stores a new review in the DB.
+	 * @param opinion the text written by the user.
+	 * @param score the score that user gives to the hotel.
+	 * @param hotelID the hotelID of the hotel the review is form.
+	 * @param userID the id of the user that writes the review.
+	 * @return A ReviewDTO.
+	 * @throws RemoteException exception.
+	 */
+	public ReviewDTO createReview(String opinion, int score, String hotelID, String userID) throws RemoteException;;
 }
